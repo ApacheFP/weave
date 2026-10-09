@@ -20,7 +20,24 @@ export const media = {
   sample: { name: 'Campione di riferimento · Cammello', kind: 'Foto', alt: 'Campione della giacca cammello su un manichino sartoriale in laboratorio' },
   'quality-seam': { name: 'Evidenza NC-018 · Spalla', kind: 'Foto', alt: 'Dettaglio fotografico della cucitura della spalla della giacca cammello, con lieve arricciatura' },
   'pattern-reference': { name: 'Studio del cartamodello', kind: 'Tavole', alt: 'Cartamodelli sartoriali di una giacca disposti sul tavolo, con linee di costruzione e drittofilo' },
+  'pattern-front': { name: 'Cartamodello · Davanti', kind: 'Tavole', alt: 'Tavola tecnica del davanti della giacca, con rever, pince e margini di cucitura' },
+  'pattern-back': { name: 'Cartamodello · Dietro', kind: 'Tavole', alt: 'Tavola tecnica del dietro della giacca, con giro manica, pince e spacco' },
+  'pattern-upper-sleeve': { name: 'Cartamodello · Manica sopra', kind: 'Tavole', alt: 'Tavola tecnica della manica superiore con testa sagomata e linee di costruzione' },
+  'pattern-under-sleeve': { name: 'Cartamodello · Manica sotto', kind: 'Tavole', alt: 'Tavola tecnica della manica inferiore sagomata al gomito' },
+  'pattern-collar': { name: 'Cartamodello · Colletto', kind: 'Tavole', alt: 'Tavola tecnica del colletto sartoriale con linea di piega e margini' },
+  'pattern-facing': { name: 'Cartamodello · Paramontura', kind: 'Tavole', alt: 'Tavola tecnica della paramontura anteriore della giacca' },
+  'grading-reference': { name: 'Sviluppo taglie · Tavola', kind: 'Tavole', alt: 'Tavola professionale di sviluppo taglie della giacca con profili annidati del davanti e della manica' },
+  'marker-base': { name: 'Piazzamento · Base', kind: 'Tavole', alt: 'Tavola di piazzamento con pezzi sartoriali della giacca orientati lungo il drittofilo e spazi residui' },
+  'marker-optimized': { name: 'Piazzamento · Ottimizzato', kind: 'Tavole', alt: 'Tavola di piazzamento compatto con davanti, dietro, maniche e piccoli pezzi della giacca' },
 };
+export const patternPieces = [
+  { name: 'Davanti', asset: 'pattern-front', qty: 2 },
+  { name: 'Dietro', asset: 'pattern-back', qty: 2 },
+  { name: 'Manica sopra', asset: 'pattern-upper-sleeve', qty: 2 },
+  { name: 'Manica sotto', asset: 'pattern-under-sleeve', qty: 2 },
+  { name: 'Colletto', asset: 'pattern-collar', qty: 1 },
+  { name: 'Paramontura', asset: 'pattern-facing', qty: 2 },
+];
 export const fabricAsset = id => ({ base: 'fabric-camel', premium: 'fabric-sand', recycled: 'fabric-stone' }[id] || 'fabric-camel');
 export const productAsset = (variant = 'Cammello', back = false) => ({ Cammello: back ? 'jacket-back' : 'jacket-camel', Sabbia: back ? 'jacket-sand-back' : 'jacket-sand', Nero: back ? 'jacket-black-back' : 'jacket-black' }[variant] || 'jacket-camel');
 export const mediaSrc = key => `${root}${key}.webp`;

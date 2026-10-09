@@ -210,13 +210,10 @@
 .dw-piece-list { display: flex; flex-direction: column; gap: 8px; }
 .dw-piece-list button { display: flex; align-items: center; gap: 12px; border: 1px solid #e9e7e2; background: #f6f5f2; border-radius: 8px; padding: 9px; text-align: left; }
 .dw-piece-list button[aria-pressed=true] { background: #dad7d0; border-color: #6b6760; }
-.dw-piece-list .dw-pattern { width: 28px; height: 44px; flex: 0 0 auto; }
 .dw-piece-list strong { display: block; font-weight: 500; font-size: 11px; }
 .dw-piece-list small { display: block; font-size: 11px; line-height: 1.5; color: #57544e; margin-top: 4px; }
 .dw-pattern-canvas, .dw-grading-canvas { display: flex; align-items: center; justify-content: center; min-height: 375px; background-color: #f6f5f2; background-image: linear-gradient(#dad7d03b 1px, transparent 1px), linear-gradient(90deg, #dad7d03b 1px, transparent 1px); background-size: 20px 20px; border-radius: 8px; padding: 28px; }
-.dw-pattern-canvas .dw-pattern { height: 345px; width: 100%; }
 .dw-pattern-legend { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 11px; color: #57544e; margin: 15px 0; }
-.dw-grading-canvas .dw-pattern { width: 42%; height: 330px; transition: transform 240ms; }
 .dw-size-selector { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
 .dw-size-selector button { border: 1px solid #dad7d0; background: #f6f5f2; color: #57544e; width: 38px; height: 34px; border-radius: 7px; font-size: 12px; }
 .dw-size-selector button[aria-pressed=true] { background: #1d1c1a; color: #dad7d0; border-color: #1d1c1a; }
@@ -533,8 +530,6 @@
   .dw-kv.horizontal { grid-template-columns: 1fr 1fr; }
   .dw-technical-canvas { padding: 8px; min-height: 270px; }
   .dw-pattern-canvas,.dw-grading-canvas { min-height: 300px; padding: 20px; }
-  .dw-pattern-canvas .dw-pattern { height: 270px; }
-  .dw-grading-canvas .dw-pattern { height: 260px; }
   .dw-chat,.dw-chat.embedded { height: 65svh; min-height: 420px; }
   .dw-chat-messages { padding: 16px; }
   .dw-chat-welcome { padding: 6px; }
@@ -723,3 +718,18 @@
 .dw-pattern-photo > img { width: 100%; height: 380px; object-fit: contain; }
 .dw-media-preview > img { position: absolute; inset: 0; }
 .dw-app .dw-media-tools .dw-media-search input[type=search] { height: 100%; padding: 0; border: 0; box-shadow: none; background: transparent; }
+
+/* Pattern documents replace the original geometric stand-ins. */
+.dw-piece-list .dw-media-image { width: 40px; height: 52px; flex: 0 0 auto; object-fit: contain; background: #faf8f2; border: 1px solid var(--border); border-radius: 3px; }
+.dw-grading-canvas.dw-grading-photo { padding: 0; min-height: 300px; background-image: none; overflow: hidden; }
+.dw-grading-photo > img { display: block; width: 100%; height: 380px; object-fit: contain; }
+.dw-grading-photo.dw-grading-single > img { width: 50%; }
+.dw-grading-measurements { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+.dw-grading-measurements small { display: block; color: var(--text-3); font-size: 11px; line-height: 1.5; }
+.dw-grading-measurements strong { display: block; font-size: 18px; font-weight: 500; margin-top: 4px; }
+.dw-grading-measurements strong span { font-size: 11px; color: var(--text-3); }
+.dw-marker-board { border-color: var(--border); background: #faf8f2; object-fit: contain; }
+@media (max-width: 760px) {
+  .dw-pattern-photo > img,.dw-grading-photo > img { height: 320px; }
+  .dw-grading-measurements { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}

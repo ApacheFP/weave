@@ -129,6 +129,79 @@
       "output": "public/images/dashboard/pattern-reference.webp",
       "thumbnail": "public/images/dashboard/pattern-reference-thumb.webp",
       "prompt": "Use case: photorealistic-natural\nAsset type: photographic evidence and material reference for a textile product dashboard.\nPrimary request: Create an authentic overhead photograph of a professional jacket patternmaking worktable: six groups of cut kraft pattern paper for a tailored single-breasted regular-fit jacket, two front panels with curved armholes and lapel extensions, back panel with shoulder dart, two-piece shaped sleeve, collar and long facing. Real curved cutting lines, fine pencil seam allowance dashed lines, notches and grainline arrows drawn on paper, laid neatly without overlap on an ivory cutting mat. One metal pattern ruler at the edge. Warm neutral paper and soft natural daylight. The drawing must look like actual atelier drafting, with believable curved armscyes and sleeve caps. No text, no codes, no numbers, no garment photo, no childish geometric icon shapes.\nConstraints: one coherent photograph only, natural physical objects, no collage, no watermark, no stylized CGI, no UI wrapper or borders."
+    },
+    {
+      "key": "pattern-front",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-1c4c2069-c622-4c9d-85f7-8e0ffdc47765.png",
+      "output": "public/images/dashboard/pattern-front.webp",
+      "thumbnail": "public/images/dashboard/pattern-front-thumb.webp",
+      "prompt": "Use case: scientific-educational. Asset type: textile dashboard professional pattern document, portrait 4:5. Reference image 1: physical jacket pattern construction and proportion reference. Create a new clean professional technical drafting plate of a SINGLE garment pattern piece, not a photo of a finished garment. Exactly one tailored jacket FRONT body pattern piece: notched lapel extension at the upper center-front, shoulder seam, smoothly concave armscye, shaped side seam, rounded hem and center-front edge, a narrow waist dart and welt pocket construction marks. Black fine precise CAD-style contours on plain warm ivory drafting paper, dotted seam allowance inside the outer cutting line, tiny realistic seam notches, one thin central grainline double arrow. Accurate-looking tailored blazer construction, elegant restrained monochrome, faint paper texture, no kraft fill, no 3D rendering, no shadows, no decorative geometry. Piece fully visible with 10% margin on every side, top-down orthographic plan, no perspective. No words, letters, size labels, measurements, ruler, logos or watermark; live metadata is supplied by the app.",
+      "created": "2026-10-10"
+    },
+    {
+      "key": "pattern-back",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-bfcd64fb-da82-4980-b37d-e96e245f0eaa.png",
+      "output": "public/images/dashboard/pattern-back.webp",
+      "thumbnail": "public/images/dashboard/pattern-back-thumb.webp",
+      "prompt": "Use case: scientific-educational. Asset type: textile dashboard professional pattern document, portrait 4:5. Reference image 1: physical jacket pattern construction and proportion reference. Create a new clean professional technical drafting plate of a SINGLE garment pattern piece, not a photo of a finished garment. Exactly one tailored jacket BACK body pattern piece: shallow curved half-back neckline, sloping shoulder seam, smoothly concave armscye, shaped side seam, straight center-back with vent extension at hem, a long waist dart. Black fine precise CAD-style contours on plain warm ivory drafting paper, dotted seam allowance inside the outer cutting line, tiny realistic seam notches, one thin central grainline double arrow. Accurate-looking tailored blazer construction, elegant restrained monochrome, faint paper texture, no kraft fill, no 3D rendering, no shadows, no decorative geometry. Piece fully visible with 10% margin on every side, top-down orthographic plan, no perspective. No words, letters, size labels, measurements, ruler, logos or watermark; live metadata is supplied by the app.",
+      "created": "2026-10-10"
+    },
+    {
+      "key": "pattern-upper-sleeve",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-996a718f-760d-42b3-a219-45739336ef15.png",
+      "output": "public/images/dashboard/pattern-upper-sleeve.webp",
+      "thumbnail": "public/images/dashboard/pattern-upper-sleeve-thumb.webp",
+      "prompt": "Use case: scientific-educational. Asset type: textile dashboard professional pattern document, portrait 4:5. Reference image 1: physical jacket pattern construction and proportion reference. Create a new clean professional technical drafting plate of a SINGLE garment pattern piece, not a photo of a finished garment. Exactly one tailored jacket UPPER SLEEVE pattern piece for a two-piece sleeve: tall rounded asymmetric sleeve cap, curved elbow line, shaped long edges tapering to the cuff, curved hem and vent extension. Black fine precise CAD-style contours on plain warm ivory drafting paper, dotted seam allowance inside the outer cutting line, tiny realistic seam notches, one thin central grainline double arrow. Accurate-looking tailored blazer construction, elegant restrained monochrome, faint paper texture, no kraft fill, no 3D rendering, no shadows, no decorative geometry. Piece fully visible with 10% margin on every side, top-down orthographic plan, no perspective. No words, letters, size labels, measurements, ruler, logos or watermark; live metadata is supplied by the app.",
+      "created": "2026-10-10"
+    },
+    {
+      "key": "pattern-under-sleeve",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-db8a0f1b-0ef3-463f-9680-ac4b21a45b9f.png",
+      "output": "public/images/dashboard/pattern-under-sleeve.webp",
+      "thumbnail": "public/images/dashboard/pattern-under-sleeve-thumb.webp",
+      "prompt": "Use case: scientific-educational. Asset type: textile dashboard professional drafting document, portrait 4:5. Reference image 1: garment pattern construction. Reference image 2: exact visual style of the new plate; match its ivory paper and fine black drafting linework. Create a NEW clean drafting plate of a SINGLE garment pattern piece. Exactly one tailored blazer UNDER SLEEVE pattern piece for a two-piece sleeve. It is visibly narrower than the upper sleeve: shallow concave upper edge, curved underarm and elbow seams, slight elbow shaping, tapering wrist and cuff/vent extension. Match realistic construction from reference 1. Crisp black professional contours, dashed seam allowance inside outer cutting line, tiny seam notches, one fine grainline double arrow. Restrained monochrome and faint ivory paper texture. Orthographic plan view, piece completely visible, generous empty margins. No words, letters, size labels, measurements, shadows, photos, decorative geometry, logos or watermark; app supplies live data.",
+      "created": "2026-10-10"
+    },
+    {
+      "key": "pattern-collar",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-0e965667-02d4-45f1-b7e0-1ade0cb48f65.png",
+      "output": "public/images/dashboard/pattern-collar.webp",
+      "thumbnail": "public/images/dashboard/pattern-collar-thumb.webp",
+      "prompt": "Use case: scientific-educational. Asset type: textile dashboard professional drafting document, portrait 4:5. Reference image 1: garment pattern construction. Reference image 2: exact visual style of the new plate; match its ivory paper and fine black drafting linework. Create a NEW clean drafting plate of a SINGLE garment pattern piece. Exactly one tailored blazer UNDER COLLAR pattern piece. A long, low, symmetric curved collar shape with gently angled pointed ends, shallow concave neck seam, convex outer edge, and an internal curved collar roll line. Position horizontally centered and comfortably sized, not stretched into a body piece. Crisp black professional contours, dashed seam allowance inside outer cutting line, tiny seam notches, one fine grainline double arrow. Restrained monochrome and faint ivory paper texture. Orthographic plan view, piece completely visible, generous empty margins. No words, letters, size labels, measurements, shadows, photos, decorative geometry, logos or watermark; app supplies live data.",
+      "created": "2026-10-10"
+    },
+    {
+      "key": "pattern-facing",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-51581d5a-2133-4e03-a565-51826ada93d6.png",
+      "output": "public/images/dashboard/pattern-facing.webp",
+      "thumbnail": "public/images/dashboard/pattern-facing-thumb.webp",
+      "prompt": "Use case: scientific-educational. Asset type: textile dashboard professional drafting document, portrait 4:5. Reference image 1: garment pattern construction. Reference image 2: exact visual style of the new plate; match its ivory paper and fine black drafting linework. Create a NEW clean drafting plate of a SINGLE garment pattern piece. Exactly one tailored blazer FRONT FACING pattern piece: a long narrow curved strip following the center front, with notched lapel/rever extension at the top and rounded hem at the bottom. Show recognisable tailored lapel geometry and smooth inside edge, substantially narrower than a front body piece. Crisp black professional contours, dashed seam allowance inside outer cutting line, tiny seam notches, one fine grainline double arrow. Restrained monochrome and faint ivory paper texture. Orthographic plan view, piece completely visible, generous empty margins. No words, letters, size labels, measurements, shadows, photos, decorative geometry, logos or watermark; app supplies live data.",
+      "created": "2026-10-10"
+    },
+    {
+      "key": "grading-reference",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-edd11c4b-0725-468d-ab0d-088d142a94a2.png",
+      "output": "public/images/dashboard/grading-reference.webp",
+      "thumbnail": "public/images/dashboard/grading-reference-thumb.webp",
+      "prompt": "Use case: scientific-educational. Asset type: professional textile grading plate, landscape 3:2. Reference 1 supplies tailored blazer pattern construction, reference 2 supplies fine black drafting style and warm ivory paper. Create a clean professional CAD-style grading reference plate containing exactly TWO large groups side by side: a recognisable front body pattern with notched lapel, dart, shoulder and concave armhole on the left; an upper two-piece sleeve pattern with rounded sleeve cap and elbow shaping on the right. Each group has SIX finely nested outlines of adjacent sizes, aligned using real grading points at center front/hem, increasing in width and length subtly with the armscye/shoulder shaped correctly, not six copies blindly scaled around the center. Black and subtle medium grey contours, fine grainline arrows, seam marks. No colored lines. Orthographic view, all contours fully visible, generous white/ivory negative space. No words, letters, size numbers, labels, dimensions, UI, logos, shadows or watermark. Do not draw finished clothes. A refined realistic pattern drafting document, not simplistic cartoon polygons.",
+      "created": "2026-10-10"
+    },
+    {
+      "key": "marker-base",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-222b4ec1-5112-46b8-9f88-ce06e48e8585.png",
+      "output": "public/images/dashboard/marker-base.webp",
+      "thumbnail": "public/images/dashboard/marker-base-thumb.webp",
+      "prompt": "Use case: scientific-educational. Asset type: professional textile cutting marker reference, landscape 2:1. Reference 1 supplies realistic tailored jacket pattern construction; reference 2 supplies fine black drafting contours and warm ivory paper. Create an authentic-looking professional top-down 2D CAD cutting marker on a long HORIZONTAL rectangular fabric strip. Use front body panels with lapel and armhole, back body panels with vent, curved upper and under-sleeves, narrow facings and curved collars, repeated sets for a few blazers with mirrored counterparts, all isolated with no overlapping outlines. CRITICAL: the fabric warp runs LEFT TO RIGHT along the strip. ALL LONG BODY AND SLEEVE PIECES LIE ON THEIR SIDES, rotated 90 degrees from an upright dress pattern. Every straight grainline double arrow is HORIZONTAL left-to-right, parallel to the top and bottom long selvage edges. No vertical body or sleeve grainlines. Fine black contours and discreet dashed inner sewing lines on warm white paper, subtle beige fabric-strip edge, consistent technical drafting, all pieces and strip edges entirely visible. No words, numbers, measurement labels, ruler, UI, colored marks, logos, watermarks or decorative geometry. BASE PLAN: arrange the sideways body panels and sideways sleeves in two loose staggered rows, with some facing and collar pieces in residual gaps. Leave noticeably wide unused gaps between groups and a long empty margin at the far right.",
+      "created": "2026-10-10"
+    },
+    {
+      "key": "marker-optimized",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-c196d0b9-bb8d-4cc9-a6cb-ae90892607d1.png",
+      "output": "public/images/dashboard/marker-optimized.webp",
+      "thumbnail": "public/images/dashboard/marker-optimized-thumb.webp",
+      "prompt": "Use case: scientific-educational. Asset type: professional textile cutting marker reference, landscape 2:1. Reference 1 supplies realistic tailored jacket pattern construction; reference 2 supplies fine black drafting contours and warm ivory paper. Create an authentic-looking professional top-down 2D CAD cutting marker on a long HORIZONTAL rectangular fabric strip. Use front body panels with lapel and armhole, back body panels with vent, curved upper and under-sleeves, narrow facings and curved collars, repeated sets for a few blazers with mirrored counterparts, all isolated with no overlapping outlines. CRITICAL: the fabric warp runs LEFT TO RIGHT along the strip. ALL LONG BODY AND SLEEVE PIECES LIE ON THEIR SIDES, rotated 90 degrees from an upright dress pattern. Every straight grainline double arrow is HORIZONTAL left-to-right, parallel to the top and bottom long selvage edges. No vertical body or sleeve grainlines. Fine black contours and discreet dashed inner sewing lines on warm white paper, subtle beige fabric-strip edge, consistent technical drafting, all pieces and strip edges entirely visible. No words, numbers, measurement labels, ruler, UI, colored marks, logos, watermarks or decorative geometry. OPTIMIZED PLAN: closely nest the sideways body panels and sideways sleeves in two tightly packed staggered rows. Fit narrow facings and small collars in residual gaps. Very narrow clear cutting gaps between all pieces, no overlaps, minimal empty strip at the far right.",
+      "created": "2026-10-10"
     }
-  ]
+  ],
+  "updated": "2026-10-10"
 }

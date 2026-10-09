@@ -46,15 +46,3 @@ export function Dialog({ title, note, children, onClose, wide }) {
   return <dialog className={`dw-dialog ${wide ? 'wide' : ''}`} ref={ref} onClose={onClose} aria-label={title} onClick={event => { if (event.target !== event.currentTarget) return; const r = event.currentTarget.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) event.currentTarget.close(); }}><header><div><h2>{title}</h2>{note && <p>{note}</p>}</div><button className="dw-icon-btn" onClick={() => ref.current.close()} aria-label="Chiudi finestra"><Icon name="close" /></button></header><div className="dw-dialog-body">{children}</div></dialog>;
 }
 export function Empty({ children }) { return <div className="dw-empty"><Icon name="search" /><p>{children}</p></div>; }
-export const patternPieces = [
-  { name: 'Davanti', path: 'M31 5L59 12Q57 28 63 38Q69 48 79 50L72 84Q70 106 78 156Q42 164 9 157L14 102Q18 75 17 59L9 47L25 38L20 27L34 22Z', qty: 2 },
-  { name: 'Dietro', path: 'M12 5Q30 11 42 4L71 15Q61 32 66 44Q69 52 79 55L70 87Q68 105 77 157L11 157L14 95L12 5Z', qty: 2 },
-  { name: 'Manica sopra', path: 'M12 40Q14 22 31 10Q44 0 56 8Q74 18 80 42Q75 66 72 93L63 151L27 151L15 93Q11 67 12 40Z', qty: 2 },
-  { name: 'Manica sotto', path: 'M25 18Q40 9 55 20Q59 49 55 77L53 147L27 149Q25 113 19 83Q15 49 25 18Z', qty: 2 },
-  { name: 'Colletto', path: 'M7 66Q42 40 86 55L93 78Q52 63 18 87Z', qty: 1 },
-  { name: 'Rever', path: 'M35 7L66 19L53 47Q40 78 34 113L40 155L16 155L18 102Q20 64 31 34L20 24Z', qty: 2 },
-];
-export function Pattern({ index = 0, scale = 1, notches = true, grain = true, nested = false, active = false }) {
-  const piece = patternPieces[index % patternPieces.length];
-  return <svg className="dw-pattern" viewBox="0 0 100 170" aria-label={`Cartamodello ${piece.name}`} role="img"><g transform={`translate(50 85) scale(${scale}) translate(-50 -85)`}>{nested && [.86, .92, 1.06, 1.12].map((factor, n) => <path key={factor} d={piece.path} transform={`translate(45 80) scale(${factor}) translate(-45 -80)`} fill="none" stroke={['#d5c7b1', '#bca785', '#7f725e', '#4b463e'][n]} strokeWidth=".7" />)}<path d={piece.path} fill={active ? '#e6d4b3' : '#f2e9d9'} stroke="#7e6a4e" strokeWidth="1.2" /><path d={piece.path} transform="translate(3 3) scale(.93)" fill="none" stroke="#a99b86" strokeDasharray="2 2" strokeWidth=".6" />{grain && <path d="M40 45v65m-3-61 3-4 3 4m-6 57 3 4 3-4" fill="none" stroke="#7e6a4e" strokeWidth=".8" />}{notches && <path d="m10 62 5 2-5 2m60-32-3 2 3 2" fill="none" stroke="#4d463a" strokeWidth="1.4" />}</g></svg>;
-}
