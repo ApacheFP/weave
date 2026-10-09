@@ -1,0 +1,7 @@
+{
+  "module": 15,
+  "method": "built-in image_gen",
+  "source": "assets/animation-frames/module-15/sheet.png",
+  "prompt": "Use case: stylized-concept. Asset type: transparent four-keyframe sprite sheet for a website product card. The image is a perfect square with exactly four equal square panels in an exact 2×2 grid, no separators or labels. In all panels show the same complete centered miniature delivery truck and simple location pin, same camera angle, scale, proportions and lighting. A small parcel sits beside the destination. Sequence: truck approaches with wheels at one angle; truck rolls forward a little and wheels rotate; truck stops by the parcel and the location pin gently pulses; parcel is delivered beside the destination and pin settles, looping smoothly to first pose. Keep all objects and truck design consistent in all four poses and show clear modest movement, mainly rotating wheels and changing truck position. Style consistent with premium cute softly-rounded white clay/paper miniature 3D UI illustrations, tactile matte white surfaces, soft restrained pale neutral-grey dimensional shading on objects only, polished friendly feel. White and grey only, no colors. Real transparent empty background; ample identical clear margin in each tile. No floor, backdrop, gradient, vignette, haze or background cast shadow. No text, letters, numbers, logo, extra characters, or unrelated props. Beautiful polished raster art, not vector diagram.\n",
+  "selected_image": "public/illustrations/module-15.webp"
+}

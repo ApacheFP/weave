@@ -1,0 +1,7 @@
+{
+  "module": 13,
+  "method": "built-in image_gen",
+  "source": "assets/animation-frames/module-13/sheet.png",
+  "prompt": "Use case: stylized-concept. Asset type: transparent four-pose sprite sheet for a textile product card. Make one perfect square canvas split into exactly four equal square tiles in a precise 2×2 grid. Same complete isolated miniature arrangement in every tile, same camera, proportions, scale, framing and light: a rounded white-clay magnifying glass next to a simple miniature white jacket with a visible stitched seam. Sequential animation: lens begins over one side of jacket seam; lens slides to scan across the seam; under the lens a tiny stitch flaw is visible; flaw resolves into a neat small grey check mark, then return to starting lens position for a seamless subtle loop. Keep the same objects unchanged through all four poses. Premium cute softly rounded white clay/paper 3D miniature illustration, matte tactile surfaces, soft refined neutral grey volume shading on objects only, match high-quality white-clay UI miniatures. White and grey only. Actual transparent background with large identical transparent margins in all four tiles. No background, no floor, no backdrop, no gradient, no vignette, no haze, no cast shadow off the objects. No text/letters/numbers/logo/color/extra objects. Polished attractive raster artwork, not vector diagram.\n",
+  "selected_image": "public/illustrations/module-13.webp"
+}

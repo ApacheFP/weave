@@ -1,0 +1,6 @@
+{
+  "method": "built-in image_gen",
+  "prompt": "Use case: photorealistic-natural. Asset type: small circular profile avatar for a fashion product web app called WEAVE. Create a polished studio headshot of one completely fictional adult fashion designer, approximately 35 years old, short dark hair, a natural friendly smile, wearing a plain black crewneck. Head and shoulders, directly facing camera, centered symmetrical composition with comfortable space above the hair and around the shoulders for a circular crop. Realistic photographic facial details, natural soft lighting, subtle film texture. Black-and-white portrait with a plain pale warm beige studio background, restrained neutral tones, no vivid colors. A single person, no accessories or clutter, no text, no logo, no watermark. Square image.",
+  "source": "assets/profile/avatar-source.png",
+  "output": "public/illustrations/profile-avatar.webp"
+}

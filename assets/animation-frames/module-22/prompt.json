@@ -1,0 +1,7 @@
+{
+  "module": 22,
+  "method": "built-in image_gen",
+  "source": "assets/animation-frames/module-22/sheet.png",
+  "prompt": "Use case: stylized-concept. Asset: transparent square 2x2 four-frame animated icon sheet for a website module. Input Image 1 is only the style reference: match premium cute softly rounded miniature 3D white clay/paper, matte tactile finish, pale neutral-grey shaded volume, identical soft studio light. Subject: one friendly rounded speech bubble with three raised typing dots, connected to a simple branching decision path with two round endpoints. One path ends in a selected raised check. Four phases in reading order: top-left three dots appear in bubble and path begins; top-right a tiny white pulse reaches the branch; bottom-left pulse travels down the selected branch; bottom-right selected endpoint check has a subtle confirmation glow. Preserve identical bubble, dots, branch, endpoints, camera, layout, scale, positions, shading and padding in each frame; only the moving pulse and gentle check glow change. Exactly four equal quadrants, same centered complete composition in each, no crossing tile boundaries. Transparent alpha, no backdrop, no grid or dividers, no letters or text, no color accents, no faces/people, no watermark.\n",
+  "selected_image": "public/illustrations/module-22.webp"
+}

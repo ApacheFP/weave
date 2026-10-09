@@ -1,0 +1,7 @@
+{
+  "module": 9,
+  "method": "built-in image_gen",
+  "source": "assets/animation-frames/module-09/sheet.png",
+  "prompt": "Generate an elegant cute premium softly rounded white-clay miniature 3D illustration of a calculator and coins, with a key pressing and a coin hopping, exact 2x2 grid of four sequential phases; same centered objects, fixed camera, equal square tiles, no gutters or borders, transparent background, white and pale neutral grey only, no text, letters, numerals, logos, polished matte texture and gentle shading.\n",
+  "selected_image": "public/illustrations/module-09.webp"
+}

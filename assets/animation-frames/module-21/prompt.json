@@ -1,0 +1,7 @@
+{
+  "module": 21,
+  "method": "built-in image_gen",
+  "source": "assets/animation-frames/module-21/sheet.png",
+  "prompt": "Use case: stylized-concept. Asset: transparent square 2x2 four-frame animated website icon sheet. Image 1 is style reference only: match premium cute softly rounded miniature 3D white clay/paper, tactile matte surface, pale neutral-grey volume and shadows, soft studio lighting. Subject: one small elegant white jacket as the central digital twin, surrounded by six small rounded data nodes arranged in a balanced orbit and joined to the jacket with thin pale-grey raised connector lines. Four sequential frames show a single luminous white data pulse traveling along those fixed connections from upper-left node, across upper-right, down to lower-right, then back to central jacket where a faint ring/glint confirms sync. Keep the exact same jacket, nodes, connectors, camera, scale, positions, lighting and padding in every quadrant; only pulse position and subtle sync glow change. Exactly four equal square quadrants in reading order, centered complete scene per quadrant, no object crosses tile borders. Transparent alpha, no background, no grid/dividers, no lettering/text, no colored accents, no people/faces, no watermark.\n",
+  "selected_image": "public/illustrations/module-21.webp"
+}

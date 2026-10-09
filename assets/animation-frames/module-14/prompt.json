@@ -1,0 +1,7 @@
+{
+  "module": 14,
+  "method": "built-in image_gen",
+  "source": "assets/animation-frames/module-14/sheet.png",
+  "prompt": "Use case: stylized-concept. Asset type: transparent animated sprite sheet for a product card. Exact square canvas, precise 2×2 grid, four equal square tiles; no gutters or borders. Every tile repeats the identical centered miniature warehouse shelf and one rounded parcel box, same scale, camera, angle and lighting. Four sequential poses: empty shelf with box just entering at the left; box slides onto the shelf; box settles at center and a small stock-check tick appears; tick is complete and box remains centered, returning smoothly to first pose for a loop. The shelf and parcel stay the same design, with clear modest meaningful box movement. Cute premium softly rounded white-clay/paper miniature 3D style, tactile matte white material, delicate pale neutral-grey dimensional shading on objects only, refined polished UI illustration, consistent with other white clay miniatures. White and soft grey only. Genuine transparent background with identical ample margins around each tile. No backdrop, floor, gradient, haze, vignette or shadow cast outside the objects. No text, letters, numbers, logos, colors or extra props. High-quality raster miniature, not flat vector diagram.\n",
+  "selected_image": "public/illustrations/module-14.webp"
+}

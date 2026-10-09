@@ -1,0 +1,7 @@
+{
+  "module": 11,
+  "method": "built-in image_gen",
+  "source": "assets/animation-frames/module-11/sheet.png",
+  "prompt": "Use case: stylized-concept. Asset type: transparent animation sprite sheet for a textile-product website card. Create a perfect square canvas containing exactly four equal square tiles in a clean 2×2 grid, with no borders/gutters/labels. Every tile shows the same complete centered miniature arrangement at identical camera angle, scale, lighting, and proportions: a small white paper purchase order clipboard with simple blank checkbox rows, next to one cute parcel box. Sequential animation poses: first parcel is just entering from the side, then it moves into place beside the order, then a checkbox on the order gets a small grey check as the parcel settles, fourth tile has parcel and check still in their settled positions. Loop subtly by matching first/last pose in object positions aside from the order check cycle. Elegant cute premium softly rounded white-clay/paper miniature 3D illustration, tactile matte white surfaces and restrained soft pale neutral-grey shading on the objects, same lighting as premium clay UI minis. White/grey only, no colors, no writing, no letters, no numbers, no logos, no extra characters. Genuinely transparent empty background, no floor or backdrop or cast shadow or vignette. Identical transparent margins in every tile, objects centered and entirely within each tile. Beautiful polished raster illustration, not vector diagram.\n",
+  "selected_image": "public/illustrations/module-11.webp"
+}

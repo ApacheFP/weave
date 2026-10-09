@@ -1,0 +1,7 @@
+{
+  "module": 17,
+  "method": "built-in image_gen",
+  "source": "assets/animation-frames/module-17/sheet.png",
+  "prompt": "Use case: stylized-concept. Asset: transparent four-frame 2x2 animation sheet for a website icon. Input Image 1 is only a style reference; match its premium cute soft rounded white clay/paper miniature 3D, matte tactile surface, gentle pale neutral-grey volume, identical soft studio lighting. Subject: a small folded white jacket drops into a simple open retail shopping bag; a tiny paper receipt beside it gains a check at the end. Four sequential keyframes in reading order: upper left jacket poised just above bag opening, upper right jacket halfway inside, lower left jacket nestled inside, lower right same settled bag and jacket plus small check on receipt. Keep all objects, bag, receipt, camera, scale, proportions, shading and layout identical across all four quadrants; only jacket height and check visibility change. Exact square canvas split into exactly four equal tile areas, generous consistent padding, scene centered per tile, no crossing tile boundaries. Genuinely transparent alpha, no background, no grid or borders, no writing, no color accents, no people/faces, no watermark.\n",
+  "selected_image": "public/illustrations/module-17.webp"
+}

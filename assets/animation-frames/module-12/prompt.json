@@ -1,0 +1,7 @@
+{
+  "module": 12,
+  "method": "built-in image_gen",
+  "source": "assets/animation-frames/module-12/sheet.png",
+  "prompt": "Use case: stylized-concept. Asset type: transparent animation sprite sheet for a textile-product website card. Create exactly one square canvas divided into a precise 2×2 grid of four equal square keyframe tiles, no gutters/borders/text. Each tile contains the same centered, isolated miniature sewing machine, spool and short piece of fabric, identical angle, scale, proportions and light. Make four clear sequential poses of a loop: needle raised; needle halfway down and spool turns slightly; needle reaches cloth with a tiny stitched seam now visible and cloth advances a little; needle rises and cloth/spool return to starting placement for seamless looping. Keep the machine body perfectly still and recognizable across all four tiles. Style: elegant cute premium softly rounded white-clay and paper miniature 3D illustration, tactile matte white surfaces, softly dimensional restrained pale neutral-grey shading on objects only, refined craftsmanship, matching high-quality UI miniature artwork. White and neutral grey ONLY. Real transparent background with identical ample clear margins, no ground, backdrop, vignette, gradient, haze or cast shadow outside objects. No color, no writing, letters, numerals, logos, tools, hands, characters or extra props. Beautiful detailed raster art, not a crude vector diagram.\n",
+  "selected_image": "public/illustrations/module-12.webp"
+}

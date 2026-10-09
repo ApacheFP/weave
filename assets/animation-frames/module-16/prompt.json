@@ -1,0 +1,7 @@
+{
+  "module": 16,
+  "method": "built-in image_gen",
+  "source": "assets/animation-frames/module-16/sheet.png",
+  "prompt": "Use case: stylized-concept. Asset: transparent 2x2 four-frame animation sheet, style reference Image 1 only. Match Image 1: premium cute softly rounded miniature 3D white clay/paper icon, tactile matte finish, pale neutral-grey shading. Scene is ONLY two small freestanding boutique buildings, one fixed on the left and one fixed on the right, with open transparent space between them. In EVERY quadrant show both entire buildings at identical scale, angle and positions. Animate only one small parcel traveling through the center gap: frame 1 top-left parcel just leaving left building; frame 2 top-right parcel in center; frame 3 bottom-left parcel nearing right building; frame 4 bottom-right parcel at right building with a small check seal. Wholesale order passing between partner businesses must read instantly. Exact square canvas, four equal quadrants in reading order, same camera/lighting/padding, icon centered within each quadrant. No grid or dividers, no labels or text, no people or faces, no colored accents, no backdrop, no shadows outside cutout, genuinely transparent background.\n",
+  "selected_image": "public/illustrations/module-16.webp"
+}
