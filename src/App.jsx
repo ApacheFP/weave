@@ -25,6 +25,7 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
   useEffect(() => {
     let active = true;
     let engine;
+    let removeLayoutListener;
 
     async function boot() {
       try {
@@ -44,10 +45,22 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
             element.style.top = `${bounds.top}px`;
             element.style.width = `${bounds.width}px`;
             element.style.height = `${bounds.height}px`;
-            element.style.setProperty('--card-copy-size', `${bounds.width * .038}px`);
+            element.style.setProperty('--card-copy-size', `${bounds.width * .043}px`);
             element.dataset.moving = !bounds.settled;
           },
         });
+        const mobile = window.matchMedia('(max-width: 600px)');
+        const compact = window.matchMedia('(max-height: 1100px)');
+        const mobileLayout = { hFrac: .88, wFrac: .8, wFracTall: .8, gap: .07, gapTall: .07, lift: 0 };
+        const desktopLayout = Object.fromEntries(Object.keys(mobileLayout).map(key => [key, engine.values[key]]));
+        const updateLayout = () => {
+          engine.set(mobile.matches ? mobileLayout : compact.matches ? { ...desktopLayout, hFrac: .88 } : desktopLayout);
+          engine.renderer.domElement.style.touchAction = mobile.matches ? 'pan-y' : 'none';
+        };
+        updateLayout();
+        mobile.addEventListener('change', updateLayout);
+        compact.addEventListener('change', updateLayout);
+        removeLayoutListener = () => { mobile.removeEventListener('change', updateLayout); compact.removeEventListener('change', updateLayout); };
         carousel.current = engine;
         engine.renderer.domElement.setAttribute('aria-hidden', 'true');
         await engine.ready;
@@ -67,6 +80,7 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
     boot();
     return () => {
       active = false;
+      removeLayoutListener?.();
       engine?.dispose();
       carousel.current = null;
     };
@@ -97,9 +111,11 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
     <section className="carousel" id={`carousel-${group.id}`} role="tabpanel" aria-labelledby={`tab-${group.id}`} aria-describedby="carousel-context carousel-hint" aria-roledescription="carosello" onKeyDown={handleKey}>
       <div className="carousel-stage" ref={host} tabIndex={0} aria-label={`Esplora ${label.toLowerCase()} con le frecce della tastiera`} aria-describedby="carousel-hint">
         <div className="card-entry" ref={entry} data-moving="true">
-          {group.id === 'modules' && <div className="card-entry-footer"><p>{items[index].copy.join(' ')}</p><button type="button" className="card-enter-button" disabled={!ready} aria-label={`Entra nel modulo ${items[index].title}`} onClick={event => { event.stopPropagation(); onEnter(items[index].id); }} onKeyDown={event => event.stopPropagation()}><span>Entra</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5" /></svg></button></div>}
+          <div className="card-entry-footer"><p>{items[index].copy.join(' ')}</p>{group.id === 'modules'
+            ? <button type="button" className="card-enter-button" disabled={!ready} aria-label={`Entra nel modulo ${items[index].title}`} onClick={event => { event.stopPropagation(); onEnter(items[index].id); }} onKeyDown={event => event.stopPropagation()}><span>Entra</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5" /></svg></button>
+            : <button ref={infoButton} type="button" className="card-enter-button card-details-button" disabled={!ready} aria-label={`Scopri di più su ${items[index].title}`} aria-expanded={Boolean(infoState)} aria-controls={infoState ? `service-info-${items[index].id}` : undefined} onClick={event => { event.stopPropagation(); setInfoCard({ id: items[index].id, state: 'opening' }); }} onKeyDown={event => event.stopPropagation()}><span>Scopri di più</span></button>
+          }</div>
           {group.id === 'services' && <>
-            <button ref={infoButton} type="button" className="card-info-button" aria-label={`Scopri di più su ${items[index].title}`} aria-expanded={Boolean(infoState)} aria-controls={infoState ? `service-info-${items[index].id}` : undefined} onClick={event => { event.stopPropagation(); setInfoCard({ id: items[index].id, state: 'opening' }); }} onKeyDown={event => event.stopPropagation()}><span className="card-info-mark" aria-hidden="true">i</span><span>Scopri di più</span></button>
             {infoState && <div id={`service-info-${items[index].id}`} className={`service-info-back is-${infoState}`} role="group" aria-label={`Informazioni sul servizio ${items[index].title}`} onAnimationEnd={event => {
               if (event.animationName === 'service-info-flip-out') {
                 setInfoCard(null);
@@ -138,6 +154,7 @@ function ProductPage({ onSignOut, onEnter, initialGroup, indices, onGroupChange,
   const page = useRef(null);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     page.current.focus({ preventScroll: true });
   }, []);
 

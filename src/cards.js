@@ -1,4 +1,4 @@
-import { modules, moduleGroups } from './modules.js';
+import { modules } from './modules.js';
 
 const font = 'system-ui, -apple-system, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif';
 const artworkCache = new Map();
@@ -81,9 +81,6 @@ export async function createModuleCards(items = modules) {
 
         drawArtwork(ctx, artwork[index]);
 
-        if (!moduleGroups[0].items.some(item => item.id === module.id)) {
-          module.copy.forEach((line, row) => text(ctx, line, 72, 1128 + row * 56, 44, .78));
-        }
       },
     };
   });

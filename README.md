@@ -11,13 +11,17 @@ npm run dev
 
 `npm run build` compila la versione distribuibile. Il prodotto è front-end: login, dati, AI, approvazioni e pubblicazione del passaporto sono dimostrativi. Non vengono chiamati backend o API AI. Le modifiche rimangono nella sessione React durante la navigazione; uscita e ricaricamento azzerano la demo. I dati di accesso non vengono trasmessi o salvati.
 
+Su Vercel la root del repository è `.`. `vercel.json` seleziona Vite, esegue `npm run build` e pubblica `dist`, anche se il progetto era stato configurato con il preset Create React App (`build`).
+
 ## Accesso e carosello
 
 Login/signup in una card bianca centrata, font Stay With Me, password mostra/nascondi e hover ocra. Il menu profilo usa un ritratto fittizio Imagegen, consente di modificare nome, cognome ed email, gestire preferenze simulate e uscire.
 
 Il carosello conserva il motore WebGL del riferimento `carousel.html`, particelle, trascinamento e scorrimento circolare. Il passaggio Moduli/Servizi Integrati usa zoom in/out. Le card sono in bianco caldo e beige, con illustrazioni WebP statiche e titoli Matcha Style.
 
-La fascia inferiore della card attiva contiene **60% testo, 10% spazio e 30% pulsante Entra**. Il pulsante è una pillola scura con hover ocra, resta dentro la card e non applica blur o spostamenti. Il testo della fascia è HTML per mantenerlo nitido. L’overlay segue la geometria della card tramite `onFrame` nel motore; durante lo scorrimento si nasconde per evitare che resti sopra una card diversa.
+La fascia inferiore della card attiva contiene **60% testo, 10% spazio e 30% pulsante**: Entra nei moduli, Scopri di più nei servizi. Il pulsante è una pillola scura con hover ocra, resta dentro la card e non applica blur o spostamenti. Il testo della fascia è HTML per mantenerlo nitido su entrambi i caroselli. L’overlay segue la geometria della card tramite `onFrame` nel motore; durante lo scorrimento si nasconde per evitare che resti sopra una card diversa.
+
+Su mobile logo e profilo condividono la prima riga; selettore e introduzione occupano entrambe le colonne. Le card usano fino all’80% della larghezza, con pulsanti alti almeno 44 px. Sugli schermi corti la pagina può scorrere verticalmente, mantenendo leggibile la card. Gli swipe orizzontali navigano il carosello; quelli verticali scorrono la pagina. Il dettaglio del servizio riserva lo spazio al pulsante di ritorno e permette di scorrere i testi lunghi. Dimensioni e touch action si aggiornano al cambio del breakpoint.
 
 Il motore limita il DPR a 1,5 desktop e 2 mobile; a DPR 2 le texture sono 1280×1600, altrimenti 1024×1280. Multisampling 2 campioni, render target senza mipmap. A carosello fermo il wrapper non applica trasformazioni CSS. È disponibile una lista di accesso ai moduli anche senza WebGL e per lettori di schermo.
 
@@ -79,7 +83,7 @@ Le 22 illustrazioni Imagegen condividono lo stile bianco/grigio clay/paper: `pub
 - **Matcha Style** per titoli delle card del carosello: [DaFont](https://www.dafont.com/it/matcha-style.font), condizioni in `public/fonts/matcha-LICENSE.txt`.
 - **Stay With Me** per logo e accesso: condizioni in `public/fonts/FONT-LICENSE.txt`. La versione scaricata è per uso personale; l’autore richiede una [licenza commerciale](https://originfonts.com/product/stay-with-me/) per uso commerciale/promozionale.
 
-La build Vite è stata compilata. Non sono stati aggiunti o eseguiti test automatici per questa implementazione.
+La build Vite è stata compilata. Il CLI Playwright ha controllato tutte le 22 card a 320×568, 375×667 e 430×932, senza sovrapposizioni fra descrizioni e pulsanti né overflow orizzontale; verificati anche screenshot a 390×844 e swipe touch. Questi controlli usano Chrome in emulazione mobile. Non sono stati aggiunti test alla suite del repository.
 
 ### Correzioni di navigazione
 
