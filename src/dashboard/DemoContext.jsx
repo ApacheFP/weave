@@ -11,8 +11,10 @@ export const fabrics = [
 export const operations = [
   ['Taglio e preparazione', 'Taglierina', 8], ['Assemblaggio davanti', 'Lineare', 9], ['Tasche e pattine', 'Lineare', 6], ['Unione spalle e fianchi', 'Lineare', 5], ['Montaggio maniche', 'Braccio libero', 7], ['Fodera e colletto', 'Lineare', 7], ['Bottoni e asole', 'Asolatrice', 3], ['Stiro e finitura', 'Stiro a vapore', 3],
 ];
+export const minQuantity = data => Math.max(data.produced, data.retailSold + data.wholesaleOrders.reduce((sum, order) => sum + order.qty, 0));
 
 const initial = {
+  styleId: 'GJ-0421', orderId: 'OP-0421', lotId: 'L-0421-A', fabricLot: 'T-7781', sampleId: 'CAMP-0421-01', collection: 'Autunno/Inverno 2027', designChecks: [true, false, false],
   profile: { firstName: 'Alex', lastName: 'Rossi', email: 'demo@weave.it' },
   title: 'Giacca Atelier', brief: 'Una giacca monopetto regular, essenziale e strutturata. Toni terra, tre bottoni e due tasche. Una nuova idea di quotidiano per la collezione Autunno/Inverno 2027.',
   variant: 'Cammello', references: [], techGenerated: true,
@@ -46,7 +48,8 @@ export function totals(data) {
 
 const Context = createContext(null);
 export function DemoProvider({ children }) {
-  const [data, setData] = useState(() => structuredClone(initial));
+  const [workspace, setWorkspace] = useState(() => ({ activeId: initial.styleId, items: [structuredClone(initial), { ...structuredClone(initial), styleId: 'GJ-0422', orderId: 'OP-0422', lotId: 'L-0422-A', fabricLot: 'T-7782', sampleId: 'CAMP-0422-01', title: 'Giacca Studio', variant: 'Sabbia', fabricId: 'premium', fabricPrice: 20, quantity: 600, events: [{ id: 'studio-1', text: 'Brief creativo di Giacca Studio pronto', module: 1, time: '21 apr · 14:00' }], brief: 'Giacca in lana vergine, linea morbida e palette sabbia. Una proposta sartoriale per il guardaroba quotidiano.' }] }));
+  const data = workspace.items.find(item => item.styleId === workspace.activeId);
   const [notice, setNotice] = useState('');
   const timeout = useRef(null);
   useEffect(() => () => clearTimeout(timeout.current), []);
@@ -56,14 +59,35 @@ export function DemoProvider({ children }) {
     timeout.current = setTimeout(() => setNotice(''), 3600);
   }
   function commit(patch, message, module = 21) {
-    setData(previous => {
-      const next = { ...previous, ...(typeof patch === 'function' ? patch(previous) : patch) };
+    setWorkspace(current => {
+      const previous = current.items.find(item => item.styleId === workspace.activeId);
+      const changes = typeof patch === 'function' ? patch(previous) : patch;
+      const next = { ...previous, ...changes };
+      if (next.fabricId !== previous.fabricId) {
+        const fabric = fabrics.find(f => f.id === next.fabricId);
+        next.purchaseOrders = next.purchaseOrders.map(row => row.id === 'ACQ-0271' ? { ...row, supplier: fabric.supplier, material: fabric.name } : row);
+      }
       if (message) next.events = [{ id: crypto.randomUUID(), text: message, module, time: 'Ora' }, ...previous.events].slice(0, 40);
-      return next;
+      return { ...current, items: current.items.map(item => item.styleId === workspace.activeId ? next : changes.profile ? { ...item, profile: changes.profile } : item) };
     });
     if (message) notify(message);
   }
-  return <Context.Provider value={{ data, commit, notify, ...totals(data) }}>{children}<div className="dw-toast" role="status" aria-live="polite">{notice && <span key={notice}>{notice}</span>}</div></Context.Provider>;
+  function selectStyle(styleId) {
+    setWorkspace(current => current.items.some(item => item.styleId === styleId) ? { ...current, activeId: styleId } : current);
+  }
+  function createStyle({ title, styleId, collection, quantity, copy }) {
+    const code = styleId.trim().toUpperCase();
+    if (workspace.items.some(item => item.styleId === code)) return false;
+    const suffix = code.replace(/^GJ-/, '');
+    const item = { ...structuredClone(copy ? data : initial), title: title.trim(), styleId: code, orderId: 'OP-' + suffix, lotId: 'L-' + suffix + '-A', fabricLot: 'T-' + suffix, sampleId: 'CAMP-' + suffix + '-01', collection: collection.trim(), quantity: Number(quantity), references: [], chats: {}, aiRuns: {}, passportPublished: false,
+      profile: data.profile, qualityNote: copy ? data.qualityNote.replaceAll(data.lotId, 'L-' + suffix + '-A') : 'Nessuna non conformità registrata sul nuovo capo.',
+      ...(copy ? {} : { brief: '', techGenerated: false, sampleApproved: false, sampleChecks: [false, false, false], designChecks: [false, false, false], produced: 0, reworks: 0, qualityScore: 100, qualityResolved: true, productionDays: [], purchaseOrders: [], wholesaleOrders: [], retailSold: 0, shipments: [], lifecycle: [] }),
+      events: [{ id: crypto.randomUUID(), text: 'Creato il capo ' + title.trim(), module: 1, time: 'Ora' }] };
+    setWorkspace(current => ({ activeId: code, items: [...current.items, item] }));
+    notify('Capo creato: ' + item.title);
+    return true;
+  }
+  return <Context.Provider value={{ data, styles: workspace.items.map(({ styleId, title, collection, variant }) => ({ styleId, title, collection, variant })), selectStyle, createStyle, commit, notify, ...totals(data) }}>{children}<div className="dw-toast" role="status" aria-live="polite">{notice && <span key={notice}>{notice}</span>}</div></Context.Provider>;
 }
 export const useDemo = () => useContext(Context);
 
@@ -82,21 +106,21 @@ export function csv(name, rows) {
 export function techPack(data) {
   const t = totals(data);
   const sections = [
-    ['01 / IDENTITA E CONCEPT', 'WEAVE - TECH PACK GJ-0421', data.title, 'Collezione Autunno/Inverno 2027 - Regular fit', 'Giacca monopetto, 3 bottoni, due tasche', 'Variante: ' + data.variant, 'Modello v' + data.modelVersion, 'Documento dimostrativo'],
+    ['01 / IDENTITA E CONCEPT', `WEAVE - TECH PACK ${data.styleId}`, data.title, `Collezione ${data.collection} - Regular fit`, 'Giacca monopetto, 3 bottoni, due tasche', 'Variante: ' + data.variant, 'Modello v' + data.modelVersion, 'Documento dimostrativo'],
     ['02 / MISURE BASE - TAGLIA 42', ...data.measurements.map(row => `${row.point}: ${row.value} cm / tolleranza +/-1 cm`), 'Taglie: 38 - 40 - 42 - 44 - 46 - 48', 'Sviluppo torace: +' + data.gradingChest + ' cm per taglia'],
     ['03 / MATERIALI E DISTINTA BASE', t.fabric.name, t.fabric.composition, 'Origine: ' + t.fabric.origin, `Tessuto: ${data.consumption.toFixed(2)} m x ${data.fabricPrice.toFixed(2)} EUR`, ...data.trims.map(row => `${row.name}: ${row.qty} ${row.unit} x ${row.price.toFixed(2)} EUR`), `Totale materiali: ${t.materials.toFixed(2)} EUR`],
-    ['04 / CONFEZIONE E CONTROLLO', `Margine cucitura: ${data.seam} cm`, `Tempo standard: ${data.laborMinutes} minuti`, 'Macchine: lineare, braccio libero, asolatrice, stiro', `Ordine: OP-0421 / ${data.quantity} capi`, 'Lotto tessuto T-7781 / lotto capo L-0421-A', data.qualityNote, 'Cura: lavaggio a secco', 'Approvazione campione: ' + (data.sampleApproved ? 'Approvato' : 'Da completare')],
+    ['04 / CONFEZIONE E CONTROLLO', `Margine cucitura: ${data.seam} cm`, `Tempo standard: ${data.laborMinutes} minuti`, 'Macchine: lineare, braccio libero, asolatrice, stiro', `Ordine: ${data.orderId} / ${data.quantity} capi`, `Lotto tessuto ${data.fabricLot} / lotto capo ${data.lotId}`, data.qualityNote, 'Cura: lavaggio a secco', 'Approvazione campione: ' + (data.sampleApproved ? 'Approvato' : 'Da completare')],
   ];
   const ascii = text => String(text).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x20-\x7e]/g, ' ').replace(/[\\()]/g, '\\$&');
   const objects = ['<< /Type /Catalog /Pages 2 0 R >>', '<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R 10 0 R] /Count 4 >>', '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'];
   sections.forEach((lines, index) => {
     const wrapped = lines.flatMap(line => String(line).match(/.{1,76}(?:\s|$)|.{1,76}/g) || ['']);
-    const stream = `0.93 0.89 0.82 rg 0 780 595 62 re f\n0.15 0.15 0.15 rg\nBT /F1 14 Tf 42 746 Td 24 TL\n${wrapped.map((line, i) => `${i ? 'T* ' : ''}(${ascii(line)}) Tj`).join('\n')}\nET\nBT /F1 9 Tf 42 36 Td (GJ-0421 | WEAVE | ${index + 1}/4 | Demo) Tj ET`;
+    const stream = `0.93 0.89 0.82 rg 0 780 595 62 re f\n0.15 0.15 0.15 rg\nBT /F1 14 Tf 42 746 Td 24 TL\n${wrapped.map((line, i) => `${i ? 'T* ' : ''}(${ascii(line)}) Tj`).join('\n')}\nET\nBT /F1 9 Tf 42 36 Td (${data.styleId} | WEAVE | ${index + 1}/4 | Demo) Tj ET`;
     objects.push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents ${5 + index * 2} 0 R >>`, `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`);
   });
   let pdf = '%PDF-1.4\n'; const offsets = [0];
   objects.forEach((object, i) => { offsets.push(pdf.length); pdf += `${i + 1} 0 obj\n${object}\nendobj\n`; });
   const xref = pdf.length;
   pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n${offsets.slice(1).map(offset => `${String(offset).padStart(10, '0')} 00000 n \n`).join('')}trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;
-  download('WEAVE-GJ-0421-tech-pack.pdf', pdf, 'application/pdf');
+  download(`WEAVE-${data.styleId}-tech-pack.pdf`, pdf, 'application/pdf');
 }

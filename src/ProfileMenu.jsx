@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDemo } from './dashboard/DemoContext.jsx';
 
 const initialProfile = { firstName: 'Alex', lastName: 'Rossi', email: 'demo@weave.it' };
 const avatar = '/illustrations/profile-avatar.webp';
@@ -17,27 +18,47 @@ function Icon({ name }) {
 
 export default function ProfileMenu({ onSignOut }) {
   const [view, setView] = useState(null);
-  const [profile, setProfile] = useState(initialProfile);
+  const [transition, setTransition] = useState('');
+  const { data, commit } = useDemo();
+  const profile = data.profile;
   const [draft, setDraft] = useState(initialProfile);
-  const [moduleAlerts, setModuleAlerts] = useState(true);
-  const [productNews, setProductNews] = useState(false);
+  const moduleAlerts = data.moduleAlerts ?? true;
+  const productNews = data.productNews ?? false;
+  const setModuleAlerts = value => commit(previous => ({ moduleAlerts: typeof value === 'function' ? value(previous.moduleAlerts ?? true) : value }));
+  const setProductNews = value => commit(previous => ({ productNews: typeof value === 'function' ? value(previous.productNews ?? false) : value }));
   const [message, setMessage] = useState('');
   const root = useRef(null);
   const trigger = useRef(null);
   const panel = useRef(null);
+  const transitionTimer = useRef(null);
   const fullName = `${profile.firstName} ${profile.lastName}`;
+
+  const closePanel = useCallback((restoreFocus = false) => {
+    window.clearTimeout(transitionTimer.current);
+    if (restoreFocus) trigger.current.focus({ preventScroll: true });
+
+    const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 160;
+    if (!view || !duration) {
+      setView(null);
+      setTransition('');
+      return;
+    }
+
+    setTransition('closing');
+    transitionTimer.current = window.setTimeout(() => {
+      setView(null);
+      setTransition('');
+    }, duration);
+  }, [view]);
 
   useEffect(() => {
     if (!view) return;
     panel.current.querySelector('button, input')?.focus({ preventScroll: true });
     function outside(event) {
-      if (!root.current.contains(event.target)) setView(null);
+      if (!root.current.contains(event.target)) closePanel();
     }
     function escape(event) {
-      if (event.key === 'Escape') {
-        setView(null);
-        trigger.current.focus({ preventScroll: true });
-      }
+      if (event.key === 'Escape') closePanel(true);
     }
     document.addEventListener('pointerdown', outside);
     document.addEventListener('keydown', escape);
@@ -45,38 +66,48 @@ export default function ProfileMenu({ onSignOut }) {
       document.removeEventListener('pointerdown', outside);
       document.removeEventListener('keydown', escape);
     };
-  }, [view]);
+  }, [view, closePanel]);
+
+  useEffect(() => () => window.clearTimeout(transitionTimer.current), []);
 
   function show(next) {
     setMessage('');
     if (next === 'profile') setDraft(profile);
-    setView(next);
-  }
+    window.clearTimeout(transitionTimer.current);
+    const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 120;
+    if (!view || view === next || !duration) {
+      setView(next);
+      setTransition('');
+      return;
+    }
 
-  function close() {
-    setView(null);
-    trigger.current.focus({ preventScroll: true });
+    setTransition('leaving');
+    transitionTimer.current = window.setTimeout(() => {
+      setView(next);
+      setTransition('entering');
+      transitionTimer.current = window.setTimeout(() => setTransition(''), 200);
+    }, duration);
   }
 
   function saveProfile(event) {
     event.preventDefault();
-    setProfile({ firstName: draft.firstName.trim(), lastName: draft.lastName.trim(), email: draft.email.trim() });
+    commit({ profile: { firstName: draft.firstName.trim(), lastName: draft.lastName.trim(), email: draft.email.trim() } });
     setMessage('Profilo aggiornato nella demo.');
   }
 
   return (
     <div className="profile-menu" ref={root}>
-      <button className="profile-trigger" type="button" ref={trigger} aria-label={`Profilo di ${fullName}`} aria-haspopup="dialog" aria-expanded={Boolean(view)} aria-controls={view ? 'profile-panel' : undefined} onClick={() => view ? close() : show('menu')}>
+      <button className="profile-trigger" type="button" ref={trigger} aria-label={`Profilo di ${fullName}`} aria-haspopup="dialog" aria-expanded={Boolean(view)} aria-controls={view ? 'profile-panel' : undefined} onClick={() => view ? closePanel(true) : show('menu')}>
         <img src={avatar} width="36" height="36" alt="" />
         <span className="profile-trigger-name">{fullName}</span>
         <span className="profile-caret" data-open={Boolean(view)}><Icon name="chevron" /></span>
       </button>
 
       {view && (
-        <div className="profile-panel" id="profile-panel" role="dialog" aria-label={view === 'menu' ? 'Il tuo account' : view === 'profile' ? 'Il tuo profilo' : 'Impostazioni'} ref={panel}>
+        <div className={`profile-panel${transition ? ` is-${transition}` : ''}`} id="profile-panel" role="dialog" aria-label={view === 'menu' ? 'Il tuo account' : view === 'profile' ? 'Il tuo profilo' : 'Impostazioni'} ref={panel} inert={transition === 'leaving' || transition === 'closing'}>
           <div className="profile-panel-top">
             {view !== 'menu' ? <button className="profile-icon-button" type="button" aria-label="Torna al menu profilo" onClick={() => show('menu')}><Icon name="back" /></button> : <span className="profile-demo-tag">Account demo</span>}
-            <button className="profile-icon-button" type="button" aria-label="Chiudi profilo" onClick={close}><Icon name="close" /></button>
+            <button className="profile-icon-button" type="button" aria-label="Chiudi profilo" onClick={() => closePanel(true)}><Icon name="close" /></button>
           </div>
 
           {view === 'menu' ? <>

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useDemo } from './DemoContext.jsx';
 
 export function Icon({ name = 'grid', size = 20 }) {
   const paths = {
@@ -14,6 +15,15 @@ export function Icon({ name = 'grid', size = 20 }) {
     file: <><path d="M5 3h9l5 5v13H5V3Zm9 0v6h5M8 13h8M8 17h6" /></>,
     box: <><path d="m3 7 9-4 9 4v10l-9 4-9-4V7Zm0 0 9 4 9-4m-9 4v10M7 5l9 4" /></>,
     menu: <path d="M4 6h16M4 12h16M4 18h16" />,
+    chevrons: <path d="m9 8 3-3 3 3m-6 8 3 3 3-3" />,
+    panel: <><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M9 4v16" /></>,
+    pencil: <><path d="m4 16-1 5 5-1L20 8l-4-4L4 16Zm10-10 4 4" /></>,
+    ruler: <><path d="m3 16 13-13 5 5L8 21l-5-5Z" /><path d="m12 7 2 2m-5 1 2 2m-5 1 2 2" /></>,
+    scissors: <><circle cx="5" cy="6" r="3" /><circle cx="5" cy="18" r="3" /><path d="m8 8 13 13M8 16 21 3" /></>,
+    calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M7 3v4m10-4v4M3 11h18M7 15h2m4 0h2" /></>,
+    chart: <><path d="M4 3v18h17M8 15l4-6 4 3 5-8" /></>,
+    activity: <path d="M2 12h5l3-8 4 16 3-8h5" />,
+    list: <><path d="M9 6h12M9 12h12M9 18h12" /><circle cx="4" cy="6" r=".5" /><circle cx="4" cy="12" r=".5" /><circle cx="4" cy="18" r=".5" /></>,
     eye: <><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></>,
   };
   return <svg className="dw-icon" width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">{paths[name] || paths.layers}</svg>;
@@ -25,7 +35,7 @@ export function Card({ title, note, actions, children, className = '', ...props 
   return <section className={`dw-card ${className}`} {...props}>{(title || actions) && <header className="dw-card-head"><div><h2>{title}</h2>{note && <p>{note}</p>}</div>{actions && <div className="dw-actions">{actions}</div>}</header>}<div className="dw-card-body">{children}</div></section>;
 }
 export function Badge({ children, tone = '' }) { return <span className={`dw-badge ${tone}`}>{children}</span>; }
-export function Metrics({ items }) { return <div className="dw-metrics">{items.map(([label, value, note]) => <div className="dw-metric" key={label}><span>{label}</span><strong>{value}</strong>{note && <small>{note}</small>}</div>)}</div>; }
+export function Metrics({ items }) { return <div className="dw-metrics" style={{ '--metric-count': items.length }}>{items.map(([label, value, note]) => <div className="dw-metric" key={label}><span>{label}</span><strong>{value}</strong>{note && <small>{note}</small>}</div>)}</div>; }
 export function Field({ label, hint, children }) { return <label className="dw-field"><span>{label}</span>{children}{hint && <small>{hint}</small>}</label>; }
 export function Tabs({ items, selected, onChange, label = 'Vista' }) {
   return <div className="dw-tabs" role="group" aria-label={label}>{items.map(item => <button key={item} type="button" aria-pressed={selected === item} onClick={() => onChange(item)}>{item}</button>)}</div>;
@@ -40,6 +50,7 @@ export function Empty({ children }) { return <div className="dw-empty"><Icon nam
 export function Artwork({ id = 2, className = '' }) { return <img className={`dw-artwork ${className}`} src={`/illustrations/module-${String(id).padStart(2, '0')}.webp`} alt="" loading="lazy" />; }
 
 export function Jacket({ back = false, sketch = false, marks = true, highlight = false, onDefect, scale = 1, tone = '#ede4d6' }) {
+  const { data } = useDemo();
   return <svg className={`dw-jacket ${sketch ? 'is-sketch' : ''}`} viewBox="0 0 400 450" role="img" aria-label={back ? 'Disegno tecnico del retro della giacca' : 'Disegno tecnico del davanti della giacca'}>
     <defs><pattern id="sketch-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#dcd5ca" strokeWidth=".4" /></pattern></defs>
     <rect width="400" height="450" fill="url(#sketch-grid)" opacity=".5" />
@@ -48,7 +59,7 @@ export function Jacket({ back = false, sketch = false, marks = true, highlight =
       {back ? <><path d="M150 65q50 40 100 0M200 90v280m0 0-12 34m12-34 12 34M110 195h180" fill="none" /><path d="M111 350h178" fill="none" /></> : <><path d="m150 65 36 123-46-38 18-32-23-16m115-37-36 123 46-38-18-32 23-16M200 128v276" fill="none" /><path d="M127 247h49v8h-49Zm98 0h49v8h-49Z" /><path d="m131 256-4 28h49v-28m53 0v28h49l-4-28" fill="none" />{[217, 265, 313].map(y => <circle key={y} cx="205" cy={y} r="3" fill="#484138" />)}</>}
       <path d="m72 319 42 9m174 0 42-9" fill="none" />
     </g>
-    {marks && <g fill="none" stroke="#aa8a58" strokeWidth="1"><path d="M104 40h192M104 34v12m192-12v12M380 85v319m-6-319h12m-12 319h12" /><g fill="#806947" stroke="none" fontSize="11" fontFamily="system-ui"><text x="165" y="30">A · SPALLE</text><text x="368" y="265" transform="rotate(-90 368 265)">B · LUNGHEZZA</text><text x="66" y="431">GJ-0421 / 42 / FRONTE {back && '→ RETRO'}</text></g></g>}
+    {marks && <g fill="none" stroke="#aa8a58" strokeWidth="1"><path d="M104 40h192M104 34v12m192-12v12M380 85v319m-6-319h12m-12 319h12" /><g fill="#806947" stroke="none" fontSize="11" fontFamily="Geist, sans-serif"><text x="165" y="30">A · SPALLE</text><text x="368" y="265" transform="rotate(-90 368 265)">B · LUNGHEZZA</text><text x="66" y="431">{data.styleId} / 42 / FRONTE {back && '→ RETRO'}</text></g></g>}
     {highlight && <g className="dw-defect" role="button" tabIndex="0" aria-label="Apri difetto cucitura sulla spalla sinistra" onClick={onDefect} onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); onDefect?.(); } }}><circle cx="127" cy="86" r="26" fill="#c79c5328" stroke="#a87833" strokeWidth="2" strokeDasharray="4 3" /><circle cx="127" cy="86" r="5" fill="#a87833" /><path d="M154 86h49" stroke="#a87833" /><rect x="203" y="73" width="78" height="26" rx="8" fill="#fff" stroke="#d5c4a7" /><text x="215" y="90" fontSize="11" fill="#6e5531">NC-018</text></g>}
   </svg>;
 }
