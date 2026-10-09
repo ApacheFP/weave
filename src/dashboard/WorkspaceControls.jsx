@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { moduleGroups } from '../modules.js';
 import { minQuantity, useDemo } from './DemoContext.jsx';
 import { Badge, Button, Dialog, Empty, Field, Icon } from './ui.jsx';
+import { ProductPhoto } from './Media.jsx';
 
 export function StyleSwitcher({ onCreate, onSelect }) {
   const { data, styles, selectStyle } = useDemo();
@@ -19,7 +20,7 @@ export function StyleSwitcher({ onCreate, onSelect }) {
     <button ref={trigger} className="dw-workspace-trigger" aria-label={`Cambia capo: ${data.title}`} aria-expanded={open} aria-controls="style-switcher" onClick={() => { setOpen(!open); setQuery(''); }}>
       <span className="dw-workspace-mark"><Icon name="shirt" size={17} /></span><span className="dw-workspace-name"><strong>{data.title}</strong><small>{data.styleId} · {data.collection}</small></span><Icon name="chevrons" size={14} />
     </button>
-    {open && <div id="style-switcher" className="dw-workspace-popover" aria-label="I tuoi capi"><div className="dw-popover-heading">Capi nello spazio Atelier <Badge>{styles.length}</Badge></div><div className="dw-popover-search"><Icon name="search" size={15} /><input autoFocus aria-label="Cerca capo" placeholder="Cerca un capo…" value={query} onChange={e => setQuery(e.target.value)} /></div><div className="dw-style-list">{styles.filter(item => `${item.title} ${item.styleId}`.toLowerCase().includes(query.toLowerCase())).map(item => <button key={item.styleId} aria-pressed={item.styleId === data.styleId} onClick={() => { selectStyle(item.styleId); setOpen(false); onSelect?.(); }}><span className="dw-style-thumb"><Icon name="shirt" size={17} /></span><span><strong>{item.title}</strong><small>{item.styleId} · {item.variant}</small></span>{item.styleId === data.styleId && <Icon name="check" size={15} />}</button>)}</div><button className="dw-create-style" onClick={() => { setOpen(false); onCreate(); }}><Icon name="plus" size={16} />Nuovo capo</button><p className="dw-popover-foot">Ogni capo ha dati e attività propri.</p></div>}
+    {open && <div id="style-switcher" className="dw-workspace-popover" aria-label="I tuoi capi"><div className="dw-popover-heading">Capi nello spazio Atelier <Badge>{styles.length}</Badge></div><div className="dw-popover-search"><Icon name="search" size={15} /><input autoFocus aria-label="Cerca capo" placeholder="Cerca un capo…" value={query} onChange={e => setQuery(e.target.value)} /></div><div className="dw-style-list">{styles.filter(item => `${item.title} ${item.styleId}`.toLowerCase().includes(query.toLowerCase())).map(item => <button key={item.styleId} aria-pressed={item.styleId === data.styleId} onClick={() => { selectStyle(item.styleId); setOpen(false); onSelect?.(); }}><span className="dw-style-thumb"><ProductPhoto variant={item.variant} sizes="40px" /></span><span><strong>{item.title}</strong><small>{item.styleId} · {item.variant}</small></span>{item.styleId === data.styleId && <Icon name="check" size={15} />}</button>)}</div><button className="dw-create-style" onClick={() => { setOpen(false); onCreate(); }}><Icon name="plus" size={16} />Nuovo capo</button><p className="dw-popover-foot">Ogni capo ha dati e attività propri.</p></div>}
   </div>;
 }
 

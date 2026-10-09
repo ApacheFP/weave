@@ -33,6 +33,14 @@ In cima alla sidebar il selettore mostra il capo corrente: permette di cercare e
 
 La ricerca globale si apre da **Cerca** o **⌘/Ctrl K**. Ogni modulo ha le viste **Spazio di lavoro**, **Servizi integrati** (solo quelli pertinenti) e **Attività**. La sidebar e il contenuto continuano a funzionare anche se una vista genera un errore, grazie a un confine di errore locale.
 
+### Wrapper e immagini dei moduli
+
+I pannelli bianchi e i riepiloghi uniti riprendono `Prova1/src/styles/panels.css`. Le cornici incise, l'intestazione con icona, le griglie dei file, le barre dei filtri e le tabelle a tutta larghezza adattano direttamente i componenti di `Prova2/app/admin/`: `ui.tsx`, `admin.module.css`, `table.module.css` e `media/MediaBrowser.tsx`. I crediti della UI di Prova2 sono in `THIRD_PARTY_NOTICES.md`.
+
+Le visuali nelle dashboard sono **16 immagini generate con il tool integrato Imagegen**, salvate in `public/images/dashboard/` in WebP: fronte e retro delle tre varianti della giacca, schizzo, due tavole tecniche, tre campioni di lana, accessori, campione sul manichino, cucitura per il controllo qualità e tavola del cartamodello. Le immagini complete sono larghe 1120 px; ogni visuale ha una miniatura di 480 px, usata tramite `srcset`, caricamento lazy e decoding asincrono. Non ci sono GIF o foto caricate da servizi esterni. I prompt e i riferimenti sono conservati in `assets/dashboard/imagegen-manifest.json`.
+
+Il moodboard offre filtri per categoria, ricerca, griglia/elenco, ordinamento del nome in elenco, anteprima ingrandita e download. Foto e varianti seguono il capo selezionato nei moduli, nella lista capi, nel retail, nella chat e nel passaporto. Il cartamodello ha una tavola fotografica di riferimento e una vista CAD dimostrativa interattiva; i grafici, il grading e il marker continuano a derivare dai dati della demo. Misure, versioni e codici sono testo HTML aggiornabile, senza valori fissi nelle immagini generate.
+
 | Modulo | Azioni della demo |
 | --- | --- |
 | 1 · Ideazione e Design | Brief modificabile, moodboard in griglia/elenco con immagini locali, tre varianti, palette e checklist |

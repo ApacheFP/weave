@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { useDemo } from './DemoContext.jsx';
 
 export function Icon({ name = 'grid', size = 20 }) {
   const paths = {
@@ -31,8 +30,8 @@ export function Icon({ name = 'grid', size = 20 }) {
 export function Button({ children, primary, icon, className = '', ...props }) {
   return <button type="button" className={`dw-btn ${primary ? 'dw-primary' : ''} ${className}`} {...props}>{icon && <Icon name={icon} size={16} />}{children}</button>;
 }
-export function Card({ title, note, actions, children, className = '', ...props }) {
-  return <section className={`dw-card ${className}`} {...props}>{(title || actions) && <header className="dw-card-head"><div><h2>{title}</h2>{note && <p>{note}</p>}</div>{actions && <div className="dw-actions">{actions}</div>}</header>}<div className="dw-card-body">{children}</div></section>;
+export function Card({ title, note, actions, children, className = '', frame = false, flush = false, ...props }) {
+  return <section className={`dw-card ${frame ? 'dw-frame' : ''} ${className}`} {...props}>{(title || note || actions) && <header className="dw-card-head"><div>{title && <h2>{title}</h2>}{note && <p>{note}</p>}</div>{actions && <div className="dw-actions">{actions}</div>}</header>}<div className={`dw-card-body ${flush ? 'dw-card-flush' : ''}`}>{children}</div></section>;
 }
 export function Badge({ children, tone = '' }) { return <span className={`dw-badge ${tone}`}>{children}</span>; }
 export function Metrics({ items }) { return <div className="dw-metrics" style={{ '--metric-count': items.length }}>{items.map(([label, value, note]) => <div className="dw-metric" key={label}><span>{label}</span><strong>{value}</strong>{note && <small>{note}</small>}</div>)}</div>; }
@@ -47,30 +46,13 @@ export function Dialog({ title, note, children, onClose, wide }) {
   return <dialog className={`dw-dialog ${wide ? 'wide' : ''}`} ref={ref} onClose={onClose} aria-label={title} onClick={event => { if (event.target !== event.currentTarget) return; const r = event.currentTarget.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) event.currentTarget.close(); }}><header><div><h2>{title}</h2>{note && <p>{note}</p>}</div><button className="dw-icon-btn" onClick={() => ref.current.close()} aria-label="Chiudi finestra"><Icon name="close" /></button></header><div className="dw-dialog-body">{children}</div></dialog>;
 }
 export function Empty({ children }) { return <div className="dw-empty"><Icon name="search" /><p>{children}</p></div>; }
-export function Artwork({ id = 2, className = '' }) { return <img className={`dw-artwork ${className}`} src={`/illustrations/module-${String(id).padStart(2, '0')}.webp`} alt="" loading="lazy" />; }
-
-export function Jacket({ back = false, sketch = false, marks = true, highlight = false, onDefect, scale = 1, tone = '#ede4d6' }) {
-  const { data } = useDemo();
-  return <svg className={`dw-jacket ${sketch ? 'is-sketch' : ''}`} viewBox="0 0 400 450" role="img" aria-label={back ? 'Disegno tecnico del retro della giacca' : 'Disegno tecnico del davanti della giacca'}>
-    <defs><pattern id="sketch-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#dcd5ca" strokeWidth=".4" /></pattern></defs>
-    <rect width="400" height="450" fill="url(#sketch-grid)" opacity=".5" />
-    <g transform={`translate(200 220) scale(${scale}) translate(-200 -220)`} stroke="#484138" strokeWidth={sketch ? '1.2' : '1.6'} fill={tone} strokeLinejoin="round">
-      <path d="m150 65-50 24-28 45-37 202 40 13 37-158-3 213h182l-3-213 37 158 40-13-37-202-28-45-50-24-17 18h-36l-17-18Z" />
-      {back ? <><path d="M150 65q50 40 100 0M200 90v280m0 0-12 34m12-34 12 34M110 195h180" fill="none" /><path d="M111 350h178" fill="none" /></> : <><path d="m150 65 36 123-46-38 18-32-23-16m115-37-36 123 46-38-18-32 23-16M200 128v276" fill="none" /><path d="M127 247h49v8h-49Zm98 0h49v8h-49Z" /><path d="m131 256-4 28h49v-28m53 0v28h49l-4-28" fill="none" />{[217, 265, 313].map(y => <circle key={y} cx="205" cy={y} r="3" fill="#484138" />)}</>}
-      <path d="m72 319 42 9m174 0 42-9" fill="none" />
-    </g>
-    {marks && <g fill="none" stroke="#aa8a58" strokeWidth="1"><path d="M104 40h192M104 34v12m192-12v12M380 85v319m-6-319h12m-12 319h12" /><g fill="#806947" stroke="none" fontSize="11" fontFamily="Geist, sans-serif"><text x="165" y="30">A · SPALLE</text><text x="368" y="265" transform="rotate(-90 368 265)">B · LUNGHEZZA</text><text x="66" y="431">{data.styleId} / 42 / FRONTE {back && '→ RETRO'}</text></g></g>}
-    {highlight && <g className="dw-defect" role="button" tabIndex="0" aria-label="Apri difetto cucitura sulla spalla sinistra" onClick={onDefect} onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); onDefect?.(); } }}><circle cx="127" cy="86" r="26" fill="#c79c5328" stroke="#a87833" strokeWidth="2" strokeDasharray="4 3" /><circle cx="127" cy="86" r="5" fill="#a87833" /><path d="M154 86h49" stroke="#a87833" /><rect x="203" y="73" width="78" height="26" rx="8" fill="#fff" stroke="#d5c4a7" /><text x="215" y="90" fontSize="11" fill="#6e5531">NC-018</text></g>}
-  </svg>;
-}
-
 export const patternPieces = [
-  { name: 'Davanti', path: 'M20 8 60 0 80 28 68 68 82 152 5 152 12 55Z', qty: 2 },
-  { name: 'Dietro', path: 'M15 8 60 0 76 38 64 70 75 150 5 150 12 65Z', qty: 2 },
-  { name: 'Manica sopra', path: 'M20 20Q42-15 65 20L75 140 5 140Z', qty: 2 },
-  { name: 'Manica sotto', path: 'M25 8 54 4 65 142 12 142Z', qty: 2 },
-  { name: 'Colletto', path: 'M5 38 15 20 70 10 92 26 76 40Z', qty: 1 },
-  { name: 'Rever', path: 'M20 0 62 14 52 140 25 140Z', qty: 2 },
+  { name: 'Davanti', path: 'M31 5L59 12Q57 28 63 38Q69 48 79 50L72 84Q70 106 78 156Q42 164 9 157L14 102Q18 75 17 59L9 47L25 38L20 27L34 22Z', qty: 2 },
+  { name: 'Dietro', path: 'M12 5Q30 11 42 4L71 15Q61 32 66 44Q69 52 79 55L70 87Q68 105 77 157L11 157L14 95L12 5Z', qty: 2 },
+  { name: 'Manica sopra', path: 'M12 40Q14 22 31 10Q44 0 56 8Q74 18 80 42Q75 66 72 93L63 151L27 151L15 93Q11 67 12 40Z', qty: 2 },
+  { name: 'Manica sotto', path: 'M25 18Q40 9 55 20Q59 49 55 77L53 147L27 149Q25 113 19 83Q15 49 25 18Z', qty: 2 },
+  { name: 'Colletto', path: 'M7 66Q42 40 86 55L93 78Q52 63 18 87Z', qty: 1 },
+  { name: 'Rever', path: 'M35 7L66 19L53 47Q40 78 34 113L40 155L16 155L18 102Q20 64 31 34L20 24Z', qty: 2 },
 ];
 export function Pattern({ index = 0, scale = 1, notches = true, grain = true, nested = false, active = false }) {
   const piece = patternPieces[index % patternPieces.length];

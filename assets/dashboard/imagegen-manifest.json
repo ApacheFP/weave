@@ -1,0 +1,134 @@
+{
+  "mode": "built-in image_gen",
+  "product": "Giacca Atelier · capo dimostrativo",
+  "created": "2026-10-09",
+  "inspiration": {
+    "ui": [
+      "Prova1/src/styles/panels.css",
+      "Prova1/src/styles/views/projects-files.css",
+      "Prova2/app/admin/ui.tsx",
+      "Prova2/app/admin/admin.module.css",
+      "Prova2/app/admin/media/MediaBrowser.tsx",
+      "Prova2/app/admin/media/media.module.css",
+      "Prova2/app/admin/table.module.css"
+    ],
+    "garment": [
+      "https://us.marcgebauer.com/products/the-madmen-blazer",
+      "https://blog.moodfabrics.com/the-nepeta-blazer-free-sewing-pattern/"
+    ]
+  },
+  "assets": [
+    {
+      "key": "jacket-sand-back",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-ea66627b-e109-4690-888d-eb9385180868.png",
+      "output": "public/images/dashboard/jacket-sand-back.webp",
+      "thumbnail": "public/images/dashboard/jacket-sand-back-thumb.webp",
+      "prompt": "Use case: precise-object-edit\nAsset type: consistent rear product catalog photo.\nInput image 1 is the back view of the master jacket and edit target.\nPrimary request: Change ONLY the fabric color to light sand beige #d5c5ac. Preserve every feature: exact shoulder width, sleeve length, centre seam, curved side seams, single centre vent, hem, complete framing, wool twill detail and identical warm white backdrop and soft light. Realistic catalog photography. No other objects, no front features, no text or watermark."
+    },
+    {
+      "key": "jacket-black-back",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-e9185b3a-d127-4656-b30a-3302603b066e.png",
+      "output": "public/images/dashboard/jacket-black-back.webp",
+      "thumbnail": "public/images/dashboard/jacket-black-back-thumb.webp",
+      "prompt": "Use case: precise-object-edit\nAsset type: consistent rear product catalog photo.\nInput image 1 is the back view of the master jacket and edit target.\nPrimary request: Change ONLY the fabric color to deep charcoal black #302f2d. Preserve every feature: exact shoulder width, sleeve length, centre seam, curved side seams, single centre vent, hem, complete framing, wool twill detail and identical warm white backdrop and soft light. Realistic catalog photography. No other objects, no front features, no text or watermark."
+    },
+    {
+      "key": "jacket-camel",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-c50d86b7-11f2-41e3-a9f0-71bb015fc60b.png",
+      "output": "public/images/dashboard/jacket-camel.webp",
+      "thumbnail": "public/images/dashboard/jacket-camel-thumb.webp",
+      "prompt": "Use case: product-mockup\nAsset type: professional textile product dashboard / photographic master reference for the same garment across all modules.\nPrimary request: Create one photorealistic studio catalog photograph of a camel wool tailored jacket, front view, single garment only.\nSubject: Contemporary regular-fit single-breasted jacket, exactly three small dark brown corozo front buttons, notch lapels, exactly two flap pockets at waist, subtle chest welt pocket, full-length sleeves, natural wool twill fabric, restrained precise tailoring. This is the fictional Giacca Atelier used in WEAVE, Italian autumn/winter collection.\nScene/backdrop: warm off-white seamless studio background, soft grounded shadow; invisible mannequin photography, no visible hanger, no person.\nComposition: vertical 4:5 photograph, complete garment centered with generous 12% breathing room around all edges, front facing square to camera, collar and hem entirely visible.\nLighting: large diffused studio softbox, soft daylight, realistic wool fiber and construction detail, professional ecommerce product photography.\nColor: true warm camel wool #bda17d, background ivory #f6f5f2.\nConstraints: produce a realistic photograph, not a 3D icon, not clay, not plastic, not a stylized render; preserve the three-button and two-flap-pocket construction; no text, logos, watermark, accessories or decorative elements."
+    },
+    {
+      "key": "fabric-camel",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-bfd9aa31-799c-4ed7-a685-eb7fb3011694.png",
+      "output": "public/images/dashboard/fabric-camel.webp",
+      "thumbnail": "public/images/dashboard/fabric-camel-thumb.webp",
+      "prompt": "Use case: product-mockup\nAsset type: textile material library photographic swatch for a professional fashion dashboard.\nPrimary request: a real macro product photograph of one folded swatch of warm camel wool blend twill fabric, dense fine diagonal weave, matte wool fibers, color #bda17d.\nScene: clean warm off-white studio tabletop. The square swatch is gently folded at one corner so thickness and drape are visible, with clean edges.\nComposition: single swatch centered, near top-down view, square photograph, swatch occupies 82% of frame. Real woven texture resolved in detail, soft shadow.\nLighting: soft natural side light; neutral studio material photography, realistic natural textile, not clay, not CGI, not a render.\nConstraints: same style of photography for this material set, no text, no card border, no label, no logo, no watermark, no other objects."
+    },
+    {
+      "key": "fabric-sand",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-8a1fc275-8392-42d5-8fd8-5489bc35c2e5.png",
+      "output": "public/images/dashboard/fabric-sand.webp",
+      "thumbnail": "public/images/dashboard/fabric-sand-thumb.webp",
+      "prompt": "Use case: product-mockup\nAsset type: textile material library photographic swatch for a professional fashion dashboard.\nPrimary request: a real macro product photograph of one folded swatch of light sand ivory virgin wool twill fabric, premium dense fine weave, matte wool fibers, color #d5c5ac.\nScene: clean warm off-white studio tabletop. The square swatch is gently folded at one corner so thickness and drape are visible, with clean edges.\nComposition: single swatch centered, near top-down view, square photograph, swatch occupies 82% of frame. Real woven texture resolved in detail, soft shadow.\nLighting: soft natural side light; neutral studio material photography, realistic natural textile, not clay, not CGI, not a render.\nConstraints: same style of photography for this material set, no text, no card border, no label, no logo, no watermark, no other objects."
+    },
+    {
+      "key": "fabric-stone",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-9825d908-dbb5-4628-886f-604f8677750c.png",
+      "output": "public/images/dashboard/fabric-stone.webp",
+      "thumbnail": "public/images/dashboard/fabric-stone-thumb.webp",
+      "prompt": "Use case: product-mockup\nAsset type: textile material library photographic swatch for a professional fashion dashboard.\nPrimary request: a real macro product photograph of one folded swatch of medium warm stone grey recycled wool blend fabric, subtly heathered fine twill weave, matte wool fibers, color #b9b3a7.\nScene: clean warm off-white studio tabletop. The square swatch is gently folded at one corner so thickness and drape are visible, with clean edges.\nComposition: single swatch centered, near top-down view, square photograph, swatch occupies 82% of frame. Real woven texture resolved in detail, soft shadow.\nLighting: soft natural side light; neutral studio material photography, realistic natural textile, not clay, not CGI, not a render.\nConstraints: same style of photography for this material set, no text, no card border, no label, no logo, no watermark, no other objects."
+    },
+    {
+      "key": "jacket-sand",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-54f0f28a-0718-47d9-a760-8ac173fc6d57.png",
+      "output": "public/images/dashboard/jacket-sand.webp",
+      "thumbnail": "public/images/dashboard/jacket-sand-thumb.webp",
+      "prompt": "Use case: precise-object-edit\nAsset type: consistent product catalog photograph.\nInput image 1 is the master reference garment and edit target.\nPrimary request: Change ONLY the wool fabric color from camel to light sand beige #d5c5ac, and make the matching lining slightly lighter. Keep the exact jacket geometry, tailoring, all three buttons and two flap pockets, chest pocket, camera, complete garment framing, natural wool texture, off-white background and soft studio light unchanged.\nConstraints: Photorealistic fashion catalog photo; no logo, no text, no watermark, no clay/plastic rendering, no other objects."
+    },
+    {
+      "key": "jacket-black",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-ee969b88-9c00-4fb3-8e74-9b56d56b66cb.png",
+      "output": "public/images/dashboard/jacket-black.webp",
+      "thumbnail": "public/images/dashboard/jacket-black-thumb.webp",
+      "prompt": "Use case: precise-object-edit\nAsset type: consistent product catalog photograph.\nInput image 1 is the master reference garment and edit target.\nPrimary request: Change ONLY the wool fabric color to soft deep charcoal black #302f2d, with matching dark lining. Keep the exact jacket geometry, tailoring, all three buttons and two flap pockets, chest pocket, camera, complete garment framing, natural wool texture, off-white background and soft studio light unchanged. Render wool detail clearly even in black.\nConstraints: Photorealistic fashion catalog photo; no logo, no text, no watermark, no clay/plastic rendering, no other objects."
+    },
+    {
+      "key": "jacket-back",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-c4fe522d-9cf3-4340-a34f-01b444e63c2c.png",
+      "output": "public/images/dashboard/jacket-back.webp",
+      "thumbnail": "public/images/dashboard/jacket-back-thumb.webp",
+      "prompt": "Use case: precise-object-edit\nAsset type: consistent product catalog photograph.\nInput image 1 is the master reference garment and edit target.\nPrimary request: Create the matching BACK VIEW studio product photograph of precisely this camel wool jacket. Keep identical camel textile, silhouette, shoulder width, sleeve length, hem length and neutral studio backdrop. Rotate garment to square-on rear view. Show authentic tailored centre back seam, curved side seams and one centre back vent, clean closed back with no front lapels/buttons/pockets showing. Entire garment visible with similar generous margin. No mannequin visible.\nConstraints: Photorealistic fashion catalog photo; no logo, no text, no watermark, no clay/plastic rendering, no other objects."
+    },
+    {
+      "key": "sketch",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-c475e07d-70b7-463a-92df-225b03569b4a.png",
+      "output": "public/images/dashboard/sketch.webp",
+      "thumbnail": "public/images/dashboard/sketch-thumb.webp",
+      "prompt": "Use case: style-transfer\nAsset type: authentic garment development drawing in a professional textile dashboard.\nInput image 1: reference garment; preserve its design and construction.\nPrimary request: Create a professional fashion designer's graphite pencil sketch of the reference jacket on warm white drawing paper, front view only. Hand-drawn confident graphite lines, subtle construction strokes, light pencil shading on the lapels and sleeves, realistic paper grain. Precisely preserve this jacket's three buttons, notch lapels, chest welt and two flap pockets, regular-fit proportions. Full garment centered, with airy blank margins. No person, no mannequin, no pencil props, no typography, no lettering, no dimensions, no colorful painting. The final image should look like an authentic scanned atelier sketch.\nAvoid: childish icons, clay, plastic, logos, watermark, collage, multiple views on one page. One asset only."
+    },
+    {
+      "key": "technical-front",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-5fb693ed-5a2a-4ad3-bb6e-81e7c6a63735.png",
+      "output": "public/images/dashboard/technical-front.webp",
+      "thumbnail": "public/images/dashboard/technical-front-thumb.webp",
+      "prompt": "Use case: style-transfer\nAsset type: authentic garment development drawing in a professional textile dashboard.\nInput image 1: reference garment; preserve its design and construction.\nPrimary request: Translate the reference jacket into a professional fashion technical flat drawing, FRONT VIEW ONLY. Clean thin black ink technical lines on pure warm white, seam lines, lapel roll line and collar shape, exactly three buttons, precise buttonholes, two flap pockets, chest welt, sleeve seams and cuffs. Complete garment facing square to camera, symmetrical proportions, no perspective, no mannequin, no 3D shading, no grid decoration. Fine grey secondary seam stitching, ample blank margins suitable for HTML labels. Authentic apparel tech-pack drawing. Do not include any text, labels, numbers, codes, measurements or dimensions.\nAvoid: childish icons, clay, plastic, logos, watermark, collage, multiple views on one page. One asset only."
+    },
+    {
+      "key": "technical-back",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-0b9b46a0-10a5-467d-9379-9333e9404921.png",
+      "output": "public/images/dashboard/technical-back.webp",
+      "thumbnail": "public/images/dashboard/technical-back-thumb.webp",
+      "prompt": "Use case: style-transfer\nAsset type: authentic garment development drawing in a professional textile dashboard.\nInput image 1: reference garment; preserve its design and construction.\nPrimary request: Translate the reference jacket into a matching professional fashion technical flat drawing, BACK VIEW ONLY. Clean thin black ink technical lines on warm white. Show correct shoulder seams, centre back seam, two curved side body seams, sleeve rear seams, cuffs and one centre back vent. Consistent hem length, silhouette and shoulders with the reference garment. No front lapels, buttons or pockets on the back. Complete garment facing square to camera, symmetrical proportions, no perspective, no mannequin, no 3D shading, no decorative grid, ample blank margins. Authentic apparel tech-pack drawing. Do not include any text, labels, numbers, codes, measurements or dimensions.\nAvoid: childish icons, clay, plastic, logos, watermark, collage, multiple views on one page. One asset only."
+    },
+    {
+      "key": "sample",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-9763405f-cb87-4d0c-8b0c-70ee537b2cca.png",
+      "output": "public/images/dashboard/sample.webp",
+      "thumbnail": "public/images/dashboard/sample-thumb.webp",
+      "prompt": "Use case: photorealistic-natural\nAsset type: photographic evidence and material reference for a textile product dashboard.\nPrimary request: Photograph the same camel wool jacket from the reference on a real beige linen torso dress form in a quiet Italian tailoring workroom. Preserve the precise three-button front, notch lapels, chest welt, two flap pockets and long sleeves. The garment is a finished development sample. Entire jacket and dress form neck are visible, three-quarter gentle front angle, soft daylight, restrained warm ivory background, a blurred cutting table behind it. Texture of real wool, seams and buttons in focus. No person, no signage, no text, no logos.\nConstraints: one coherent photograph only, natural physical objects, no collage, no watermark, no stylized CGI, no UI wrapper or borders."
+    },
+    {
+      "key": "quality-seam",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-830c6520-0668-4500-a6c9-e7acdb9d31ed.png",
+      "output": "public/images/dashboard/quality-seam.webp",
+      "thumbnail": "public/images/dashboard/quality-seam-thumb.webp",
+      "prompt": "Use case: photorealistic-natural\nAsset type: photographic evidence and material reference for a textile product dashboard.\nPrimary request: Photorealistic close-up inspection evidence of the LEFT SHOULDER seam of the same camel wool jacket in the reference. Macro photograph on a tailoring worktable, show the shoulder joining the sleeve head, with a small visibly puckered uneven stitch line about 2 cm long: subtle seam tension defect, not a tear or catastrophic damage. Clear wool fiber and twill weave texture, soft neutral daylight, realistic natural sewing construction. No red circle, no drawn arrow, no label, no ruler numbers, no text, no logo. Full frame material detail with shoulder seam crossing near the center.\nConstraints: one coherent photograph only, natural physical objects, no collage, no watermark, no stylized CGI, no UI wrapper or borders."
+    },
+    {
+      "key": "trims",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-5717b6b8-242a-487a-be85-e9c9a84c89a1.png",
+      "output": "public/images/dashboard/trims.webp",
+      "thumbnail": "public/images/dashboard/trims-thumb.webp",
+      "prompt": "Use case: product-mockup\nAsset type: photographic evidence and material reference for a textile product dashboard.\nPrimary request: Photorealistic overhead flat lay of garment BOM accessories on a warm white tailoring table: a folded light beige viscose lining swatch with authentic silky drape, a small ivory fusible woven interfacing swatch, exactly three dark brown four-hole corozo buttons neatly aligned, and two plain cream woven garment labels beside a simple kraft packaging sleeve. Each component visually distinct, tidy purposeful layout, generous spacing, soft side light, realistic textiles and natural materials, square photograph. No fake words, no logo, no text, no colorful objects, no clay or plastic icons.\nConstraints: one coherent photograph only, natural physical objects, no collage, no watermark, no stylized CGI, no UI wrapper or borders."
+    },
+    {
+      "key": "pattern-reference",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-86f55485-b281-4cc7-89f5-a6a92a363a7f.png",
+      "output": "public/images/dashboard/pattern-reference.webp",
+      "thumbnail": "public/images/dashboard/pattern-reference-thumb.webp",
+      "prompt": "Use case: photorealistic-natural\nAsset type: photographic evidence and material reference for a textile product dashboard.\nPrimary request: Create an authentic overhead photograph of a professional jacket patternmaking worktable: six groups of cut kraft pattern paper for a tailored single-breasted regular-fit jacket, two front panels with curved armholes and lapel extensions, back panel with shoulder dart, two-piece shaped sleeve, collar and long facing. Real curved cutting lines, fine pencil seam allowance dashed lines, notches and grainline arrows drawn on paper, laid neatly without overlap on an ivory cutting mat. One metal pattern ruler at the edge. Warm neutral paper and soft natural daylight. The drawing must look like actual atelier drafting, with believable curved armscyes and sleeve caps. No text, no codes, no numbers, no garment photo, no childish geometric icon shapes.\nConstraints: one coherent photograph only, natural physical objects, no collage, no watermark, no stylized CGI, no UI wrapper or borders."
+    }
+  ]
+}
