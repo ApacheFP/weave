@@ -1,16 +1,54 @@
-[
-  {
-    "id": "warm",
-    "mode": "built-in imagegen",
-    "prompt": "Use case: stylized-concept. Asset type: genuine fashion research moodboard for a stylist developing a versatile contemporary everyday tailored jacket. Create ONE landscape image showing a curated physical fashion inspiration collage on plain off-white paper, photographed flat from directly above. The collage must clearly consist of 8 to 10 DISTINCT overlapping irregular rectangular paper clippings and actual tactile swatches, with breathing space and intentional visual hierarchy. Include: 3 tactile fabric swatches (wool twill closeup with frayed edge, cotton, linen); 2 cropped editorial fashion photographs showing jacket shoulder/lapel proportions and relaxed tailoring on a person (crop out the face and head; these are reference garments, not a definitive new design); 1 closeup of a hand sewing a jacket seam; 1 detail photo of matte buttons beside thread; 1 restrained everyday city fashion street photograph cropped to clothing in motion. Palette: camel wool, ivory cotton, sand linen, taupe, warm charcoal; understated everyday tailoring. These should be inspiration fragments with different crops, scales and textures, pasted together by a fashion stylist, not one continuous scene. Realistic editorial photography and tangible fabric texture. No hotel, room, furniture, architecture, building, courtyard, pool, vase, landscape, interior decoration, sculpture. No fashion drawings, figurines, croquis, blueprint, finished design presentation, logo, caption, words, labels, color palette blocks or interface. No hands arranging the board. Portraits must be incidental cropped garment references only. The overall result must read unmistakably as a FASHION MOODBOARD, tactile and exploratory, not a hotel photograph. Landscape 3:2 image.",
-    "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-8f8cf2da-daa9-45f5-8898-c47b83314e35.png",
-    "output": "public/images/dashboard/moodboard-fashion-warm.webp"
-  },
-  {
-    "id": "cool",
-    "mode": "built-in imagegen",
-    "prompt": "Use case: stylized-concept. Asset type: genuine fashion research moodboard for a stylist developing a versatile contemporary everyday tailored jacket. Create ONE landscape image showing a curated physical fashion inspiration collage on plain off-white paper, photographed flat from directly above. The collage must clearly consist of 8 to 10 DISTINCT overlapping irregular rectangular paper clippings and actual tactile swatches, with breathing space and intentional visual hierarchy. Include: 3 tactile fabric swatches (wool twill closeup with frayed edge, cotton, linen); 2 cropped editorial fashion photographs showing jacket shoulder/lapel proportions and relaxed tailoring on a person (crop out the face and head; these are reference garments, not a definitive new design); 1 closeup of a hand sewing a jacket seam; 1 detail photo of matte buttons beside thread; 1 restrained everyday city fashion street photograph cropped to clothing in motion. Palette: slate wool, chalk cotton, dove gray linen, sage, charcoal; understated contemporary urban tailoring. These should be inspiration fragments with different crops, scales and textures, pasted together by a fashion stylist, not one continuous scene. Realistic editorial photography and tangible fabric texture. No hotel, room, furniture, architecture, building, courtyard, pool, vase, landscape, interior decoration, sculpture. No fashion drawings, figurines, croquis, blueprint, finished design presentation, logo, caption, words, labels, color palette blocks or interface. No hands arranging the board. Portraits must be incidental cropped garment references only. The overall result must read unmistakably as a FASHION MOODBOARD, tactile and exploratory, not a hotel photograph. Landscape 3:2 image.",
-    "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-889d1313-fbd7-4103-a111-10223562d408.png",
-    "output": "public/images/dashboard/moodboard-fashion-cool.webp"
-  }
-]
+{
+  "generator": "OpenAI imagegen",
+  "purpose": "Independent fashion reference photographs; six shown per direction",
+  "assets": [
+    {
+      "id": "fabric-warm",
+      "prompt": "Use case: photorealistic-natural. Asset type: one individual fashion moodboard reference photograph for a contemporary everyday tailored jacket, displayed as a separate card. One macro photograph of camel wool twill, softly folded to show its diagonal weave and weight. Only fabric. Soft natural studio light, restrained neutral colors, tactile real material, refined professional fashion editorial photography. Square composition. Exactly ONE photograph, ONE coherent scene filling the frame. Absolutely no collage, no panels, no montage, no moodboard layout, no overlapping paper, no swatch board, no frame, no captions, no text, no logo, no hotel, no interior decoration. This image will be arranged beside other separate images by the web app.",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-d51f2b20-a181-4a0a-aaeb-45b1ea45d7db.png",
+      "output": "public/images/dashboard/mood-reference-fabric-warm.webp"
+    },
+    {
+      "id": "fabric-cool",
+      "prompt": "Use case: photorealistic-natural. Asset type: one individual fashion moodboard reference photograph for a contemporary everyday tailored jacket, displayed as a separate card. One macro photograph of slate gray wool twill, softly folded to show its diagonal weave and weight. Only fabric. Soft natural studio light, restrained neutral colors, tactile real material, refined professional fashion editorial photography. Square composition. Exactly ONE photograph, ONE coherent scene filling the frame. Absolutely no collage, no panels, no montage, no moodboard layout, no overlapping paper, no swatch board, no frame, no captions, no text, no logo, no hotel, no interior decoration. This image will be arranged beside other separate images by the web app.",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-053822a3-33ba-4297-8625-151d5539c6b0.png",
+      "output": "public/images/dashboard/mood-reference-fabric-cool.webp"
+    },
+    {
+      "id": "silhouette-warm",
+      "prompt": "Use case: photorealistic-natural. Asset type: one individual fashion moodboard reference photograph for a contemporary everyday tailored jacket, displayed as a separate card. One editorial photograph cropped from neck to upper thigh of a person wearing a sand relaxed tailored blazer over a plain ivory top. Emphasize soft shoulder and generous silhouette. No face. Soft natural studio light, restrained neutral colors, tactile real material, refined professional fashion editorial photography. Square composition. Exactly ONE photograph, ONE coherent scene filling the frame. Absolutely no collage, no panels, no montage, no moodboard layout, no overlapping paper, no swatch board, no frame, no captions, no text, no logo, no hotel, no interior decoration. This image will be arranged beside other separate images by the web app.",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-d16d41e6-2217-40a3-be8a-15334f56a7d7.png",
+      "output": "public/images/dashboard/mood-reference-silhouette-warm.webp"
+    },
+    {
+      "id": "silhouette-cool",
+      "prompt": "Use case: photorealistic-natural. Asset type: one individual fashion moodboard reference photograph for a contemporary everyday tailored jacket, displayed as a separate card. One editorial photograph cropped from neck to upper thigh of a person wearing a charcoal relaxed tailored blazer over a plain chalk top. Emphasize soft shoulder and generous silhouette. No face. Soft natural studio light, restrained neutral colors, tactile real material, refined professional fashion editorial photography. Square composition. Exactly ONE photograph, ONE coherent scene filling the frame. Absolutely no collage, no panels, no montage, no moodboard layout, no overlapping paper, no swatch board, no frame, no captions, no text, no logo, no hotel, no interior decoration. This image will be arranged beside other separate images by the web app.",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-c3ddccc7-d2b9-4cbb-a6e0-bd1a579f18d4.png",
+      "output": "public/images/dashboard/mood-reference-silhouette-cool.webp"
+    },
+    {
+      "id": "lapel",
+      "prompt": "Use case: photorealistic-natural. Asset type: one individual fashion moodboard reference photograph for a contemporary everyday tailored jacket, displayed as a separate card. One close-up photograph of an ivory wool jacket lapel and shoulder, showing clean seams and understated tailoring. Only the garment detail. Soft natural studio light, restrained neutral colors, tactile real material, refined professional fashion editorial photography. Square composition. Exactly ONE photograph, ONE coherent scene filling the frame. Absolutely no collage, no panels, no montage, no moodboard layout, no overlapping paper, no swatch board, no frame, no captions, no text, no logo, no hotel, no interior decoration. This image will be arranged beside other separate images by the web app.",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-a2fc2971-0cf2-4e9a-a033-bcc5d367c8c8.png",
+      "output": "public/images/dashboard/mood-reference-lapel.webp"
+    },
+    {
+      "id": "buttons",
+      "prompt": "A single macro product photograph of exactly three matte dark charcoal sewing buttons lying on a plain ivory cotton fabric, with one loose thin sewing thread. ONLY buttons, thread and fabric visible. No person, no model, no clothing, no portrait. Entire frame is one continuous tabletop scene. Square photograph, subtle natural light, professional tactile still life, photorealistic. No collage, no montage, no panels, no text.",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-0a19dfc7-9737-4982-9e65-579f84950901.png",
+      "output": "public/images/dashboard/mood-reference-buttons.webp"
+    },
+    {
+      "id": "craft",
+      "prompt": "Use case: photorealistic-natural. Asset type: one individual fashion moodboard reference photograph for a contemporary everyday tailored jacket, displayed as a separate card. One documentary close-up photograph of a tailor's fingers hand sewing a subtle seam in taupe wool. Natural human hands, needle and small stitches visible. Soft natural studio light, restrained neutral colors, tactile real material, refined professional fashion editorial photography. Square composition. Exactly ONE photograph, ONE coherent scene filling the frame. Absolutely no collage, no panels, no montage, no moodboard layout, no overlapping paper, no swatch board, no frame, no captions, no text, no logo, no hotel, no interior decoration. This image will be arranged beside other separate images by the web app.",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-33d228eb-84ab-4669-82a4-bef3b36d8423.png",
+      "output": "public/images/dashboard/mood-reference-craft.webp"
+    },
+    {
+      "id": "movement",
+      "prompt": "Use case: photorealistic-natural. Asset type: one individual fashion moodboard reference photograph for a contemporary everyday tailored jacket, displayed as a separate card. One editorial photograph cropped from waist to ankle showing relaxed taupe tailored trousers in gentle walking motion beside a plain neutral backdrop. No architecture or face. Soft natural studio light, restrained neutral colors, tactile real material, refined professional fashion editorial photography. Square composition. Exactly ONE photograph, ONE coherent scene filling the frame. Absolutely no collage, no panels, no montage, no moodboard layout, no overlapping paper, no swatch board, no frame, no captions, no text, no logo, no hotel, no interior decoration. This image will be arranged beside other separate images by the web app.",
+      "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-8bc1729e-04e0-41cd-bc82-dd10c3a7007b.png",
+      "output": "public/images/dashboard/mood-reference-movement.webp"
+    }
+  ]
+}

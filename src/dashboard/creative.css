@@ -19,8 +19,8 @@
 .dw-creative-ref img { width:48px;height:48px;object-fit:cover;border-radius:12px; }
 .dw-creative-empty { display:flex;flex-direction:column;align-items:center;text-align:center;padding:48px 20px;gap:12px;color:var(--text-3); }
 .dw-creative-empty strong { color:var(--text-2);font-size:14px;font-weight:600; }.dw-creative-empty p { margin:0;font-size:12px;line-height:1.7;max-width:280px; }
-.dw-creative-atmosphere { display:block;width:100%;border:0;padding:0;background:#f4f0e9;border-radius:12px;overflow:hidden;cursor:zoom-in;margin-bottom:16px; }
-.dw-creative-atmosphere img { display:block;width:100%;aspect-ratio:1.6;object-fit:cover; }
+.dw-creative-atmosphere { display:block;width:100%;border:0;padding:0;background:#f4f0e9;border-radius:12px;overflow:hidden;cursor:zoom-in; }
+.dw-creative-atmosphere img { display:block;width:100%;aspect-ratio:1;object-fit:cover; }
 .dw-creative-colors { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px; }
 .dw-creative-colors>div { min-width:0;display:flex;flex-direction:column;gap:8px; }
 .dw-creative-colors input[type=color] { width:100%;height:64px;border:1px solid #0000001a;border-radius:12px;padding:0;cursor:pointer;overflow:hidden;background:none; }
@@ -39,3 +39,12 @@
 @media(max-width:560px) { .dw-creative-routes { grid-template-columns:minmax(0,1fr);gap:10px; }.dw-creative-routes button { padding:16px; }.dw-creative-handoff { grid-template-columns:minmax(0,1fr);gap:20px; }.dw-creative-colors { grid-template-columns:repeat(2,minmax(0,1fr));gap:12px; }.dw-creative .dw-card-head { flex-wrap:wrap; } }
 @media(hover:none) { .dw-creative .dw-btn { min-height:44px; }.dw-creative { padding-bottom:100px; } }
 @media(prefers-reduced-motion:no-preference) { .dw-creative-routes button { transition:background 150ms ease-out,transform 150ms ease-out; }.dw-creative-routes button:active { transform:scale(.96); } }
+
+.dw-mood-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px; }
+.dw-mood-reference { border:1px solid var(--border);border-radius:12px;overflow:hidden;min-width:0;background:var(--surface); }
+.dw-mood-info { padding:12px;display:flex;flex-direction:column;gap:10px; }
+.dw-mood-info .dw-field>span { font-size:10px;color:var(--text-3); }
+.dw-mood-info input,.dw-mood-info textarea { font-size:11px; }
+.dw-mood-actions { display:flex;justify-content:space-between;gap:8px; }
+.dw-mood-actions .dw-btn { padding:8px;font-size:11px; }
+@media(max-width:420px) { .dw-mood-grid { grid-template-columns:minmax(0,1fr); } }

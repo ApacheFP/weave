@@ -150,3 +150,18 @@ Entrambe le immagini imagegen ispezionate visivamente e salvate WebP 1200×800, 
 **Not verified:** nessun nuovo collaudo dell’intero flusso; UI e interazioni non modificate. Generazione runtime ancora simulata.
 
 **Approve** per la correzione delle due immagini.
+
+## Moodboard · riferimenti indipendenti (10 ottobre)
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| HIGH | Modulo 1, moodboard | Un unico raster composto come collage. | Sei fotografie indipendenti, disposte in una griglia responsive. | Lo stilista può gestire ogni riferimento e leggerne la didascalia. |
+| MEDIUM | Modifica manuale | Sostituzione dell’intera tavola. | Titolo e didascalia per immagine, anteprima, aggiunta, sostituzione e rimozione singole. | La ricerca visiva resta modificabile. |
+
+Otto fotografie imagegen ispezionate: sei per direzione, con tessuto e proporzioni alternativi caldi/freddi. WebP 800×800, circa 26–128 KB ciascuna. Prompt e percorsi in `moodboard-images.json`.
+
+Build riuscita. CLI Playwright: griglia inizialmente assente, sei riferimenti dopo generazione; anteprima; titolo/didascalia modificati; sostituzione singola; rimozione; rigenerazione fredda; aggiunta settimo riferimento; rimozione di tutti i riferimenti con palette ancora accessibile; caricamento del disegno finale e concept approvato. Nessun overflow orizzontale a 320, 390, 768 e 1440 px. Screenshot desktop e contesto touch mobile ispezionati.
+
+**Not verified:** dispositivi fisici, Safari/Firefox, generazione AI o ricerca web runtime. Il servizio resta simulato con riferimenti preparati; le nuove immagini sono state realmente generate con imagegen durante lo sviluppo.
+
+**Approve** per il moodboard a immagini separate e le interazioni demo verificate.
