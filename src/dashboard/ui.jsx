@@ -41,9 +41,9 @@ export function Metrics({ items }) {
   return <div className="dw-metrics" style={{ '--metric-count': items.length }}>{items.map(([label, value, note, detail = {}]) => {
     const percentage = detail.progress == null ? null : Math.max(0, Math.min(100, detail.progress));
     return <section className={`dw-metric ${String(value).length > 12 ? 'dw-metric-compact' : ''}`} key={label} aria-label={label}>
-      <div className="dw-metric-heading"><span>{label}</span><span className="dw-metric-icon"><Icon name={detail.icon || 'chart'} size={18} /></span></div>
+      <div className="dw-metric-heading"><Icon name={detail.icon || 'chart'} size={14} /><span>{label}</span></div>
       <strong>{value}</strong>{note && <small>{note}</small>}
-      {percentage != null && <div className="dw-metric-ticks" role="progressbar" aria-label={label} aria-valuenow={Math.round(percentage)} aria-valuemin={0} aria-valuemax={100}>{Array.from({ length: 40 }, (_, index) => <i key={index} aria-hidden="true" className={index < Math.round(percentage * .4) ? 'filled' : ''} />)}</div>}
+      {percentage != null && <Progress value={percentage} label={label} />}
     </section>;
   })}</div>;
 }

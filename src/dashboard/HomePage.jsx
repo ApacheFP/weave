@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { modules } from '../modules.js';
 import { euro, number, useDemo } from './DemoContext.jsx';
-import { ProductPhoto } from './Media.jsx';
-import { Badge, Button, Card, Icon, Metrics, Progress, Tabs } from './ui.jsx';
+import { Button, Card, Icon, Progress, Tabs } from './ui.jsx';
 import './home.css';
 
 const groups = [
@@ -73,64 +72,71 @@ export default function HomePage({ onNavigate, onService, onActivity }) {
   const inProgress = phaseIds.filter(id => phaseState(id) === 'active').length;
   const reviewPhase = (id, checked) => commit(previous => ({ phaseReviews: { ...previous.phaseReviews, [id]: checked } }), `${checked ? 'Confermata' : 'Riaperta'} la revisione: ${moduleName(id)}`, id);
 
+  const metricItems = [
+    { label: 'Produzione', value: `${number(data.produced)} / ${number(data.quantity)}`, note: `${progress}% dell’ordine completato`, icon: 'activity', target: 12 },
+    { label: 'Costo industriale', value: euro(cost), note: 'Stima per capo', icon: 'chart', target: 9 },
+    { label: 'Stock disponibile', value: number(stock), note: data.produced ? 'Capi approvati al netto delle vendite' : 'Produzione da avviare', icon: 'box', target: 12 },
+    { label: 'Da verificare', value: alerts, note: alerts ? 'Acquisti e qualità' : 'Nessuna anomalia aperta', icon: 'eye', target: delayed.length ? 11 : 13 },
+  ];
+
   return <div className="dw-home">
-    <Card className="dw-home-product" title={data.title} note={`${data.styleId} · ${data.collection}`} actions={<Badge tone={alerts ? 'warn' : ''}>{stage}</Badge>}>
-      <div className="dw-home-product-body">
-        <figure className="dw-home-photo"><ProductPhoto sizes="(max-width: 760px) 96px, 132px" /><figcaption>Visuale demo</figcaption></figure>
-        <div className="dw-home-product-info">
-          <div className="dw-home-identity"><Badge>{data.variant}</Badge><span>{fabric.composition}</span></div>
-          <p>{data.brief.trim() || 'Il tuo nuovo capo parte da qui. Definisci il brief e personalizza i materiali e le misure del modello base.'}</p>
-          <div className="dw-home-product-actions"><Button primary icon={icons[continueId]} onClick={() => onNavigate(continueId)}>{continueLabel}<Icon name="arrow" size={16} /></Button><Button icon="file" onClick={() => onNavigate(2)}>Scheda tecnica</Button></div>
-        </div>
-        <div className="dw-home-delivery"><span className="dw-eyebrow">Obiettivo di consegna</span><strong>{date(data.delivery)}</strong><span>{data.factory}</span><span>{number(data.quantity)} capi previsti</span><Button icon="calendar" onClick={() => onNavigate(10)}>Apri pianificazione</Button></div>
-      </div>
-    </Card>
+    <header className="dw-home-header">
+      <div><h2>Panoramica del capo</h2><p><span className="dw-home-stage"><i />{stage}</span><span>{data.collection}</span></p></div>
+      <div className="dw-home-header-actions"><Button icon="file" onClick={() => onNavigate(2)}>Scheda tecnica</Button><Button primary icon={icons[continueId]} onClick={() => onNavigate(continueId)}>{continueLabel}<Icon name="arrow" size={14} /></Button></div>
+    </header>
 
-    <Card className="dw-home-path" title="Le fasi del capo" note={`${complete} ${complete === 1 ? 'completata' : 'completate'} · ${inProgress} in corso · ${phaseIds.length - complete - inProgress} da iniziare`} actions={<Badge>{complete} / {phaseIds.length} completate</Badge>}>
-      <ol className="dw-home-path-steps">{path.map((step, index) => {
-        const done = step.ids.filter(id => phaseState(id) === 'done').length;
-        const state = done === step.ids.length ? 'done' : step.ids.some(id => phaseState(id) !== 'pending') ? 'active' : 'pending';
-        const target = step.ids.find(id => phaseState(id) === 'active') || step.ids.find(id => phaseState(id) === 'pending') || step.ids[0];
-        return <li key={step.name} data-phase={state}><button onClick={() => onNavigate(target)} aria-label={`${step.name}: ${phaseLabel(state)}, ${done} di ${step.ids.length} fasi completate. Apri ${moduleName(target)}`}><span className="dw-home-step-number">{state === 'done' ? <Icon name="check" size={18} /> : String(index + 1).padStart(2, '0')}</span><strong>{step.name}</strong><span className="dw-phase-label">{phaseLabel(state)}</span><small>{done} / {step.ids.length} fasi completate</small></button></li>;
-      })}</ol>
-      <div className="dw-home-path-legend"><span><i data-phase="done" />Completata</span><span><i data-phase="active" />In corso</span><span><i data-phase="pending" />Da iniziare</span><small>Apri una fase per continuare il lavoro.</small></div>
-    </Card>
-
-    <Metrics items={[
-      ['Produzione', `${number(data.produced)} / ${number(data.quantity)}`, `${progress}% dell’ordine completato`, { icon: 'activity', progress }],
-      ['Costo industriale', euro(cost), 'Stima dai materiali e tempi correnti', { icon: 'chart' }],
-      ['Stock disponibile', number(stock), data.produced ? 'Capi approvati, al netto delle vendite' : 'Nessun capo ancora prodotto', { icon: 'box' }],
-      ['Segnali da seguire', alerts, alerts ? 'Acquisti e qualità richiedono attenzione' : 'Nessuna anomalia registrata', { icon: 'eye' }],
-    ]} />
+    <div className="dw-home-metrics" aria-label="Dati principali del capo">{metricItems.map(item => <button type="button" key={item.label} onClick={() => onNavigate(item.target)}>
+      <span className="dw-home-metric-label"><Icon name={item.icon} size={14} />{item.label}</span><strong>{item.value}</strong><small>{item.note}</small>
+    </button>)}</div>
 
     <div className="dw-home-columns">
-      <Card title="Prossime azioni" note="Le priorità di questo capo" actions={<Badge>{actions.length} da seguire</Badge>}>
-        {actions.length ? <ol className="dw-home-tasks">{actions.slice(0, 5).map(action => <li key={action.key}><button onClick={() => onNavigate(action.id)}><span className={`dw-home-task-icon ${action.urgent ? 'urgent' : ''}`}><Icon name={icons[action.id]} size={18} /></span><span className="dw-home-task-copy"><strong>{action.title}</strong><small>{action.note}</small></span>{action.urgent && <Badge tone="warn">Verifica</Badge>}<Icon name="arrow" size={16} /></button></li>)}</ol> : <div className="dw-home-clear"><Icon name="check" /><strong>Le attività principali sono completate.</strong><p>Puoi proseguire nei moduli o seguire il capo nel passaporto digitale.</p><Button onClick={() => onNavigate(19)}>Apri passaporto</Button></div>}
-        {actions.length > 5 && <p className="dw-muted">Altre {actions.length - 5} attività disponibili nei rispettivi moduli.</p>}
-      </Card>
-
-      <Card title="Avanzamento del lotto" note={data.produced ? `${data.orderId} · ${data.lotId}` : 'La produzione inizierà dopo lo sviluppo'} actions={<Button onClick={() => onNavigate(12)}>Apri <Icon name="arrow" size={14} /></Button>}>
-        <div className="dw-home-progress"><strong>{progress}<span>%</span></strong><span>{number(remaining)} capi da completare</span></div>
-        <Progress value={progress} label="Avanzamento della produzione del capo" />
-        <dl className="dw-home-lot-stats"><div><dt>Approvati</dt><dd>{number(approved)}</dd></div><div><dt>Rilavorazione</dt><dd>{number(data.reworks)}</dd></div><div><dt>Da produrre</dt><dd>{number(remaining)}</dd></div></dl>
-        {data.productionDays.length > 0 ? <div className="dw-home-chart"><span>Ultime rilevazioni · capi prodotti</span><div role="img" aria-label={`Produzione per rilevazione: ${data.productionDays.map(value => number(value)).join(', ')} capi`}>{data.productionDays.slice(-7).map((value, index) => <div key={index}><span>{number(value)}</span><i style={{ height: `${Math.max(2, value / Math.max(...data.productionDays, 1) * 70)}px` }} /><small>{index + 1}</small></div>)}</div></div> : <div className="dw-home-production-empty"><Icon name="activity" size={18} /><p>Le rilevazioni appariranno qui quando registrerai i primi capi prodotti.</p></div>}
-      </Card>
-    </div>
-
-    <div className="dw-home-columns">
-      <Card title="Il percorso del capo" note="Apri un modulo per lavorare sui suoi dati" actions={<Tabs items={groups.map(item => item.name)} selected={group} onChange={setGroup} label="Fasi del percorso del capo" />}>
-        <div className="dw-home-modules">{groups.find(item => item.name === group).ids.map(id => <article key={id} data-phase={id === 22 ? undefined : phaseState(id)}><button onClick={() => onNavigate(id)}><span className="dw-home-module-icon"><Icon name={phaseState(id) === 'done' ? 'check' : icons[id]} size={20} /></span><strong>{moduleName(id)}</strong>{id !== 22 && <span className="dw-phase-label">{phaseLabel(phaseState(id))}</span>}<small>{statuses[id]}</small><Icon name="arrow" size={15} /></button>{reviewable.has(id) && !outputs[id] && <label className="dw-home-review"><input type="checkbox" checked={Boolean(data.phaseReviews?.[id])} onChange={event => reviewPhase(id, event.target.checked)} />Revisione confermata</label>}</article>)}</div>
-        <p className="dw-home-modules-note"><Icon name="layers" size={15} />{!data.brief.trim() ? 'Materiali, modello e taglie partono dai dati base modificabili.' : 'Dati condivisi tra moduli: ogni modifica aggiorna questa Home.'}</p>
-      </Card>
-      <div className="dw-stack">
-        <Card title="Attività recenti" note="Modifiche e decisioni del capo" actions={<Button onClick={onActivity}>Vedi tutte</Button>}>
-          <div className="dw-home-feed">{data.events.slice(0, 4).map(event => <button key={event.id} onClick={() => openEvent(event)}><span className="dw-event-dot" /><span><small>{event.actor?.name || 'Utente non registrato'} · {event.time}</small><strong>{event.text}</strong></span><Icon name="arrow" size={14} /></button>)}</div>
+      <div className="dw-home-main">
+        <Card className="dw-home-portfolio" flush title="Avanzamento della filiera" actions={<Tabs items={groups.map(item => item.name)} selected={group} onChange={setGroup} label="Fasi del percorso del capo" />}>
+          <div className="dw-home-phase-overview"><div><span>{complete} di {phaseIds.length} fasi completate</span><span>{inProgress} in corso</span></div><Progress value={complete / phaseIds.length * 100} label="Fasi del capo completate" /></div>
+          <ol className="dw-home-phases">{path.map(step => {
+            const done = step.ids.filter(id => phaseState(id) === 'done').length;
+            const state = done === step.ids.length ? 'done' : step.ids.some(id => phaseState(id) !== 'pending') ? 'active' : 'pending';
+            const target = step.ids.find(id => phaseState(id) === 'active') || step.ids.find(id => phaseState(id) === 'pending') || step.ids[0];
+            return <li key={step.name} data-phase={state}><button type="button" onClick={() => onNavigate(target)} aria-label={`${step.name}: ${phaseLabel(state)}, ${done} di ${step.ids.length} fasi completate. Apri ${moduleName(target)}`}><i /><span>{step.name}</span><small>{done}/{step.ids.length}</small></button></li>;
+          })}</ol>
+          <div className="dw-table-wrap"><table className="dw-table dw-home-module-table"><thead><tr><th>Modulo</th><th>Stato</th><th>Dati correnti</th><th>Revisione</th></tr></thead><tbody>{groups.find(item => item.name === group).ids.map(id => <tr key={id} data-phase={id === 22 ? undefined : phaseState(id)}>
+            <td><button type="button" className="dw-home-module-link" onClick={() => onNavigate(id)}><span className="dw-home-module-icon"><Icon name={icons[id]} size={14} /></span>{moduleName(id)}</button></td>
+            <td>{id === 22 ? <span className="dw-muted">—</span> : <span className="dw-home-state"><i />{phaseLabel(phaseState(id))}</span>}</td>
+            <td>{statuses[id]}</td>
+            <td>{reviewable.has(id) && !outputs[id] ? <label className="dw-home-review"><input type="checkbox" checked={Boolean(data.phaseReviews?.[id])} onChange={event => reviewPhase(id, event.target.checked)} aria-label={`Conferma la revisione di ${moduleName(id)}`} /><span>{data.phaseReviews?.[id] ? 'Confermata' : 'Conferma'}</span></label> : <span className="dw-home-review-source">{id === 22 ? '—' : phaseState(id) === 'done' ? <><Icon name="check" size={12} />Completata</> : 'Nel modulo'}</span>}</td>
+          </tr>)}</tbody></table></div>
+          <footer className="dw-home-portfolio-foot"><Icon name="layers" size={13} /><span>{!data.brief.trim() ? 'Materiali, modello e taglie partono dai dati base modificabili.' : 'Ogni modifica nei moduli aggiorna i dati di questa panoramica.'}</span></footer>
+          <details className="dw-home-brief"><summary>Brief e materiali del capo</summary><p>{data.brief.trim() || 'Definisci il brief per iniziare lo sviluppo del capo.'}</p><dl><div><dt>Variante</dt><dd>{data.variant}</dd></div><div><dt>Composizione</dt><dd>{fabric.composition}</dd></div></dl></details>
         </Card>
-        <Card title="Composizione del costo" note="Stima unitaria · dati correnti" actions={<Button onClick={() => onNavigate(9)}>Pricing <Icon name="arrow" size={14} /></Button>}>
+
+        <Card className="dw-home-priorities" flush title="Prossime attività" actions={<span className="dw-home-panel-count">{actions.length} da seguire</span>}>
+          {actions.length ? <ol className="dw-home-tasks">{actions.slice(0, 5).map(action => <li key={action.key}><button type="button" onClick={() => onNavigate(action.id)}><span className={`dw-home-task-icon ${action.urgent ? 'urgent' : ''}`}><Icon name={icons[action.id]} size={14} /></span><span className="dw-home-task-copy"><strong>{action.title}</strong><small>{action.note}</small></span><span className="dw-home-task-module">{moduleName(action.id)}</span><Icon name="arrow" size={13} /></button></li>)}</ol> : <div className="dw-home-clear"><Icon name="check" size={16} /><span>Le attività principali sono completate.</span><Button onClick={() => onNavigate(19)}>Apri passaporto</Button></div>}
+          {actions.length > 5 && <p className="dw-home-more">Altre {actions.length - 5} attività nei rispettivi moduli.</p>}
+        </Card>
+      </div>
+
+      <aside className="dw-home-aside" aria-label="Ordine, attività e costi">
+        <Card className="dw-home-production" title="Avanzamento del lotto" actions={<Button onClick={() => onNavigate(12)}>Produzione<Icon name="arrow" size={13} /></Button>}>
+          <div className="dw-home-progress"><strong>{progress}%</strong><span>{number(data.produced)} di {number(data.quantity)} capi</span></div><Progress value={progress} label="Avanzamento della produzione del capo" />
+          <dl className="dw-home-lot-stats"><div><dt>Approvati</dt><dd>{number(approved)}</dd></div><div><dt>Rilavorazione</dt><dd>{number(data.reworks)}</dd></div><div><dt>Da produrre</dt><dd>{number(remaining)}</dd></div></dl>
+          {data.productionDays.length > 0 ? <div className="dw-home-chart"><span>Ultime rilevazioni · capi prodotti</span><div role="img" aria-label={`Produzione per rilevazione: ${data.productionDays.map(value => number(value)).join(', ')} capi`}>{data.productionDays.slice(-7).map((value, index) => <div key={index}><span>{number(value)}</span><i style={{ height: `${Math.max(2, value / Math.max(...data.productionDays, 1) * 42)}px` }} /><small>{index + 1}</small></div>)}</div></div> : <p className="dw-home-production-empty">Le rilevazioni appariranno dopo la registrazione dei primi capi.</p>}
+          <button type="button" className="dw-home-delivery" onClick={() => onNavigate(10)}><span><Icon name="calendar" size={13} />Consegna prevista</span><strong>{date(data.delivery)}</strong><Icon name="arrow" size={13} /></button>
+          <p className="dw-home-order">{data.factory} · {data.orderId} · {data.lotId}</p>
+        </Card>
+
+        <Card title="Attività recenti" actions={<Button onClick={onActivity}>Vedi tutte</Button>}>
+          <div className="dw-home-feed">{data.events.slice(0, 4).map(event => {
+            const name = event.actor?.name || 'Utente non registrato';
+            const initials = name.split(' ').map(word => word[0]).slice(0, 2).join('');
+            return <button type="button" key={event.id} onClick={() => openEvent(event)}><span className="dw-home-avatar" aria-hidden="true">{event.actor?.email === 'demo@weave.it' ? <img src="/illustrations/profile-avatar.webp" alt="" /> : initials}</span><span className="dw-home-feed-copy"><strong>{name}</strong><span>{event.text}</span><small>{moduleName(event.module) || 'Servizi'} · {event.time.split(/[·,]/)[0].trim()}</small></span><time>{event.time.split(/[·,]/).at(-1).trim()}</time></button>;
+          })}</div>
+        </Card>
+
+        <Card title="Composizione del costo" actions={<Button onClick={() => onNavigate(9)}>Pricing<Icon name="arrow" size={13} /></Button>}>
           <div className="dw-home-cost-bar" role="img" aria-label={costs.map(([label, value]) => `${label}: ${euro(value)}`).join(', ')}>{costs.map(([label, value, color]) => <span key={label} style={{ flex: value, background: color }} />)}</div>
           <dl className="dw-home-costs">{costs.map(([label, value, color]) => <div key={label}><dt><i style={{ background: color }} />{label}</dt><dd>{euro(value)}</dd></div>)}<div className="dw-home-cost-total"><dt>Totale / capo</dt><dd>{euro(cost)}</dd></div></dl>
         </Card>
-      </div>
+      </aside>
     </div>
   </div>;
 }
