@@ -136,3 +136,17 @@ Build riuscita. CLI Playwright: zero card dei figurini dopo la generazione; Rice
 **Not verified:** ricerca web o generazione AI runtime: nella demo due direzioni preparate simulano il servizio, senza analizzare i file visivamente. La ricerca interna reale, storage remoto e persistenza oltre la sessione richiedono un backend. Non verificati dispositivi fisici, Safari/Firefox o rendering interno dei PDF.
 
 **Approve** per UI e percorsi demo ispezionati.
+
+## Moodboard · correzione della direzione visiva
+
+Sostituite le immagini di ambienti architettonici con due collage di ricerca moda: campioni di tessuto, fotografie ritagliate di proporzioni e dettagli sartoriali, cuciture e accessori. Didascalie allineate al brief della giacca.
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| MEDIUM | `creativeData.js`, immagini moodboard | Ambiente simile a un hotel con materiali decorativi. | Collage di riferimenti tessili e di abbigliamento, in direzione calda o fredda. | Il moodboard comunica una ricerca di moda pertinente al capo. |
+
+Entrambe le immagini imagegen ispezionate visivamente e salvate WebP 1200×800, 182/193 KB. Build riuscita. Prompt e percorsi aggiornati in `moodboard-images.json`.
+
+**Not verified:** nessun nuovo collaudo dell’intero flusso; UI e interazioni non modificate. Generazione runtime ancora simulata.
+
+**Approve** per la correzione delle due immagini.
