@@ -34,6 +34,24 @@
 .dw-creative-pdf { display:flex;flex-direction:column;gap:10px;align-items:center;color:#a08159;font-size:11px; }
 .dw-creative-deliverables { display:grid;align-content:start;gap:16px;min-width:0; }
 .dw-creative-deliverables h3 { margin:0;font-size:14px; }.dw-creative-deliverables dl { display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;margin:0; }.dw-creative-deliverables dt { color:var(--text-3); }.dw-creative-deliverables dd { margin:0;text-align:right;overflow-wrap:anywhere; }.dw-creative-deliverables>p { font-size:12px;color:var(--text-3);line-height:1.7;margin:0; }.dw-creative-deliverables>.dw-btn { justify-self:start;margin:0; }
+.dw-concept-card .dw-creative-handoff { align-items:start;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); }
+.dw-concept-card .dw-creative-drop.has-file { border-style:solid;border-color:var(--border);min-height:280px;padding:20px;background:#faf8f4; }
+.dw-concept-file-actions { display:flex;justify-content:center;flex-wrap:wrap;gap:8px; }
+.dw-concept-verification { border-top:1px solid var(--border);padding-top:12px; }
+.dw-concept-verification summary { display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--text-2);cursor:pointer;list-style:none; }
+.dw-concept-verification summary::after { content:'+';font-size:16px; }
+.dw-concept-verification[open] summary::after { content:'−'; }
+.dw-concept-verification .dw-badge { margin-left:auto; }
+.dw-concept-verification .dw-field { margin-top:12px; }
+.dw-concept-verification p { margin:10px 0 0;font-size:11px;line-height:1.6;color:var(--text-3); }
+.dw-concept-footer { display:flex;align-items:flex-end;justify-content:space-between;gap:20px;border-top:1px solid var(--border);margin-top:20px;padding-top:16px; }
+.dw-concept-next { display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-width:0; }
+.dw-concept-next p { display:flex;align-items:flex-start;gap:8px;margin:0;font-size:12px;line-height:1.5;color:var(--text-2); }
+.dw-concept-next .dw-icon { flex-shrink:0;margin-top:1px; }
+.dw-concept-continue { flex-shrink:0;min-height:40px; }
+.dw-concept-card .dw-concept-continue:disabled { opacity:1;background:#eeece8;border-color:#e3dfd7;color:#918d84;box-shadow:none;cursor:not-allowed; }
+@media(max-width:900px) { .dw-concept-card .dw-creative-handoff { grid-template-columns:minmax(0,1fr); } }
+@media(max-width:560px) { .dw-concept-footer { flex-direction:column;align-items:stretch;gap:16px; }.dw-concept-continue { align-self:flex-end;max-width:100%; }.dw-concept-card .dw-creative-drop.has-file { min-height:240px;padding:16px; } }
 .dw-creative-preview { display:block;width:100%;max-height:65vh;object-fit:contain;margin-bottom:16px; }
 @media(hover:hover) { .dw-creative-routes button:hover { border-color:#b8a181; } }
 @media(max-width:900px) { .dw-creative-studio { grid-template-columns:minmax(0,1fr); } }

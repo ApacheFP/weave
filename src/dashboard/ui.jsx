@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import './selectors.css';
 
 export function Icon({ name = 'grid', size = 20 }) {
   const paths = {

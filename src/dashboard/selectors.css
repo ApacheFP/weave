@@ -1,0 +1,65 @@
+/* Shared proportions for dashboard view and section selectors. */
+.dw-app :is(.dw-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds)[role] {
+  padding: 4px;
+  gap: 4px;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #f3f3f2;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.dw-app :is(.dw-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds)[role] > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 38px;
+  min-height: 38px;
+  margin: 0;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-2);
+  font: 500 12px var(--font);
+  white-space: nowrap;
+  cursor: pointer;
+  transform: none;
+}
+.dw-app :is(.dw-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds)[role] > button:is([aria-pressed=true],[aria-selected=true]) {
+  border-color: #dededb;
+  background: #fff;
+  color: #252525;
+  box-shadow: 0 1px 2px #1d1c1a08;
+}
+.dw-app .dw-creative-result-indicator { display: none; }
+.dw-app :is(.dw-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds)[role] > button:focus-visible {
+  outline: 2px solid #555;
+  outline-offset: -2px;
+}
+@media (hover:hover) {
+  .dw-app :is(.dw-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds)[role] > button:hover { color: #252525; }
+}
+@media (hover:none) {
+  .dw-app :is(.dw-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds)[role] > button { height: 44px; min-height: 44px; }
+}
+@media (max-width:560px) {
+  .dw-app :is(.dw-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds)[role] > button { padding-inline: 10px; }
+}
+
+.dw-app .dw-workspace-toolbar { position: relative; justify-content: center; }
+.dw-app .dw-workspace-toolbar > .dw-btn { position: absolute; right: 0; }
+.dw-app .dw-page-tabs[role=tablist] { width: auto; margin-inline: auto; padding: 4px; gap: 4px; background: #252525; border-color: #252525; }
+.dw-app .dw-page-tabs[role=tablist] > button { height: 40px; min-height: 40px; padding-inline: 16px; font-size: 13px; color: #d1d1d1; }
+.dw-app .dw-page-tabs[role=tablist] > button[aria-selected=true] { color: #252525; background: #fff; border-color: #fff; }
+@media (hover:hover) {
+  .dw-app .dw-page-tabs[role=tablist] > button:hover { color: #fff; }
+  .dw-app .dw-page-tabs[role=tablist] > button[aria-selected=true]:hover { color: #252525; }
+}
+.dw-app :is(.dw-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds)[role] > button > .dw-icon { width: 16px; height: 16px; }
+@media (max-width:560px) {
+  .dw-app .dw-workspace-toolbar { flex-direction: column; }
+  .dw-app .dw-workspace-toolbar > .dw-btn { position: static; align-self: flex-end; }
+}
