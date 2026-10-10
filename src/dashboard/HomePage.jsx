@@ -37,7 +37,7 @@ export default function HomePage({ onNavigate, onService, onActivity }) {
   const actions = [
     ...delayed.map(order => ({ key: order.id, id: 11, title: order.material + ': consegna in ritardo', note: `${order.supplier} · ${order.id}`, urgent: true })),
     ...(qualityAlert ? [{ key: 'quality', id: 13, title: 'Verifica la non conformità del lotto', note: `${data.lotId} · ${data.reworks} capi in rilavorazione`, urgent: true }] : []),
-    ...(!data.conceptApproved ? [{ key: 'concept', id: 1, title: 'Prepara il concept del capo', note: 'Carica il disegno finale o esplora moodboard e palette' }] : []),
+    ...(!data.sketchFile ? [{ key: 'concept', id: 1, title: 'Prepara il concept del capo', note: 'Carica il disegno finale o esplora moodboard e palette' }] : []),
     ...(!data.techGenerated ? [{ key: 'tech', id: 2, title: 'Prepara il tech pack', note: 'Tavole tecniche e punti di misura' }] : []),
     ...(!data.sampleApproved ? [{ key: 'sample', id: 6, title: 'Completa il fitting del campione', note: `${data.sampleChecks.filter(Boolean).length} di ${data.sampleChecks.length} verifiche registrate` }] : []),
     ...(data.sampleApproved && remaining ? [{ key: 'production', id: 12, title: 'Prosegui con il lotto produttivo', note: `${number(remaining)} capi ancora da completare` }] : []),
@@ -47,8 +47,8 @@ export default function HomePage({ onNavigate, onService, onActivity }) {
   const continueId = !data.brief.trim() ? 1 : next?.urgent || !data.techGenerated ? next.id : data.produced ? 12 : next?.id || 1;
   const continueLabel = !data.brief.trim() ? 'Completa il brief' : next?.urgent ? 'Verifica ' + (next.id === 11 ? 'acquisti' : 'qualità') : data.produced ? 'Apri produzione' : 'Continua lo sviluppo';
   const statuses = {
-    1: data.conceptApproved ? 'Concept approvato' : data.creative?.round ? 'Spunti in esplorazione' : 'Schizzo da preparare',
-    2: data.techGenerated ? 'Tech pack disponibile' : 'Da generare',
+    1: data.sketchFile ? 'Schizzo caricato' : data.creative?.round ? 'Spunti in esplorazione' : 'Schizzo da preparare',
+    2: data.technical?.approvedId === data.technical?.currentId && data.technical?.approvedId ? 'Disegno tecnico approvato' : data.techGenerated ? 'Disegno in revisione' : 'Da generare',
     3: `${data.trims.length + 1} materiali nella BOM`,
     4: `Modello v${data.modelVersion}`,
     5: '6 taglie · 38–48',
@@ -64,9 +64,9 @@ export default function HomePage({ onNavigate, onService, onActivity }) {
   };
   const costs = [['Materiali', materials, '#b89c72'], ['Lavorazione', labor, '#d1bfa2'], ['Logistica', data.logisticsCost, '#e7ded0']];
   const openEvent = event => modules.find(item => item.id === event.module)?.serviceInfo || event.module === 20 ? onService(event.module) : onNavigate(event.module);
-  const outputs = { 1: Boolean(data.conceptApproved && data.creative?.concept?.sketch), 2: data.techGenerated, 6: data.sampleApproved, 7: data.optimized, 11: data.purchaseOrders.length > 0 && data.purchaseOrders.every(order => order.status === 'Consegnato'), 12: data.produced >= data.quantity, 13: data.produced >= data.quantity && data.qualityResolved && !data.reworks, 19: data.passportPublished };
+  const outputs = { 1: Boolean(data.sketchFile), 2: Boolean(data.technical?.approvedId && data.technical.approvedId === data.technical.currentId), 6: data.sampleApproved, 7: data.optimized, 11: data.purchaseOrders.length > 0 && data.purchaseOrders.every(order => order.status === 'Consegnato'), 12: data.produced >= data.quantity, 13: data.produced >= data.quantity && data.qualityResolved && !data.reworks, 19: data.passportPublished };
   const started = { 1: Boolean(data.brief.trim()) || data.references.length > 0, 6: data.sampleChecks.some(Boolean), 9: data.produced > 0, 10: data.purchaseOrders.length > 0 || data.produced > 0, 11: data.purchaseOrders.length > 0, 12: data.produced > 0, 13: data.produced > 0, 19: data.produced > 0 };
-  const phaseState = id => outputs[id] || data.phaseReviews?.[id] ? 'done' : started[id] || data.phaseReviews?.[id] === false || data.events.some(event => event.module === id) ? 'active' : 'pending';
+  const phaseState = id => outputs[id] || (![1, 2].includes(id) && data.phaseReviews?.[id]) ? 'done' : started[id] || data.phaseReviews?.[id] === false || data.events.some(event => event.module === id) ? 'active' : 'pending';
   const phaseLabel = state => ({ done: 'Completata', active: 'In corso', pending: 'Da iniziare' }[state]);
   const phaseIds = path.flatMap(item => item.ids);
   const complete = phaseIds.filter(id => phaseState(id) === 'done').length;

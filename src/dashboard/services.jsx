@@ -63,7 +63,7 @@ function Intelligence({ moduleId }) {
   const { data, fabric, materials, cost, suggestedWholesale, commit, notify, collectionData } = useDemo();
   const output = aiOutputs[moduleId] || 'Dati della filiera';
   const results = {
-    1: [['Capo', data.title], ['Direzione', collectionData.moodboard.some(item => item.atmosphere) ? 'Moodboard e palette disponibili' : 'Facoltativa · non generata'], ['Stato', data.conceptApproved ? 'Concept approvato' : 'Esplorazione creativa']],
+    1: [['Capo', data.title], ['Direzione', collectionData.moodboard.some(item => item.atmosphere) ? 'Moodboard e palette disponibili' : 'Facoltativa · non generata'], ['Stato', data.sketchFile ? 'Schizzo caricato' : 'Spunti facoltativi']],
     2: data.measurements.map(row => [row.point, number(row.value, 1) + ' cm']),
     3: [['Tessuto', fabric.name], ['Consumo', number(data.consumption, 2) + ' m'], ['Distinta completa', euro(materials)]],
     4: [['Modello', 'v' + data.modelVersion], ['Pezzi', '11 · davanti, dietro, maniche, colletto, paramontura'], ['Margine', data.seam + ' cm']],
@@ -79,7 +79,7 @@ function Intelligence({ moduleId }) {
   }[moduleId] || [['Identità', `${data.styleId}`]];
   // Prepared outputs are regenerated locally; decisions belong to the assistant.
   function generate() {
-    commit(previous => ({ aiRuns: { ...previous.aiRuns, [moduleId]: (previous.aiRuns[moduleId] || 0) + 1 }, ...(moduleId === 2 ? { techGenerated: true } : {}), ...(moduleId === 7 && !previous.optimized ? { optimized: true, waste: Math.round(11 + (150 - previous.markerWidth) * .12), consumption: Number((1.85 * 150 / previous.markerWidth * .86 / .89).toFixed(4)) } : {}) }), output + ': output aggiornato', moduleId);
+    commit(previous => ({ aiRuns: { ...previous.aiRuns, [moduleId]: (previous.aiRuns[moduleId] || 0) + 1 }, ...(moduleId === 7 && !previous.optimized ? { optimized: true, waste: Math.round(11 + (150 - previous.markerWidth) * .12), consumption: Number((1.85 * 150 / previous.markerWidth * .86 / .89).toFixed(4)) } : {}) }), output + ': output aggiornato', moduleId);
   }
   return <Card title="Automatizzato con AI" note={`Specialista per ${modules.find(m => m.id === moduleId)?.title.toLowerCase()}`}><div className="dw-ai-output">{[2, 3, 4, 5, 6, 7, 13, 19].includes(moduleId) ? <MediaImage asset={{ 1: 'sketch', 2: 'technical-front', 3: fabricAsset(data.fabricId), 4: 'pattern-front', 5: 'grading-reference', 6: 'sample', 7: data.optimized ? 'marker-optimized' : 'marker-base', 13: 'quality-seam', 19: 'technical-front' }[moduleId]} sizes="160px" /> : <span className="dw-output-icon"><Icon name="file" size={28} /></span>}<div><Badge>Output preparato</Badge><h3>{output}</h3><p>Input: {data.styleId} · modello v{data.modelVersion} · distinta base corrente. Il risultato compare nello spazio di lavoro e alimenta la storia del capo.</p><small>Generazioni nella sessione: {data.aiRuns[moduleId] || 0}</small></div></div><table className="dw-table dw-ai-results"><tbody>{results.map(([name, value]) => <tr key={name}><td>{name}</td><td>{value}</td></tr>)}</tbody></table><div className="dw-actions"><Button primary icon="spark" onClick={generate}>Genera output demo</Button><Button icon="download" onClick={() => { if (moduleId === 2) techPack(data); else csv(`${data.styleId}-output-${moduleId}.csv`, [['Dato', 'Valore'], ['Capo', `${data.styleId}`], ['Output', output], ...results]); notify('Output esportato'); }}>Esporta scheda output</Button></div><p className="dw-muted">Risultati simulati. Per scenari e decisioni usa l’assistente del modulo.</p></Card>;
 }

@@ -18,7 +18,7 @@ const initial = {
   styleId: 'GJ-0421', orderId: 'OP-0421', lotId: 'L-0421-A', fabricLot: 'T-7781', sampleId: 'CAMP-0421-01', collection: 'Autunno/Inverno 2027',
   profile: { firstName: 'Alex', lastName: 'Rossi', email: 'demo@weave.it' },
   title: 'Giacca Atelier', brief: 'Una giacca monopetto regular, essenziale e strutturata. Toni terra, tre bottoni e due tasche. Una nuova idea di quotidiano per la collezione Autunno/Inverno 2027.',
-  variant: 'Cammello', references: [], creative: creativeDefaults(), conceptApproved: false, techGenerated: true, phaseReviews: {},
+  variant: 'Cammello', references: [], creative: creativeDefaults(), conceptApproved: false, identityAssigned: false, techGenerated: false, technical: null, phaseReviews: {},
   measurements: [{ point: 'Lunghezza centro dietro', value: 72 }, { point: 'Larghezza spalle', value: 44 }, { point: 'Circonferenza torace', value: 100 }, { point: 'Lunghezza manica', value: 62 }],
   fabricId: 'base', fabricPrice: 16, consumption: 1.85,
   trims: [{ id: 'lining', name: 'Fodera viscosa', code: 'FOD-006', qty: 1.3, unit: 'm', price: 4.5, supplier: 'Tessitura E' }, { id: 'canvas', name: 'Tela termoadesiva', code: 'TEL-011', qty: .6, unit: 'm', price: 2.2, supplier: 'Fornitore A' }, { id: 'buttons', name: 'Bottoni corozo', code: 'BOT-003', qty: 3, unit: 'pz', price: .45, supplier: 'Accessori F' }, { id: 'pack', name: 'Etichette e imballo', code: 'PKG-002', qty: 1, unit: 'set', price: .8, supplier: 'Pack G' }],
@@ -107,7 +107,7 @@ export function DemoProvider({ children }) {
     const code = styleId.trim().toUpperCase();
     if (workspace.items.some(item => item.styleId === code)) return false;
     const suffix = code.replace(/^GJ-/, '');
-    const item = { ...structuredClone(copy ? data : initial), title: title.trim(), styleId: code, orderId: 'OP-' + suffix, lotId: 'L-' + suffix + '-A', fabricLot: 'T-' + suffix, sampleId: 'CAMP-' + suffix + '-01', collection: collection.trim(), quantity: Number(quantity), references: [], creative: creativeDefaults(), conceptApproved: false, sketch: null, sketchFile: null, sketchName: null, chats: {}, aiRuns: {}, phaseReviews: {}, passportPublished: false,
+    const item = { ...structuredClone(copy ? data : initial), title: title.trim(), styleId: code, orderId: 'OP-' + suffix, lotId: 'L-' + suffix + '-A', fabricLot: 'T-' + suffix, sampleId: 'CAMP-' + suffix + '-01', collection: collection.trim(), quantity: Number(quantity), references: [], creative: creativeDefaults(), conceptApproved: false, identityAssigned: false, technical: null, techGenerated: false, sketch: null, sketchFile: null, sketchName: null, chats: {}, aiRuns: {}, phaseReviews: {}, passportPublished: false,
       profile: data.profile, qualityNote: copy ? data.qualityNote.replaceAll(data.lotId, 'L-' + suffix + '-A') : 'Nessuna non conformità registrata sul nuovo capo.',
       ...(copy ? {} : { brief: '', techGenerated: false, sampleApproved: false, sampleChecks: [false, false, false], produced: 0, reworks: 0, qualityScore: 100, qualityResolved: true, productionDays: [], purchaseOrders: [], wholesaleOrders: [], retailSold: 0, shipments: [], lifecycle: [] }),
       events: [{ id: crypto.randomUUID(), text: 'Creato il capo ' + title.trim(), module: 21, time: 'Ora', actor: { name: `${data.profile.firstName} ${data.profile.lastName}`, email: data.profile.email } }] };
@@ -131,21 +131,46 @@ export function csv(name, rows) {
 }
 
 // A small real PDF for the demo, without adding a document library.
-export function techPack(data) {
+export async function techPack(data, drawings = []) {
   const t = totals(data);
+  const version = data.technical?.exportVersion || data.technical?.versions.find(v => v.id === data.technical.approvedId) || data.technical?.versions.at(-1);
+  const spec = version?.snapshot;
+  const colors = spec?.colors || [];
   const sections = [
-    ['01 / IDENTITA E CONCEPT', `WEAVE - TECH PACK ${data.styleId}`, data.title, `Collezione ${data.collection} - Regular fit`, 'Giacca monopetto, 3 bottoni, due tasche', 'Variante: ' + data.variant, 'Modello v' + data.modelVersion, 'Documento dimostrativo'],
-    ['02 / MISURE BASE - TAGLIA 42', ...data.measurements.map(row => `${row.point}: ${row.value} cm / tolleranza +/-1 cm`), 'Taglie: 38 - 40 - 42 - 44 - 46 - 48', 'Sviluppo torace: +' + data.gradingChest + ' cm per taglia'],
-    ['03 / MATERIALI E DISTINTA BASE', t.fabric.name, t.fabric.composition, 'Origine: ' + t.fabric.origin, `Tessuto: ${data.consumption.toFixed(2)} m x ${data.fabricPrice.toFixed(2)} EUR`, ...data.trims.map(row => `${row.name}: ${row.qty} ${row.unit} x ${row.price.toFixed(2)} EUR`), `Totale materiali: ${t.materials.toFixed(2)} EUR`],
-    ['04 / CONFEZIONE E CONTROLLO', `Margine cucitura: ${data.seam} cm`, `Tempo standard: ${data.laborMinutes} minuti`, 'Macchine: lineare, braccio libero, asolatrice, stiro', `Ordine: ${data.orderId} / ${data.quantity} capi`, `Lotto tessuto ${data.fabricLot} / lotto capo ${data.lotId}`, data.qualityNote, 'Cura: lavaggio a secco', 'Approvazione campione: ' + (data.sampleApproved ? 'Approvato' : 'Da completare')],
+    ['01 / IDENTITA E DISEGNO', `WEAVE - TECH PACK ${data.styleId}`, data.title, `Collezione ${data.collection} - ${spec?.fit || 'Regular'} fit`, `Disegno v${version?.number || 1} - ${version && version.id === data.technical?.approvedId ? 'APPROVATO' : 'BOZZA'}`, spec?.requirements || data.brief, 'Schizzo: ' + (data.sketchName || 'Non caricato'), ...colors.map(c => `Variante ${c.name}: ${c.code} / ${c.color}`), 'Documento dimostrativo'],
+    ['02 / MISURE BASE - TAGLIA 42', ...(spec?.measurements || data.measurements).map(row => `${row.point}: ${row.value} cm / tolleranza +/-${spec?.tolerance || 1} cm`), `Colletto: ${spec?.parts.collar || 8} cm / Tasca: ${spec?.parts.pocket || 14} cm`, 'Taglie: 38 - 40 - 42 - 44 - 46 - 48', 'Sviluppo torace: +' + data.gradingChest + ' cm per taglia'],
+    ['03 / MATERIALI E DISTINTA BASE', t.fabric.name, t.fabric.composition, 'Origine: ' + t.fabric.origin, `Tessuto: ${data.consumption.toFixed(2)} m x ${data.fabricPrice.toFixed(2)} EUR`, ...data.trims.map(row => `${row.name}: ${row.qty} ${row.unit} x ${row.price.toFixed(2)} EUR`), `Totale materiali: ${t.materials.toFixed(2)} EUR`, 'Disponibilita e colori da confermare nel modulo 3'],
+    ['04 / COSTRUZIONE E NOTE', spec?.constraints || 'Cuciture a vista', ...(spec?.notes || []).map((n, i) => `Nota ${i + 1}: ${n.text} / punto ${n.x}%, ${n.y}%`), `Margine cucitura: ${spec?.parts.seam || data.seam} cm`, `Tempo standard: ${data.laborMinutes} minuti`, 'Macchine: lineare, braccio libero, asolatrice, stiro', `Ordine: ${data.orderId} / ${data.quantity} capi`, 'Revisione: ' + (version?.note || 'Base demo'), 'Approvazione campione: ' + (data.sampleApproved ? 'Approvato' : 'Da completare')],
   ];
+  const images = await Promise.all(drawings.map(async source => {
+    const url = URL.createObjectURL(new Blob([source], { type: 'image/svg+xml' }));
+    try {
+      const image = new Image(); image.src = url; await image.decode();
+      const viewBox = new DOMParser().parseFromString(source, 'image/svg+xml').documentElement.getAttribute('viewBox').split(' ').map(Number);
+      const canvas = document.createElement('canvas'); canvas.width = 900; canvas.height = Math.round(900 * viewBox[3] / viewBox[2]);
+      canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+      const hex = Array.from(atob(canvas.toDataURL('image/jpeg', .9).split(',')[1]), c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('') + '>';
+      return { width: canvas.width, height: canvas.height, hex };
+    } finally { URL.revokeObjectURL(url); }
+  }));
   const ascii = text => String(text).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x20-\x7e]/g, ' ').replace(/[\\()]/g, '\\$&');
   const objects = ['<< /Type /Catalog /Pages 2 0 R >>', '<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R 10 0 R] /Count 4 >>', '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'];
   sections.forEach((lines, index) => {
     const wrapped = lines.flatMap(line => String(line).match(/.{1,76}(?:\s|$)|.{1,76}/g) || ['']);
-    const stream = `0.93 0.89 0.82 rg 0 780 595 62 re f\n0.15 0.15 0.15 rg\nBT /F1 14 Tf 42 746 Td 24 TL\n${wrapped.map((line, i) => `${i ? 'T* ' : ''}(${ascii(line)}) Tj`).join('\n')}\nET\nBT /F1 9 Tf 42 36 Td (${data.styleId} | WEAVE | ${index + 1}/4 | Demo) Tj ET`;
-    objects.push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents ${5 + index * 2} 0 R >>`, `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`);
+    const figureIds = images.length === 3 ? index === 1 ? [0, 1] : index === 3 ? [2] : [] : [];
+    const textHeight = figureIds.length ? index === 1 ? 335 : 435 : 650;
+    const leading = Math.min(20, textHeight / wrapped.length), font = Math.min(12, leading * .8);
+    const figures = figureIds.map((id, n) => {
+      const image = images[id], width = figureIds.length === 2 ? 245 : 340;
+      const height = Math.min(figureIds.length === 2 ? 310 : 210, width * image.height / image.width);
+      const w = height * image.width / image.height, x = figureIds.length === 2 ? 42 + n * 260 : (595 - w) / 2;
+      return `q ${w} 0 0 ${height} ${x} 65 cm /I${id} Do Q`;
+    }).join('\n');
+    const stream = `0.93 0.89 0.82 rg 0 780 595 62 re f\n0.15 0.15 0.15 rg\nBT /F1 ${font} Tf 42 746 Td ${leading} TL\n${wrapped.map((line, i) => `${i ? 'T* ' : ''}(${ascii(line)}) Tj`).join('\n')}\nET\n${figures}\nBT /F1 9 Tf 42 36 Td (${ascii(data.styleId)} | WEAVE | ${index + 1}/4 | Demo) Tj ET`;
+    const resources = figureIds.map(id => `/I${id} ${12 + id} 0 R`).join(' ');
+    objects.push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> /XObject << ${resources} >> >> /Contents ${5 + index * 2} 0 R >>`, `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`);
   });
+  images.forEach(image => objects.push(`<< /Type /XObject /Subtype /Image /Width ${image.width} /Height ${image.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter [/ASCIIHexDecode /DCTDecode] /Length ${image.hex.length} >>\nstream\n${image.hex}\nendstream`));
   let pdf = '%PDF-1.4\n'; const offsets = [0];
   objects.forEach((object, i) => { offsets.push(pdf.length); pdf += `${i + 1} 0 obj\n${object}\nendobj\n`; });
   const xref = pdf.length;

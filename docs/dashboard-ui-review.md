@@ -180,3 +180,35 @@ Build riuscita. CLI Playwright: generazione, apertura/modifica/chiusura del tito
 **Not verified:** dispositivi fisici, Safari/Firefox e backend AI. Restano valide le limitazioni della demo.
 
 **Approve** per la gerarchia e i controlli ispezionati.
+
+## Moduli 1–2 · flusso aggiornato dal PDF (10 ottobre)
+
+Fonte: `filiera_tessile_input_output.pdf`, sezioni Ideazione e Design e Disegno Tecnico. Restano rimossi fascia di prezzo e vincoli di sostenibilità, come richiesto prima del PDF.
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| HIGH | Modulo 1, caricamento | Il file approvava il concept. | Il caricamento assegna l’identità e completa il modulo, senza approvazione. | L’approvazione ufficiale appartiene al disegno tecnico. |
+| HIGH | Modulo 1, scheda capo | Spunti allegati automaticamente al disegno. | Schizzo, moodboard e palette in viste separate; origine esplicita, avvisi demo e scelta fra spunti, manuale o vuoto. | Lo stilista decide ciò che accompagna il capo; i dati mancanti non vengono inventati. |
+| MEDIUM | Modulo 1, risultati | Moodboard, palette e revisione impilati; storico degli spunti. | Selettore con un pannello visibile; la rigenerazione sovrascrive il set. Mobile: Brief/Spunti e due riferimenti per pagina. | Riduce la lunghezza senza trasformare il moodboard in un collage. |
+| HIGH | Modulo 2 | Tavola raster preparata, nessuna revisione confrontabile. | Input, Tavola, Misure, Colori, Versioni; vettoriale interattivo con fronte, retro e dettagli, quote e revisioni a prompt/manuali. | Il disegno tecnico diventa il centro della demo. |
+| HIGH | Versioni e approvazione | Un flag generico di tavola disponibile. | Snapshot indipendenti, confronto delle quote, versione ufficiale selezionabile; ogni nuova revisione resta da approvare. | Le modifiche non riscrivono le versioni precedenti. |
+| MEDIUM | Colori | Un solo nome variante. | Varianti con nome, campione, codice univoco, vestibilità e tolleranza; editor singolo selezionabile. | La palette indicativa diventa una specifica del tech pack, da verificare sui materiali. |
+| HIGH | Export | PDF generico e tavole senza export vettoriale. | SVG reale della vista selezionata; PDF di quattro pagine con dati della versione, fronte/retro e dettagli. | I file scaricati corrispondono alla revisione esaminata e riportano BOZZA/APPROVATO. |
+| MEDIUM | Passaggio a materiali e Home | Stato di completamento legato alla sola generazione. | Home distingue schizzo caricato/disegno in revisione/approvato; BOM mostra versione ufficiale e codici colore. | Il passaggio successivo ha una specifica riconoscibile. |
+
+### Controlli
+
+- Build Vite riuscita; nessuna dipendenza aggiunta e nessuna suite di test eseguita.
+- CLI Playwright: generazione facoltativa, prompt, palette manuale e vuota, collegamento esplicito della palette, stesso ID dopo il passaggio al modulo 2.
+- Quattro prompt preparati: manica 62→61 cm, corpo 72→74 cm, spalle 44→45 cm e tasca 14→16 cm. Modifica manuale della tasca e del margine di cucitura; confronto con v1 conserva le misure iniziali.
+- Codici colore duplicati rifiutati; salvataggio di una nuova versione e approvazione verificati. La precedente versione ufficiale resta consultabile dopo ulteriori revisioni.
+- Passaggio alla BOM: versione approvata e sei codici colore visibili.
+- Contesto touch fresco a 390 px: upload PDF diretto nel modulo 2 senza spunti, palette completata lì e approvazione; file JSON e file di 9 MB rifiutati senza perdere la versione ufficiale. Il nuovo schizzo azzera le vecchie tavole. Nessun errore JavaScript nel percorso.
+- Layout a 320/390/768/1440 px senza overflow della pagina. Passaggio Panoramica/Attività: spostamento orizzontale misurato 0 px. Screenshot desktop e mobile ispezionati.
+- Export scaricati dal browser: SVG XML valido, PDF di quattro pagine aperto con Poppler, testo e tutte le pagine renderizzate ispezionati. Quote, note, varianti e stato corrispondono alla versione approvata.
+
+Il codice viene riservato come chiave dello spazio di lavoro, per conservare i collegamenti della demo. Prima del caricamento la UI indica Bozza; il file lo attiva come Product/Style ID. Moodboard e palette della collezione hanno un solo set di spunti, mentre gli allegati al capo sono copie scelte dallo stilista.
+
+**Not verified:** ricerca web e trasformazione AI reali, analisi visiva dei file, storage remoto e persistenza oltre la sessione. La verifica dello schizzo è uno scenario demo dichiarato, non un’analisi del file. Il vettoriale parametrico è dimostrativo, non validato per produzione sartoriale. Non verificati Illustrator, dispositivi fisici, Safari/Firefox o deployment Vercel.
+
+**Approve** per i flussi demo e la UI ispezionati.
