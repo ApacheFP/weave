@@ -56,7 +56,7 @@ export function NotificationsPage({ onSelectMessage, onOpenPage }) {
       <div className="dw-notifications-actions">
         <div className="dw-notifications-filter" role="group" aria-label="Filtra notifiche">{[['all', 'Tutte'], ['unread', 'Da leggere']].map(([key, label]) => <button type="button" key={key} aria-pressed={filter === key} onClick={() => setFilter(key)}>{label}</button>)}</div>
         <button type="button" className="dw-notifications-mark-all" disabled={!unread} onClick={markAllInboxRead}><Icon name="check" size={14} />Segna tutte come lette</button>
-        {onOpenPage && <button type="button" className="dw-notifications-preferences" onClick={() => onOpenPage('settings')} aria-label="Preferenze notifiche" title="Preferenze notifiche"><Icon name="settings" size={16} /></button>}
+        {onOpenPage && <button type="button" className="dw-notifications-preferences" onClick={() => onOpenPage('settings?section=email')} aria-label="Preferenze notifiche" title="Preferenze notifiche"><Icon name="settings" size={16} /></button>}
       </div>
     </header>
     {visible.length ? Object.entries(buckets).map(([bucket, list]) => <section className="dw-notifications-group" key={bucket} aria-label={bucket}>

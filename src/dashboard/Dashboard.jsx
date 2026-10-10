@@ -14,13 +14,13 @@ import Assistant from './Assistant.jsx';
 import { ProductPhoto } from './Media.jsx';
 import WorkspaceHome, { WorkspaceActivityPage } from './WorkspaceOverview.jsx';
 import { CreateTaskDialog, InboxPage, MyTasksPage } from './PersonalPages.jsx';
-import { SettingsPage, HelpPage } from './AccountPages.jsx';
+import { SettingsPage, HelpMenu } from './AccountPages.jsx';
 import NotificationsPage from './NotificationsPage.jsx';
 import './dashboard.css';
 import './workspace-shell.css';
 
 const shortNames = { 1: 'Ideazione e design', 2: 'Disegno tecnico', 3: 'Materiali e BOM', 4: 'Modellistica', 5: 'Sviluppo taglie', 6: 'Prototipi', 7: 'Piazzamento', 9: 'Costi e pricing', 10: 'Pianificazione', 11: 'Acquisti', 12: 'Produzione', 13: 'Qualità', 19: 'Passaporto digitale', 21: 'Panoramica del capo', 22: 'Assistente' };
-const pageNames = { home: 'Home', inbox: 'Inbox', 'my-tasks': 'Le mie attività', notifications: 'Notifiche', capi: 'Capi', activity: 'Attività della filiera', settings: 'Impostazioni', profile: 'Il tuo profilo', help: 'Aiuto e risorse' };
+const pageNames = { home: 'Home', inbox: 'Inbox', 'my-tasks': 'Le mie attività', notifications: 'Notifiche', capi: 'Capi', activity: 'Attività della filiera', settings: 'Impostazioni', profile: 'Il tuo profilo' };
 const moduleIcons = { 1: 'pencil', 2: 'ruler', 3: 'layers', 4: 'scissors', 5: 'ruler', 6: 'shirt', 7: 'grid', 9: 'chart', 10: 'calendar', 11: 'box', 12: 'activity', 13: 'check', 19: 'file', 21: 'home', 22: 'chat' };
 const components = { 1: DesignPage, 2: TechnicalPage, 3: MaterialsPage, 4: PatternPage, 5: GradingPage, 6: PrototypePage, 7: MarkerPage, 9: PricingPage, 10: PlanningPage, 11: ProcurementPage, 12: ProductionPage, 13: QualityPage, 19: PassportPage, 21: HomePage, 22: DecisionPage };
 // Keep the shell navigable if a page fails, as in Prova1's stateFailed view.
@@ -48,8 +48,8 @@ function StylesPage({ onCreate, onOpen }) {
   </div>;
 }
 
-export default function Dashboard({ moduleId, workspacePage, inboxId, onOpenPage, onNavigate, onHome, onSignOut }) {
-  const { data, tasks, inbox, selectStyle } = useDemo();
+export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSection, onOpenPage, onNavigate, onHome, onSignOut }) {
+  const { data, tasks, inbox, selectStyle, preferences } = useDemo();
   const [menu, setMenu] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [service, setService] = useState(null);
@@ -81,7 +81,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, onOpenPage
     const key = event => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); setSearch(true); }
       if (event.key === 'Escape') {
-        if (document.querySelector('.profile-panel,.dw-workspace-popover,dialog[open]')) return;
+        if (document.querySelector('.profile-panel,.dw-workspace-popover,.dw-help-popover,dialog[open]')) return;
         if (newMenu) { setNewMenu(false); newTrigger.current?.focus(); return; }
         setMenu(false); setChat(false);
         if (menu) mobileTrigger.current?.focus();
@@ -119,11 +119,10 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, onOpenPage
     'my-tasks': <MyTasksPage onOpenModule={openModule} />,
     capi: <StylesPage onCreate={() => setCreate(true)} onOpen={() => navigate(21)} />,
     activity: <WorkspaceActivityPage onOpenModule={openModule} />,
-    settings: <SettingsPage section="notifications" />,
+    settings: <SettingsPage section={settingsSection || 'appearance'} />,
     profile: <SettingsPage section="profile" />,
-    help: <HelpPage onNavigate={navigate} onOpenPage={openPage} />,
   };
-  return <div className={`dw-app ${collapsed ? 'dw-collapsed' : ''}`} data-module={isModule ? moduleId : undefined} data-workspace-page={workspacePage || undefined}>
+  return <div className={`dw-app ${collapsed ? 'dw-collapsed' : ''}`} data-module={isModule ? moduleId : undefined} data-workspace-page={workspacePage || undefined} data-ui-theme={preferences?.theme || 'system'} data-ui-accent={preferences?.accent || 'graphite'} data-sidebar-density={preferences?.sideDensity || 'comfortable'} data-task-density={preferences?.taskDensity || 'comfortable'} data-motion={preferences?.motion || 'system'}>
     <a className="dw-skip" href="#module-workspace" onClick={event => { event.preventDefault(); page.current?.focus(); content.current?.scrollTo(0, 0); }}>Vai al contenuto</a>
     <div className="dw-layout">
       {menu && <button className="dw-nav-scrim" onClick={() => { setMenu(false); mobileTrigger.current?.focus(); }} aria-label="Chiudi navigazione" />}
@@ -152,7 +151,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, onOpenPage
         </div>
         <div className="dw-sidebar-bottom">
           <nav className="dw-nav-quick dw-account-nav" aria-label="Account e risorse">
-            {navItem('Aiuto e risorse', 'help', () => openPage('help'), workspacePage === 'help')}
+            <HelpMenu onSearch={() => setSearch(true)} />
             {navItem('Impostazioni', 'settings', () => openPage('settings'), workspacePage === 'settings' || workspacePage === 'profile')}
           </nav>
           <ProfileMenu sidebar collapsed={collapsed} onSignOut={onSignOut} onProfile={() => openPage('profile')} onSettings={() => openPage('settings')} />
@@ -161,7 +160,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, onOpenPage
       <div className="dw-main">
         <header className="dw-header">
           <button ref={mobileTrigger} className="dw-icon-btn dw-mobile-menu" aria-label={menu ? 'Chiudi navigazione' : 'Apri navigazione'} aria-expanded={menu} aria-controls="workspace-nav" onClick={() => setMenu(!menu)}><Icon name={menu ? 'close' : 'menu'} /></button>
-          <nav className="dw-breadcrumb" aria-label="Percorso"><button onClick={() => openPage('home')}>Atelier</button><span>/</span>{isModule && <><button className="dw-breadcrumb-product" onClick={() => navigate(21)}>{data.title}</button><span>/</span></>}<strong>{title}</strong></nav>
+          <nav className="dw-breadcrumb" aria-label="Percorso">{isModule && moduleId !== 21 && <><button className="dw-breadcrumb-product" onClick={() => navigate(21)}>{data.title}</button><span>/</span></>}<strong>{isModule && moduleId === 21 ? data.title : title}</strong></nav>
           <div className="dw-header-tools">
             <button className="dw-header-search" onClick={() => setSearch(true)} aria-label="Cerca pagine, moduli e capi"><Icon name="search" size={15} /><span>Cerca in Atelier…</span><kbd>⌘ K</kbd></button>
             <button className="dw-icon-btn dw-header-inbox" aria-label={`Notifiche${unread ? `, ${unread} da leggere` : ''}`} onClick={() => openPage('notifications')}><Icon name="bell" size={17} />{unread > 0 && <i aria-hidden="true" />}</button>

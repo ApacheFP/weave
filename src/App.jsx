@@ -172,7 +172,7 @@ function readRoute() {
   const id = match ? Number(match[1]) : null;
   if (moduleGroups[0].items.some(module => module.id === id)) return { moduleId: id, page: null };
   const [page, query] = window.location.hash.slice(2).split('?');
-  return ['home', 'inbox', 'my-tasks', 'notifications', 'capi', 'activity', 'settings', 'profile', 'help'].includes(page) ? { moduleId: 21, page, inboxId: new URLSearchParams(query).get('message') } : null;
+  return ['home', 'inbox', 'my-tasks', 'notifications', 'capi', 'activity', 'settings', 'profile'].includes(page) ? { moduleId: 21, page, inboxId: new URLSearchParams(query).get('message'), settingsSection: new URLSearchParams(query).get('section') } : null;
 }
 
 function Workspace({ onSignOut }) {
@@ -194,7 +194,7 @@ function Workspace({ onSignOut }) {
   const rememberIndex = useCallback((_id, nextIndex) => setIndex(nextIndex), []);
   function home() { window.location.hash = '/moduli'; setRoute(null); }
   return route
-    ? <Dashboard moduleId={route.moduleId} workspacePage={route.page} inboxId={route.inboxId} onOpenPage={openPage} onNavigate={navigate} onHome={home} onSignOut={onSignOut} />
+    ? <Dashboard moduleId={route.moduleId} workspacePage={route.page} inboxId={route.inboxId} settingsSection={route.settingsSection} onOpenPage={openPage} onNavigate={navigate} onHome={home} onSignOut={onSignOut} />
     : <ProductPage onSignOut={onSignOut} onEnter={navigate} index={index} onIndexChange={rememberIndex} />;
 }
 

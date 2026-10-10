@@ -196,6 +196,8 @@ export function DemoProvider({ children }) {
   }
   function updatePreferences(patch) {
     const changes = Object.fromEntries(['moduleAlerts', 'productNews'].filter(key => typeof patch?.[key] === 'boolean').map(key => [key, patch[key]]));
+    const choices = { theme: ['light', 'dark', 'system'], accent: ['indigo', 'blue', 'violet', 'teal', 'rose', 'graphite'], sideDensity: ['comfortable', 'compact'], taskDensity: ['comfortable', 'compact'], motion: ['system', 'reduce'] };
+    for (const [key, values] of Object.entries(choices)) if (values.includes(patch?.[key])) changes[key] = patch[key];
     setWorkspace(current => ({ ...current, preferences: { ...current.preferences, ...changes } }));
     notify('Preferenze salvate');
   }
