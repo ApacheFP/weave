@@ -111,3 +111,28 @@ Build riuscita. CLI Playwright: zero card dei figurini dopo la generazione; Rice
 **Not verified:** upload finale non ripetuto in questa modifica; i limiti della demo già documentati restano validi.
 
 **Approve** per la rimozione e il passaggio ispezionati.
+
+## Modulo 1 · due percorsi paralleli
+
+10 ottobre 2026. Caricamento diretto del disegno finale oppure ispirazione facoltativa. La direzione creativa produce esclusivamente un moodboard di atmosfere con didascalia e sei colori indicativi; nessun figurino o risultato di ricerca web viene mostrato.
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| HIGH | `CreativePage.jsx` | Lo schizzo richiedeva ricerca, proposta e palette approvata. | Upload JPG/PNG/WebP/PDF subito disponibile; il file approva il concept e resta collegato allo stesso Style ID. | Lo stilista può partire dal proprio disegno senza usare il percorso creativo. |
+| MEDIUM | `CreativePage.jsx`, `creativeData.js` | Fonti web esplicite, moodboard di capi e quattro colori. | Input del cliente/brand/collezioni/target e riferimenti provvisori facoltativi; immagine atmosferica, didascalia e sei colori. | La ricerca di contesto resta interna e l’output dà una direzione, senza progettare il capo. |
+| MEDIUM | `CreativePage.jsx`, `creative.css` | Percorso sequenziale con approvazioni obbligatorie. | Due accessi paralleli; prompt di revisione, sostituzione dell’immagine, didascalia e colori/nomi modificabili, ripristino delle versioni. | Iterazione libera senza bloccare il disegno finale. |
+| MEDIUM | `Assistant.jsx`, `services.jsx`, `HomePage.jsx` | Indicazioni ancora riferite ai figurini e alla palette obbligatoria. | Copie allineate a upload diretto e ispirazione facoltativa. | Le altre parti della dashboard descrivono lo stesso flusso. |
+
+### Controlli
+
+- Build Vite riuscita, nessuna dipendenza o suite di test aggiunta/eseguita.
+- CLI Playwright: upload WebP diretto senza moodboard/palette, stesso ID GJ-0421, file presente nel modulo 2 e generazione tecnica abilitata.
+- Generazione facoltativa: un moodboard, sei colori, zero card dei figurini e zero sintesi/fonti pubblicate.
+- Prompt fresco/salvia aggiorna immagine e palette demo; modifiche manuali a didascalia, nome e colore conservate.
+- Caricato riferimento provvisorio, sostituita l’immagine del moodboard, caricato PDF finale. Dossier JSON scaricato: sei colori, nome/colore manuali, didascalia manuale e riferimento conservati sullo stesso ID.
+- Layout ispezionato a 320/390/768/1024/1440 px senza overflow. Contesto touch fresco a 390 px: upload diretto e moodboard ispezionati; sei colori, zero errori JavaScript.
+- Due immagini atmosferiche generate con imagegen e convertite in WebP 1200×800, 171/201 KB; prompt e percorsi in `moodboard-images.json`.
+
+**Not verified:** ricerca web o generazione AI runtime: nella demo due direzioni preparate simulano il servizio, senza analizzare i file visivamente. La ricerca interna reale, storage remoto e persistenza oltre la sessione richiedono un backend. Non verificati dispositivi fisici, Safari/Firefox o rendering interno dei PDF.
+
+**Approve** per UI e percorsi demo ispezionati.

@@ -37,7 +37,7 @@ export default function HomePage({ onNavigate, onService, onActivity }) {
   const actions = [
     ...delayed.map(order => ({ key: order.id, id: 11, title: order.material + ': consegna in ritardo', note: `${order.supplier} · ${order.id}`, urgent: true })),
     ...(qualityAlert ? [{ key: 'quality', id: 13, title: 'Verifica la non conformità del lotto', note: `${data.lotId} · ${data.reworks} capi in rilavorazione`, urgent: true }] : []),
-    ...(!data.conceptApproved ? [{ key: 'concept', id: 1, title: 'Prepara il concept del capo', note: 'Esplora gli spunti e carica il tuo schizzo definitivo' }] : []),
+    ...(!data.conceptApproved ? [{ key: 'concept', id: 1, title: 'Prepara il concept del capo', note: 'Carica il disegno finale o esplora moodboard e palette' }] : []),
     ...(!data.techGenerated ? [{ key: 'tech', id: 2, title: 'Prepara il tech pack', note: 'Tavole tecniche e punti di misura' }] : []),
     ...(!data.sampleApproved ? [{ key: 'sample', id: 6, title: 'Completa il fitting del campione', note: `${data.sampleChecks.filter(Boolean).length} di ${data.sampleChecks.length} verifiche registrate` }] : []),
     ...(data.sampleApproved && remaining ? [{ key: 'production', id: 12, title: 'Prosegui con il lotto produttivo', note: `${number(remaining)} capi ancora da completare` }] : []),
