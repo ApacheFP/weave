@@ -56,13 +56,22 @@ export function CreateStyleDialog({ onClose, onCreated }) {
 
 export function WorkspaceSearch({ onNavigate, onOpenPage, onClose }) {
   const { data, styles, selectStyle } = useDemo(); const [query, setQuery] = useState('');
+  const results = useRef(null);
   const matches = text => text.toLowerCase().includes(query.toLowerCase());
   const pages = [['home', 'Home', 'home'], ['inbox', 'Inbox', 'inbox'], ['my-tasks', 'Le mie attività', 'list'], ['notifications', 'Notifiche', 'bell'], ['capi', 'Capi', 'shirt'], ['activity', 'Attività della filiera', 'activity'], ['settings', 'Impostazioni', 'settings'], ['profile', 'Il tuo profilo', 'user']].filter(([, title]) => matches(title));
   const rows = moduleGroups[0].items.map(item => item.id === 21 ? { ...item, title: 'Panoramica del capo' } : item).sort((a, b) => Number(b.id === 21) - Number(a.id === 21)).filter(item => matches(item.title) || item.id === 21 && matches('Context Engine Digital Twin'));
   const products = styles.filter(item => matches(`${item.title} ${item.styleId}`));
+  function moveResult(event) {
+    if (!['ArrowDown', 'ArrowUp'].includes(event.key)) return;
+    const buttons = [...(results.current?.querySelectorAll('button') || [])];
+    if (!buttons.length) return;
+    event.preventDefault();
+    const current = buttons.indexOf(document.activeElement);
+    buttons[(current + (event.key === 'ArrowDown' ? 1 : -1) + buttons.length) % buttons.length].focus();
+  }
   return <Dialog instant title="Cerca in Atelier" note="Apri una pagina, un modulo oppure cambia capo" onClose={onClose}>
-    <div className="dw-command-search"><Icon name="search" size={18} /><input data-autofocus aria-label="Cerca pagine, moduli e capi" placeholder="Pagine, moduli, codici, capi…" value={query} onChange={e => setQuery(e.target.value)} /></div>
-    <div className="dw-command-results">
+    <div className="dw-command-search"><Icon name="search" size={18} /><input data-autofocus aria-label="Cerca pagine, moduli e capi" placeholder="Pagine, moduli, codici, capi…" value={query} onChange={e => setQuery(e.target.value)} onKeyDown={event => { if (['ArrowDown', 'Tab'].includes(event.key) && !event.shiftKey) { const first = results.current?.querySelector('button'); if (first) { event.preventDefault(); first.focus(); } } }} /></div>
+    <div className="dw-command-results" ref={results} onKeyDown={moveResult}>
       {pages.length > 0 && <><span className="dw-eyebrow">Spazio di lavoro</span>{pages.map(([id, label, icon]) => <button key={id} onClick={() => { onOpenPage(id); onClose(); }}><Icon name={icon} size={16} /><span>{label}</span><Icon name="arrow" size={14} /></button>)}</>}
       {rows.length > 0 && <><span className="dw-eyebrow">Moduli · {data.title}</span>{rows.map(item => <button key={item.id} onClick={() => { onNavigate(item.id); onClose(); }}><Icon name={item.id === 21 ? 'home' : 'grid'} size={16} /><span>{item.title}</span><Icon name="arrow" size={14} /></button>)}</>}
       {products.length > 0 && <><span className="dw-eyebrow">Capi</span>{products.map(item => <button key={item.styleId} onClick={() => { selectStyle(item.styleId); onNavigate(21); onClose(); }}><Icon name="shirt" size={16} /><span>{item.title} <small>{item.identityAssigned ? item.styleId : 'Bozza'}</small></span>{item.styleId === data.styleId && <Icon name="check" size={14} />}</button>)}</>}

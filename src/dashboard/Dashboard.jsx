@@ -49,7 +49,7 @@ function StylesPage({ onCreate, onOpen }) {
 }
 
 export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSection, onOpenPage, onNavigate, onHome, onSignOut }) {
-  const { data, tasks, inbox, selectStyle, preferences } = useDemo();
+  const { data, tasks, inbox, selectStyle, preferences, updatePreferences } = useDemo();
   const [menu, setMenu] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [service, setService] = useState(null);
@@ -65,6 +65,8 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
   const newTrigger = useRef(null);
   const newRoot = useRef(null);
   const pendingService = useRef(null);
+  const navChord = useRef(false);
+  const navChordTimer = useRef(null);
   const isModule = !workspacePage;
   const Content = components[moduleId];
   const title = isModule ? shortNames[moduleId] : pageNames[workspacePage];
@@ -85,11 +87,28 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
         if (newMenu) { setNewMenu(false); newTrigger.current?.focus(); return; }
         setMenu(false); setChat(false);
         if (menu) mobileTrigger.current?.focus();
+        return;
       }
+      if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') { document.activeElement?.closest('form')?.requestSubmit(); return; }
+      if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.key.toLowerCase() === 'l') { event.preventDefault(); updatePreferences({ theme: preferences?.theme === 'dark' ? 'light' : 'dark' }); return; }
+      if (document.querySelector('dialog[open],.profile-panel,.dw-workspace-popover,.dw-help-popover')) return;
+      if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName) || document.activeElement?.isContentEditable) return;
+      if (event.key === '/') { event.preventDefault(); setSearch(true); return; }
+      const pressed = event.key.toLowerCase();
+      if (navChord.current) {
+        navChord.current = false; clearTimeout(navChordTimer.current);
+        const routes = { h: 'home', t: 'my-tasks', p: 'capi', i: 'inbox', s: 'settings' };
+        if (routes[pressed]) { event.preventDefault(); openPage(routes[pressed]); }
+        return;
+      }
+      if (pressed === 'g') { navChord.current = true; event.preventDefault(); navChordTimer.current = setTimeout(() => { navChord.current = false; }, 900); return; }
+      if (pressed === 'n') { event.preventDefault(); setCreateTask(true); }
+      if (pressed === 'p') { event.preventDefault(); setCreate(true); }
+      if (event.key === '[') { event.preventDefault(); setCollapsed(value => !value); }
     };
     document.addEventListener('keydown', key);
     return () => document.removeEventListener('keydown', key);
-  }, [menu, newMenu]);
+  }, [menu, newMenu, preferences?.theme, updatePreferences]);
   useEffect(() => {
     if (!newMenu) return;
     newRoot.current?.querySelector('.dw-header-new-menu button')?.focus();

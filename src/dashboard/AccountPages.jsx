@@ -12,6 +12,12 @@ const settingsGroups = [
   ['Fatturazione', [['plan', 'Piano', 'layers'], ['payment', 'Pagamento', 'list'], ['invoices', 'Fatture', 'file']]],
 ];
 const sectionLabel = Object.fromEntries(settingsGroups.flatMap(([, items]) => items.map(([id, label]) => [id, label])));
+const shortcutGroups = [
+  ['Generale', [['Menu comandi', ['⌘', 'K']], ['Cerca', ['/']], ['Scorciatoie da tastiera', ['?']], ['Riduci sidebar', ['[']], ['Cambia tema chiaro/scuro', ['⌘', 'Shift', 'L']], ['Chiudi pannello o finestra', ['Esc']]]],
+  ['Crea', [['Nuova attività', ['N']], ['Nuovo capo', ['P']], ['Invia modulo', ['⌘', '↵']], ['Invia commento', ['⌘', '↵']]]],
+  ['Naviga', [['Vai alla Home', ['G', 'H']], ['Vai alle mie attività', ['G', 'T']], ['Vai ai capi', ['G', 'P']], ['Vai all’Inbox', ['G', 'I']], ['Vai alle impostazioni', ['G', 'S']]]],
+  ['Menu comandi', [['Sposta selezione', ['↑', '↓']], ['Esegui comando', ['↵']], ['Passa ai risultati', ['Tab']]]],
+];
 
 function Preference({ label, description, checked, onChange }) {
   return <div className="dw-setting-row"><div><strong>{label}</strong><p>{description}</p></div><button className="dw-account-switch" type="button" role="switch" aria-label={label} aria-checked={checked} onClick={() => onChange(!checked)}><span /></button></div>;
@@ -77,6 +83,6 @@ export function HelpMenu({ onSearch }) {
   return <div className="dw-help-menu" ref={root}>
     <button type="button" className="dw-help-trigger" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(value => !value)}><Icon name="help" size={16} /><span>Aiuto e risorse</span></button>
     {open && <div className="dw-help-popover" role="menu" aria-label="Aiuto e risorse"><strong>Aiuto e risorse</strong><button role="menuitem" onClick={() => { setOpen(false); setShortcuts(true); }}><Icon name="list" size={15} />Scorciatoie da tastiera<kbd>?</kbd></button><button role="menuitem" onClick={() => { setOpen(false); onSearch(); }}><Icon name="search" size={15} />Menu comandi<kbd>⌘K</kbd></button><button role="menuitem" onClick={unavailable}><Icon name="layers" size={15} />Sistema di design</button><button role="menuitem" onClick={unavailable}><Icon name="grid" size={15} />Stati di sistema</button><hr /><strong>Prototipo</strong><button role="menuitem" onClick={unavailable}><Icon name="spark" size={15} />Ripeti introduzione</button><button role="menuitem" onClick={unavailable}><Icon name="activity" size={15} />Simula offline</button><button role="menuitem" onClick={unavailable}><Icon name="file" size={15} />Apri un link non valido</button><button role="menuitem" onClick={unavailable}><Icon name="settings" size={15} />Ripristina dati demo</button></div>}
-    {shortcuts && <Dialog title="Scorciatoie da tastiera" onClose={() => setShortcuts(false)}><div className="dw-shortcut-row"><span>Cerca pagine e moduli</span><kbd>⌘ K</kbd></div><div className="dw-shortcut-row"><span>Chiudi menu o finestra</span><kbd>Esc</kbd></div></Dialog>}
+    {shortcuts && <Dialog title="Scorciatoie da tastiera" className="dw-shortcuts-dialog" onClose={() => setShortcuts(false)}><div className="dw-shortcut-columns">{shortcutGroups.map(([group, items]) => <section key={group}><h3>{group}</h3>{items.map(([label, keys]) => <div className="dw-shortcut-row" key={label}><span>{label}</span><span className="dw-shortcut-keys">{keys.map((key, index) => <React.Fragment key={`${key}-${index}`}>{index > 0 && keys[0] === 'G' && <small>poi</small>}<kbd>{key}</kbd></React.Fragment>)}</span></div>)}</section>)}</div></Dialog>}
   </div>;
 }
