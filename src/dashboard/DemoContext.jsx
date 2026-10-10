@@ -142,7 +142,7 @@ export function DemoProvider({ children }) {
     notify('Capo creato: ' + item.title);
     return true;
   }
-  return <Context.Provider value={{ data, styles: workspace.items.map(({ styleId, title, collection, variant }) => ({ styleId, title, collection, variant })), selectStyle, createStyle, commit, notify, collectionData, commitCollection, ...totals(data) }}>{children}<div className="dw-toast" role="status" aria-live="polite">{notice && <span key={notice}>{notice}</span>}</div></Context.Provider>;
+  return <Context.Provider value={{ data, styles: workspace.items.map(({ styleId, title, collection, variant, identityAssigned }) => ({ styleId, title, collection, variant, identityAssigned })), selectStyle, createStyle, commit, notify, collectionData, commitCollection, ...totals(data) }}>{children}<div className="dw-toast" role="status" aria-live="polite">{notice && <span key={notice}>{notice}</span>}</div></Context.Provider>;
 }
 export const useDemo = () => useContext(Context);
 
