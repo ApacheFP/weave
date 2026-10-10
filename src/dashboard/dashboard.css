@@ -108,12 +108,15 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-card-head h2 { font-size: 13.5px; font-weight: 600; margin: 0; line-height: 1.45; }
 .dw-card-head p { margin: 4px 0 0; font-size: 12px; color: var(--text-3); line-height: 1.5; }
 .dw-card-body { padding: 0 14px 14px; }
+.dw-card-body > .dw-btn { display: flex; width: fit-content; max-width: 100%; margin: 10px 0 0 auto; }
+.dw-card-body form > .dw-btn { display: flex; width: fit-content; max-width: 100%; margin-left: auto; }
+.dw-card-body > .dw-actions { margin-top: 10px; }
 .dw-card-body > :first-child { margin-top: 0; }
 .dw-card-body > :last-child { margin-bottom: 0; }
 .dw-card-body > p { color: var(--text-2); line-height: 1.6; }
 .dw-card-body h3 { font-size: 14.5px; font-weight: 600; }
-.dw-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
-.dw-measurement-actions { justify-content: flex-end; margin-top: 10px; }
+.dw-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px; }
+.dw-measurement-actions { margin-top: 10px; }
 .dw-stack { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 .dw-two { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
 .dw-two-main,.dw-design-layout,.dw-pricing-layout,.dw-marker-layout,.dw-production-layout,.dw-passport-layout,.dw-decision-layout { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(270px,1fr); gap: 16px; align-items: start; }
@@ -129,6 +132,7 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-app input[type=checkbox] { accent-color: var(--accent); width: 14px; height: 14px; flex: 0 0 auto; }
 .dw-check { display: flex; align-items: center; gap: 7px; font-size: 12.5px; line-height: 1.5; color: var(--text-2); }
 .dw-inline-form { display: flex; align-items: end; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.dw-inline-form > .dw-btn { margin-left: auto; }
 .dw-muted { color: var(--text-3); font-size: 12px; line-height: 1.6; }
 .dw-error { color: #a54737; font-size: 12px; }
 .dw-tabs { display: inline-flex; align-items: center; padding: 2px; gap: 2px; border: 1px solid var(--border); background: var(--surface-2); border-radius: var(--radius); max-width: 100%; }

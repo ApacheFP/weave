@@ -34,6 +34,40 @@ function drawArtwork(ctx, artwork) {
   ctx.restore();
 }
 
+function drawCardCopy(ctx, module) {
+  const left = 72;
+  const copyWidth = 528;
+  const centerY = 1153.5;
+  const fontSize = 36;
+  const lineHeight = 52;
+  const lines = [];
+
+  ctx.save();
+  ctx.font = `400 ${fontSize}px ${font}`;
+  for (const sourceLine of module.copy) {
+    let line = '';
+    for (const word of sourceLine.split(/\s+/)) {
+      const candidate = line ? `${line} ${word}` : word;
+      if (line && ctx.measureText(candidate).width > copyWidth) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = candidate;
+      }
+    }
+    if (line) lines.push(line);
+  }
+
+  ctx.fillStyle = '#4d473d';
+  ctx.textBaseline = 'middle';
+  const textHeight = lines.length * lineHeight;
+  lines.forEach((line, index) => {
+    ctx.fillText(line, left, centerY - textHeight / 2 + lineHeight * (index + .5));
+  });
+
+  ctx.restore();
+}
+
 async function loadArtwork(id) {
   if (!artworkCache.has(id)) {
     const image = new Image();
@@ -80,7 +114,7 @@ export async function createModuleCards(items = modules) {
         ctx.restore();
 
         drawArtwork(ctx, artwork[index]);
-
+        drawCardCopy(ctx, module);
       },
     };
   });

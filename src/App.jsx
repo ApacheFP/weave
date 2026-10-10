@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { moduleGroups } from './modules.js';
+import { carouselGroup, moduleGroups } from './modules.js';
 import { createModuleCards } from './cards.js';
 import AuthPage from './AuthPage.jsx';
 import ProfileMenu from './ProfileMenu.jsx';
@@ -46,7 +46,7 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
             element.style.width = `${bounds.width}px`;
             element.style.height = `${bounds.height}px`;
             element.style.setProperty('--card-copy-size', `${bounds.width * .043}px`);
-            element.dataset.moving = !bounds.settled;
+            element.dataset.positioned = 'true';
           },
         });
         const mobile = window.matchMedia('(max-width: 600px)');
@@ -93,7 +93,7 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
     else if (event.key === 'ArrowRight') carousel.current.go(1);
     else if (event.key === 'Home') carousel.current.show(0);
     else if (event.key === 'End') carousel.current.show(items.length - 1);
-    else if (event.key === 'Enter' && group.id === 'modules' && ready) onEnter(items[index].id);
+    else if (event.key === 'Enter' && !items[index].serviceInfo && ready) onEnter(items[index].routeId);
     else return;
     event.preventDefault();
   }
@@ -108,14 +108,14 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
   }
 
   return (
-    <section className="carousel" id={`carousel-${group.id}`} role="tabpanel" aria-labelledby={`tab-${group.id}`} aria-describedby="carousel-context carousel-hint" aria-roledescription="carosello" onKeyDown={handleKey}>
+    <section className="carousel" id={`carousel-${group.id}`} aria-describedby="carousel-context carousel-hint" aria-roledescription="carosello" onKeyDown={handleKey}>
       <div className="carousel-stage" ref={host} tabIndex={0} aria-label={`Esplora ${label.toLowerCase()} con le frecce della tastiera`} aria-describedby="carousel-hint">
-        <div className="card-entry" ref={entry} data-moving="true">
-          <div className="card-entry-footer"><p>{items[index].copy.join(' ')}</p>{group.id === 'modules'
-            ? <button type="button" className="card-enter-button" disabled={!ready} aria-label={`Entra nel modulo ${items[index].title}`} onClick={event => { event.stopPropagation(); onEnter(items[index].id); }} onKeyDown={event => event.stopPropagation()}><span>Entra</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5" /></svg></button>
+        <div className="card-entry" ref={entry} data-positioned="false">
+          <div className="card-entry-footer"><p aria-hidden="true">{items[index].copy.join(' ')}</p>{!items[index].serviceInfo
+            ? <button type="button" className="card-enter-button" disabled={!ready} aria-label={`Entra nel modulo ${items[index].title}`} onClick={event => { event.stopPropagation(); onEnter(items[index].routeId); }} onKeyDown={event => event.stopPropagation()}><span>Entra</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5" /></svg></button>
             : <button ref={infoButton} type="button" className="card-enter-button card-details-button" disabled={!ready} aria-label={`Scopri di più su ${items[index].title}`} aria-expanded={Boolean(infoState)} aria-controls={infoState ? `service-info-${items[index].id}` : undefined} onClick={event => { event.stopPropagation(); setInfoCard({ id: items[index].id, state: 'opening' }); }} onKeyDown={event => event.stopPropagation()}><span>Scopri di più</span></button>
           }</div>
-          {group.id === 'services' && <>
+          {items[index].serviceInfo && <>
             {infoState && <div id={`service-info-${items[index].id}`} className={`service-info-back is-${infoState}`} role="group" aria-label={`Informazioni sul servizio ${items[index].title}`} onAnimationEnd={event => {
               if (event.animationName === 'service-info-flip-out') {
                 setInfoCard(null);
@@ -140,87 +140,29 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
         <p id="carousel-hint">Trascina o scorri per esplorare la filiera</p>
       </footer>
 
-      <p className="sr-only" aria-live="polite" aria-atomic="true">{group.id === 'services' ? 'Servizio integrato' : 'Modulo'}, card {index + 1} di {items.length}: {items[index].title}. {items[index].copy.join(' ')}</p>
-      <ol className={error ? 'carousel-fallback' : 'sr-only'}>{items.map(module => <li key={module.id}>{group.id === 'modules' ? <button onClick={() => onEnter(module.id)}>{module.title} · Entra</button> : `Servizio: ${module.title}`}. {module.copy.join(' ')}</li>)}</ol>
+      <p className="sr-only" aria-live="polite" aria-atomic="true">Card {index + 1} di {items.length}: {items[index].title}. {items[index].copy.join(' ')}</p>
+      <ol className={error ? 'carousel-fallback' : 'sr-only'}>{items.map(module => <li key={module.id}>{module.title}. {module.copy.join(' ')}</li>)}</ol>
     </section>
   );
 }
 
-function ProductPage({ onSignOut, onEnter, initialGroup, indices, onGroupChange, onIndexChange }) {
-  const [selected, setSelected] = useState(initialGroup);
-  const [displayed, setDisplayed] = useState(initialGroup);
-  const [phase, setPhase] = useState('waiting');
-  const tabs = useRef([]);
+function ProductPage({ onSignOut, onEnter, index, onIndexChange }) {
   const page = useRef(null);
+  const onReady = useCallback(() => {}, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     page.current.focus({ preventScroll: true });
   }, []);
 
-  const finishEntry = useCallback(() => {
-    setPhase(window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'idle' : 'in');
-  }, []);
-
-  function selectGroup(next) {
-    if (next === selected) return;
-    setSelected(next);
-    onGroupChange(next);
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || phase === 'waiting') {
-      setDisplayed(next);
-      setPhase('waiting');
-    } else if (next !== displayed) {
-      setPhase('out');
-    } else if (phase === 'out') {
-      setPhase('in');
-    }
-  }
-
-  function finishZoom(event) {
-    if (event.target !== event.currentTarget || event.propertyName !== 'transform') return;
-    if (phase === 'out') {
-      setDisplayed(selected);
-      setPhase('waiting');
-    } else if (phase === 'in') {
-      setPhase('idle');
-    }
-  }
-
-  function handleTabKey(event) {
-    let next;
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') next = 1 - selected;
-    else if (event.key === 'Home') next = 0;
-    else if (event.key === 'End') next = 1;
-    else return;
-    event.preventDefault();
-    selectGroup(next);
-    tabs.current[next].focus();
-  }
-
   return (
     <main className="demo-page" ref={page} tabIndex={-1}>
       <header className="demo-header">
         <ProfileMenu onSignOut={onSignOut} />
         <h1>weave<span className="brand-dot" aria-hidden="true">.</span></h1>
-        <div className="module-selector" role="tablist" aria-label="Esplora WEAVE" style={{ '--selected': selected }} onKeyDown={handleTabKey}>
-          <span className="selector-pill" aria-hidden="true" />
-          {moduleGroups.map((group, index) => (
-            <button key={group.id} ref={element => { tabs.current[index] = element; }} id={`tab-${group.id}`} type="button" role="tab" aria-selected={index === selected} aria-controls={`carousel-${group.id}`} tabIndex={index === selected ? 0 : -1} onClick={() => selectGroup(index)}>
-              <span>{group.label}</span><span className="selector-count" aria-hidden="true">{group.items.length}</span>
-            </button>
-          ))}
-        </div>
-        <p className="carousel-context" id="carousel-context" data-group={moduleGroups[displayed].id} aria-live="polite">
-          {moduleGroups[displayed].id === 'services'
-            ? <>Esplora i servizi a cui potrai accedere all’interno dei nostri <button type="button" className="carousel-context-link" aria-label="Vai ai moduli" onClick={() => { selectGroup(0); tabs.current[0]?.focus(); }}>moduli</button>.</>
-            : <>Esplora i moduli: dall’idea alla vendita e alla seconda vita.<span className="carousel-context-second-line">Un percorso integrato dai nostri <button type="button" className="carousel-context-link" aria-label="Vai ai servizi integrati" onClick={() => { selectGroup(1); tabs.current[1]?.focus(); }}>servizi</button>.</span></>}
-        </p>
+        <p className="carousel-context" id="carousel-context">Dall’idea al passaporto digitale, tutti i moduli della filiera tessile in un unico percorso.</p>
       </header>
-      <div className="carousel-switch" data-phase={phase} aria-busy={phase !== 'idle'} inert={phase !== 'idle'} onTransitionEnd={finishZoom}>
-        {moduleGroups.map((group, index) => index === displayed
-          ? <CardCarousel key={group.id} group={group} onReady={finishEntry} onEnter={onEnter} startIndex={indices[group.id]} onIndexChange={onIndexChange} />
-          : <section key={group.id} id={`carousel-${group.id}`} role="tabpanel" aria-labelledby={`tab-${group.id}`} hidden />)}
-      </div>
+      <CardCarousel group={carouselGroup} onReady={onReady} onEnter={onEnter} startIndex={index} onIndexChange={onIndexChange} />
     </main>
   );
 }
@@ -233,8 +175,7 @@ function readRoute() {
 
 function Workspace({ onSignOut }) {
   const [moduleId, setModuleId] = useState(readRoute);
-  const [group, setGroup] = useState(0);
-  const [indices, setIndices] = useState({ modules: 0, services: 0 });
+  const [index, setIndex] = useState(0);
   useEffect(() => {
     const change = () => setModuleId(readRoute());
     window.addEventListener('hashchange', change);
@@ -244,11 +185,11 @@ function Workspace({ onSignOut }) {
     window.location.hash = `/moduli/${id}`;
     setModuleId(id);
   }, []);
-  const rememberIndex = useCallback((id, index) => setIndices(previous => ({ ...previous, [id]: index })), []);
+  const rememberIndex = useCallback((_id, nextIndex) => setIndex(nextIndex), []);
   function home() { window.location.hash = '/moduli'; setModuleId(null); }
   return moduleId
     ? <Dashboard moduleId={moduleId} onNavigate={navigate} onHome={home} onSignOut={onSignOut} />
-    : <ProductPage onSignOut={onSignOut} onEnter={navigate} initialGroup={group} indices={indices} onGroupChange={setGroup} onIndexChange={rememberIndex} />;
+    : <ProductPage onSignOut={onSignOut} onEnter={navigate} index={index} onIndexChange={rememberIndex} />;
 }
 
 export default function App() {

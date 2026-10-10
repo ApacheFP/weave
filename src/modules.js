@@ -23,6 +23,28 @@ export const modules = [
   { id: 22, title: 'LLM Governante e Decision Intelligence', lines: ['Decision Intelligence', 'Assistente decisionale'], category: 'Decisioni', icon: 'decision', copy: ['Una chat per scenari e decisioni,', 'anche dentro ogni modulo.'] },
 ];
 
+// Homepage cards follow the demo order and the 16 platform modules in the blueprint.
+export const carouselGroup = {
+  id: 'all',
+  label: 'filiera',
+  items: [
+    { id: 1, routeId: 1, title: 'Ideazione e Design', lines: ['Ideazione', 'e design'], copy: ['Trasforma idee e riferimenti', 'in concept, palette e varianti.'] },
+    { id: 2, routeId: 2, title: 'Disegno Tecnico', lines: ['Disegno', 'tecnico'], copy: ['Dallo schizzo al disegno tecnico,', 'alle misure e al tech pack.'] },
+    { id: 3, routeId: 3, title: 'Materiali e Distinta Base', lines: ['Materiali', 'e distinta base'], copy: ['Tessuti, accessori e consumi', 'in una distinta base connessa.'] },
+    { id: 4, routeId: 4, title: 'Modellistica', lines: ['Modellistica', 'digitale'], copy: ['Costruisci i pezzi del modello,', 'con margini, tacche e drittofilo.'] },
+    { id: 5, routeId: 5, title: 'Grading', lines: ['Grading', 'e sviluppo taglie'], copy: ['Sviluppa ogni taglia mantenendo', 'misure e proporzioni coerenti.'] },
+    { id: 6, routeId: 6, title: 'Prototipazione e Campionario', lines: ['Prototipi', 'e campionario'], copy: ['Valida fitting e campioni,', 'fino all’approvazione del capo.'] },
+    { id: 7, routeId: 7, title: 'Piazzamento', lines: ['Piazzamento', 'del tessuto'], copy: ['Disponi i pezzi sul tessuto', 'e riduci consumo e scarto.'] },
+    { id: 10, routeId: 10, title: 'Industrializzazione e Pianificazione', lines: ['Industrializzazione', 'e pianificazione'], copy: ['Definisci il ciclo produttivo', 'e pianifica quantità e scadenze.'] },
+    { id: 9, routeId: 9, title: 'Costi, Pricing e Acquisti', lines: ['Costi, pricing', 'e acquisti'], copy: ['Collega costi, margini, prezzi', 'e ordini ai fornitori.'] },
+    { id: 12, routeId: 12, title: 'Produzione e Controllo Qualità', lines: ['Produzione', 'e qualità'], copy: ['Segui avanzamento, scarti', 'e controlli qualità del lotto.'] },
+    { id: 15, title: 'Magazzino e Logistica', lines: ['Magazzino', 'e logistica'], copy: ['Organizza stock e spedizioni,', 'con tracking e tracciabilità.'], serviceInfo: 'Mostra stock, ubicazioni e disponibilità per taglia. Organizza spedizioni e consegne, con tracking, costi e catena di custodia.' },
+    { id: 17, title: 'Vendita e Ciclo di Vita', lines: ['Vendita', 'e ciclo di vita'], copy: ['Ordini, vendite e storico del capo,', 'fino a riparazione e riciclo.'], serviceInfo: 'Unisce vendita B2B e retail, e-commerce e post-vendita. Raccoglie ordini, prezzi, feedback, resi e assistenza; registra riparazioni, seconda vita e riciclo nel passaporto digitale.' },
+    { id: 19, routeId: 19, title: 'Passaporto Digitale', lines: ['Passaporto', 'digitale'], copy: ['Riunisci la storia del capo', 'in un passaporto digitale.'] },
+    { id: 22, routeId: 22, title: 'Decision Intelligence', lines: ['Decision Intelligence', 'Assistente decisionale'], copy: ['Un assistente per scenari,', 'analisi e decisioni operative.'] },
+  ],
+};
+
 // Decision Intelligence has a standalone chat as well as its embedded assistant.
 const integratedIds = new Set([8, 14, 15, 16, 17, 18, 20]);
 
