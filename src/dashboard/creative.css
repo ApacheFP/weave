@@ -40,11 +40,15 @@
 @media(hover:none) { .dw-creative .dw-btn { min-height:44px; }.dw-creative { padding-bottom:100px; } }
 @media(prefers-reduced-motion:no-preference) { .dw-creative-routes button { transition:background 150ms ease-out,transform 150ms ease-out; }.dw-creative-routes button:active { transform:scale(.96); } }
 
-.dw-mood-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px; }
+.dw-creative-results { container-type:inline-size; }
+.dw-mood-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px; }
+.dw-mood-grid .dw-creative-atmosphere img { aspect-ratio:4/3;max-height:180px; }
 .dw-mood-reference { border:1px solid var(--border);border-radius:12px;overflow:hidden;min-width:0;background:var(--surface); }
-.dw-mood-info { padding:12px;display:flex;flex-direction:column;gap:10px; }
+.dw-mood-info { padding:8px;display:flex;flex-direction:column;gap:6px; }
 .dw-mood-info .dw-field>span { font-size:10px;color:var(--text-3); }
-.dw-mood-info input,.dw-mood-info textarea { font-size:11px; }
+.dw-mood-info input,.dw-mood-info textarea { font-size:11px;padding:7px 8px; }
+.dw-mood-info textarea { min-height:56px; }
 .dw-mood-actions { display:flex;justify-content:space-between;gap:8px; }
-.dw-mood-actions .dw-btn { padding:8px;font-size:11px; }
-@media(max-width:420px) { .dw-mood-grid { grid-template-columns:minmax(0,1fr); } }
+.dw-mood-actions .dw-btn { padding:6px;font-size:11px;gap:4px; }
+@container(min-width:580px) { .dw-mood-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@container(max-width:380px) { .dw-mood-actions .dw-btn:first-child { font-size:0;min-width:44px; }.dw-mood-actions .dw-btn:last-child { min-width:44px; } }
