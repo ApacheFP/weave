@@ -97,3 +97,17 @@ Link consultabili sui siti originali, senza recuperare o ripubblicare le loro im
 **Not verified:** motori di ricerca/AI in tempo reale, caricamento su storage remoto, persistenza oltre la sessione, dispositivi fisici e browser diversi da Chromium. Ricerca, combinazione e rigenerazione usano fonti e figurini preparati; le note di modifica sono conservate, non inviate a un modello runtime.
 
 **Approve** per il percorso dimostrativo ispezionato; nessun HIGH residuo rilevato in questo ambito.
+
+## Modulo 1 · rimozione della card dei figurini
+
+Su richiesta, rimossa l’intera card degli spunti, con feedback, combinazioni e modifica del figurino. La revisione conserva sintesi/fonti, moodboard e palette; l’approvazione richiede la palette e porta direttamente allo schizzo dello stilista.
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| MEDIUM | `CreativePage.jsx`, `creative.css` | Card Quattro interpretazioni e approvazione bloccata senza un figurino preferito. | Card eliminata; moodboard e palette occupano lo spazio disponibile, senza requisito sui figurini. | Rimozione completa della sezione senza bloccare il percorso. |
+
+Build riuscita. CLI Playwright: zero card dei figurini dopo la generazione; Ricerca → Proposta → Approva palette → Approva e continua abilita Carica il tuo schizzo.
+
+**Not verified:** upload finale non ripetuto in questa modifica; i limiti della demo già documentati restano validi.
+
+**Approve** per la rimozione e il passaggio ispezionati.

@@ -140,3 +140,10 @@
 
 @media(hover:none) { .dw-creative .dw-btn,.dw-creative-edit,.dw-creative-keep,.dw-creative-figure-top label { min-height:44px; }.dw-creative-path button { min-height:48px; }.dw-creative-figure-top label { width:100%; }.dw-creative { padding-bottom:100px; } }
 @media(prefers-reduced-motion:no-preference) { .dw-creative-path button,.dw-creative-edit,.dw-creative-history button { transition:background 150ms ease-out,transform 150ms ease-out; }.dw-creative-path button:active:not(:disabled),.dw-creative-edit:active,.dw-creative-history button:active { transform:scale(.96); } }
+
+/* Moodboard and palette share the review area after removing the figurine card. */
+.stage-2 .dw-creative-side-output { grid-column:1 / -1;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:start; }
+.stage-2 .dw-creative-mood-card,.stage-2 .dw-creative-palette-card { grid-column:auto; }
+.stage-2 .dw-creative-moodboard { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.stage-2 .dw-creative-moodboard img { aspect-ratio:1; }
+@media(max-width:900px) { .stage-2 .dw-creative-side-output { grid-template-columns:minmax(0,1fr); } }
