@@ -14,6 +14,33 @@ export const operations = [
 ];
 export const minQuantity = data => Math.max(data.produced, data.retailSold + data.wholesaleOrders.reduce((sum, order) => sum + order.qty, 0));
 
+const demoActors = [
+  { name: 'Alex Rossi', email: 'demo@weave.it' },
+  { name: 'Marta Bianchi', email: 'marta@atelier.demo' },
+  { name: 'Luca Ferri', email: 'luca@atelier.demo' },
+  { name: 'Elena Conti', email: 'elena@atelier.demo' },
+];
+const demoEvents = [
+  [12, '09 ott · 16:40', 2, 'Aggiornato il lotto L-0421-A: 320 capi completati su 500.'],
+  [13, '09 ott · 15:25', 1, 'Aperta NC-018 sulla cucitura della spalla sinistra: 12 capi da ricontrollare.'],
+  [11, '09 ott · 14:10', 2, 'Segnalato il ritardo dei bottoni BOT-003. Richiesta una nuova data ad Accessori F.'],
+  [10, '09 ott · 11:50', 2, 'Impostata la priorità Alta per l’ordine OP-0421 da 500 capi.'],
+  [9, '09 ott · 10:30', 3, 'Registrati i listini di lavoro: wholesale 160 €, retail 320 €.'],
+  [7, '09 ott · 09:15', 1, 'Impostata l’altezza del tessuto a 150 cm. Piazzamento da ottimizzare.'],
+  [6, '08 ott · 16:35', 1, 'Verificata la costruzione delle tasche sul campione. Restano due controlli aperti.'],
+  [5, '08 ott · 15:20', 1, 'Impostata la progressione del torace a 4 cm tra le taglie.'],
+  [4, '08 ott · 14:45', 1, 'Configurato il modello v1.0: margini di cucitura 1 cm, tacche e drittofilo attivi.'],
+  [3, '08 ott · 12:10', 2, 'Selezionata la lana mista TES-017: 70% lana, 30% poliestere, 280 g/m².'],
+  [3, '08 ott · 11:40', 2, 'Preparata la distinta base con fodera viscosa, tela termoadesiva e tre bottoni corozo.'],
+  [2, '08 ott · 10:50', 1, 'Annotati i requisiti di lavoro: tre bottoni, due tasche con pattina e vestibilità regular. Tavola da generare.'],
+  [1, '08 ott · 10:15', 0, 'Inserita la richiesta del cliente: una giacca versatile per il quotidiano, senza eccessi.'],
+  [1, '08 ott · 09:45', 3, 'Aggiunto il contesto del brand e lo storico della Giacca Core AI 2026.'],
+  [1, '08 ott · 09:20', 0, 'Aperta la bozza Giacca Atelier nella collezione Autunno/Inverno 2027. Schizzo finale da caricare.'],
+  [19, '08 ott · 09:15', 3, 'Preparata l’anteprima del passaporto con composizione e indicazioni di cura. Pubblicazione da confermare.'],
+  [21, '08 ott · 09:00', 0, 'Creato lo spazio del capo e condiviso con il team di sviluppo prodotto.'],
+].map(([module, time, actor, text], index) => ({ id: `demo-${index}`, module, time, text, actor: demoActors[actor], demo: true }));
+const activityTime = () => new Intl.DateTimeFormat('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date());
+
 const initial = {
   styleId: 'GJ-0421', orderId: 'OP-0421', lotId: 'L-0421-A', fabricLot: 'T-7781', sampleId: 'CAMP-0421-01', collection: 'Autunno/Inverno 2027',
   profile: { firstName: 'Alex', lastName: 'Rossi', email: 'demo@weave.it' },
@@ -35,7 +62,7 @@ const initial = {
   shipments: [{ id: 'TRK-88214', client: 'Negozio X', qty: 80, status: 'In consegna' }, { id: 'TRK-88210', client: 'Boutique Y', qty: 80, status: 'Consegnata' }, { id: 'TRK-88218', client: 'Studio Z', qty: 100, status: 'Da preparare' }],
   lifecycle: [{ id: 'life-1', date: '2028-10-12', type: 'Riparazione', note: 'Sostituzione bottone · laboratorio autorizzato', future: true }, { id: 'life-2', date: '2029-03-06', type: 'Seconda vita', note: 'Rivendita dopo controllo condizioni', future: true }],
   aiRuns: {}, chats: {},
-  events: [{ id: 'evt-1', text: 'Lotto L-0421-A: completati 320 capi su 500', module: 12, time: '22 apr · 10:40', actor: { name: 'Alex Rossi', email: 'demo@weave.it' } }, { id: 'evt-2', text: 'Spalla sinistra: aperta non conformità NC-018', module: 13, time: '22 apr · 10:15', actor: { name: 'Marta Bianchi', email: 'marta@atelier.demo' } }, { id: 'evt-3', text: 'Accessori F: consegna bottoni in ritardo', module: 11, time: '22 apr · 09:30', actor: { name: 'Luca Ferri', email: 'luca@atelier.demo' } }, { id: 'evt-4', text: 'Tech pack GJ-0421 aggiornato', module: 2, time: '21 apr · 16:20', actor: { name: 'Alex Rossi', email: 'demo@weave.it' } }],
+  events: demoEvents,
 };
 
 export function totals(data) {
@@ -49,7 +76,7 @@ export function totals(data) {
 
 const Context = createContext(null);
 export function DemoProvider({ children }) {
-  const [workspace, setWorkspace] = useState(() => ({ activeId: initial.styleId, collections: { [initial.collection]: collectionDefaults() }, items: [structuredClone(initial), { ...structuredClone(initial), styleId: 'GJ-0422', orderId: 'OP-0422', lotId: 'L-0422-A', fabricLot: 'T-7782', sampleId: 'CAMP-0422-01', title: 'Giacca Studio', variant: 'Sabbia', fabricId: 'premium', fabricPrice: 20, quantity: 600, events: [{ id: 'studio-1', text: 'Brief creativo di Giacca Studio pronto', module: 1, time: '21 apr · 14:00', actor: { name: 'Alex Rossi', email: 'demo@weave.it' } }], brief: 'Giacca in lana vergine, linea morbida e palette sabbia. Una proposta sartoriale per il guardaroba quotidiano.' }] }));
+  const [workspace, setWorkspace] = useState(() => ({ activeId: initial.styleId, collections: { [initial.collection]: collectionDefaults() }, items: [structuredClone(initial), { ...structuredClone(initial), styleId: 'GJ-0422', orderId: 'OP-0422', lotId: 'L-0422-A', fabricLot: 'T-7782', sampleId: 'CAMP-0422-01', title: 'Giacca Studio', variant: 'Sabbia', fabricId: 'premium', fabricPrice: 20, quantity: 600, events: [{ id: 'studio-1', text: 'Inserito il brief: giacca in lana vergine, linea morbida e palette sabbia.', module: 1, time: '08 ott · 14:00', actor: demoActors[0], demo: true }, { id: 'studio-2', text: 'Selezionata la lana vergine TES-024 del Lanificio C, 310 g/m².', module: 3, time: '08 ott · 13:40', actor: demoActors[2], demo: true }, { id: 'studio-3', text: 'Aperta la bozza Giacca Studio nella collezione Autunno/Inverno 2027.', module: 21, time: '08 ott · 13:30', actor: demoActors[0], demo: true }], brief: 'Giacca in lana vergine, linea morbida e palette sabbia. Una proposta sartoriale per il guardaroba quotidiano.' }] }));
   const data = workspace.items.find(item => item.styleId === workspace.activeId);
   const [notice, setNotice] = useState('');
   const timeout = useRef(null);
@@ -84,7 +111,7 @@ export function DemoProvider({ children }) {
         }
         next.phaseReviews = reviews;
       }
-      if (message) next.events = [{ id: crypto.randomUUID(), text: message, module, time: 'Ora', actor: { name: `${previous.profile.firstName} ${previous.profile.lastName}`, email: previous.profile.email } }, ...previous.events].slice(0, 40);
+      if (message) next.events = [{ id: crypto.randomUUID(), text: message, module, time: activityTime(), actor: { name: `${previous.profile.firstName} ${previous.profile.lastName}`, email: previous.profile.email } }, ...previous.events].slice(0, 40);
       return { ...current, items: current.items.map(item => item.styleId === workspace.activeId ? next : changes.profile ? { ...item, profile: changes.profile } : item) };
     });
     if (message) notify(message);
@@ -95,7 +122,7 @@ export function DemoProvider({ children }) {
       const previous = current.items.find(item => item.styleId === workspace.activeId);
       const collection = current.collections[previous.collection] || collectionDefaults();
       const changes = typeof patch === 'function' ? patch(collection) : patch;
-      const event = message && { id: crypto.randomUUID(), text: message, module: 1, time: 'Ora', actor: { name: `${previous.profile.firstName} ${previous.profile.lastName}`, email: previous.profile.email } };
+      const event = message && { id: crypto.randomUUID(), text: message, module: 1, time: activityTime(), actor: { name: `${previous.profile.firstName} ${previous.profile.lastName}`, email: previous.profile.email } };
       return { ...current, collections: { ...current.collections, [previous.collection]: { ...collection, ...changes } }, items: event ? current.items.map(item => item.styleId === previous.styleId ? { ...item, events: [event, ...item.events].slice(0, 40) } : item) : current.items };
     });
     if (message) notify(message);
@@ -110,7 +137,7 @@ export function DemoProvider({ children }) {
     const item = { ...structuredClone(copy ? data : initial), title: title.trim(), styleId: code, orderId: 'OP-' + suffix, lotId: 'L-' + suffix + '-A', fabricLot: 'T-' + suffix, sampleId: 'CAMP-' + suffix + '-01', collection: collection.trim(), quantity: Number(quantity), references: [], creative: creativeDefaults(), conceptApproved: false, identityAssigned: false, technical: null, techGenerated: false, sketch: null, sketchFile: null, sketchName: null, chats: {}, aiRuns: {}, phaseReviews: {}, passportPublished: false,
       profile: data.profile, qualityNote: copy ? data.qualityNote.replaceAll(data.lotId, 'L-' + suffix + '-A') : 'Nessuna non conformità registrata sul nuovo capo.',
       ...(copy ? {} : { brief: '', techGenerated: false, sampleApproved: false, sampleChecks: [false, false, false], produced: 0, reworks: 0, qualityScore: 100, qualityResolved: true, productionDays: [], purchaseOrders: [], wholesaleOrders: [], retailSold: 0, shipments: [], lifecycle: [] }),
-      events: [{ id: crypto.randomUUID(), text: 'Creato il capo ' + title.trim(), module: 21, time: 'Ora', actor: { name: `${data.profile.firstName} ${data.profile.lastName}`, email: data.profile.email } }] };
+      events: [{ id: crypto.randomUUID(), text: 'Creato il capo ' + title.trim(), module: 21, time: activityTime(), actor: { name: `${data.profile.firstName} ${data.profile.lastName}`, email: data.profile.email } }] };
     setWorkspace(current => ({ ...current, activeId: code, items: [...current.items, item] }));
     notify('Capo creato: ' + item.title);
     return true;

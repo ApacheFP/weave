@@ -75,7 +75,6 @@ export default function CreativePage({ onNavigate }) {
   function editReference(id, patch) { commitCollection(previous => ({ moodboard: previous.moodboard.map(ref => ref.id === id ? { ...ref, ...patch } : ref) })); }
   function chooseReference(id = null) { setReplacing(id); moodInput.current.click(); }
   return <div className="dw-creative">
-    <div className="dw-creative-context"><span><Icon name="shirt" size={16} /><strong>{data.title}</strong><span className="dw-code">{concept ? data.styleId : 'Bozza'}</span></span><Badge>{concept ? 'Schizzo caricato' : 'Disegno da caricare'}</Badge></div>
     <div className="dw-creative-routes" role="group" aria-label="Come vuoi iniziare?">
       <button type="button" aria-pressed={route === 'upload'} onClick={() => update({ route: 'upload' })}><Icon name="file" /><span>Carica il tuo schizzo</span></button>
       <button type="button" aria-pressed={route === 'inspire'} onClick={() => update({ route: 'inspire' })}><Icon name="spark" /><span>Genera spunti</span></button>
@@ -125,7 +124,7 @@ export default function CreativePage({ onNavigate }) {
         </>}
       </div>
     </div></>}
-    {route === 'upload' && <Card className="dw-concept-card" title="Scheda del capo" note={data.title} actions={<Badge>{concept ? data.styleId : 'Bozza'}</Badge>}>
+    {route === 'upload' && <Card className="dw-concept-card" title="Scheda del capo" actions={<Badge>{concept ? data.styleId : 'Bozza'}</Badge>}>
       <input ref={finalInput} type="file" accept="image/jpeg,image/png,image/webp,application/pdf" hidden onChange={e => { uploadFinal(e.target.files[0]); e.target.value = ''; }} />
       {concept && <div className="dw-sketch-toolbar"><div className="dw-creative-result-switch" role="group" aria-label="Scheda del capo" style={{ '--selected-view': ['Schizzo', 'Moodboard', 'Palette'].indexOf(fileView) }}><span className="dw-creative-result-indicator" aria-hidden="true" />{['Schizzo', 'Moodboard', 'Palette'].map(name => <button type="button" key={name} aria-pressed={fileView === name} onClick={() => setFileView(name)}>{name}</button>)}</div></div>}
       {(!concept || fileView === 'Schizzo') && <div className="dw-creative-handoff"><div className={`dw-creative-drop ${concept ? 'has-file' : ''} ${drag ? 'dragging' : ''}`} onDragOver={e => { e.preventDefault(); setDrag(true); }} onDragLeave={() => setDrag(false)} onDrop={e => { e.preventDefault(); setDrag(false); uploadFinal(e.dataTransfer.files[0]); }}>

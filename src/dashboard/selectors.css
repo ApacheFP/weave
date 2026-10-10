@@ -51,6 +51,7 @@
 
 .dw-app .dw-workspace-toolbar { position: relative; justify-content: center; }
 .dw-app .dw-workspace-toolbar > .dw-btn { position: absolute; right: 0; }
+.dw-app .dw-workspace-toolbar { min-height: 50px; }
 .dw-app .dw-page-tabs[role=tablist] { width: auto; margin-inline: auto; padding: 4px; gap: 4px; background: #252525; border-color: #252525; }
 .dw-app .dw-page-tabs[role=tablist] > button { height: 40px; min-height: 40px; padding-inline: 16px; font-size: 13px; color: #d1d1d1; }
 .dw-app .dw-page-tabs[role=tablist] > button[aria-selected=true] { color: #252525; background: #fff; border-color: #fff; }
@@ -63,3 +64,4 @@
   .dw-app .dw-workspace-toolbar { flex-direction: column; }
   .dw-app .dw-workspace-toolbar > .dw-btn { position: static; align-self: flex-end; }
 }
+.dw-app .dw-breadcrumb > strong { padding: 7px 10px; border-radius: 9px; background: #eee5d6; color: #604b30; }

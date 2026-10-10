@@ -7,6 +7,7 @@ import { DesignPage, TechnicalPage, MaterialsPage, PatternPage, GradingPage, Pro
 import { PricingPage, PlanningPage, ProcurementPage, ProductionPage, QualityPage } from './OperationsPages.jsx';
 import { DecisionPage, PassportPage } from './IdentityPages.jsx';
 import HomePage from './HomePage.jsx';
+import ActivityPage from './ActivityPage.jsx';
 import { ServiceContent } from './services.jsx';
 import { CreateStyleDialog, StyleSwitcher, WorkspaceSearch } from './WorkspaceControls.jsx';
 import Assistant from './Assistant.jsx';
@@ -28,19 +29,6 @@ function StylesPage({ onCreate, onOpen }) {
   const { data, styles, selectStyle } = useDemo(); const [query, setQuery] = useState('');
   const rows = styles.filter(item => `${item.title} ${item.styleId} ${item.collection}`.toLowerCase().includes(query.toLowerCase()));
   return <><Metrics items={[["Capi in Atelier", styles.length, 'Spazi di lavoro disponibili'], ['Capo selezionato', data.identityAssigned ? data.styleId : 'Bozza', data.title], ['Collezione', data.collection, 'Sviluppo prodotto']]} /><Card title="Capi" note="Ogni riga apre la filiera del prodotto" actions={<Button primary icon="plus" onClick={onCreate}>Nuovo capo</Button>}><div className="dw-search"><span><Icon name="search" size={16} /><input aria-label="Cerca nella lista capi" placeholder="Cerca per nome, codice o collezione…" value={query} onChange={e => setQuery(e.target.value)} /></span><span className="dw-muted">{rows.length} risultati</span></div><div className="dw-table-wrap"><table className="dw-table"><thead><tr><th>Capo</th><th>Codice</th><th>Collezione</th><th>Variante</th><th /></tr></thead><tbody>{rows.map(item => <tr key={item.styleId}><td><span className="dw-product-cell"><span className="dw-style-thumb"><ProductPhoto variant={item.variant} sizes="44px" /></span><strong>{item.title}</strong>{data.styleId === item.styleId && <Badge>Attivo</Badge>}</span></td><td className="dw-code">{item.identityAssigned ? item.styleId : 'Bozza'}</td><td>{item.collection}</td><td>{item.variant}</td><td><Button onClick={() => { selectStyle(item.styleId); onOpen(); }}>Apri capo <Icon name="arrow" size={14} /></Button></td></tr>)}</tbody></table></div>{!rows.length && <Empty>Nessun capo corrisponde alla ricerca.</Empty>}</Card></>;
-}
-
-function ActivityPage({ moduleId, onNavigate, onService }) {
-  const { data } = useDemo();
-  const [all, setAll] = useState(moduleId === 21);
-  const [actor, setActor] = useState('all');
-  const actors = [...new Map(data.events.map(event => [event.actor?.email || 'unknown', event.actor || { name: 'Utente non registrato', email: 'unknown' }])).values()];
-  const events = data.events.filter(event => (all || event.module === moduleId) && (actor === 'all' || (event.actor?.email || 'unknown') === actor));
-  return <Card title="Registro attività" note={`${data.title} · modifiche e decisioni della sessione`}>
-    <div className="dw-activity-filters"><label className="dw-check"><input type="checkbox" checked={all} onChange={e => setAll(e.target.checked)} />Tutta la filiera</label><label className="dw-activity-user">Utente<select aria-label="Filtra attività per utente" value={actor} onChange={e => setActor(e.target.value)}><option value="all">Tutti gli utenti</option>{actors.map(item => <option key={item.email} value={item.email}>{item.name}</option>)}</select></label><span>{events.length} attività</span></div>
-    <div className="dw-event-list">{events.map(event => <div key={event.id}><span className="dw-event-dot" /><div><small>{event.time} · {event.module === 21 ? 'Home' : modules.find(item => item.id === event.module)?.title}</small><button className="dw-event-link" onClick={() => components[event.module] ? onNavigate(event.module) : onService(event.module)}>{event.text}<Icon name="arrow" size={14} /></button><span className="dw-activity-author"><Icon name="user" size={14} />{event.actor?.name || 'Utente non registrato'}{event.actor && <span>{event.actor.email}</span>}</span></div></div>)}</div>
-    {!events.length && <Empty>Nessuna attività per questo utente e questa vista.</Empty>}
-  </Card>;
 }
 
 export default function Dashboard({ moduleId, onNavigate, onHome, onSignOut }) {
