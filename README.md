@@ -35,7 +35,7 @@ La ricerca globale si apre da **Cerca** o **⌘/Ctrl K**. Ogni modulo ha le vist
 
 ### Wrapper e immagini dei moduli
 
-I pannelli bianchi e i riepiloghi uniti riprendono `Prova1/src/styles/panels.css`. Le cornici incise, l'intestazione con icona, le griglie dei file, le barre dei filtri e le tabelle a tutta larghezza adattano direttamente i componenti di `Prova2/app/admin/`: `ui.tsx`, `admin.module.css`, `table.module.css` e `media/MediaBrowser.tsx`. I crediti della UI di Prova2 sono in `THIRD_PARTY_NOTICES.md`.
+I pannelli bianchi e i riepiloghi uniti riprendono `Prova1/src/styles/panels.css`. L'intestazione con icona, le griglie dei file, le barre dei filtri e le tabelle adattano i componenti di `Prova2/app/admin/`: `ui.tsx`, `admin.module.css`, `table.module.css` e `media/MediaBrowser.tsx`. Card, anteprime, campi, pulsanti e finestre della dashboard condividono un raggio di 12 px. Le intestazioni usano spaziatura e azioni uniformi; su mobile i riepiloghi sono su due colonne, con l’ultimo elemento dispari a tutta larghezza. I crediti della UI di Prova2 sono in `THIRD_PARTY_NOTICES.md`.
 
 Le visuali nelle dashboard sono **25 immagini generate con il tool integrato Imagegen**, salvate in `public/images/dashboard/` in WebP: fronte e retro delle tre varianti della giacca, schizzo, due tavole tecniche, tre campioni di lana, accessori, campione sul manichino, cucitura per il controllo qualità, tavola fotografica del cartamodello, sei tavole dei singoli pezzi, sviluppo taglie e due piazzamenti (base e ottimizzato). Le immagini complete sono larghe 1120 px; ogni visuale ha una miniatura di 480 px, usata tramite `srcset`, caricamento lazy e decoding asincrono. Non ci sono GIF o foto caricate da servizi esterni. I prompt e i riferimenti sono conservati in `assets/dashboard/imagegen-manifest.json`.
 
@@ -49,7 +49,7 @@ Il moodboard offre filtri per categoria, ricerca, griglia/elenco, ordinamento de
 | 4 · Modellistica | Selezione dei pezzi, margine, tacche, drittofilo e revisioni |
 | 5 · Sviluppo Taglie | Sei taglie, viste sovrapposte/singole, regole, tabella ed export |
 | 6 · Prototipazione | Fitting, checklist, approvazione campione e versione del modello |
-| 7 · Piazzamento | Larghezza, quantità, ottimizzazione simulata, consumi/scarto/costo e marker SVG |
+| 7 · Piazzamento | Larghezza, quantità, ottimizzazione simulata, consumi/scarto/costo e tavola WebP |
 | 9 · Costificazione | Cursori prezzo tessuto, margine, quantità e tariffa, tre scenari, approvazione listini ed export |
 | 10 · Pianificazione | Calendario navigabile, timeline, laboratorio, capacità, priorità e date validate |
 | 11 · Procurement | Ricerca, filtri, modifica stati/date, creazione acquisti ed export |
@@ -92,6 +92,8 @@ Le 22 illustrazioni Imagegen condividono lo stile bianco/grigio clay/paper: `pub
 - **Stay With Me** per logo e accesso: condizioni in `public/fonts/FONT-LICENSE.txt`. La versione scaricata è per uso personale; l’autore richiede una [licenza commerciale](https://originfonts.com/product/stay-with-me/) per uso commerciale/promozionale.
 
 La build Vite è stata compilata. Il CLI Playwright ha controllato tutte le 22 card a 320×568, 375×667 e 430×932, senza sovrapposizioni fra descrizioni e pulsanti né overflow orizzontale; verificati anche screenshot a 390×844 e swipe touch. Questi controlli usano Chrome in emulazione mobile. Non sono stati aggiunti test alla suite del repository.
+
+La dashboard usa un raggio comune di 12 px; i 15 moduli sono stati rivisti con il CLI Playwright a 1440 e 320 px, senza overflow della pagina o errori di rendering. Profili, ricerca globale, servizi e anteprime sono stati controllati anche a 390 px.
 
 ### Correzioni di navigazione
 

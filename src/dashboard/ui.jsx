@@ -30,8 +30,8 @@ export function Icon({ name = 'grid', size = 20 }) {
 export function Button({ children, primary, icon, className = '', ...props }) {
   return <button type="button" className={`dw-btn ${primary ? 'dw-primary' : ''} ${className}`} {...props}>{icon && <Icon name={icon} size={16} />}{children}</button>;
 }
-export function Card({ title, note, actions, children, className = '', frame = false, flush = false, ...props }) {
-  return <section className={`dw-card ${frame ? 'dw-frame' : ''} ${className}`} {...props}>{(title || note || actions) && <header className="dw-card-head"><div>{title && <h2>{title}</h2>}{note && <p>{note}</p>}</div>{actions && <div className="dw-actions">{actions}</div>}</header>}<div className={`dw-card-body ${flush ? 'dw-card-flush' : ''}`}>{children}</div></section>;
+export function Card({ title, note, actions, children, className = '', flush = false, ...props }) {
+  return <section className={`dw-card ${className}`} {...props}>{(title || note || actions) && <header className="dw-card-head"><div>{title && <h2>{title}</h2>}{note && <p>{note}</p>}</div>{actions && <div className="dw-actions">{actions}</div>}</header>}<div className={`dw-card-body ${flush ? 'dw-card-flush' : ''}`}>{children}</div></section>;
 }
 export function Badge({ children, tone = '' }) { return <span className={`dw-badge ${tone}`}>{children}</span>; }
 export function Metrics({ items }) { return <div className="dw-metrics" style={{ '--metric-count': items.length }}>{items.map(([label, value, note]) => <div className="dw-metric" key={label}><span>{label}</span><strong>{value}</strong>{note && <small>{note}</small>}</div>)}</div>; }
