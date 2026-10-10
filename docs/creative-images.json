@@ -1,0 +1,58 @@
+[
+  {
+    "id": "regular",
+    "mode": "built-in imagegen",
+    "prompt": "Create one premium fashion designer's inspiration illustration, a single full-body adult female fashion croquis wearing tailored hip-length camel three-button single-breasted blazer, notched lapels, flap pockets, straight dark trousers; balanced regular fit. Same coherent art direction across a professional tailoring collection: delicate confident graphite pencil lines, light beige watercolor wash, faint construction strokes, blank warm ivory paper background, refined minimal facial features, standing front three-quarter pose with arms slightly away from body, entire head and feet visible with generous margin, tall portrait composition. Make an actual fashion figurine showing how the garments fit on the person, not a flat garment blueprint, not a photograph, not 3D, not an icon. Sophisticated editorial sketchbook quality. No text, labels, logos, borders, props, extra figures or collage. This is a working inspiration sketch for a stylist, intentionally unfinished, all colors restricted to ivory, warm beige, taupe, graphite and charcoal.",
+    "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-24a5268c-031f-4842-b7d2-af604eff9db8.png",
+    "output": "public/images/dashboard/creative-regular.webp"
+  },
+  {
+    "id": "relaxed",
+    "mode": "built-in imagegen",
+    "prompt": "Create one premium fashion designer's inspiration illustration, a single full-body adult female fashion croquis wearing long relaxed sand-colored double-breasted blazer with dropped shoulder and broad lapels, wide flowing trousers; soft oversized silhouette. Same coherent art direction across a professional tailoring collection: delicate confident graphite pencil lines, light beige watercolor wash, faint construction strokes, blank warm ivory paper background, refined minimal facial features, standing front three-quarter pose with arms slightly away from body, entire head and feet visible with generous margin, tall portrait composition. Make an actual fashion figurine showing how the garments fit on the person, not a flat garment blueprint, not a photograph, not 3D, not an icon. Sophisticated editorial sketchbook quality. No text, labels, logos, borders, props, extra figures or collage. This is a working inspiration sketch for a stylist, intentionally unfinished, all colors restricted to ivory, warm beige, taupe, graphite and charcoal.",
+    "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-bc17277a-0966-4af3-ac98-8f9e9d1b4c4e.png",
+    "output": "public/images/dashboard/creative-relaxed.webp"
+  },
+  {
+    "id": "cropped",
+    "mode": "built-in imagegen",
+    "prompt": "Create one premium fashion designer's inspiration illustration, a single full-body adult female fashion croquis wearing cropped boxy ivory jacket with clean collarless neckline, slightly rounded sleeves, high-waisted charcoal trousers; architectural proportions. Same coherent art direction across a professional tailoring collection: delicate confident graphite pencil lines, light beige watercolor wash, faint construction strokes, blank warm ivory paper background, refined minimal facial features, standing front three-quarter pose with arms slightly away from body, entire head and feet visible with generous margin, tall portrait composition. Make an actual fashion figurine showing how the garments fit on the person, not a flat garment blueprint, not a photograph, not 3D, not an icon. Sophisticated editorial sketchbook quality. No text, labels, logos, borders, props, extra figures or collage. This is a working inspiration sketch for a stylist, intentionally unfinished, all colors restricted to ivory, warm beige, taupe, graphite and charcoal.",
+    "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-6765c9ad-2a7d-469e-b034-2d3bfc65ef22.png",
+    "output": "public/images/dashboard/creative-cropped.webp"
+  },
+  {
+    "id": "wrap",
+    "mode": "built-in imagegen",
+    "prompt": "Create one premium fashion designer's inspiration illustration, a single full-body adult female fashion croquis wearing taupe wrap blazer with soft asymmetric front, thin matching waist belt, tapered trousers; gently defined waist. Same coherent art direction across a professional tailoring collection: delicate confident graphite pencil lines, light beige watercolor wash, faint construction strokes, blank warm ivory paper background, refined minimal facial features, standing front three-quarter pose with arms slightly away from body, entire head and feet visible with generous margin, tall portrait composition. Make an actual fashion figurine showing how the garments fit on the person, not a flat garment blueprint, not a photograph, not 3D, not an icon. Sophisticated editorial sketchbook quality. No text, labels, logos, borders, props, extra figures or collage. This is a working inspiration sketch for a stylist, intentionally unfinished, all colors restricted to ivory, warm beige, taupe, graphite and charcoal.",
+    "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-929b4d68-169f-48e4-a936-3b7098f46c59.png",
+    "output": "public/images/dashboard/creative-wrap.webp"
+  },
+  {
+    "id": "combined",
+    "mode": "built-in imagegen",
+    "prompt": "Create one premium fashion designer's inspiration illustration, a single full-body adult female fashion croquis wearing cropped camel single-breasted blazer with notched lapels, broad relaxed shoulders, two flap pockets and high-waisted wide trousers; combine tailored classic detail with cropped architectural proportion. Same coherent art direction across a professional tailoring collection: delicate confident graphite pencil lines, light beige watercolor wash, faint construction strokes, blank warm ivory paper background, refined minimal facial features, standing front three-quarter pose with arms slightly away from body, entire head and feet visible with generous margin, tall portrait composition. Make an actual fashion figurine showing how the garments fit on the person, not a flat garment blueprint, not a photograph, not 3D, not an icon. Sophisticated editorial sketchbook quality. No text, labels, logos, borders, props, extra figures or collage. This is a working inspiration sketch for a stylist, intentionally unfinished, all colors restricted to ivory, warm beige, taupe, graphite and charcoal.",
+    "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-e2836ec4-5aba-4ccf-82d7-430d768f4175.png",
+    "output": "public/images/dashboard/creative-combined.webp"
+  },
+  {
+    "id": "fluid",
+    "mode": "built-in imagegen",
+    "prompt": "Create one premium fashion designer's inspiration illustration, a single full-body adult female fashion croquis wearing long sand single-breasted blazer with narrow lapels, softly rounded shoulders, rolled sleeves and straight charcoal trousers; fluid easy tailoring. Same coherent art direction across a professional tailoring collection: delicate confident graphite pencil lines, light beige watercolor wash, faint construction strokes, blank warm ivory paper background, refined minimal facial features, standing front three-quarter pose with arms slightly away from body, entire head and feet visible with generous margin, tall portrait composition. Make an actual fashion figurine showing how the garments fit on the person, not a flat garment blueprint, not a photograph, not 3D, not an icon. Sophisticated editorial sketchbook quality. No text, labels, logos, borders, props, extra figures or collage. This is a working inspiration sketch for a stylist, intentionally unfinished, all colors restricted to ivory, warm beige, taupe, graphite and charcoal.",
+    "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-522bdbaf-7fd5-4c52-a359-96a112f922a4.png",
+    "output": "public/images/dashboard/creative-fluid.webp"
+  },
+  {
+    "id": "minimal",
+    "mode": "built-in imagegen",
+    "prompt": "One premium professional graphite fashion designer inspiration illustration on blank warm ivory paper, single tall full-body adult female fashion croquis standing front three-quarter pose, wearing a charcoal slim single-breasted blazer with a narrow clean notched lapel, single button and ivory straight trousers; quiet minimal tailored silhouette. Light beige watercolor wash, fine confident pencil strokes, faint construction marks, refined minimal face, entire head and feet visible with generous margin, portrait composition. Same minimal tailoring sketchbook collection aesthetic: ivory, beige, taupe, charcoal only. Actual fashion figurine on a person, not flat blueprint or photograph, not 3D icon. No text, logos, props, borders, other figures or collage. Intentionally unfinished creative working sketch.",
+    "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-fc3ea46f-d937-473a-b90c-acf2f0da8aed.png",
+    "output": "public/images/dashboard/creative-minimal.webp"
+  },
+  {
+    "id": "draped",
+    "mode": "built-in imagegen",
+    "prompt": "One premium professional graphite fashion designer inspiration illustration on blank warm ivory paper, single tall full-body adult female fashion croquis standing front three-quarter pose, wearing a long ivory collarless jacket with gently draped open front, soft rounded shoulder and sand wide trousers; unstructured modern silhouette. Light beige watercolor wash, fine confident pencil strokes, faint construction marks, refined minimal face, entire head and feet visible with generous margin, portrait composition. Same minimal tailoring sketchbook collection aesthetic: ivory, beige, taupe, charcoal only. Actual fashion figurine on a person, not flat blueprint or photograph, not 3D icon. No text, logos, props, borders, other figures or collage. Intentionally unfinished creative working sketch.",
+    "source": "/Users/chico/.codex/generated_images/01a11ffd-8036-7332-90c7-9e829e2dc4f3/exec-0f57fb90-f005-4dd0-9450-8130e9982cf4.png",
+    "output": "public/images/dashboard/creative-draped.webp"
+  }
+]

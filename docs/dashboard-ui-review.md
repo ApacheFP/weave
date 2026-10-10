@@ -66,3 +66,34 @@ Le severità descrivono i problemi prima delle modifiche. Tutte le righe sono ri
 **Not verified:** autenticazione e autorizzazioni fra utenti reali (il registro usa profili demo), dispositivi fisici e browser diversi da Chrome. Gli altri limiti della revisione precedente restano validi; i controlli dei 44 servizi appartengono alla versione precedente con il relativo tab.
 
 **Approve** per le viste e i flussi qui ispezionati: nessun problema HIGH residuo rilevato.
+
+
+## Modulo 1 · percorso creativo
+
+10 ottobre 2026. Revisione del modulo Ideazione e Design, con le successive correzioni richieste: output solo dopo la generazione; rimozione di fascia di prezzo e materiali/sostenibilità dagli input.
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| HIGH | `CreativePage.jsx`, `creativeData.js` | Tre fotografie dello stesso capo presentate come varianti; output precompilati. | Percorso Input → Valuta la proposta → Il tuo schizzo. Moodboard, palette e quattro figurini compaiono solo dopo Genera proposta. | Lo stilista guida il flusso e valuta gli spunti prima di procedere. |
+| MEDIUM | `CreativePage.jsx`, `creative.css` | Brief e checklist generici, nessun confronto o feedback visivo. | Quattro figurini WebP, Mi piace/Scarta, combinazione di più spunti, modifica del singolo figurino, rigenerazione e storico delle versioni. | Una proposta può essere approvata, scartata o modificata senza perdere le esplorazioni precedenti. |
+| HIGH | `DemoContext.jsx` | Nessuna distinzione fra dati della collezione ed esito del capo. | Trend, moodboard e palette condivisi per collezione; input e feedback per capo. Concept approvato conserva una copia di palette, riferimenti, spunti preferiti e file dello stilista. | Le ricerche successive non riscrivono l’output già approvato di un prodotto. |
+| HIGH | `DesignPages.jsx`, `HomePage.jsx` | Checklist completata equivaleva a concept; upload dello schizzo duplicato nel modulo tecnico. | Approva palette e almeno uno spunto, carica foto/file tablet/PDF. Lo stesso Style ID diventa concept approvato e completa la fase Home. Il modulo 2 legge quel file; una nuova tavola richiede il concept. | Il disegno definitivo è dello stilista, l’automatismo tecnico inizia dopo il passaggio. |
+| MEDIUM | `creative.css` | Modulo senza una gerarchia di revisione. | Mulish, superfici bianche/beige, wrapper a 12 px e componenti esistenti. Due colonne nella revisione desktop, layout adattivo mobile, controlli touch da 44 px, press leggero e reduced motion. | Coerenza con Prova1/Prova2 e con il resto della dashboard. |
+
+### Verifiche
+
+- Build Vite riuscita; nessuna dipendenza aggiunta, nessuna suite di test eseguita o creata.
+- CLI Playwright: schermata iniziale senza moodboard, palette o figurini; i due campi rimossi sono assenti.
+- Ricerca → generazione → feedback → combinazione 1+3 → modifica con variante e nota → approvazione → upload WebP → modulo 2 → Home. Quattro figurini e nessun errore JavaScript nel flusso.
+- Scartare tutti i figurini blocca l’approvazione; rigenerare li sostituisce con quattro alternative. Scartare l’intera proposta riporta agli input senza mostrare output, mantenendo le versioni nello storico.
+- Upload PDF e download verificati; il PDF arriva nel modulo 2. Style ID GJ-0421 invariato; fase Concept completata solo dopo lo schizzo.
+- Cambiare il colore della collezione mantiene invariata la palette conservata nel concept approvato. Giacca Studio eredita la ricerca della collezione, senza ereditare il concept approvato di Giacca Atelier.
+- Input, revisione e upload controllati fra 320, 390, 768, 1024 e 1440 px senza overflow; emulazione touch 390 px con screenshot dei tre passaggi. Figurini generati con imagegen e convertiti in WebP, circa 45–56 KB ciascuno. Manifest con prompt e percorsi in `creative-images.json`.
+
+### Fonti della ricerca demo
+
+Link consultabili sui siti originali, senza recuperare o ripubblicare le loro immagini: [COS AW26](https://www.cos.com/en-gb/runway/autumn-winter-2026), [LEMAIRE AW26](https://www.lemaire.fr/pages/runway-fall-winter-2026), [Woolmark · Incomparable](https://www.woolmark.com/industry/source-wool/the-wool-lab/themes/incomparable/). La sintesi è una direzione di lavoro dimostrativa, non una previsione automatica dei trend 2027.
+
+**Not verified:** motori di ricerca/AI in tempo reale, caricamento su storage remoto, persistenza oltre la sessione, dispositivi fisici e browser diversi da Chromium. Ricerca, combinazione e rigenerazione usano fonti e figurini preparati; le note di modifica sono conservate, non inviate a un modello runtime.
+
+**Approve** per il percorso dimostrativo ispezionato; nessun HIGH residuo rilevato in questo ambito.

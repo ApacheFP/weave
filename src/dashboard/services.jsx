@@ -9,7 +9,7 @@ export const serviceMap = {
   9: [8, 15, 16, 17, 20], 10: [8, 15, 16, 20], 11: [14, 15, 20], 12: [8, 14, 15, 20], 13: [8, 14, 20],
   19: [14, 15, 16, 17, 18, 20], 21: [8, 14, 15, 16, 17, 18], 22: [],
 };
-const aiOutputs = { 1: 'Tre varianti di concept', 2: 'Disegno tecnico e punti di misura', 3: 'Distinta base con consumi', 4: 'Cartamodello digitale', 5: 'Sviluppo delle sei taglie', 6: 'Report di fitting', 7: 'Marker ottimizzato', 9: 'Tre scenari di costo', 10: 'Bozza del piano produttivo', 11: 'Fabbisogni e ordini di acquisto', 12: 'Report di avanzamento', 13: 'Evidenze di controllo qualità', 19: 'Bozza del passaporto digitale' };
+const aiOutputs = { 1: 'Quattro figurini di ispirazione, da interpretare', 2: 'Disegno tecnico e punti di misura', 3: 'Distinta base con consumi', 4: 'Cartamodello digitale', 5: 'Sviluppo delle sei taglie', 6: 'Report di fitting', 7: 'Marker ottimizzato', 9: 'Tre scenari di costo', 10: 'Bozza del piano produttivo', 11: 'Fabbisogni e ordini di acquisto', 12: 'Report di avanzamento', 13: 'Evidenze di controllo qualità', 19: 'Bozza del passaporto digitale' };
 
 export function ServiceStrip({ moduleId, onOpen }) {
   const list = serviceMap[moduleId] || [];
@@ -63,7 +63,7 @@ function Intelligence({ moduleId }) {
   const { data, fabric, materials, cost, suggestedWholesale, commit, notify } = useDemo();
   const output = aiOutputs[moduleId] || 'Dati della filiera';
   const results = {
-    1: [['Concept', data.title], ['Variante scelta', data.variant], ['Proposte', 'Cammello / Sabbia / Nero']],
+    1: [['Capo', data.title], ['Spunti', String(data.creative?.ideas.length || 0)], ['Stato', data.conceptApproved ? 'Concept approvato' : 'Esplorazione creativa']],
     2: data.measurements.map(row => [row.point, number(row.value, 1) + ' cm']),
     3: [['Tessuto', fabric.name], ['Consumo', number(data.consumption, 2) + ' m'], ['Distinta completa', euro(materials)]],
     4: [['Modello', 'v' + data.modelVersion], ['Pezzi', '11 · davanti, dietro, maniche, colletto, paramontura'], ['Margine', data.seam + ' cm']],

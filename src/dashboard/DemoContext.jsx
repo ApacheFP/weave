@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { collectionDefaults, creativeDefaults } from './creativeData.js';
 
 export const euro = value => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
 export const number = (value, digits = 0) => new Intl.NumberFormat('it-IT', { maximumFractionDigits: digits }).format(value);
@@ -14,10 +15,10 @@ export const operations = [
 export const minQuantity = data => Math.max(data.produced, data.retailSold + data.wholesaleOrders.reduce((sum, order) => sum + order.qty, 0));
 
 const initial = {
-  styleId: 'GJ-0421', orderId: 'OP-0421', lotId: 'L-0421-A', fabricLot: 'T-7781', sampleId: 'CAMP-0421-01', collection: 'Autunno/Inverno 2027', designChecks: [true, false, false],
+  styleId: 'GJ-0421', orderId: 'OP-0421', lotId: 'L-0421-A', fabricLot: 'T-7781', sampleId: 'CAMP-0421-01', collection: 'Autunno/Inverno 2027',
   profile: { firstName: 'Alex', lastName: 'Rossi', email: 'demo@weave.it' },
   title: 'Giacca Atelier', brief: 'Una giacca monopetto regular, essenziale e strutturata. Toni terra, tre bottoni e due tasche. Una nuova idea di quotidiano per la collezione Autunno/Inverno 2027.',
-  variant: 'Cammello', references: [], techGenerated: true, phaseReviews: {},
+  variant: 'Cammello', references: [], creative: creativeDefaults(), conceptApproved: false, techGenerated: true, phaseReviews: {},
   measurements: [{ point: 'Lunghezza centro dietro', value: 72 }, { point: 'Larghezza spalle', value: 44 }, { point: 'Circonferenza torace', value: 100 }, { point: 'Lunghezza manica', value: 62 }],
   fabricId: 'base', fabricPrice: 16, consumption: 1.85,
   trims: [{ id: 'lining', name: 'Fodera viscosa', code: 'FOD-006', qty: 1.3, unit: 'm', price: 4.5, supplier: 'Tessitura E' }, { id: 'canvas', name: 'Tela termoadesiva', code: 'TEL-011', qty: .6, unit: 'm', price: 2.2, supplier: 'Fornitore A' }, { id: 'buttons', name: 'Bottoni corozo', code: 'BOT-003', qty: 3, unit: 'pz', price: .45, supplier: 'Accessori F' }, { id: 'pack', name: 'Etichette e imballo', code: 'PKG-002', qty: 1, unit: 'set', price: .8, supplier: 'Pack G' }],
@@ -48,7 +49,7 @@ export function totals(data) {
 
 const Context = createContext(null);
 export function DemoProvider({ children }) {
-  const [workspace, setWorkspace] = useState(() => ({ activeId: initial.styleId, items: [structuredClone(initial), { ...structuredClone(initial), styleId: 'GJ-0422', orderId: 'OP-0422', lotId: 'L-0422-A', fabricLot: 'T-7782', sampleId: 'CAMP-0422-01', title: 'Giacca Studio', variant: 'Sabbia', fabricId: 'premium', fabricPrice: 20, quantity: 600, events: [{ id: 'studio-1', text: 'Brief creativo di Giacca Studio pronto', module: 1, time: '21 apr · 14:00', actor: { name: 'Alex Rossi', email: 'demo@weave.it' } }], brief: 'Giacca in lana vergine, linea morbida e palette sabbia. Una proposta sartoriale per il guardaroba quotidiano.' }] }));
+  const [workspace, setWorkspace] = useState(() => ({ activeId: initial.styleId, collections: { [initial.collection]: collectionDefaults() }, items: [structuredClone(initial), { ...structuredClone(initial), styleId: 'GJ-0422', orderId: 'OP-0422', lotId: 'L-0422-A', fabricLot: 'T-7782', sampleId: 'CAMP-0422-01', title: 'Giacca Studio', variant: 'Sabbia', fabricId: 'premium', fabricPrice: 20, quantity: 600, events: [{ id: 'studio-1', text: 'Brief creativo di Giacca Studio pronto', module: 1, time: '21 apr · 14:00', actor: { name: 'Alex Rossi', email: 'demo@weave.it' } }], brief: 'Giacca in lana vergine, linea morbida e palette sabbia. Una proposta sartoriale per il guardaroba quotidiano.' }] }));
   const data = workspace.items.find(item => item.styleId === workspace.activeId);
   const [notice, setNotice] = useState('');
   const timeout = useRef(null);
@@ -88,6 +89,17 @@ export function DemoProvider({ children }) {
     });
     if (message) notify(message);
   }
+  const collectionData = workspace.collections[data.collection] || collectionDefaults();
+  function commitCollection(patch, message) {
+    setWorkspace(current => {
+      const previous = current.items.find(item => item.styleId === workspace.activeId);
+      const collection = current.collections[previous.collection] || collectionDefaults();
+      const changes = typeof patch === 'function' ? patch(collection) : patch;
+      const event = message && { id: crypto.randomUUID(), text: message, module: 1, time: 'Ora', actor: { name: `${previous.profile.firstName} ${previous.profile.lastName}`, email: previous.profile.email } };
+      return { ...current, collections: { ...current.collections, [previous.collection]: { ...collection, ...changes } }, items: event ? current.items.map(item => item.styleId === previous.styleId ? { ...item, events: [event, ...item.events].slice(0, 40) } : item) : current.items };
+    });
+    if (message) notify(message);
+  }
   function selectStyle(styleId) {
     setWorkspace(current => current.items.some(item => item.styleId === styleId) ? { ...current, activeId: styleId } : current);
   }
@@ -95,15 +107,15 @@ export function DemoProvider({ children }) {
     const code = styleId.trim().toUpperCase();
     if (workspace.items.some(item => item.styleId === code)) return false;
     const suffix = code.replace(/^GJ-/, '');
-    const item = { ...structuredClone(copy ? data : initial), title: title.trim(), styleId: code, orderId: 'OP-' + suffix, lotId: 'L-' + suffix + '-A', fabricLot: 'T-' + suffix, sampleId: 'CAMP-' + suffix + '-01', collection: collection.trim(), quantity: Number(quantity), references: [], chats: {}, aiRuns: {}, phaseReviews: {}, passportPublished: false,
+    const item = { ...structuredClone(copy ? data : initial), title: title.trim(), styleId: code, orderId: 'OP-' + suffix, lotId: 'L-' + suffix + '-A', fabricLot: 'T-' + suffix, sampleId: 'CAMP-' + suffix + '-01', collection: collection.trim(), quantity: Number(quantity), references: [], creative: creativeDefaults(), conceptApproved: false, sketch: null, sketchFile: null, sketchName: null, chats: {}, aiRuns: {}, phaseReviews: {}, passportPublished: false,
       profile: data.profile, qualityNote: copy ? data.qualityNote.replaceAll(data.lotId, 'L-' + suffix + '-A') : 'Nessuna non conformità registrata sul nuovo capo.',
-      ...(copy ? {} : { brief: '', techGenerated: false, sampleApproved: false, sampleChecks: [false, false, false], designChecks: [false, false, false], produced: 0, reworks: 0, qualityScore: 100, qualityResolved: true, productionDays: [], purchaseOrders: [], wholesaleOrders: [], retailSold: 0, shipments: [], lifecycle: [] }),
+      ...(copy ? {} : { brief: '', techGenerated: false, sampleApproved: false, sampleChecks: [false, false, false], produced: 0, reworks: 0, qualityScore: 100, qualityResolved: true, productionDays: [], purchaseOrders: [], wholesaleOrders: [], retailSold: 0, shipments: [], lifecycle: [] }),
       events: [{ id: crypto.randomUUID(), text: 'Creato il capo ' + title.trim(), module: 21, time: 'Ora', actor: { name: `${data.profile.firstName} ${data.profile.lastName}`, email: data.profile.email } }] };
-    setWorkspace(current => ({ activeId: code, items: [...current.items, item] }));
+    setWorkspace(current => ({ ...current, activeId: code, items: [...current.items, item] }));
     notify('Capo creato: ' + item.title);
     return true;
   }
-  return <Context.Provider value={{ data, styles: workspace.items.map(({ styleId, title, collection, variant }) => ({ styleId, title, collection, variant })), selectStyle, createStyle, commit, notify, ...totals(data) }}>{children}<div className="dw-toast" role="status" aria-live="polite">{notice && <span key={notice}>{notice}</span>}</div></Context.Provider>;
+  return <Context.Provider value={{ data, styles: workspace.items.map(({ styleId, title, collection, variant }) => ({ styleId, title, collection, variant })), selectStyle, createStyle, commit, notify, collectionData, commitCollection, ...totals(data) }}>{children}<div className="dw-toast" role="status" aria-live="polite">{notice && <span key={notice}>{notice}</span>}</div></Context.Provider>;
 }
 export const useDemo = () => useContext(Context);
 
