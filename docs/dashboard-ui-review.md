@@ -165,3 +165,18 @@ Build riuscita. CLI Playwright: griglia inizialmente assente, sei riferimenti do
 **Not verified:** dispositivi fisici, Safari/Firefox, generazione AI o ricerca web runtime. Il servizio resta simulato con riferimenti preparati; le nuove immagini sono state realmente generate con imagegen durante lo sviluppo.
 
 **Approve** per il moodboard a immagini separate e le interazioni demo verificate.
+
+## Modulo 1 · gerarchia visiva e controlli su richiesta
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| MEDIUM | Percorsi | Due grandi card di navigazione. | Selettore compatto con le due azioni. | Riduce lo spazio prima del contenuto. |
+| HIGH | Brief | Form lungo e generazione sotto i riferimenti. | Richiesta e generazione vicine; brand, storico e target espandibili. | L’azione principale resta visibile. |
+| MEDIUM | Moodboard | Input e textarea sempre aperti. | Titolo e didascalia leggibili, editor in “Modifica testo”. | Le immagini diventano protagoniste senza perdere il controllo manuale. |
+| LOW | Stati iniziali e upload | Testi ripetuti e vuoto ampio. | Istruzioni concrete e riepilogo del concept breve. | Chiarisce il passaggio successivo. |
+
+Build riuscita. CLI Playwright: generazione, apertura/modifica/chiusura del titolo di un riferimento; layout senza overflow orizzontale a 320, 390, 768, 1440 px. Screenshot desktop e mobile touch ispezionati.
+
+**Not verified:** dispositivi fisici, Safari/Firefox e backend AI. Restano valide le limitazioni della demo.
+
+**Approve** per la gerarchia e i controlli ispezionati.
