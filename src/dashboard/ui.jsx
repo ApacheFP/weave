@@ -27,22 +27,31 @@ export function Icon({ name = 'grid', size = 20 }) {
   };
   return <svg className="dw-icon" width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">{paths[name] || paths.layers}</svg>;
 }
-export function Button({ children, primary, icon, className = '', ...props }) {
-  return <button type="button" className={`dw-btn ${primary ? 'dw-primary' : ''} ${className}`} {...props}>{icon && <Icon name={icon} size={16} />}{children}</button>;
+export function Button({ children, primary, icon, static: staticButton = false, className = '', ...props }) {
+  return <button type="button" className={`dw-btn ${primary ? 'dw-primary' : ''} ${staticButton ? 'dw-static' : ''} ${className}`} {...props}>{icon && <Icon name={icon} size={16} />}{children}</button>;
 }
 export function Card({ title, note, actions, children, className = '', flush = false, ...props }) {
   return <section className={`dw-card ${className}`} {...props}>{(title || note || actions) && <header className="dw-card-head"><div>{title && <h2>{title}</h2>}{note && <p>{note}</p>}</div>{actions && <div className="dw-actions">{actions}</div>}</header>}<div className={`dw-card-body ${flush ? 'dw-card-flush' : ''}`}>{children}</div></section>;
 }
 export function Badge({ children, tone = '' }) { return <span className={`dw-badge ${tone}`}>{children}</span>; }
-export function Metrics({ items }) { return <div className="dw-metrics" style={{ '--metric-count': items.length }}>{items.map(([label, value, note]) => <div className="dw-metric" key={label}><span>{label}</span><strong>{value}</strong>{note && <small>{note}</small>}</div>)}</div>; }
+export function Metrics({ items }) {
+  return <div className="dw-metrics" style={{ '--metric-count': items.length }}>{items.map(([label, value, note, detail = {}]) => {
+    const percentage = detail.progress == null ? null : Math.max(0, Math.min(100, detail.progress));
+    return <section className={`dw-metric ${String(value).length > 12 ? 'dw-metric-compact' : ''}`} key={label} aria-label={label}>
+      <div className="dw-metric-heading"><span>{label}</span><span className="dw-metric-icon"><Icon name={detail.icon || 'chart'} size={18} /></span></div>
+      <strong>{value}</strong>{note && <small>{note}</small>}
+      {percentage != null && <div className="dw-metric-ticks" role="progressbar" aria-label={label} aria-valuenow={Math.round(percentage)} aria-valuemin={0} aria-valuemax={100}>{Array.from({ length: 40 }, (_, index) => <i key={index} aria-hidden="true" className={index < Math.round(percentage * .4) ? 'filled' : ''} />)}</div>}
+    </section>;
+  })}</div>;
+}
 export function Field({ label, hint, children }) { return <label className="dw-field"><span>{label}</span>{children}{hint && <small>{hint}</small>}</label>; }
 export function Tabs({ items, selected, onChange, label = 'Vista' }) {
   return <div className="dw-tabs" role="group" aria-label={label}>{items.map(item => <button key={item} type="button" aria-pressed={selected === item} onClick={() => onChange(item)}>{item}</button>)}</div>;
 }
 export function Progress({ value, label }) { return <div className="dw-progress" role="progressbar" aria-label={label} aria-valuenow={Math.round(value)} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${Math.max(0, Math.min(100, value))}%` }} /></div>; }
-export function Dialog({ title, note, children, onClose, wide }) {
+export function Dialog({ title, note, children, onClose, wide, instant = false }) {
   const ref = useRef(null);
-  useEffect(() => { ref.current.showModal(); }, []);
-  return <dialog className={`dw-dialog ${wide ? 'wide' : ''}`} ref={ref} onClose={onClose} aria-label={title} onClick={event => { if (event.target !== event.currentTarget) return; const r = event.currentTarget.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) event.currentTarget.close(); }}><header><div><h2>{title}</h2>{note && <p>{note}</p>}</div><button className="dw-icon-btn" onClick={() => ref.current.close()} aria-label="Chiudi finestra"><Icon name="close" /></button></header><div className="dw-dialog-body">{children}</div></dialog>;
+  useEffect(() => { ref.current.showModal(); ref.current.querySelector('[data-autofocus]')?.focus(); }, []);
+  return <dialog className={`dw-dialog ${wide ? 'wide' : ''} ${instant ? 'dw-instant' : ''}`} ref={ref} onClose={onClose} aria-label={title} onClick={event => { if (event.target !== event.currentTarget) return; const r = event.currentTarget.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) event.currentTarget.close(); }}><header><div><h2>{title}</h2>{note && <p>{note}</p>}</div><button className="dw-icon-btn" onClick={() => ref.current.close()} aria-label="Chiudi finestra"><Icon name="close" /></button></header><div className="dw-dialog-body">{children}</div></dialog>;
 }
 export function Empty({ children }) { return <div className="dw-empty"><Icon name="search" /><p>{children}</p></div>; }

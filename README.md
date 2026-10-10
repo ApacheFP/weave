@@ -27,15 +27,15 @@ Il motore limita il DPR a 1,5 desktop e 2 mobile; a DPR 2 le texture sono 1280×
 
 ## Dashboard
 
-Navigazione hash `#/moduli/ID`, cronologia del browser e ritorno al carosello con gruppo e posizione conservati. La shell comune ha header WEAVE, profilo, breadcrumb e footer. La console riprende i token, la sidebar compatta e riducibile, i pannelli, le statistiche unite, i pulsanti e le tabelle di **Prova1**. File, miniature, metadati e finestre di modifica seguono i pattern di **Prova2**. Il font dell’intera console è **Geist**, servito localmente; i titoli scritti a mano restano nel carosello e nel logo. Su mobile la navigazione si apre dal menu e le aree operative si dispongono in una colonna.
+Navigazione hash `#/moduli/ID`, cronologia del browser e ritorno al carosello con gruppo e posizione conservati. La shell comune ha header WEAVE, profilo, breadcrumb e footer. La console riprende i token, la sidebar compatta e riducibile, i pannelli, i pulsanti e le tabelle di **Prova1**. File, miniature, metadati e finestre di modifica seguono i pattern di **Prova2**. Il contenuto della console segue ora il riferimento **OpsLoop** allegato: font **Mulish** locale, statistiche in card separate, titoli più leggibili, ricerca nell’header e grafici sulla griglia di lettura; i titoli scritti a mano restano nel carosello e nel logo. Su mobile la navigazione si apre dal menu e le aree operative si dispongono in una colonna.
 
 In cima alla sidebar il selettore mostra il capo corrente: permette di cercare e cambiare capo oppure crearne uno nuovo. **Capi** apre la lista con ricerca e azioni. **Nuovo capo** raccoglie nome, codice univoco, collezione e quantità; può duplicare specifiche e ordini del capo corrente. Ogni capo ha dati, servizi, cronologia e conversazioni separati, conservati durante la sessione. I codici di prodotto, ordine, campione e lotto nelle viste e negli export seguono il capo selezionato. Il profilo rimane comune.
 
-La ricerca globale si apre da **Cerca** o **⌘/Ctrl K**. Ogni modulo ha le viste **Spazio di lavoro**, **Servizi integrati** (solo quelli pertinenti) e **Attività**. La sidebar e il contenuto continuano a funzionare anche se una vista genera un errore, grazie a un confine di errore locale.
+La ricerca globale si apre dall’header, da **Cerca** nella sidebar o da **⌘/Ctrl K**. Il comando si apre senza animazione. Ogni modulo ha le viste **Spazio di lavoro**, **Servizi integrati** (solo quelli pertinenti) e **Attività**. La sidebar e il contenuto continuano a funzionare anche se una vista genera un errore, grazie a un confine di errore locale.
 
 ### Wrapper e immagini dei moduli
 
-I pannelli bianchi e i riepiloghi uniti riprendono `Prova1/src/styles/panels.css`. L'intestazione con icona, le griglie dei file, le barre dei filtri e le tabelle adattano i componenti di `Prova2/app/admin/`: `ui.tsx`, `admin.module.css`, `table.module.css` e `media/MediaBrowser.tsx`. Card, anteprime, campi, pulsanti e finestre della dashboard condividono un raggio di 12 px. Le intestazioni usano spaziatura e azioni uniformi; su mobile i riepiloghi sono su due colonne, con l’ultimo elemento dispari a tutta larghezza. I crediti della UI di Prova2 sono in `THIRD_PARTY_NOTICES.md`.
+I pannelli bianchi riprendono `Prova1/src/styles/panels.css`. L'intestazione con icona, le griglie dei file, le barre dei filtri e le tabelle adattano i componenti di `Prova2/app/admin/`: `ui.tsx`, `admin.module.css`, `table.module.css` e `media/MediaBrowser.tsx`. Card, anteprime, campi, pulsanti e finestre della dashboard condividono un raggio di 12 px. Le intestazioni usano spaziatura e azioni uniformi; su mobile i riepiloghi sono su due colonne, con l’ultimo elemento dispari a tutta larghezza. I crediti della UI di Prova2 sono in `THIRD_PARTY_NOTICES.md`.
 
 Le visuali nelle dashboard sono **25 immagini generate con il tool integrato Imagegen**, salvate in `public/images/dashboard/` in WebP: fronte e retro delle tre varianti della giacca, schizzo, due tavole tecniche, tre campioni di lana, accessori, campione sul manichino, cucitura per il controllo qualità, tavola fotografica del cartamodello, sei tavole dei singoli pezzi, sviluppo taglie e due piazzamenti (base e ottimizzato). Le immagini complete sono larghe 1120 px; ogni visuale ha una miniatura di 480 px, usata tramite `srcset`, caricamento lazy e decoding asincrono. Non ci sono GIF o foto caricate da servizi esterni. I prompt e i riferimenti sono conservati in `assets/dashboard/imagegen-manifest.json`.
 
@@ -87,7 +87,8 @@ Il QR in `public/illustrations/dpp-qr.svg` è reale e punta al passaporto **loca
 
 Le 22 illustrazioni Imagegen condividono lo stile bianco/grigio clay/paper: `public/illustrations/module-01.webp` … `module-22.webp`. Nessuna GIF nel runtime. Originali e prompt in `assets/animation-frames/`; avatar e prompt in `assets/profile/`.
 
-- **Geist / Geist Mono** per la console, come nelle prove: licenza SIL OFL in `public/fonts/geist-LICENSE.txt`.
+- **Mulish** per la console, come in OpsLoop: licenza SIL OFL in `public/fonts/mulish-LICENSE.txt`.
+- **Geist / Geist Mono** (Mono per i codici): licenza SIL OFL in `public/fonts/geist-LICENSE.txt`.
 - **Matcha Style** per titoli delle card del carosello: [DaFont](https://www.dafont.com/it/matcha-style.font), condizioni in `public/fonts/matcha-LICENSE.txt`.
 - **Stay With Me** per logo e accesso: condizioni in `public/fonts/FONT-LICENSE.txt`. La versione scaricata è per uso personale; l’autore richiede una [licenza commerciale](https://originfonts.com/product/stay-with-me/) per uso commerciale/promozionale.
 
@@ -98,3 +99,5 @@ La dashboard usa un raggio comune di 12 px; i 15 moduli sono stati rivisti con i
 ### Correzioni di navigazione
 
 Materiali e BOM importava l’icona di ricerca senza dichiararla: l’import è stato corretto. L’effetto di scorrimento della chat ora scarta esplicitamente il valore restituito dal browser, evitando errori React al cambio di vista. Le 15 pagine e le 7 tipologie di servizio sono state aperte durante il debugging dell’anteprima locale; creazione del capo e salvataggio del brief sono stati riprodotti nella demo.
+
+Il redesign OpsLoop mantiene la sidebar laterale e il raggio comune di 12 px. I riepiloghi con avanzamento mostrano tacche calcolate sui dati della demo; hover solo sui dispositivi compatibili, pressione `.96` in 150 ms, rispetto di reduced motion e contenimento dello scroll nelle finestre. Nessuna dipendenza aggiunta.
