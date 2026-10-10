@@ -17,7 +17,7 @@ const initial = {
   styleId: 'GJ-0421', orderId: 'OP-0421', lotId: 'L-0421-A', fabricLot: 'T-7781', sampleId: 'CAMP-0421-01', collection: 'Autunno/Inverno 2027', designChecks: [true, false, false],
   profile: { firstName: 'Alex', lastName: 'Rossi', email: 'demo@weave.it' },
   title: 'Giacca Atelier', brief: 'Una giacca monopetto regular, essenziale e strutturata. Toni terra, tre bottoni e due tasche. Una nuova idea di quotidiano per la collezione Autunno/Inverno 2027.',
-  variant: 'Cammello', references: [], techGenerated: true,
+  variant: 'Cammello', references: [], techGenerated: true, phaseReviews: {},
   measurements: [{ point: 'Lunghezza centro dietro', value: 72 }, { point: 'Larghezza spalle', value: 44 }, { point: 'Circonferenza torace', value: 100 }, { point: 'Lunghezza manica', value: 62 }],
   fabricId: 'base', fabricPrice: 16, consumption: 1.85,
   trims: [{ id: 'lining', name: 'Fodera viscosa', code: 'FOD-006', qty: 1.3, unit: 'm', price: 4.5, supplier: 'Tessitura E' }, { id: 'canvas', name: 'Tela termoadesiva', code: 'TEL-011', qty: .6, unit: 'm', price: 2.2, supplier: 'Fornitore A' }, { id: 'buttons', name: 'Bottoni corozo', code: 'BOT-003', qty: 3, unit: 'pz', price: .45, supplier: 'Accessori F' }, { id: 'pack', name: 'Etichette e imballo', code: 'PKG-002', qty: 1, unit: 'set', price: .8, supplier: 'Pack G' }],
@@ -34,7 +34,7 @@ const initial = {
   shipments: [{ id: 'TRK-88214', client: 'Negozio X', qty: 80, status: 'In consegna' }, { id: 'TRK-88210', client: 'Boutique Y', qty: 80, status: 'Consegnata' }, { id: 'TRK-88218', client: 'Studio Z', qty: 100, status: 'Da preparare' }],
   lifecycle: [{ id: 'life-1', date: '2028-10-12', type: 'Riparazione', note: 'Sostituzione bottone · laboratorio autorizzato', future: true }, { id: 'life-2', date: '2029-03-06', type: 'Seconda vita', note: 'Rivendita dopo controllo condizioni', future: true }],
   aiRuns: {}, chats: {},
-  events: [{ id: 'evt-1', text: 'Lotto L-0421-A: completati 320 capi su 500', module: 12, time: '22 apr · 10:40' }, { id: 'evt-2', text: 'Spalla sinistra: aperta non conformità NC-018', module: 13, time: '22 apr · 10:15' }, { id: 'evt-3', text: 'Accessori F: consegna bottoni in ritardo', module: 11, time: '22 apr · 09:30' }, { id: 'evt-4', text: 'Tech pack GJ-0421 aggiornato', module: 2, time: '21 apr · 16:20' }],
+  events: [{ id: 'evt-1', text: 'Lotto L-0421-A: completati 320 capi su 500', module: 12, time: '22 apr · 10:40', actor: { name: 'Alex Rossi', email: 'demo@weave.it' } }, { id: 'evt-2', text: 'Spalla sinistra: aperta non conformità NC-018', module: 13, time: '22 apr · 10:15', actor: { name: 'Marta Bianchi', email: 'marta@atelier.demo' } }, { id: 'evt-3', text: 'Accessori F: consegna bottoni in ritardo', module: 11, time: '22 apr · 09:30', actor: { name: 'Luca Ferri', email: 'luca@atelier.demo' } }, { id: 'evt-4', text: 'Tech pack GJ-0421 aggiornato', module: 2, time: '21 apr · 16:20', actor: { name: 'Alex Rossi', email: 'demo@weave.it' } }],
 };
 
 export function totals(data) {
@@ -48,7 +48,7 @@ export function totals(data) {
 
 const Context = createContext(null);
 export function DemoProvider({ children }) {
-  const [workspace, setWorkspace] = useState(() => ({ activeId: initial.styleId, items: [structuredClone(initial), { ...structuredClone(initial), styleId: 'GJ-0422', orderId: 'OP-0422', lotId: 'L-0422-A', fabricLot: 'T-7782', sampleId: 'CAMP-0422-01', title: 'Giacca Studio', variant: 'Sabbia', fabricId: 'premium', fabricPrice: 20, quantity: 600, events: [{ id: 'studio-1', text: 'Brief creativo di Giacca Studio pronto', module: 1, time: '21 apr · 14:00' }], brief: 'Giacca in lana vergine, linea morbida e palette sabbia. Una proposta sartoriale per il guardaroba quotidiano.' }] }));
+  const [workspace, setWorkspace] = useState(() => ({ activeId: initial.styleId, items: [structuredClone(initial), { ...structuredClone(initial), styleId: 'GJ-0422', orderId: 'OP-0422', lotId: 'L-0422-A', fabricLot: 'T-7782', sampleId: 'CAMP-0422-01', title: 'Giacca Studio', variant: 'Sabbia', fabricId: 'premium', fabricPrice: 20, quantity: 600, events: [{ id: 'studio-1', text: 'Brief creativo di Giacca Studio pronto', module: 1, time: '21 apr · 14:00', actor: { name: 'Alex Rossi', email: 'demo@weave.it' } }], brief: 'Giacca in lana vergine, linea morbida e palette sabbia. Una proposta sartoriale per il guardaroba quotidiano.' }] }));
   const data = workspace.items.find(item => item.styleId === workspace.activeId);
   const [notice, setNotice] = useState('');
   const timeout = useRef(null);
@@ -67,7 +67,23 @@ export function DemoProvider({ children }) {
         const fabric = fabrics.find(f => f.id === next.fabricId);
         next.purchaseOrders = next.purchaseOrders.map(row => row.id === 'ACQ-0271' ? { ...row, supplier: fabric.supplier, material: fabric.name } : row);
       }
-      if (message) next.events = [{ id: crypto.randomUUID(), text: message, module, time: 'Ora' }, ...previous.events].slice(0, 40);
+      // Reopen a reviewed phase when its inputs change, including live edits.
+      if (!Object.hasOwn(changes, 'phaseReviews')) {
+        const reviews = { ...previous.phaseReviews };
+        const inputs = {
+          3: ['fabricId', 'fabricPrice', 'consumption', 'trims'],
+          4: ['modelVersion', 'seam', 'grain', 'notches'],
+          5: ['gradingChest', 'measurements'],
+          7: ['markerWidth', 'consumption', 'waste', 'optimized'],
+          9: ['fabricId', 'fabricPrice', 'consumption', 'trims', 'laborMinutes', 'hourlyRate', 'logisticsCost', 'margin', 'wholesale', 'retail'],
+          10: ['quantity', 'factory', 'priority', 'start', 'end', 'delivery'],
+        };
+        for (const [id, keys] of Object.entries(inputs)) {
+          if (reviews[id] && keys.some(key => Object.hasOwn(changes, key) && changes[key] !== previous[key])) reviews[id] = false;
+        }
+        next.phaseReviews = reviews;
+      }
+      if (message) next.events = [{ id: crypto.randomUUID(), text: message, module, time: 'Ora', actor: { name: `${previous.profile.firstName} ${previous.profile.lastName}`, email: previous.profile.email } }, ...previous.events].slice(0, 40);
       return { ...current, items: current.items.map(item => item.styleId === workspace.activeId ? next : changes.profile ? { ...item, profile: changes.profile } : item) };
     });
     if (message) notify(message);
@@ -79,10 +95,10 @@ export function DemoProvider({ children }) {
     const code = styleId.trim().toUpperCase();
     if (workspace.items.some(item => item.styleId === code)) return false;
     const suffix = code.replace(/^GJ-/, '');
-    const item = { ...structuredClone(copy ? data : initial), title: title.trim(), styleId: code, orderId: 'OP-' + suffix, lotId: 'L-' + suffix + '-A', fabricLot: 'T-' + suffix, sampleId: 'CAMP-' + suffix + '-01', collection: collection.trim(), quantity: Number(quantity), references: [], chats: {}, aiRuns: {}, passportPublished: false,
+    const item = { ...structuredClone(copy ? data : initial), title: title.trim(), styleId: code, orderId: 'OP-' + suffix, lotId: 'L-' + suffix + '-A', fabricLot: 'T-' + suffix, sampleId: 'CAMP-' + suffix + '-01', collection: collection.trim(), quantity: Number(quantity), references: [], chats: {}, aiRuns: {}, phaseReviews: {}, passportPublished: false,
       profile: data.profile, qualityNote: copy ? data.qualityNote.replaceAll(data.lotId, 'L-' + suffix + '-A') : 'Nessuna non conformità registrata sul nuovo capo.',
       ...(copy ? {} : { brief: '', techGenerated: false, sampleApproved: false, sampleChecks: [false, false, false], designChecks: [false, false, false], produced: 0, reworks: 0, qualityScore: 100, qualityResolved: true, productionDays: [], purchaseOrders: [], wholesaleOrders: [], retailSold: 0, shipments: [], lifecycle: [] }),
-      events: [{ id: crypto.randomUUID(), text: 'Creato il capo ' + title.trim(), module: 1, time: 'Ora' }] };
+      events: [{ id: crypto.randomUUID(), text: 'Creato il capo ' + title.trim(), module: 21, time: 'Ora', actor: { name: `${data.profile.firstName} ${data.profile.lastName}`, email: data.profile.email } }] };
     setWorkspace(current => ({ activeId: code, items: [...current.items, item] }));
     notify('Capo creato: ' + item.title);
     return true;

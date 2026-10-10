@@ -1,0 +1,165 @@
+/* Product overview: Prova2's identity/actions and module tiles, Prova1's
+   task rows and activity feed, with OpsLoop's separate metric surfaces. */
+.dw-home { display: grid; gap: 16px; min-width: 0; }
+.dw-home-columns { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(0,1fr); gap: 16px; align-items: start; }
+.dw-home-columns > * { min-width: 0; }
+.dw-home-product .dw-card-head h2 { font-size: 23px; }
+.dw-home-product-body { display: grid; grid-template-columns: 132px minmax(0,1fr) 220px; gap: 24px; align-items: center; }
+.dw-home-photo { position: relative; margin: 0; }
+.dw-home-photo img { display: block; width: 100%; height: 158px; object-fit: cover; border-radius: var(--radius); }
+.dw-home-photo figcaption { position: absolute; bottom: 6px; left: 6px; right: 6px; padding: 3px 5px; text-align: center; border: 1px solid transparent; border-radius: var(--radius); background: #ffffffde; font-size: 10px; color: var(--text-3); }
+.dw-home-product-info { min-width: 0; }
+.dw-home-identity { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; color: var(--text-3); font-size: 12px; }
+.dw-home-product-info > p { margin: 12px 0 18px; color: var(--text-2); font-size: 13px; line-height: 1.65; overflow-wrap: anywhere; }
+.dw-home-product-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.dw-home-delivery { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; border-left: 1px solid var(--divider); padding-left: 24px; font-size: 12px; color: var(--text-3); }
+.dw-home-delivery > strong { margin: 4px 0; color: var(--text); font-size: 22px; letter-spacing: -.03em; }
+.dw-home-delivery > .dw-btn { margin-top: 8px; }
+.dw-home-tasks { list-style: none; padding: 0; margin: 0; }
+.dw-home-tasks li + li { border-top: 1px solid var(--divider); }
+.dw-home-tasks button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px 6px; border: 1px solid transparent; border-radius: var(--radius); background: transparent; text-align: left; color: var(--text); transition: background 150ms ease-out; }
+.dw-home-tasks li:first-child button { padding-top: 8px; }
+.dw-home-tasks li:last-child button { padding-bottom: 8px; }
+.dw-home-task-icon,.dw-home-module-icon { display: grid; place-items: center; flex: 0 0 auto; width: 36px; height: 36px; background: var(--surface-2); border-radius: var(--radius); color: var(--text-3); }
+.dw-home-task-icon.urgent { background: #efe4d1; color: #78603b; }
+.dw-home-task-copy { flex: 1; min-width: 0; }
+.dw-home-task-copy strong { display: block; font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
+.dw-home-task-copy small { display: block; font-size: 12px; color: var(--text-3); margin-top: 4px; overflow-wrap: anywhere; }
+.dw-home-tasks button > .dw-icon { color: var(--text-4); }
+.dw-home-clear { display: grid; justify-items: start; gap: 10px; padding: 8px 0; }
+.dw-home-clear p { margin: 0; color: var(--text-3); }
+.dw-home-progress { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.dw-home-progress > strong { font-size: 36px; letter-spacing: -.04em; line-height: 1.1; }
+.dw-home-progress > strong span { font-size: 20px; color: var(--text-3); margin-left: 3px; }
+.dw-home-progress > span { color: var(--text-3); font-size: 12px; }
+.dw-home-lot-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin: 18px 0; }
+.dw-home-lot-stats dt { font-size: 11px; color: var(--text-3); }
+.dw-home-lot-stats dd { margin: 5px 0 0; font-size: 20px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.dw-home-chart { border-top: 1px solid var(--divider); padding-top: 14px; }
+.dw-home-chart > span { font-size: 11px; color: var(--text-3); }
+.dw-home-chart > div { display: flex; align-items: flex-end; gap: 10px; height: 112px; margin-top: 12px; }
+.dw-home-chart > div > div { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; min-width: 0; }
+.dw-home-chart span,.dw-home-chart small { font-size: 11px; font-variant-numeric: tabular-nums; color: var(--text-3); }
+.dw-home-chart i { display: block; width: 100%; max-width: 36px; background: #d1bfa2; border-radius: 4px 4px 0 0; }
+.dw-home-chart > div > div:last-child i { background: #b89c72; }
+.dw-home-production-empty { display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--surface-2); border: 1px solid transparent; border-radius: var(--radius); color: var(--text-3); }
+.dw-home-production-empty p { margin: 0; font-size: 12px; line-height: 1.6; }
+.dw-home-modules { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+.dw-home-modules > article { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--surface); }
+.dw-home-modules > article > button { position: relative; display: flex; flex: 1; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%; min-height: 158px; padding: 16px; border: 1px solid transparent; background: transparent; border-radius: var(--radius); text-align: left; color: var(--text); transition: background 150ms ease-out; }
+.dw-home-modules strong { font-size: 13px; font-weight: 650; overflow-wrap: anywhere; }
+.dw-home-modules small { font-size: 11px; color: var(--text-3); overflow-wrap: anywhere; }
+.dw-home-modules > article > button > .dw-icon { position: absolute; right: 16px; top: 25px; color: var(--text-4); }
+.dw-home-modules-note { display: flex; align-items: flex-start; gap: 8px; margin: 16px 0 0; font-size: 11px; color: var(--text-3); line-height: 1.5; }
+.dw-home-feed > button { display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 12px 4px; border: 1px solid transparent; border-radius: var(--radius); background: transparent; text-align: left; transition: background 150ms ease-out; }
+.dw-home-feed > button + button { border-top-color: var(--divider); }
+.dw-home-feed > button:first-child { padding-top: 2px; }
+.dw-home-feed > button:last-child { padding-bottom: 2px; }
+.dw-home-feed .dw-event-dot { margin-top: 5px; }
+.dw-home-feed > button > span:nth-child(2) { min-width: 0; flex: 1; }
+.dw-home-feed small { display: block; color: var(--text-3); font-size: 11px; }
+.dw-home-feed strong { display: block; margin-top: 5px; font-size: 12px; font-weight: 500; line-height: 1.6; color: var(--text-2); overflow-wrap: anywhere; }
+.dw-home-feed > button > .dw-icon { margin-top: 4px; color: var(--text-4); }
+.dw-home-cost-bar { display: flex; gap: 3px; height: 12px; overflow: hidden; border-radius: var(--radius); }
+.dw-home-costs { display: grid; gap: 10px; margin: 16px 0 0; font-size: 12px; }
+.dw-home-costs > div { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.dw-home-costs dt { display: flex; align-items: center; gap: 8px; color: var(--text-3); }
+.dw-home-costs dt i { display: block; width: 8px; height: 8px; border-radius: 50%; }
+.dw-home-costs dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.dw-home-cost-total { border-top: 1px solid var(--divider); padding-top: 12px; }
+.dw-home-cost-total dt { color: var(--text); font-weight: 600; }
+@media (hover: hover) {
+  .dw-home-tasks button:hover,.dw-home-feed > button:hover { background: var(--surface-2); }
+  .dw-home-modules > article > button:hover { background: var(--surface-2); }
+}
+@media (max-width: 1200px) {
+  .dw-home-product-body { grid-template-columns: 112px minmax(0,1fr); gap: 20px; }
+  .dw-home-delivery { grid-column: 1 / -1; display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 8px 16px; padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--divider); }
+  .dw-home-delivery > strong { font-size: 18px; margin: 0; }
+  .dw-home-delivery > .dw-btn { margin: 0 0 0 auto; }
+  .dw-home-columns { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+  .dw-home-tasks button > .dw-badge { display: none; }
+}
+@media (max-width: 1000px) {
+  .dw-home-columns { grid-template-columns: minmax(0,1fr); }
+  .dw-home-modules { grid-template-columns: repeat(3,minmax(0,1fr)); }
+}
+@media (max-width: 760px) {
+  .dw-home-product .dw-card-head h2 { font-size: 21px; }
+  .dw-home-product-body { grid-template-columns: 96px minmax(0,1fr); gap: 16px; align-items: start; }
+  .dw-home-photo img { height: 126px; }
+  .dw-home-identity { gap: 6px; font-size: 11px; }
+  .dw-home-product-info > p { font-size: 12px; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .dw-home-product-actions { grid-column: 1 / -1; }
+  .dw-home-product-info { display: contents; }
+  .dw-home-identity { grid-column: 2; align-self: center; }
+  .dw-home-product-info > p { grid-column: 1 / -1; }
+  .dw-home-photo { grid-column: 1; grid-row: 1; }
+  .dw-home-delivery { gap: 8px 12px; }
+  .dw-home-delivery .dw-eyebrow { flex: 1 0 100%; }
+  .dw-home-delivery > .dw-btn { margin: 6px 0 0; }
+  .dw-home-modules { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+  .dw-home-modules > article > button { padding: 12px; min-height: 158px; }
+  .dw-home-modules > article > button > .dw-icon { right: 12px; top: 22px; }
+  .dw-home-tasks button { padding: 14px 0; gap: 10px; }
+  .dw-home-task-copy strong { font-size: 12px; }
+  .dw-home-task-copy small { font-size: 11px; }
+}
+
+/* The path and per-module state share the same neutral status vocabulary. */
+.dw-home-path .dw-card-body { padding-top: 24px; }
+.dw-home-path-steps { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 12px; list-style: none; padding: 0; margin: 0; }
+.dw-home-path-steps li { position: relative; min-width: 0; }
+.dw-home-path-steps li:not(:last-child)::after { content: ''; position: absolute; top: 22px; left: 50px; right: -12px; height: 2px; background: var(--border); pointer-events: none; }
+.dw-home-path-steps button { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 7px; width: 100%; padding: 4px; text-align: left; color: var(--text); background: transparent; border: 1px solid transparent; border-radius: var(--radius); transition: background 150ms ease-out; }
+.dw-home-step-number { position: relative; z-index: 1; display: grid; place-items: center; width: 36px; height: 36px; border: 1px dashed var(--border-strong); border-radius: var(--radius); background: var(--surface); color: var(--text-4); font: 12px var(--mono); margin-bottom: 5px; }
+.dw-home-path-steps strong { font-size: 13px; font-weight: 700; overflow-wrap: anywhere; }
+.dw-home-path-steps small { font-size: 11px; color: var(--text-3); }
+.dw-phase-label { display: inline-flex; align-items: center; width: fit-content; padding: 3px 7px; font-size: 11px; font-weight: 600; color: var(--text-3); background: var(--surface-2); border: 1px dashed var(--border-strong); border-radius: var(--radius); }
+[data-phase=done] .dw-phase-label { background: #eeede9; color: #37362f; border: 1px solid #d4d2c9; }
+[data-phase=done] .dw-home-step-number,[data-phase=done] .dw-home-module-icon { background: #393831; color: #fff; border: 1px solid transparent; }
+[data-phase=active] .dw-phase-label { background: #f3e7d4; color: #725630; border: 1px solid #d7bb90; }
+[data-phase=active] .dw-home-step-number,[data-phase=active] .dw-home-module-icon { background: #f3e7d4; color: #725630; border: 1px solid #d7bb90; }
+.dw-home-path-legend { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 18px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--divider); font-size: 11px; color: var(--text-3); }
+.dw-home-path-legend > span { display: flex; align-items: center; gap: 7px; }
+.dw-home-path-legend i { width: 8px; height: 8px; border-radius: 50%; }
+.dw-home-path-legend [data-phase=done] { background: #393831; }
+.dw-home-path-legend [data-phase=active] { background: #b89764; }
+.dw-home-path-legend [data-phase=pending] { background: #fff; border: 1px solid var(--border-strong); }
+.dw-home-path-legend small { margin-left: auto; font-size: 11px; }
+.dw-home-review { display: flex; align-items: center; gap: 7px; min-height: 44px; padding: 8px 12px; font-size: 11px; line-height: 1.4; color: var(--text-3); border-top: 1px solid var(--divider); background: var(--surface-2); cursor: pointer; }
+.dw-home-review input { accent-color: #78603b; flex: 0 0 auto; }
+.dw-activity-filters { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 20px; padding-bottom: 18px; margin-bottom: 10px; border-bottom: 1px solid var(--divider); }
+.dw-activity-user { display: flex; align-items: center; gap: 8px; color: var(--text-3); font-size: 12px; }
+.dw-activity-user select { width: auto; min-width: 160px; }
+.dw-activity-filters > span { margin-left: auto; color: var(--text-3); font-size: 12px; }
+.dw-activity-author { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; color: var(--text-2); font-size: 12px; margin-top: 8px; }
+.dw-activity-author > span { color: var(--text-3); font-size: 11px; overflow-wrap: anywhere; }
+@media (hover:hover) { .dw-home-path-steps button:hover { background: var(--surface-2); } }
+@media (max-width: 1000px) and (min-width: 761px) { .dw-home-path-steps strong { font-size: 12px; } }
+@media (max-width: 760px) {
+  .dw-home-path-steps { grid-template-columns: minmax(0,1fr); gap: 8px; }
+  .dw-home-path-steps button { display: grid; grid-template-columns: 36px minmax(0,1fr) auto; gap: 4px 12px; align-items: center; padding: 8px 2px; }
+  .dw-home-step-number { grid-row: 1 / 3; margin: 0; }
+  .dw-home-path-steps strong { grid-column: 2; }
+  .dw-home-path-steps .dw-phase-label { grid-column: 3; grid-row: 1 / 3; }
+  .dw-home-path-steps small { grid-column: 2; }
+  .dw-home-path-steps li:not(:last-child)::after { top: 44px; bottom: -12px; left: 20px; right: auto; width: 2px; height: auto; }
+  .dw-home-path-legend { gap: 10px 12px; }
+  .dw-home-path-legend small { margin-left: 0; flex: 1 0 100%; }
+  .dw-activity-user { width: 100%; }
+  .dw-activity-user select { flex: 1; min-width: 0; }
+  .dw-activity-filters > span { margin: 0; }
+}
+
+/* Keep the document's available width stable between short and long views. */
+html:has(.dw-app) { scrollbar-gutter: stable; }
+.dw-app .dw-workspace-toolbar { align-items: center; flex-wrap: nowrap; }
+.dw-app .dw-workspace-toolbar > .dw-btn { flex: 0 0 auto; }
+.dw-home-modules > article > button:focus-visible { outline-offset: -3px; }
+@media (max-width: 760px) {
+  .dw-app .dw-page-tabs { width: auto; flex: 0 1 auto; }
+  .dw-app .dw-page-tabs button { min-height: 36px; gap: 5px; padding: 6px 8px; font-size: 11px; }
+  .dw-app .dw-workspace-toolbar { gap: 8px; }
+  .dw-app .dw-workspace-toolbar > .dw-btn { padding: 6px 8px; font-size: 11px; }
+}

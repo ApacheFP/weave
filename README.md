@@ -31,7 +31,17 @@ Navigazione hash `#/moduli/ID`, cronologia del browser e ritorno al carosello co
 
 In cima alla sidebar il selettore mostra il capo corrente: permette di cercare e cambiare capo oppure crearne uno nuovo. **Capi** apre la lista con ricerca e azioni. **Nuovo capo** raccoglie nome, codice univoco, collezione e quantità; può duplicare specifiche e ordini del capo corrente. Ogni capo ha dati, servizi, cronologia e conversazioni separati, conservati durante la sessione. I codici di prodotto, ordine, campione e lotto nelle viste e negli export seguono il capo selezionato. Il profilo rimane comune.
 
-La ricerca globale si apre dall’header, da **Cerca** nella sidebar o da **⌘/Ctrl K**. Il comando si apre senza animazione. Ogni modulo ha le viste **Spazio di lavoro**, **Servizi integrati** (solo quelli pertinenti) e **Attività**. La sidebar e il contenuto continuano a funzionare anche se una vista genera un errore, grazie a un confine di errore locale.
+La ricerca globale si apre dall’header, accanto al profilo, o da **⌘/Ctrl K**. Il comando si apre senza animazione. Ogni modulo ha solo **Panoramica** e **Attività**. La barra del contenuto ha le due schede a sinistra e Assistente a destra; titolo e descrizione ripetuti sono stati rimossi. Il documento riserva spazio alla scrollbar per mantenere la stessa larghezza nelle viste corte e lunghe. La sidebar e il contenuto continuano a funzionare anche se una vista genera un errore, grazie a un confine di errore locale.
+
+### Home del capo
+
+Il Context Engine è ora **Home**, prima voce della sidebar sotto il selettore del capo. Creazione, cambio capo, apertura dalla lista e selezione di un prodotto nella ricerca globale portano a `#/moduli/21`. La Home riprende le azioni e le attività di Prova1, l’identità e gli accessi di Prova2 e le statistiche di OpsLoop.
+
+Il percorso raggruppa 13 fasi operative in Concept, Sviluppo tecnico, Validazione, Produzione e Passaporto. Ogni fase distingue **Completata**, **In corso** e **Da iniziare**. Brief con checklist completa, tech pack, campione approvato, marker ottimizzato, acquisti consegnati, produzione completata, qualità risolta sul lotto completo e passaporto pubblicato determinano gli stati automatici. Materiali, modellistica, grading, pricing, pianificazione e marker di base possono essere confermati come revisionati nella Home; modificare i relativi input riapre la revisione. L’assistente è un accesso continuo, escluso dal conteggio delle fasi.
+
+Un capo appena creato parte con tutte le fasi da iniziare, produzione e stock a zero, senza anomalie inventate. Materiali e misure restano precompilati come modello base. Le fotografie sono riferimenti demo.
+
+**Attività** mostra modulo, autore ed email, permette di filtrare per utente e di includere tutta la filiera. Le modifiche successive registrano il profilo corrente; gli esempi iniziali hanno tre autori fittizi. È un registro della sessione demo: non implementa autenticazione, ruoli o permessi fra utenti reali.
 
 ### Wrapper e immagini dei moduli
 
@@ -56,7 +66,7 @@ Il moodboard offre filtri per categoria, ricerca, griglia/elenco, ordinamento de
 | 12 · Produzione | Avanzamento, sessioni, pausa/ripresa, scarto reale e registrazione capi |
 | 13 · Qualità | Difetto evidenziato, azione correttiva, ricontrollo e rilascio rilavorazioni |
 | 19 · DPP | Viste consumatore/brand/autorità, tracciabilità, cura, eventi di vita, export JSON e pubblicazione simulata |
-| 21 · Context Engine | Mappa navigabile, ricerca, rischi ed eventi delle modifiche |
+| 21 · Home del capo | Percorso con stati delle fasi, priorità, avanzamento del lotto, costi, accessi ai moduli e attività per autore |
 | 22 · Decision Intelligence | Chat autonoma, domande suggerite, scenari e decisioni approvabili |
 
 ## Servizi integrati
@@ -79,7 +89,7 @@ Ogni dashboard operativa ha **Assistente**, una chat con contesto e cronologia p
 
 La fotografia temporale è coerente: 12 dei 320 capi sono in rilavorazione; 308 sono approvati, 160 distribuiti wholesale e 112 retail, lasciando **36 disponibili**. I 320 capi wholesale del documento sono ordini confermati, di cui 160 ancora da evadere. Nuove vendite e spedizioni rispettano le disponibilità.
 
-Cambiare tessuto aggiorna composizione, fornitore, BOM, acquisti, costo e DPP. Ottimizzare il marker aggiorna consumi e fabbisogni. Produzione e chiusura di una non conformità aggiornano lo stock. Le azioni compaiono nel Context Engine. La scelta del ruolo DPP è una presentazione dimostrativa, non un’autorizzazione reale.
+Cambiare tessuto aggiorna composizione, fornitore, BOM, acquisti, costo e DPP. Ottimizzare il marker aggiorna consumi e fabbisogni. Produzione e chiusura di una non conformità aggiornano lo stock. Le azioni compaiono nella Home del capo e nel registro Attività. La scelta del ruolo DPP è una presentazione dimostrativa, non un’autorizzazione reale.
 
 Il QR in `public/illustrations/dpp-qr.svg` è reale e punta al passaporto **locale** `http://127.0.0.1:5174/#/moduli/19`. Per pubblicarlo va rigenerato con l’URL pubblico. Nessuna dipendenza QR aggiunta all’app.
 

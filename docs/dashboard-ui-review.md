@@ -39,3 +39,30 @@ Le severità descrivono i problemi prima delle modifiche. Tutte le righe sono ri
 **Not verified:** dispositivi fisici, Safari/Firefox, pannello Animations di DevTools (rallentamento effettuato via API), forced colors e confronto pixel per pixel con il CSS mancante del riferimento. Le azioni di business non coinvolte dal redesign non sono state sottoposte a un nuovo collaudo completo.
 
 **Approve** per l’ambito ispezionato: nessun problema HIGH residuo riscontrato.
+
+## Aggiornamento: Home del capo, percorso e Attività
+
+10 ottobre 2026. Ambito aggiuntivo: navigazione del prodotto, Home, stati delle fasi, registro per autore e barra del contenuto in tutti i moduli. La sidebar resta laterale. Il tab Servizi integrati è stato rimosso su richiesta: le viste sono ora solo Panoramica e Attività.
+
+| Severity | Location | Before | After | Why |
+| --- | --- | --- | --- | --- |
+| MEDIUM | `src/dashboard/Dashboard.jsx`, `src/dashboard/WorkspaceControls.jsx` | Il Context Engine era in fondo alla navigazione; creare o aprire un capo portava al design o conservava il modulo. | Home è la prima voce sotto il selettore; creazione, cambio, lista e ricerca aprono il riepilogo del prodotto. Ricerca desktop accanto al profilo. | Il capo ha un punto di ingresso coerente e accessi rapidi ai suoi dati. |
+| MEDIUM | `src/dashboard/HomePage.jsx`, `src/dashboard/home.css` | Mappa generica con nodi dichiarati connessi anche su un prodotto appena creato. | Identità, prossime azioni, lotto, costi e feed riprendono Prova1 Home, Prova2 Overview e OpsLoop. Percorso in cinque gruppi con 13 fasi, stati testuali e segni di spunta. | Dati base, lavoro avviato ed esito completato sono distinguibili senza usare solo il colore. |
+| MEDIUM | `src/dashboard/DemoContext.jsx` | Nessun controllo delle revisioni di BOM, modello, grading, pricing e piano. | Revisioni confermabili nella Home; input modificati riaprono gli esiti manuali pertinenti. Esiti automatici da checklist, tech pack, campione, marker, acquisti, lotto, qualità e passaporto. | La presenza di dati precompilati non equivale a una fase completata. |
+| MEDIUM | `src/dashboard/Dashboard.jsx`, `src/dashboard/DemoContext.jsx` | Attività senza autore e senza filtro per persona. | Nome ed email sugli eventi, filtro per utente, vista del modulo o di tutta la filiera. Conferme delle revisioni registrate nel modulo interessato. | È possibile leggere chi ha modificato il capo nella sessione dimostrativa. |
+| MEDIUM | `src/dashboard/Dashboard.jsx`, `src/dashboard/home.css` | Intestazione ripetuta e larghezza variabile fra pagina lunga e corta. | Rimossi titolo, descrizione e metadati ripetuti; schede a sinistra, Assistente a destra. Spazio della scrollbar stabile. Titolo mantenuto per i lettori di schermo. | Meno rumore nella pagina e allineamento costante al cambio vista. |
+
+### Controlli aggiuntivi
+
+- Build Vite riuscita; nessuna dipendenza o test alla suite aggiunto o eseguito.
+- Home ispezionata a 1440, 1024, 768, 390 e 320 px: Mulish, superfici a 12 px e nessun overflow della pagina.
+- CLI Playwright: 15 moduli a 1440, 390 e 320 px, 45 confronti Panoramica/Attività. Posizione e larghezza della barra rimangono identiche; due sole schede, nessuna intestazione di pagina ripetuta visibile. Zero errori JavaScript o viste fallite.
+- Creazione, cambio dal selettore, apertura dalla lista e risultato della ricerca portano alla Home del capo corretto. Il campo Nome riceve il focus nel dialog di creazione.
+- Nuovo capo: cinque gruppi da iniziare, 0% produzione, stock e anomalie a zero. La fotografia è marcata come riferimento demo.
+- Filtro Marta Bianchi: compare solo la non conformità registrata da quell’autore.
+- Confermare Materiali porta il conteggio da 1 a 2 fasi completate e registra autore e modulo. Cambiare tessuto riapre la revisione. Completare brief e checklist di un nuovo capo completa il gruppo Concept.
+- Controllata l’apertura dell’assistente contestuale e della sidebar in emulazione touch a 390 px.
+
+**Not verified:** autenticazione e autorizzazioni fra utenti reali (il registro usa profili demo), dispositivi fisici e browser diversi da Chrome. Gli altri limiti della revisione precedente restano validi; i controlli dei 44 servizi appartengono alla versione precedente con il relativo tab.
+
+**Approve** per le viste e i flussi qui ispezionati: nessun problema HIGH residuo rilevato.
