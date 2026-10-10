@@ -12,9 +12,15 @@ import { ServiceContent } from './services.jsx';
 import { CreateStyleDialog, StyleSwitcher, WorkspaceSearch } from './WorkspaceControls.jsx';
 import Assistant from './Assistant.jsx';
 import { ProductPhoto } from './Media.jsx';
+import WorkspaceHome, { WorkspaceActivityPage } from './WorkspaceOverview.jsx';
+import { CreateTaskDialog, InboxPage, MyTasksPage } from './PersonalPages.jsx';
+import { SettingsPage, HelpPage } from './AccountPages.jsx';
+import NotificationsPage from './NotificationsPage.jsx';
 import './dashboard.css';
+import './workspace-shell.css';
 
-const shortNames = { 1: 'Ideazione e design', 2: 'Disegno tecnico', 3: 'Materiali e BOM', 4: 'Modellistica', 5: 'Sviluppo taglie', 6: 'Prototipi', 7: 'Piazzamento', 9: 'Costi e pricing', 10: 'Pianificazione', 11: 'Acquisti', 12: 'Produzione', 13: 'Qualità', 19: 'Passaporto digitale', 21: 'Home', 22: 'Assistente' };
+const shortNames = { 1: 'Ideazione e design', 2: 'Disegno tecnico', 3: 'Materiali e BOM', 4: 'Modellistica', 5: 'Sviluppo taglie', 6: 'Prototipi', 7: 'Piazzamento', 9: 'Costi e pricing', 10: 'Pianificazione', 11: 'Acquisti', 12: 'Produzione', 13: 'Qualità', 19: 'Passaporto digitale', 21: 'Panoramica del capo', 22: 'Assistente' };
+const pageNames = { home: 'Home', inbox: 'Inbox', 'my-tasks': 'Le mie attività', notifications: 'Notifiche', capi: 'Capi', activity: 'Attività della filiera', settings: 'Impostazioni', profile: 'Il tuo profilo', help: 'Aiuto e risorse' };
 const moduleIcons = { 1: 'pencil', 2: 'ruler', 3: 'layers', 4: 'scissors', 5: 'ruler', 6: 'shirt', 7: 'grid', 9: 'chart', 10: 'calendar', 11: 'box', 12: 'activity', 13: 'check', 19: 'file', 21: 'home', 22: 'chat' };
 const components = { 1: DesignPage, 2: TechnicalPage, 3: MaterialsPage, 4: PatternPage, 5: GradingPage, 6: PrototypePage, 7: MarkerPage, 9: PricingPage, 10: PlanningPage, 11: ProcurementPage, 12: ProductionPage, 13: QualityPage, 19: PassportPage, 21: HomePage, 22: DecisionPage };
 // Keep the shell navigable if a page fails, as in Prova1's stateFailed view.
@@ -42,41 +48,160 @@ function StylesPage({ onCreate, onOpen }) {
   </div>;
 }
 
-export default function Dashboard({ moduleId, onNavigate, onHome, onSignOut }) {
-  const { data } = useDemo();
-  const [menu, setMenu] = useState(false); const [collapsed, setCollapsed] = useState(false);
-  const [service, setService] = useState(null); const [chat, setChat] = useState(false); const [create, setCreate] = useState(false); const [search, setSearch] = useState(false);
-  const [view, setView] = useState('workspace'); const [tab, setTab] = useState('work'); const page = useRef(null); const content = useRef(null);
+export default function Dashboard({ moduleId, workspacePage, inboxId, onOpenPage, onNavigate, onHome, onSignOut }) {
+  const { data, tasks, inbox, selectStyle } = useDemo();
+  const [menu, setMenu] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const [service, setService] = useState(null);
+  const [chat, setChat] = useState(false);
+  const [create, setCreate] = useState(false);
+  const [search, setSearch] = useState(false);
+  const [newMenu, setNewMenu] = useState(false);
+  const [createTask, setCreateTask] = useState(false);
+  const [tab, setTab] = useState('work');
+  const page = useRef(null);
+  const content = useRef(null);
+  const mobileTrigger = useRef(null);
+  const newTrigger = useRef(null);
+  const newRoot = useRef(null);
+  const pendingService = useRef(null);
+  const isModule = !workspacePage;
   const Content = components[moduleId];
-  useEffect(() => { content.current?.scrollTo(0, 0); }, [moduleId, data.styleId, view, tab]);
-  useEffect(() => { setService(null); setChat(false); setMenu(false); setView('workspace'); setTab('work'); page.current?.focus({ preventScroll: true }); }, [moduleId, data.styleId]);
-  useEffect(() => { const key = e => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); setSearch(true); } if (e.key === 'Escape') { setMenu(false); setChat(false); } }; document.addEventListener('keydown', key); return () => document.removeEventListener('keydown', key); }, []);
-  function navigate(id) { setMenu(false); setView('workspace'); setTab('work'); onNavigate(id); }
-  function created() { setCreate(false); navigate(21); }
-  return <div className={`dw-app ${collapsed ? 'dw-collapsed' : ''}`} data-module={moduleId}>
-    <a className="dw-skip" href="#module-workspace" onClick={event => { event.preventDefault(); page.current?.focus(); page.current?.scrollIntoView({ block: 'start' }); }}>Vai al contenuto</a>
+  const title = isModule ? shortNames[moduleId] : pageNames[workspacePage];
+  const unread = inbox.filter(item => !item.read).length;
+  const mineOpen = tasks.filter(task => task.assignee.email === data.profile.email && task.status !== 'Completata').length;
 
-    <div className="dw-layout">{menu && <button className="dw-nav-scrim" onClick={() => setMenu(false)} aria-label="Chiudi navigazione" />}
-      <aside className={`dw-sidebar ${menu ? 'open' : ''}`} id="workspace-nav"><div className="dw-sidebar-brand"><button className="dw-brand" onClick={onHome} aria-label="Torna al carosello weave">weave<span className="brand-dot" aria-hidden="true">.</span></button><button className="dw-icon-btn dw-collapse" aria-label={collapsed ? 'Espandi sidebar' : 'Riduci sidebar'} onClick={() => setCollapsed(!collapsed)}><Icon name="panel" size={16} /></button></div><div className="dw-sidebar-top"><StyleSwitcher onCreate={() => setCreate(true)} onSelect={() => navigate(21)} /></div><div className="dw-side-scroll"><nav className="dw-nav-quick" aria-label="Spazio di lavoro"><button title="Home" aria-current={view === 'workspace' && moduleId === 21 ? 'page' : undefined} onClick={() => navigate(21)}><Icon name="home" size={16} /><span>Home</span></button><button aria-current={view === 'styles' ? 'page' : undefined} onClick={() => { setView('styles'); setMenu(false); }}><Icon name="shirt" size={16} /><span>Capi</span></button><button onClick={() => setCreate(true)}><Icon name="plus" size={16} /><span>Nuovo capo</span></button></nav><nav aria-label="Moduli della filiera">{[['Sviluppo prodotto', [1, 2, 3, 4, 5, 6, 7]], ['Operazioni', [9, 10, 11, 12, 13]], ['Identità e intelligence', [19, 22]]].map(([label, ids]) => <div className="dw-nav-group" key={label}><span>{label}</span>{ids.map(id => <button key={id} title={shortNames[id]} aria-current={view === 'workspace' && moduleId === id ? 'page' : undefined} onClick={() => navigate(id)}><Icon name={moduleIcons[id]} size={16} /><span>{shortNames[id]}</span>{id === 11 && data.purchaseOrders.some(o => o.status === 'In ritardo') && <i className="dw-nav-dot" />}</button>)}</div>)}</nav></div><div className="dw-sidebar-bottom"><button className="dw-back-carousel" onClick={onHome} title="Torna al carosello"><Icon name="back" size={16} /><span>Torna al carosello</span></button></div></aside>
-      <div className="dw-main"><header className="dw-header"><button className="dw-icon-btn dw-mobile-menu" aria-label={menu ? 'Chiudi navigazione moduli' : 'Apri navigazione moduli'} aria-expanded={menu} aria-controls="workspace-nav" onClick={() => setMenu(!menu)}><Icon name={menu ? 'close' : 'menu'} /></button><button className="dw-brand dw-mobile-brand" onClick={onHome} aria-label="Torna al carosello weave">weave<span className="brand-dot" aria-hidden="true">.</span></button><nav className="dw-breadcrumb" aria-label="Percorso"><button onClick={() => setView('styles')}>Atelier</button><span>/</span><span className="dw-breadcrumb-product">{data.title}</span><span>/</span><strong>{view === 'styles' ? 'Capi' : shortNames[moduleId]}</strong></nav><span className="dw-header-demo">Demo</span><button className="dw-header-search" onClick={() => setSearch(true)} aria-label="Cerca moduli e capi"><Icon name="search" size={18} /><span>Cerca in Atelier…</span><kbd>⌘ K</kbd></button><ProfileMenu onSignOut={onSignOut} /></header><div className="dw-content" ref={content}><main id="module-workspace" ref={page} tabIndex={-1} className={`dw-page ${view === 'styles' ? 'dw-page-wide' : ''}`}><h1 className="sr-only">{view === 'styles' ? 'Capi in Atelier' : shortNames[moduleId]}</h1>
-        {view === 'workspace' && <div className="dw-workspace-toolbar"><div className="dw-page-tabs" role="tablist" aria-label="Viste del modulo">{[['work', 'Panoramica', moduleId === 21 ? 'home' : 'grid'], ['activity', 'Attività', 'activity']].map(([id, label, icon]) => <button key={id} role="tab" id={`view-${id}`} aria-selected={tab === id} aria-controls="dashboard-view" onClick={() => setTab(id)}><Icon name={icon} size={15} />{label}</button>)}</div></div>}
-        <div className="dw-page-content" id="dashboard-view" role={view === 'workspace' ? 'tabpanel' : undefined} aria-labelledby={view === 'workspace' ? `view-${tab}` : undefined} key={`${moduleId}-${data.styleId}-${view}-${tab}`}><PageBoundary>{view === 'styles' ? <StylesPage onCreate={() => setCreate(true)} onOpen={() => navigate(21)} /> : tab === 'activity' ? <ActivityPage moduleId={moduleId} onNavigate={navigate} onService={setService} /> : <Content onNavigate={navigate} onService={setService} onActivity={() => setTab('activity')} />}</PageBoundary></div>
-      </main><footer className="dw-footer"><span>Atelier <i>/</i> {data.title}</span><span className="dw-code">{data.identityAssigned ? data.styleId : 'Bozza'}<span>·</span><span>Dati dimostrativi</span></span></footer></div></div>
-    </div>
-    {create && <CreateStyleDialog onClose={() => setCreate(false)} onCreated={created} />}
-    {search && <WorkspaceSearch onNavigate={navigate} onClose={() => setSearch(false)} />}
-    {service && <Dialog wide title={modules.find(m => m.id === service).title} note={`${shortNames[moduleId]} · ${data.title} / ${data.styleId}`} onClose={() => setService(null)}><ServiceContent serviceId={service} moduleId={moduleId} /></Dialog>}
-    <div className="dw-assistant-dock">
-      {chat && <section id="weave-assistant-panel" className="dw-assistant-panel" role="dialog" aria-label="Assistente weave" aria-modal="false"><Assistant key={`${moduleId}-${data.styleId}`} moduleId={moduleId} embedded onClose={() => setChat(false)} /></section>}
-      <div className="dw-assistant-launcher-row">
-        <button className={`dw-assistant-launcher ${chat ? 'is-open' : ''}`} type="button" aria-expanded={chat} aria-controls={chat ? 'weave-assistant-panel' : undefined} onClick={() => setChat(open => !open)}>
-          <span className="dw-assistant-launcher-copy"><small>Hai un dubbio?</small><strong>{chat ? 'Chiudi Filo' : 'Chiedi a Filo'}</strong></span>
-          <Icon name={chat ? 'close' : 'arrow'} size={17} />
-        </button>
-        <button className="dw-assistant-filo" type="button" aria-label={chat ? 'Chiudi Filo' : 'Apri l’assistente Filo'} aria-expanded={chat} aria-controls={chat ? 'weave-assistant-panel' : undefined} onClick={() => setChat(open => !open)}>
-          <img src="/mascot-filo.png" alt="" />
-        </button>
+  useEffect(() => { content.current?.scrollTo(0, 0); }, [moduleId, workspacePage, data.styleId, tab]);
+  useEffect(() => {
+    setService(pendingService.current); pendingService.current = null;
+    setChat(false); setMenu(false); setNewMenu(false); setTab('work');
+    page.current?.focus({ preventScroll: true });
+  }, [moduleId, workspacePage, data.styleId]);
+  useEffect(() => {
+    const key = event => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); setSearch(true); }
+      if (event.key === 'Escape') {
+        if (document.querySelector('.profile-panel,.dw-workspace-popover,dialog[open]')) return;
+        if (newMenu) { setNewMenu(false); newTrigger.current?.focus(); return; }
+        setMenu(false); setChat(false);
+        if (menu) mobileTrigger.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', key);
+    return () => document.removeEventListener('keydown', key);
+  }, [menu, newMenu]);
+  useEffect(() => {
+    if (!newMenu) return;
+    newRoot.current?.querySelector('.dw-header-new-menu button')?.focus();
+    const outside = event => { if (!newRoot.current?.contains(event.target)) setNewMenu(false); };
+    document.addEventListener('pointerdown', outside);
+    return () => document.removeEventListener('pointerdown', outside);
+  }, [newMenu]);
+  function navigate(id) { setMenu(false); setTab('work'); onNavigate(id); }
+  function openPage(target) { setMenu(false); onOpenPage(target); }
+  function openModule(styleId, id) {
+    const integrated = modules.find(item => item.id === id)?.serviceInfo || id === 20;
+    const value = integrated ? { id, contextModuleId: ({ 8: 10, 14: 3, 15: 12, 16: 9, 17: 9, 18: 19, 20: 1 })[id] || 21 } : null;
+    if (value && styleId !== data.styleId) pendingService.current = value;
+    selectStyle(styleId);
+    if (value) setService(value);
+    else navigate(components[id] ? id : 21);
+  }
+  function openService(id) { setService({ id, contextModuleId: moduleId }); }
+  function created() { setCreate(false); navigate(21); }
+  function navItem(label, icon, action, selected, count) {
+    return <button type="button" key={label} title={label} aria-current={selected ? 'page' : undefined} onClick={action}><Icon name={icon} size={16} /><span>{label}</span>{count > 0 && <small className="dw-nav-count">{count}</small>}</button>;
+  }
+  const globalContent = {
+    home: <WorkspaceHome onOpenPage={openPage} onOpenModule={openModule} onCreate={() => setCreate(true)} />,
+    inbox: <InboxPage initialSelectedId={inboxId} onOpenModule={openModule} />,
+    notifications: <NotificationsPage onSelectMessage={id => openPage(`inbox?message=${encodeURIComponent(id)}`)} onOpenPage={openPage} />,
+    'my-tasks': <MyTasksPage onOpenModule={openModule} />,
+    capi: <StylesPage onCreate={() => setCreate(true)} onOpen={() => navigate(21)} />,
+    activity: <WorkspaceActivityPage onOpenModule={openModule} />,
+    settings: <SettingsPage section="notifications" />,
+    profile: <SettingsPage section="profile" />,
+    help: <HelpPage onNavigate={navigate} onOpenPage={openPage} />,
+  };
+  return <div className={`dw-app ${collapsed ? 'dw-collapsed' : ''}`} data-module={isModule ? moduleId : undefined} data-workspace-page={workspacePage || undefined}>
+    <a className="dw-skip" href="#module-workspace" onClick={event => { event.preventDefault(); page.current?.focus(); content.current?.scrollTo(0, 0); }}>Vai al contenuto</a>
+    <div className="dw-layout">
+      {menu && <button className="dw-nav-scrim" onClick={() => { setMenu(false); mobileTrigger.current?.focus(); }} aria-label="Chiudi navigazione" />}
+      <aside className={`dw-sidebar ${menu ? 'open' : ''}`} id="workspace-nav">
+        <div className="dw-sidebar-brand">
+          <button className="dw-brand" onClick={() => openPage('home')} aria-label="Home di Atelier">weave<span className="brand-dot" aria-hidden="true">.</span></button>
+          <span className="dw-sidebar-workspace">Atelier</span>
+          <button className="dw-icon-btn dw-collapse" aria-label={collapsed ? 'Espandi sidebar' : 'Riduci sidebar'} onClick={() => setCollapsed(!collapsed)}><Icon name="panel" size={16} /></button>
+        </div>
+        <div className="dw-sidebar-top"><StyleSwitcher onCreate={() => setCreate(true)} onSelect={() => navigate(21)} /></div>
+        <div className="dw-side-scroll">
+          <nav className="dw-nav-quick dw-personal-nav" aria-label="Il tuo lavoro">
+            {navItem('Home', 'home', () => openPage('home'), workspacePage === 'home')}
+            {navItem('Inbox', 'inbox', () => openPage('inbox'), workspacePage === 'inbox', unread)}
+            {navItem('Le mie attività', 'list', () => openPage('my-tasks'), workspacePage === 'my-tasks', mineOpen)}
+            {navItem('Notifiche', 'bell', () => openPage('notifications'), workspacePage === 'notifications', unread)}
+          </nav>
+          <nav className="dw-nav-group dw-atelier-nav" aria-label="Atelier"><span>Atelier</span>
+            {navItem('Capi', 'shirt', () => openPage('capi'), workspacePage === 'capi')}
+            {navItem('Attività della filiera', 'activity', () => openPage('activity'), workspacePage === 'activity')}
+          </nav>
+          <nav className="dw-cap-nav" aria-label={`Moduli di ${data.title}`}>
+            <div className="dw-nav-group dw-cap-overview">{navItem('Panoramica del capo', 'grid', () => navigate(21), isModule && moduleId === 21)}</div>
+            {[['Sviluppo prodotto', [1, 2, 3, 4, 5, 6, 7]], ['Operazioni', [9, 10, 11, 12, 13]], ['Identità e intelligence', [19, 22]]].map(([label, ids]) => <div className="dw-nav-group" key={label}><span>{label}</span>{ids.map(id => <button key={id} type="button" title={shortNames[id]} aria-current={isModule && moduleId === id ? 'page' : undefined} onClick={() => navigate(id)}><Icon name={moduleIcons[id]} size={16} /><span>{shortNames[id]}</span>{id === 11 && data.purchaseOrders.some(order => order.status === 'In ritardo') && <i className="dw-nav-dot" />}</button>)}</div>)}
+          </nav>
+        </div>
+        <div className="dw-sidebar-bottom">
+          <nav className="dw-nav-quick dw-account-nav" aria-label="Account e risorse">
+            {navItem('Aiuto e risorse', 'help', () => openPage('help'), workspacePage === 'help')}
+            {navItem('Impostazioni', 'settings', () => openPage('settings'), workspacePage === 'settings' || workspacePage === 'profile')}
+          </nav>
+          <ProfileMenu sidebar collapsed={collapsed} onSignOut={onSignOut} onProfile={() => openPage('profile')} onSettings={() => openPage('settings')} />
+        </div>
+      </aside>
+      <div className="dw-main">
+        <header className="dw-header">
+          <button ref={mobileTrigger} className="dw-icon-btn dw-mobile-menu" aria-label={menu ? 'Chiudi navigazione' : 'Apri navigazione'} aria-expanded={menu} aria-controls="workspace-nav" onClick={() => setMenu(!menu)}><Icon name={menu ? 'close' : 'menu'} /></button>
+          <nav className="dw-breadcrumb" aria-label="Percorso"><button onClick={() => openPage('home')}>Atelier</button><span>/</span>{isModule && <><button className="dw-breadcrumb-product" onClick={() => navigate(21)}>{data.title}</button><span>/</span></>}<strong>{title}</strong></nav>
+          <div className="dw-header-tools">
+            <button className="dw-header-search" onClick={() => setSearch(true)} aria-label="Cerca pagine, moduli e capi"><Icon name="search" size={15} /><span>Cerca in Atelier…</span><kbd>⌘ K</kbd></button>
+            <button className="dw-icon-btn dw-header-inbox" aria-label={`Notifiche${unread ? `, ${unread} da leggere` : ''}`} onClick={() => openPage('notifications')}><Icon name="bell" size={17} />{unread > 0 && <i aria-hidden="true" />}</button>
+            <div className="dw-header-new" ref={newRoot}>
+              <button ref={newTrigger} type="button" className="dw-btn dw-header-create" aria-label="Crea nuovo" aria-expanded={newMenu} aria-controls={newMenu ? 'header-create-menu' : undefined} onClick={() => setNewMenu(open => !open)}><Icon name="plus" size={14} /><span>Nuovo</span><span className="dw-header-new-chevron"><Icon name="back" size={12} /></span></button>
+              {newMenu && <div className="dw-header-new-menu" id="header-create-menu" role="group" aria-label="Azioni rapide">
+                <button type="button" onClick={() => { setNewMenu(false); setCreate(true); }}><Icon name="shirt" size={15} />Nuovo capo</button>
+                <button type="button" onClick={() => { setNewMenu(false); setCreateTask(true); }}><Icon name="list" size={15} />Nuova attività</button>
+                <button type="button" onClick={onHome}><Icon name="layers" size={15} />Carosello dei moduli</button>
+              </div>}
+            </div>
+            <ProfileMenu compact onSignOut={onSignOut} onProfile={() => openPage('profile')} onSettings={() => openPage('settings')} />
+          </div>
+        </header>
+        <div className="dw-content" ref={content}>
+          <main id="module-workspace" ref={page} tabIndex={-1} className={`dw-page ${workspacePage === 'capi' ? 'dw-page-wide' : ''} ${workspacePage === 'inbox' ? 'dw-page-inbox' : ''} ${workspacePage === 'my-tasks' ? 'dw-page-my-tasks' : ''}`}>
+            <h1 className="sr-only">{title}</h1>
+            {isModule && <div className="dw-workspace-toolbar"><div className="dw-page-tabs" role="tablist" aria-label="Viste del modulo">{[['work', 'Panoramica', moduleId === 21 ? 'home' : 'grid'], ['activity', 'Attività', 'activity']].map(([id, label, icon], index, all) => <button key={id} role="tab" id={`view-${id}`} tabIndex={tab === id ? 0 : -1} aria-selected={tab === id} aria-controls="dashboard-view" onClick={() => setTab(id)} onKeyDown={event => {
+              if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+              event.preventDefault();
+              const next = event.key === 'Home' ? 0 : event.key === 'End' ? all.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + all.length) % all.length;
+              setTab(all[next][0]); document.getElementById(`view-${all[next][0]}`)?.focus();
+            }}><Icon name={icon} size={15} />{label}</button>)}</div></div>}
+            <div className="dw-page-content" id="dashboard-view" role={isModule ? 'tabpanel' : undefined} aria-labelledby={isModule ? `view-${tab}` : undefined} key={`${workspacePage || moduleId}-${isModule ? data.styleId : ''}-${tab}`}>
+              <PageBoundary>{!isModule ? globalContent[workspacePage] : tab === 'activity' ? <ActivityPage moduleId={moduleId} onNavigate={navigate} onService={openService} /> : <Content onNavigate={navigate} onService={openService} onActivity={() => setTab('activity')} />}</PageBoundary>
+            </div>
+          </main>
+        </div>
       </div>
     </div>
+    {create && <CreateStyleDialog onClose={() => setCreate(false)} onCreated={created} />}
+    {createTask && <CreateTaskDialog onClose={() => setCreateTask(false)} />}
+    {search && <WorkspaceSearch onNavigate={navigate} onOpenPage={openPage} onClose={() => setSearch(false)} />}
+    {service && <Dialog wide title={modules.find(item => item.id === service.id)?.title || 'Servizio WEAVE'} note={`${shortNames[service.contextModuleId]} · ${data.title} / ${data.styleId}`} onClose={() => setService(null)}><ServiceContent key={`${service.id}-${data.styleId}`} serviceId={service.id} moduleId={service.contextModuleId} /></Dialog>}
+    {isModule && <div className="dw-assistant-dock">
+      {chat && <section id="weave-assistant-panel" className="dw-assistant-panel" role="dialog" aria-label="Assistente weave" aria-modal="false"><Assistant key={`${moduleId}-${data.styleId}`} moduleId={moduleId} embedded onClose={() => setChat(false)} /></section>}
+      <div className="dw-assistant-launcher-row">
+        <button className={`dw-assistant-launcher ${chat ? 'is-open' : ''}`} type="button" aria-expanded={chat} aria-controls={chat ? 'weave-assistant-panel' : undefined} onClick={() => setChat(open => !open)}><span className="dw-assistant-launcher-copy"><small>Hai un dubbio?</small><strong>{chat ? 'Chiudi Filo' : 'Chiedi a Filo'}</strong></span><Icon name={chat ? 'close' : 'arrow'} size={17} /></button>
+        <button className="dw-assistant-filo" type="button" aria-label={chat ? 'Chiudi Filo' : 'Apri l’assistente Filo'} aria-expanded={chat} aria-controls={chat ? 'weave-assistant-panel' : undefined} onClick={() => setChat(open => !open)}><img src="/mascot-filo.png" alt="" /></button>
+      </div>
+    </div>}
   </div>;
 }

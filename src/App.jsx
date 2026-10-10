@@ -170,25 +170,31 @@ function ProductPage({ onSignOut, onEnter, index, onIndexChange }) {
 function readRoute() {
   const match = window.location.hash.match(/^#\/moduli\/(\d+)$/);
   const id = match ? Number(match[1]) : null;
-  return moduleGroups[0].items.some(module => module.id === id) ? id : null;
+  if (moduleGroups[0].items.some(module => module.id === id)) return { moduleId: id, page: null };
+  const [page, query] = window.location.hash.slice(2).split('?');
+  return ['home', 'inbox', 'my-tasks', 'notifications', 'capi', 'activity', 'settings', 'profile', 'help'].includes(page) ? { moduleId: 21, page, inboxId: new URLSearchParams(query).get('message') } : null;
 }
 
 function Workspace({ onSignOut }) {
-  const [moduleId, setModuleId] = useState(readRoute);
+  const [route, setRoute] = useState(readRoute);
   const [index, setIndex] = useState(0);
   useEffect(() => {
-    const change = () => setModuleId(readRoute());
+    const change = () => setRoute(readRoute());
     window.addEventListener('hashchange', change);
     return () => window.removeEventListener('hashchange', change);
   }, []);
   const navigate = useCallback(id => {
     window.location.hash = `/moduli/${id}`;
-    setModuleId(id);
+    setRoute({ moduleId: id, page: null });
+  }, []);
+  const openPage = useCallback(page => {
+    window.location.hash = `/${page}`;
+    setRoute(readRoute());
   }, []);
   const rememberIndex = useCallback((_id, nextIndex) => setIndex(nextIndex), []);
-  function home() { window.location.hash = '/moduli'; setModuleId(null); }
-  return moduleId
-    ? <Dashboard moduleId={moduleId} onNavigate={navigate} onHome={home} onSignOut={onSignOut} />
+  function home() { window.location.hash = '/moduli'; setRoute(null); }
+  return route
+    ? <Dashboard moduleId={route.moduleId} workspacePage={route.page} inboxId={route.inboxId} onOpenPage={openPage} onNavigate={navigate} onHome={home} onSignOut={onSignOut} />
     : <ProductPage onSignOut={onSignOut} onEnter={navigate} index={index} onIndexChange={rememberIndex} />;
 }
 

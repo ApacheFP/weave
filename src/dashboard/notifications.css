@@ -1,0 +1,46 @@
+/* The dimensions and structure of Prova1's notification page, using WEAVE's light tokens. */
+.dw-page:has(.dw-notifications-page) { max-width:820px; padding-top:28px; }
+.dw-notifications-page { max-width:820px; margin:0 auto; width:100%; }
+.dw-notifications-heading { display:flex; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:20px; }
+.dw-notifications-heading h2 { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin:0; color:var(--text); font-size:23px; font-weight:600; letter-spacing:-.022em; line-height:1.2; }
+.dw-notifications-heading p { margin:4px 0 0; color:var(--text-2); font-size:13.5px; }
+.dw-notifications-count { display:inline-flex; align-items:center; padding:2px 6px; border-radius:5px; color:var(--accent); background:color-mix(in srgb,var(--accent) 10%,var(--surface)); font-size:11px; font-weight:500; letter-spacing:0; line-height:1.4; }
+.dw-notifications-actions { display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-left:auto; }
+.dw-notifications-filter { display:inline-flex; padding:2px; border-radius:6px; background:var(--surface-3); gap:2px; }
+.dw-notifications-filter > button { display:inline-flex; align-items:center; height:24px; padding:0 9px; border:0; border-radius:5px; background:transparent; color:var(--text-2); font-size:12px; font-weight:500; }
+.dw-notifications-filter > button[aria-pressed="true"] { color:var(--text); background:var(--surface); box-shadow:0 1px 2px #00000014,0 0 0 1px var(--border); }
+.dw-notifications-mark-all { display:inline-flex; align-items:center; justify-content:center; min-height:30px; gap:6px; padding:0 10px; border:1px solid var(--border); border-radius:6px; background:var(--surface); color:var(--text-2); font-size:12px; font-weight:500; }
+.dw-notifications-preferences { display:inline-grid; place-items:center; width:30px; height:30px; padding:0; border:0; border-radius:6px; color:var(--text-3); background:transparent; }
+.dw-notifications-group > h3 { margin:0; padding:14px 0 4px; color:var(--text-3); font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; }
+.dw-notifications-panel { overflow:hidden; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); }
+.dw-notification-row { display:flex; align-items:flex-start; gap:12px; padding:11px 14px; }
+.dw-notification-row + .dw-notification-row { border-top:1px solid var(--divider); }
+.dw-notification-row.unread { background:color-mix(in srgb,var(--accent) 3.5%,transparent); }
+.dw-notification-open { display:flex; align-items:flex-start; flex:1; gap:12px; min-width:0; padding:0; border:0; border-radius:0; background:transparent; text-align:left; color:var(--text); font:inherit; }
+.dw-notification-avatar { display:inline-grid; place-items:center; flex:0 0 26px; width:26px; height:26px; border-radius:50%; background:color-mix(in srgb,var(--accent) 17%,var(--surface)); color:color-mix(in srgb,var(--accent) 55%,var(--text)); font-size:10.4px; font-weight:600; letter-spacing:.01em; line-height:1; box-shadow:0 0 0 1.5px var(--surface); }
+.dw-notification-avatar img { width:100%; height:100%; border-radius:50%; object-fit:cover; }
+.dw-notification-copy { display:flex; flex-direction:column; flex:1; min-width:0; font-size:13px; }
+.dw-notification-title { line-height:1.45; }
+.dw-notification-title strong { font-weight:600; }
+.dw-notification-title > span { color:var(--text-2); }
+.dw-notification-snippet { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:2px; color:var(--text-2); font-size:12.5px; }
+.dw-notification-meta { display:block; margin-top:4px; color:var(--text-3); font-size:11.5px; }
+.dw-notification-dot { flex:0 0 7px; width:7px; height:7px; margin-top:8px; border-radius:50%; background:var(--accent); }
+.dw-notification-toggle { display:inline-grid; place-items:center; flex:0 0 24px; width:24px; height:24px; padding:0; border:0; border-radius:5px; background:transparent; color:var(--text-3); }
+.dw-notifications-empty { display:flex; flex-direction:column; align-items:center; gap:8px; padding:36px 20px; text-align:center; color:var(--text-3); }
+.dw-notifications-empty h3 { margin:0; color:var(--text); font-size:15px; font-weight:600; }
+.dw-notifications-empty p { margin:0 0 4px; font-size:12.5px; }
+@media (hover:hover) {
+  .dw-notification-row:hover,.dw-notifications-mark-all:hover,.dw-notifications-preferences:hover,.dw-notification-toggle:hover { background:var(--surface-2); }
+  .dw-notifications-filter > button:hover { color:var(--text); }
+}
+@media (max-width:760px) {
+  .dw-page:has(.dw-notifications-page) { padding-top:20px; }
+  .dw-notifications-heading h2 { font-size:19px; }
+  .dw-notifications-actions { margin-left:0; width:100%; }
+}
+@media (hover:none) {
+  .dw-notifications-mark-all,.dw-notifications-preferences,.dw-notification-toggle { min-height:40px; }
+  .dw-notification-toggle,.dw-notifications-preferences { min-width:40px; }
+  .dw-notifications-filter > button { min-height:36px; }
+}

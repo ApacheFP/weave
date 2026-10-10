@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { useDemo } from './dashboard/DemoContext.jsx';
+import './dashboard/account-pages.css';
 
 const initialProfile = { firstName: 'Alex', lastName: 'Rossi', email: 'demo@weave.it' };
 const avatar = '/illustrations/profile-avatar.webp';
@@ -12,20 +13,22 @@ function Icon({ name }) {
     close: <path d="m6 6 12 12M6 18 18 6" />,
     back: <path d="m14 6-6 6 6 6" />,
     chevron: <path d="m9 6 6 6-6 6" />,
+    chevrons: <path d="m9 8 3-3 3 3m-6 8 3 3 3-3" />,
   };
   return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">{paths[name]}</svg>;
 }
 
-export default function ProfileMenu({ onSignOut }) {
+export default function ProfileMenu({ onSignOut, sidebar = false, compact = false, collapsed = false, onSettings, onProfile }) {
   const [view, setView] = useState(null);
   const [transition, setTransition] = useState('');
-  const { data, commit } = useDemo();
+  const { data, commit, preferences, updatePreferences } = useDemo();
+  const panelId = useId();
   const profile = data.profile;
   const [draft, setDraft] = useState(initialProfile);
-  const moduleAlerts = data.moduleAlerts ?? true;
-  const productNews = data.productNews ?? false;
-  const setModuleAlerts = value => commit(previous => ({ moduleAlerts: typeof value === 'function' ? value(previous.moduleAlerts ?? true) : value }));
-  const setProductNews = value => commit(previous => ({ productNews: typeof value === 'function' ? value(previous.productNews ?? false) : value }));
+  const moduleAlerts = preferences?.moduleAlerts ?? data.moduleAlerts ?? true;
+  const productNews = preferences?.productNews ?? data.productNews ?? false;
+  const setModuleAlerts = value => updatePreferences ? updatePreferences({ moduleAlerts: typeof value === 'function' ? value(moduleAlerts) : value }) : commit(previous => ({ moduleAlerts: typeof value === 'function' ? value(previous.moduleAlerts ?? true) : value }));
+  const setProductNews = value => updatePreferences ? updatePreferences({ productNews: typeof value === 'function' ? value(productNews) : value }) : commit(previous => ({ productNews: typeof value === 'function' ? value(previous.productNews ?? false) : value }));
   const [message, setMessage] = useState('');
   const root = useRef(null);
   const trigger = useRef(null);
@@ -95,16 +98,27 @@ export default function ProfileMenu({ onSignOut }) {
     setMessage('Profilo aggiornato nella demo.');
   }
 
+  function openAccountPage(callback, fallback) {
+    if (!callback) {
+      show(fallback);
+      return;
+    }
+    window.clearTimeout(transitionTimer.current);
+    setView(null);
+    setTransition('');
+    callback();
+  }
+
   return (
-    <div className="profile-menu" ref={root}>
-      <button className="profile-trigger" type="button" ref={trigger} aria-label={`Profilo di ${fullName}`} aria-haspopup="dialog" aria-expanded={Boolean(view)} aria-controls={view ? 'profile-panel' : undefined} onClick={() => view ? closePanel(true) : show('menu')}>
-        <img src={avatar} width="36" height="36" alt="" />
+    <div className={`profile-menu${sidebar ? ' dw-profile-sidebar' : ''}${compact ? ' dw-profile-compact' : ''}`} data-collapsed={sidebar && collapsed} ref={root}>
+      <button className="profile-trigger" type="button" ref={trigger} aria-label={`Profilo di ${fullName}`} aria-haspopup="dialog" aria-expanded={Boolean(view)} aria-controls={view ? panelId : undefined} onClick={() => view ? closePanel(true) : show('menu')}>
+        <img src={avatar} width={sidebar ? '26' : '36'} height={sidebar ? '26' : '36'} alt="" />
         <span className="profile-trigger-name">{fullName}</span>
-        <span className="profile-caret" data-open={Boolean(view)}><Icon name="chevron" /></span>
+        <span className="profile-caret" data-open={Boolean(view)}><Icon name={sidebar ? 'chevrons' : 'chevron'} /></span>
       </button>
 
       {view && (
-        <div className={`profile-panel${transition ? ` is-${transition}` : ''}`} id="profile-panel" role="dialog" aria-label={view === 'menu' ? 'Il tuo account' : view === 'profile' ? 'Il tuo profilo' : 'Impostazioni'} ref={panel} inert={transition === 'leaving' || transition === 'closing'}>
+        <div className={`profile-panel${transition ? ` is-${transition}` : ''}`} id={panelId} role="dialog" aria-label={view === 'menu' ? 'Il tuo account' : view === 'profile' ? 'Il tuo profilo' : 'Impostazioni'} ref={panel} inert={transition === 'leaving' || transition === 'closing'}>
           <div className="profile-panel-top">
             {view !== 'menu' ? <button className="profile-icon-button" type="button" aria-label="Torna al menu profilo" onClick={() => show('menu')}><Icon name="back" /></button> : <span className="profile-demo-tag">Account demo</span>}
             <button className="profile-icon-button" type="button" aria-label="Chiudi profilo" onClick={() => closePanel(true)}><Icon name="close" /></button>
@@ -113,8 +127,8 @@ export default function ProfileMenu({ onSignOut }) {
           {view === 'menu' ? <>
             <div className="profile-summary"><img src={avatar} width="52" height="52" alt="Ritratto del profilo demo" /><div><strong>{fullName}</strong><span>{profile.email}</span><small>Designer · WEAVE</small></div></div>
             <div className="profile-actions">
-              <button type="button" onClick={() => show('profile')}><Icon name="user" /><span>Il tuo profilo</span><Icon name="chevron" /></button>
-              <button type="button" onClick={() => show('settings')}><Icon name="settings" /><span>Impostazioni</span><Icon name="chevron" /></button>
+              <button type="button" onClick={() => openAccountPage(onProfile, 'profile')}><Icon name="user" /><span>Il tuo profilo</span><Icon name="chevron" /></button>
+              <button type="button" onClick={() => openAccountPage(onSettings, 'settings')}><Icon name="settings" /><span>Impostazioni</span><Icon name="chevron" /></button>
             </div>
             <button className="profile-signout" type="button" onClick={onSignOut}><Icon name="exit" /><span>Esci da weave</span></button>
           </> : view === 'profile' ? <>

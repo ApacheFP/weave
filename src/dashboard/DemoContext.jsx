@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { collectionDefaults, creativeDefaults } from './creativeData.js';
+import { profileActor, seedWorkspaceData, validTask } from './workspaceData.js';
 
 export const euro = value => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
 export const number = (value, digits = 0) => new Intl.NumberFormat('it-IT', { maximumFractionDigits: digits }).format(value);
@@ -76,7 +77,10 @@ export function totals(data) {
 
 const Context = createContext(null);
 export function DemoProvider({ children }) {
-  const [workspace, setWorkspace] = useState(() => ({ activeId: initial.styleId, collections: { [initial.collection]: collectionDefaults() }, items: [structuredClone(initial), { ...structuredClone(initial), styleId: 'GJ-0422', orderId: 'OP-0422', lotId: 'L-0422-A', fabricLot: 'T-7782', sampleId: 'CAMP-0422-01', title: 'Giacca Studio', variant: 'Sabbia', fabricId: 'premium', fabricPrice: 20, quantity: 600, events: [{ id: 'studio-1', text: 'Inserito il brief: giacca in lana vergine, linea morbida e palette sabbia.', module: 1, time: '08 ott · 14:00', actor: demoActors[0], demo: true }, { id: 'studio-2', text: 'Selezionata la lana vergine TES-024 del Lanificio C, 310 g/m².', module: 3, time: '08 ott · 13:40', actor: demoActors[2], demo: true }, { id: 'studio-3', text: 'Aperta la bozza Giacca Studio nella collezione Autunno/Inverno 2027.', module: 21, time: '08 ott · 13:30', actor: demoActors[0], demo: true }], brief: 'Giacca in lana vergine, linea morbida e palette sabbia. Una proposta sartoriale per il guardaroba quotidiano.' }] }));
+  const [workspace, setWorkspace] = useState(() => {
+    const items = [structuredClone(initial), { ...structuredClone(initial), styleId: 'GJ-0422', orderId: 'OP-0422', lotId: 'L-0422-A', fabricLot: 'T-7782', sampleId: 'CAMP-0422-01', title: 'Giacca Studio', variant: 'Sabbia', fabricId: 'premium', fabricPrice: 20, quantity: 600, events: [{ id: 'studio-1', text: 'Inserito il brief: giacca in lana vergine, linea morbida e palette sabbia.', module: 1, time: '08 ott · 14:00', actor: demoActors[0], demo: true }, { id: 'studio-2', text: 'Selezionata la lana vergine TES-024 del Lanificio C, 310 g/m².', module: 3, time: '08 ott · 13:40', actor: demoActors[2], demo: true }, { id: 'studio-3', text: 'Aperta la bozza Giacca Studio nella collezione Autunno/Inverno 2027.', module: 21, time: '08 ott · 13:30', actor: demoActors[0], demo: true }], brief: 'Giacca in lana vergine, linea morbida e palette sabbia. Una proposta sartoriale per il guardaroba quotidiano.' }];
+    return { activeId: initial.styleId, collections: { [initial.collection]: collectionDefaults() }, items, ...seedWorkspaceData(items, initial.profile) };
+  });
   const data = workspace.items.find(item => item.styleId === workspace.activeId);
   const [notice, setNotice] = useState('');
   const timeout = useRef(null);
@@ -111,8 +115,13 @@ export function DemoProvider({ children }) {
         }
         next.phaseReviews = reviews;
       }
-      if (message) next.events = [{ id: crypto.randomUUID(), text: message, module, time: activityTime(), actor: { name: `${previous.profile.firstName} ${previous.profile.lastName}`, email: previous.profile.email } }, ...previous.events].slice(0, 40);
-      return { ...current, items: current.items.map(item => item.styleId === workspace.activeId ? next : changes.profile ? { ...item, profile: changes.profile } : item) };
+      const actor = profileActor(next.profile);
+      const at = new Date().toISOString();
+      if (message) next.events = [{ id: crypto.randomUUID(), text: message, module, time: activityTime(), at, actor }, ...previous.events].slice(0, 40);
+      const updatedActor = oldActor => changes.profile && oldActor.email === previous.profile.email ? actor : oldActor;
+      const inbox = changes.profile ? current.inbox.map(item => ({ ...item, actor: updatedActor(item.actor), replies: item.replies.map(reply => ({ ...reply, actor: updatedActor(reply.actor) })) })) : current.inbox;
+      const update = message && current.preferences.moduleAlerts && !changes.profile ? { id: crypto.randomUUID(), type: 'update', styleId: next.styleId, moduleId: module, title: `${next.title} · aggiornamento`, body: message, actor, at, read: false, replies: [], demo: true } : null;
+      return { ...current, tasks: changes.profile ? current.tasks.map(task => ({ ...task, assignee: updatedActor(task.assignee) })) : current.tasks, inbox: update ? [update, ...inbox] : inbox, items: current.items.map(item => item.styleId === workspace.activeId ? next : changes.profile ? { ...item, profile: changes.profile } : item) };
     });
     if (message) notify(message);
   }
@@ -122,8 +131,11 @@ export function DemoProvider({ children }) {
       const previous = current.items.find(item => item.styleId === workspace.activeId);
       const collection = current.collections[previous.collection] || collectionDefaults();
       const changes = typeof patch === 'function' ? patch(collection) : patch;
-      const event = message && { id: crypto.randomUUID(), text: message, module: 1, time: activityTime(), actor: { name: `${previous.profile.firstName} ${previous.profile.lastName}`, email: previous.profile.email } };
-      return { ...current, collections: { ...current.collections, [previous.collection]: { ...collection, ...changes } }, items: event ? current.items.map(item => item.styleId === previous.styleId ? { ...item, events: [event, ...item.events].slice(0, 40) } : item) : current.items };
+      const actor = profileActor(previous.profile);
+      const at = new Date().toISOString();
+      const event = message && { id: crypto.randomUUID(), text: message, module: 1, time: activityTime(), at, actor };
+      const update = event && current.preferences.moduleAlerts ? { id: crypto.randomUUID(), type: 'update', styleId: previous.styleId, moduleId: 1, title: `${previous.collection} · direzione creativa`, body: message, actor, at, read: false, replies: [], demo: true } : null;
+      return { ...current, inbox: update ? [update, ...current.inbox] : current.inbox, collections: { ...current.collections, [previous.collection]: { ...collection, ...changes } }, items: event ? current.items.map(item => item.styleId === previous.styleId ? { ...item, events: [event, ...item.events].slice(0, 40) } : item) : current.items };
     });
     if (message) notify(message);
   }
@@ -137,12 +149,57 @@ export function DemoProvider({ children }) {
     const item = { ...structuredClone(copy ? data : initial), title: title.trim(), styleId: code, orderId: 'OP-' + suffix, lotId: 'L-' + suffix + '-A', fabricLot: 'T-' + suffix, sampleId: 'CAMP-' + suffix + '-01', collection: collection.trim(), quantity: Number(quantity), references: [], creative: creativeDefaults(), conceptApproved: false, identityAssigned: false, technical: null, techGenerated: false, sketch: null, sketchFile: null, sketchName: null, chats: {}, aiRuns: {}, phaseReviews: {}, passportPublished: false,
       profile: data.profile, qualityNote: copy ? data.qualityNote.replaceAll(data.lotId, 'L-' + suffix + '-A') : 'Nessuna non conformità registrata sul nuovo capo.',
       ...(copy ? {} : { brief: '', techGenerated: false, sampleApproved: false, sampleChecks: [false, false, false], produced: 0, reworks: 0, qualityScore: 100, qualityResolved: true, productionDays: [], purchaseOrders: [], wholesaleOrders: [], retailSold: 0, shipments: [], lifecycle: [] }),
-      events: [{ id: crypto.randomUUID(), text: 'Creato il capo ' + title.trim(), module: 21, time: activityTime(), actor: { name: `${data.profile.firstName} ${data.profile.lastName}`, email: data.profile.email } }] };
+      events: [{ id: crypto.randomUUID(), text: 'Creato il capo ' + title.trim(), module: 21, time: activityTime(), at: new Date().toISOString(), actor: profileActor(data.profile) }] };
     setWorkspace(current => ({ ...current, activeId: code, items: [...current.items, item] }));
     notify('Capo creato: ' + item.title);
     return true;
   }
-  return <Context.Provider value={{ data, styles: workspace.items.map(({ styleId, title, collection, variant, identityAssigned }) => ({ styleId, title, collection, variant, identityAssigned })), selectStyle, createStyle, commit, notify, collectionData, commitCollection, ...totals(data) }}>{children}<div className="dw-toast" role="status" aria-live="polite">{notice && <span key={notice}>{notice}</span>}</div></Context.Provider>;
+  function updateTask(id, patch) {
+    const previous = workspace.tasks.find(task => task.id === id);
+    if (!previous || !patch || typeof patch !== 'object') return false;
+    const changes = Object.fromEntries(['title', 'styleId', 'moduleId', 'status', 'priority', 'due', 'note'].filter(key => Object.hasOwn(patch, key)).map(key => [key, patch[key]]));
+    if (!Object.keys(changes).length) return false;
+    const next = { ...previous, ...changes };
+    if (!validTask(next, workspace.items)) return false;
+    next.title = next.title.trim();
+    setWorkspace(current => ({ ...current, tasks: current.tasks.map(task => task.id === id ? { ...task, ...changes, title: next.title } : task) }));
+    notify(next.status !== previous.status ? `Attività ${next.status === 'Completata' ? 'completata' : 'aggiornata'}` : 'Attività aggiornata');
+    return true;
+  }
+  function createTask(input) {
+    if (!input || typeof input !== 'object') return false;
+    const task = { id: crypto.randomUUID(), title: input.title, styleId: input.styleId, moduleId: input.moduleId, due: input.due, priority: input.priority ?? 'Media', note: input.note ?? '', status: input.status ?? 'Da fare', assignee: profileActor(data.profile), demo: true };
+    if (!validTask(task, workspace.items)) return false;
+    task.title = task.title.trim();
+    setWorkspace(current => {
+      const profile = current.items.find(item => item.styleId === current.activeId).profile;
+      const actor = profileActor(profile);
+      const assignment = { id: crypto.randomUUID(), type: 'assign', styleId: task.styleId, moduleId: task.moduleId, title: `Nuova attività: ${task.title}`, body: task.note || 'Attività aggiunta alla tua lista.', actor, at: new Date().toISOString(), read: false, replies: [], demo: true };
+      return { ...current, tasks: [{ ...task, assignee: actor }, ...current.tasks], inbox: [assignment, ...current.inbox] };
+    });
+    notify('Attività creata');
+    return true;
+  }
+  function markInboxRead(id, read = true) {
+    setWorkspace(current => ({ ...current, inbox: current.inbox.map(item => item.id === id ? { ...item, read: Boolean(read) } : item) }));
+  }
+  function markAllInboxRead() {
+    setWorkspace(current => ({ ...current, inbox: current.inbox.map(item => ({ ...item, read: true })) }));
+    notify('Inbox segnata come letta');
+  }
+  function replyInbox(id, body) {
+    if (typeof body !== 'string' || !body.trim() || body.trim().length > 2000 || !workspace.inbox.some(item => item.id === id)) return false;
+    const reply = { id: crypto.randomUUID(), body: body.trim(), actor: profileActor(data.profile), at: new Date().toISOString() };
+    setWorkspace(current => ({ ...current, inbox: current.inbox.map(item => item.id === id ? { ...item, read: true, replies: [...item.replies, reply] } : item) }));
+    notify('Risposta salvata nella demo');
+    return true;
+  }
+  function updatePreferences(patch) {
+    const changes = Object.fromEntries(['moduleAlerts', 'productNews'].filter(key => typeof patch?.[key] === 'boolean').map(key => [key, patch[key]]));
+    setWorkspace(current => ({ ...current, preferences: { ...current.preferences, ...changes } }));
+    notify('Preferenze salvate');
+  }
+  return <Context.Provider value={{ data, workspaceItems: workspace.items, tasks: workspace.tasks, inbox: workspace.inbox, preferences: workspace.preferences, updateTask, createTask, markInboxRead, markAllInboxRead, replyInbox, updatePreferences, styles: workspace.items.map(({ styleId, title, collection, variant, identityAssigned }) => ({ styleId, title, collection, variant, identityAssigned })), selectStyle, createStyle, commit, notify, collectionData, commitCollection, ...totals(data) }}>{children}<div className="dw-toast" role="status" aria-live="polite">{notice && <span key={notice}>{notice}</span>}</div></Context.Provider>;
 }
 export const useDemo = () => useContext(Context);
 

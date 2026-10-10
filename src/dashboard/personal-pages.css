@@ -1,0 +1,192 @@
+.dw-personal { min-width: 0; }
+.dw-personal-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.dw-personal-heading h2 { margin: 0; color: var(--text); font-size: 19px; line-height: 1.25; letter-spacing: -.015em; font-weight: 600; }
+.dw-personal-heading p { margin: 5px 0 0; color: var(--text-3); font-size: 12.5px; }
+.dw-personal-heading-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.dw-personal-caption { margin: 12px 0 0; color: var(--text-3); font-size: 11px; line-height: 1.5; }
+.dw-personal-count { color: var(--text-3); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.dw-personal-avatar { display: inline-grid; place-items: center; flex: 0 0 26px; width: 26px; height: 26px; overflow: hidden; border-radius: 50%; background: color-mix(in srgb,var(--actor-color,#8b84bd) 17%,var(--surface)); color: color-mix(in srgb,var(--actor-color,#8b84bd) 55%,var(--text)); font-size: 10px; font-weight: 600; letter-spacing: .01em; line-height: 1; }
+.dw-personal-avatar img { width: 100%; height: 100%; object-fit: cover; }
+/* Inbox follows Prova 1's secondary sidebar and full-height preview. */
+.dw-inbox-page { display: flex; flex: 1; min-height: 0; width: 100%; height: 100%; }
+.dw-inbox-workspace { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); flex: 1; min-height: 0; min-width: 0; background: var(--bg); }
+.dw-inbox-master { display: flex; flex-direction: column; min-width: 0; min-height: 0; border-right: 1px solid var(--border); }
+.dw-inbox-master-heading { display: flex; align-items: center; gap: 8px; padding: 18px 24px 0; }
+.dw-inbox-master-heading h2 { flex: 1; font-size: 19px; margin: 0; font-weight: 600; letter-spacing: -.015em; }
+.dw-inbox-unread-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-2); cursor: pointer; white-space: nowrap; }
+.dw-app .dw-inbox-unread-toggle input[type=checkbox] { appearance: none; width: 30px; height: 18px; flex: 0 0 30px; margin: 0; border: 0; border-radius: 9px; background: var(--border-strong); position: relative; cursor: pointer; }
+.dw-inbox-unread-toggle input::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px #0003; transition: transform var(--dur); }
+.dw-app .dw-inbox-unread-toggle input:checked { background: var(--accent); }
+.dw-inbox-unread-toggle input:checked::after { transform: translateX(12px); }
+.dw-inbox-unread-toggle input:focus-visible { outline: 2px solid var(--text-3); outline-offset: 3px; }
+.dw-inbox-mark-all,.dw-inbox-read,.dw-inbox-back { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 0; border: 0; background: none; color: var(--text-2); border-radius: 5px; }
+.dw-inbox-mark-all,.dw-inbox-back { width: 26px; height: 26px; }
+.dw-inbox-mark-all:disabled { opacity: .4; cursor: default; }
+.dw-inbox-categories { display: flex; gap: 16px; padding: 0 24px; margin-top: 8px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; flex-shrink: 0; }
+.dw-inbox-categories::-webkit-scrollbar,.dw-inbox-list::-webkit-scrollbar { display: none; }
+.dw-inbox-categories button { position: relative; height: 36px; padding: 0; display: inline-flex; align-items: center; gap: 6px; font: 500 12.5px var(--font); color: var(--text-2); border: 0; border-radius: 0; background: none; white-space: nowrap; flex-shrink: 0; }
+.dw-inbox-categories button[aria-selected=true] { color: var(--text); }
+.dw-inbox-categories button[aria-selected=true]::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px; background: var(--text); }
+.dw-inbox-categories button > span { color: var(--text-3); font-size: 11px; font-weight: 500; }
+.dw-inbox-list { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+.dw-inbox-row { position: relative; display: flex; align-items: flex-start; gap: 10px; padding: 12px 24px; border-bottom: 1px solid var(--divider); }
+.dw-inbox-row.selected { background: var(--surface-2); }
+.dw-inbox-item { display: flex; align-items: flex-start; gap: 10px; flex: 1; min-width: 0; padding: 0; border: 0; background: none; color: var(--text); text-align: left; }
+.dw-inbox-item-copy { display: block; flex: 1; min-width: 0; font-size: 13px; line-height: 1.45; }
+.dw-inbox-item-title { display: block; }
+.dw-inbox-item-title strong { font-weight: 600; }
+.dw-inbox-item-title > span { color: var(--text-2); }
+.dw-inbox-unread-dot { position: absolute; left: 6px; top: 22px; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+.dw-inbox-item-snippet { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; color: var(--text-2); font-size: 12.5px; }
+.dw-inbox-item-meta { display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 11.5px; color: var(--text-3); }
+.dw-inbox-item-meta > span:first-of-type { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dw-inbox-item-meta time { white-space: nowrap; flex-shrink: 0; }
+.dw-inbox-item-meta i,.dw-inbox-product-dot { width: 6px; height: 6px; flex-shrink: 0; border-radius: 3px; background: #918276; }
+.dw-inbox-read { width: 22px; height: 22px; }
+.dw-inbox-preview { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; background: var(--bg); }
+.dw-inbox-preview:focus { outline: none; }
+.dw-inbox-preview-bar { display: flex; align-items: center; gap: 8px; height: 46px; padding: 0 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.dw-inbox-preview-bar > span:not(.dw-inbox-product-dot) { color: var(--text-2); font-size: 12.5px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dw-inbox-preview-bar > small { color: var(--text-3); font-size: 11px; font-family: var(--mono); }
+.dw-inbox-preview-bar > .dw-btn { margin-left: auto; white-space: nowrap; height: 26px; min-height: 26px; font-size: 12px; }
+.dw-inbox-conversation { padding: 24px 28px; max-width: 720px; width: 100%; }
+.dw-inbox-conversation > h3 { font-size: 19px; line-height: 1.4; font-weight: 600; letter-spacing: -.015em; margin: 0 0 10px; overflow-wrap: anywhere; }
+.dw-inbox-conversation-module { margin: 0 0 18px; color: var(--text-3); font-size: 12.5px; }
+.dw-inbox-message { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px; }
+.dw-inbox-message > div { flex: 1; min-width: 0; }
+.dw-inbox-message-meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+.dw-inbox-message-meta strong { font-size: 12.5px; font-weight: 500; }
+.dw-inbox-message-meta time { font-size: 11px; color: var(--text-3); }
+.dw-inbox-message p { margin: 7px 0 0; color: var(--text-2); font-size: 13px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.dw-inbox-composer { margin-top: 10px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.dw-inbox-composer textarea { width: 100%; }
+.dw-inbox-composer > div { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.dw-inbox-composer > div > span { color: var(--text-3); font-size: 11.5px; }
+.dw-inbox-feedback { margin: 8px 0 0; font-size: 11.5px; color: var(--text-2); }
+.dw-inbox-feedback:empty { display: none; }
+.dw-inbox-start { display: flex; align-items: center; justify-content: center; flex-direction: column; flex: 1; padding: 40px 20px; text-align: center; color: var(--text-4); }
+.dw-inbox-start h3,.dw-inbox-list-empty h3 { margin: 10px 0 6px; font-size: 14.5px; font-weight: 600; color: var(--text); }
+.dw-inbox-start p,.dw-inbox-list-empty p { margin: 0 0 10px; max-width: 340px; font-size: 12.5px; line-height: 1.5; color: var(--text-2); }
+.dw-inbox-list-empty { padding: 28px 16px; display: flex; flex-direction: column; align-items: center; text-align: center; color: var(--text-4); }
+/* My Tasks uses the full-width list proportions from Prova 1. */
+.dw-task-page-heading { padding: 24px 24px 12px; margin: 0; }
+.dw-task-page-heading h2 { font-size: 23px; line-height: 1.2; letter-spacing: -.022em; }
+.dw-task-page-heading p { margin-top: 4px; font-size: 13.5px; color: var(--text-2); }
+.dw-task-page-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dw-task-view { display: inline-flex; padding: 2px; border-radius: 6px; background: var(--surface-3); gap: 2px; }
+.dw-task-view button { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px; border: 0; border-radius: 5px; font: 500 12px var(--font); color: var(--text-2); background: none; }
+.dw-task-view button[aria-pressed=true] { color: var(--text); background: var(--surface); box-shadow: 0 1px 3px #00000012; }
+.dw-personal-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.dw-task-page-toolbar { padding: 0 24px 12px; border-bottom: 1px solid var(--border); }
+.dw-personal-search { display: flex; position: relative; align-items: center; width: 200px; max-width: 100%; }
+.dw-personal-search > .dw-icon { position: absolute; left: 9px; color: var(--text-3); pointer-events: none; }
+.dw-app .dw-personal-search > input:not([type=range]):not([type=checkbox]):not([type=file]) { width: 100%; padding: 4px 9px 4px 29px; min-height: 28px; height: 28px; border-radius: 6px; font-size: 12px; background: transparent; }
+.dw-task-popover-anchor { position: relative; }
+.dw-task-toolbar-button { display: flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 5px; background: none; border: 0; border-radius: 5px; font: 400 12px var(--font); color: var(--text-2); }
+.dw-task-toolbar-button > span { font-size: 10px; background: var(--surface-3); padding: 1px 4px; border-radius: 3px; }
+.dw-task-toolbar-popover { position: absolute; top: calc(100% + 6px); left: 0; z-index: 5; display: flex; flex-direction: column; gap: 12px; width: 240px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow-popover); }
+.dw-task-toolbar-popover select { width: 100%; }
+.dw-task-sort-popover { width: 160px; gap: 2px; padding: 5px; }
+.dw-task-sort-popover > button { display: flex; justify-content: space-between; align-items: center; border: 0; background: none; border-radius: 5px; padding: 7px 8px; color: var(--text-2); font-size: 12px; text-align: left; }
+.dw-task-sort-popover > button[aria-pressed=true] { background: var(--surface-2); color: var(--text); }
+.dw-personal-task-wrap { padding: 0 24px 90px; border: 0; border-radius: 0; background: transparent; }
+.dw-app .dw-personal-task-table { min-width: 780px; table-layout: fixed; }
+.dw-personal-task-table thead th { height: 32px; background: transparent; font-size: 12px; color: var(--text-3); padding: 0 8px; }
+.dw-personal-task-table thead th:first-child { padding-left: 48px; }
+.dw-app .dw-personal-task-table td { height: 32px; min-height: 32px; padding: 0 8px; font-size: 12px; }
+.dw-personal-task-table td:first-child { padding-left: 0; }
+.dw-personal-task-table .dw-task-group-space td { height: 10px; min-height: 10px; padding: 0; border: 0; }
+.dw-personal-task-table .dw-task-group th { height: 36px; padding: 0; border-bottom: 1px solid var(--border); background: transparent; }
+.dw-task-group th > div { display: flex; align-items: center; gap: 8px; }
+.dw-task-group button { display: inline-flex; align-items: center; gap: 8px; height: 36px; background: none; border: 0; padding: 0; color: var(--text-2); font-size: 12.5px; font-weight: 600; text-align: left; }
+.dw-task-group button.dw-task-group-add { width: 22px; height: 22px; justify-content: center; opacity: .6; }
+.dw-task-group-chevron { display: flex; width: 22px; justify-content: center; transform: rotate(180deg); }
+.dw-task-group-chevron[data-open=true] { transform: rotate(-90deg); }
+.dw-task-group .dw-personal-count { font-size: 12.5px; font-weight: 500; }
+.dw-task-title-cell { display: flex; align-items: center; min-width: 0; }
+.dw-task-complete-control { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 30px; height: 32px; cursor: pointer; }
+.dw-app .dw-task-complete-control input[type=checkbox] { appearance: none; width: 15px; height: 15px; margin: 0; border: 1.5px solid var(--border-strong); border-radius: 50%; display: inline-grid; place-content: center; background: transparent; cursor: pointer; }
+.dw-app .dw-task-complete-control input:checked { border-color: var(--accent); background: var(--accent); }
+.dw-task-complete-control input:checked::after { content: ''; width: 7px; height: 4px; border-left: 1.5px solid white; border-bottom: 1.5px solid white; transform: rotate(-45deg) translateY(-1px); }
+.dw-task-complete-control input:focus-visible { outline: 2px solid var(--text-3); outline-offset: 3px; }
+.dw-task-title-cell > button { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; height: 32px; padding: 0 0 0 18px; border: 0; background: none; text-align: left; }
+.dw-task-key { font: 11px var(--mono); color: var(--text-3); flex-shrink: 0; }
+.dw-personal-task-table .dw-task-title-cell strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13.5px; font-weight: 400; }
+.dw-task-completed .dw-task-title-cell strong { color: var(--text-3); text-decoration: line-through; }
+.dw-task-style-link { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; background: none; border: 0; padding: 0; color: var(--text-2); font-size: 12px; }
+.dw-task-style-link i { flex-shrink: 0; width: 6px; height: 6px; border-radius: 3px; background: #918276; }
+.dw-task-style-link span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dw-task-status-cell { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.dw-task-status-dot { flex-shrink: 0; width: 10px; height: 10px; border: 1.5px solid var(--text-4); border-radius: 50%; }
+.dw-task-status-dot[data-status="In corso"] { border-color: #ad8c45; background: linear-gradient(to right,#ad8c45 50%,transparent 50%); }
+.dw-task-status-dot[data-status="Completata"] { border-color: #68886e; background: #68886e; }
+.dw-app .dw-personal-task-table select { min-width: 0; max-width: 100%; height: 26px; min-height: 26px; padding: 0 3px; border: 0; background: transparent; border-radius: 5px; font-size: 12px; appearance: none; }
+.dw-task-priority { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-size: 12px; }
+.dw-task-priority i { width: 7px; height: 7px; border-radius: 2px; background: var(--text-4); }
+.dw-task-priority[data-priority=Alta] i { background: #af594a; }
+.dw-task-priority[data-priority=Media] i { background: #ad8c45; }
+.dw-personal-task-table time { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.dw-task-overdue { color: #a54737; }
+.dw-personal-task-table .dw-task-add-row td { padding: 0; height: 34px; }
+.dw-personal-task-table tbody .dw-task-add-row:last-child td { border-bottom: 1px solid var(--divider); }
+.dw-task-add-row button { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px 0 2px; width: 100%; border: 0; background: none; color: var(--text-3); font-size: 12.5px; text-align: left; }
+.dw-new-task-form { display: flex; flex-direction: column; gap: 14px; }
+.dw-new-task-form .dw-field > :is(input, textarea, select) { width: 100%; }
+.dw-new-task-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.dw-tasks-calendar { padding: 0 24px 24px; }
+.dw-calendar-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; }
+.dw-calendar-heading h3 { margin: 0; font-size: 16px; font-weight: 600; text-transform: capitalize; }
+.dw-calendar-heading > div { display: flex; align-items: center; gap: 4px; }
+.dw-calendar-heading > div > button:not(.dw-btn) { display: grid; place-items: center; width: 26px; height: 26px; border: 0; border-radius: 5px; background: none; color: var(--text-2); }
+.dw-calendar-heading > div > button:last-child svg { transform: rotate(180deg); }
+.dw-calendar-week,.dw-calendar-grid { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); }
+.dw-calendar-week { border-bottom: 1px solid var(--border); }
+.dw-calendar-week > span { padding: 8px 10px; font-size: 12px; font-weight: 500; color: var(--text-3); }
+.dw-calendar-grid { grid-auto-rows: minmax(112px,1fr); }
+.dw-calendar-day { position: relative; display: flex; flex-direction: column; gap: 3px; min-width: 0; padding: 6px; border-right: 1px solid var(--divider); border-bottom: 1px solid var(--divider); }
+.dw-calendar-day:nth-child(7n) { border-right: 0; }
+.dw-calendar-day.outside { background: var(--sunken); }
+.dw-calendar-day-number { display: grid; place-items: center; width: 22px; height: 22px; font-size: 12px; font-weight: 500; color: var(--text-2); border-radius: 50%; }
+.dw-calendar-day.today .dw-calendar-day-number { background: var(--accent); color: var(--on-accent); }
+.dw-calendar-add { position: absolute; top: 5px; right: 5px; width: 22px; height: 22px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 5px; background: none; color: var(--text-3); opacity: 0; }
+.dw-calendar-add:focus-visible { opacity: 1; }
+.dw-calendar-task { display: flex; align-items: center; gap: 5px; width: 100%; min-width: 0; height: 22px; padding: 0 6px; border: 1px solid var(--border); border-radius: 5px; background: var(--surface-2); color: var(--text); font-size: 12px; text-align: left; }
+.dw-calendar-task > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dw-calendar-task .dw-task-status-dot { width: 7px; height: 7px; }
+.dw-calendar-task.completed { opacity: .55; }
+.dw-calendar-task.completed > span:last-child { text-decoration: line-through; }
+.dw-calendar-undated { font-size: 12px; color: var(--text-3); margin: 14px 0 0; }
+@media (hover:hover) {
+  .dw-inbox-row:hover,.dw-inbox-read:hover,.dw-inbox-back:hover,.dw-inbox-mark-all:not(:disabled):hover,.dw-task-toolbar-button:hover,.dw-task-sort-popover > button:hover,.dw-task-add-row button:hover,.dw-calendar-heading button:hover { background: var(--surface-2); }
+  .dw-task-title-cell button:hover strong { text-decoration: underline; }
+  .dw-task-group:hover .dw-task-group-add { opacity: 1; }
+  .dw-calendar-day:hover .dw-calendar-add { opacity: 1; }
+}
+@media (hover:none) {
+  .dw-inbox-read,.dw-inbox-mark-all,.dw-inbox-back { min-height: 40px; min-width: 30px; }
+  .dw-task-complete-control,.dw-task-title-cell > button,.dw-app .dw-personal-task-table select { min-height: 40px; }
+  .dw-calendar-add { opacity: 1; }
+}
+@media (max-width:900px) {
+  .dw-inbox-workspace { display: flex; flex-direction: column; }
+  .dw-inbox-master { flex: 1; border-right: 0; }
+  .dw-inbox-preview { display: none; flex: 1; }
+  .dw-inbox-workspace.has-selection .dw-inbox-master { display: none; }
+  .dw-inbox-workspace.has-selection .dw-inbox-preview { display: flex; }
+}
+@media (max-width:560px) {
+  .dw-inbox-master-heading { padding-inline: 16px; }
+  .dw-inbox-categories { padding-inline: 16px; gap: 12px; }
+  .dw-inbox-row { padding-inline: 16px; }
+  .dw-inbox-conversation { padding: 24px 16px; }
+  .dw-inbox-preview-bar > small { display: none; }
+  .dw-task-page-heading { padding: 20px 16px 12px; }
+  .dw-task-page-toolbar { padding-inline: 16px; gap: 8px; }
+  .dw-personal-task-wrap { padding-inline: 16px; }
+  .dw-new-task-pair { grid-template-columns: minmax(0,1fr); }
+  .dw-task-toolbar-popover { width: 210px; }
+  .dw-task-sort-popover { width: 150px; }
+  .dw-tasks-calendar { padding-inline: 16px; }
+  .dw-calendar-scroll { overflow-x: auto; }
+  .dw-calendar-week,.dw-calendar-grid { min-width: 620px; }
+}

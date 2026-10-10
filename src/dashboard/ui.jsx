@@ -27,6 +27,12 @@ export function Icon({ name = 'grid', size = 20 }) {
     activity: <path d="M2 12h5l3-8 4 16 3-8h5" />,
     list: <><path d="M9 6h12M9 12h12M9 18h12" /><circle cx="4" cy="6" r=".5" /><circle cx="4" cy="12" r=".5" /><circle cx="4" cy="18" r=".5" /></>,
     eye: <><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></>,
+    inbox: <><path d="M4 4h16l2 9v7H2v-7l2-9Z" /><path d="M2 13h6l2 3h4l2-3h6" /></>,
+    bell: <><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4" /></>,
+    settings: <><path d="m9 3-1 3-3 1v3l-2 2 2 2v3l3 1 1 3h6l1-3 3-1v-3l2-2-2-2V7l-3-1-1-3H9Z" /><circle cx="12" cy="12" r="3" /></>,
+    help: <><circle cx="12" cy="12" r="9" /><path d="M9.5 8a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4m0 4h.01" /></>,
+    filter: <><path d="M3 4h18l-7 8v7l-4 2v-9L3 4Z" /></>,
+    sort: <><path d="M8 4v16m-3-3 3 3 3-3M16 20V4m-3 3 3-3 3 3" /></>,
   };
   return <svg className="dw-icon" width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">{paths[name] || paths.layers}</svg>;
 }
