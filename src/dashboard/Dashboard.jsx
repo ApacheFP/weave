@@ -38,7 +38,7 @@ export default function Dashboard({ moduleId, onNavigate, onHome, onSignOut }) {
   const [view, setView] = useState('workspace'); const [tab, setTab] = useState('work'); const page = useRef(null);
   const Content = components[moduleId];
   useEffect(() => { setService(null); setChat(false); setMenu(false); setView('workspace'); setTab('work'); page.current?.focus({ preventScroll: true }); window.scrollTo(0, 0); }, [moduleId, data.styleId]);
-  useEffect(() => { const key = e => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); setSearch(true); } if (e.key === 'Escape') setMenu(false); }; document.addEventListener('keydown', key); return () => document.removeEventListener('keydown', key); }, []);
+  useEffect(() => { const key = e => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); setSearch(true); } if (e.key === 'Escape') { setMenu(false); setChat(false); } }; document.addEventListener('keydown', key); return () => document.removeEventListener('keydown', key); }, []);
   function navigate(id) { setMenu(false); setView('workspace'); setTab('work'); onNavigate(id); }
   function created() { setCreate(false); navigate(21); }
   return <div className={`dw-app ${collapsed ? 'dw-collapsed' : ''}`} data-module={moduleId}>
@@ -47,13 +47,24 @@ export default function Dashboard({ moduleId, onNavigate, onHome, onSignOut }) {
     <div className="dw-layout">{menu && <button className="dw-nav-scrim" onClick={() => setMenu(false)} aria-label="Chiudi navigazione" />}
       <aside className={`dw-sidebar ${menu ? 'open' : ''}`} id="workspace-nav"><div className="dw-sidebar-top"><StyleSwitcher onCreate={() => setCreate(true)} onSelect={() => navigate(21)} /></div><div className="dw-side-scroll"><nav className="dw-nav-quick" aria-label="Spazio di lavoro"><button title="Home" aria-current={view === 'workspace' && moduleId === 21 ? 'page' : undefined} onClick={() => navigate(21)}><Icon name="home" size={16} /><span>Home</span></button><button aria-current={view === 'styles' ? 'page' : undefined} onClick={() => { setView('styles'); setMenu(false); }}><Icon name="shirt" size={16} /><span>Capi</span></button><button onClick={() => setCreate(true)}><Icon name="plus" size={16} /><span>Nuovo capo</span></button></nav><nav aria-label="Moduli della filiera">{[['Sviluppo prodotto', [1, 2, 3, 4, 5, 6, 7]], ['Operazioni', [9, 10, 11, 12, 13]], ['Identità e intelligence', [19, 22]]].map(([label, ids]) => <div className="dw-nav-group" key={label}><span>{label}</span>{ids.map(id => <button key={id} title={shortNames[id]} aria-current={view === 'workspace' && moduleId === id ? 'page' : undefined} onClick={() => navigate(id)}><Icon name={moduleIcons[id]} size={16} /><span>{shortNames[id]}</span>{id === 11 && data.purchaseOrders.some(o => o.status === 'In ritardo') && <i className="dw-nav-dot" />}</button>)}</div>)}</nav></div><div className="dw-sidebar-bottom"><button className="dw-back-carousel" onClick={onHome} title="Torna al carosello"><Icon name="back" size={16} /><span>Torna al carosello</span></button><button className="dw-icon-btn dw-collapse" aria-label={collapsed ? 'Espandi sidebar' : 'Riduci sidebar'} onClick={() => setCollapsed(!collapsed)}><Icon name="panel" size={16} /></button></div></aside>
       <div className="dw-main"><main id="module-workspace" ref={page} tabIndex={-1} className="dw-page"><h1 className="sr-only">{view === 'styles' ? 'Capi in Atelier' : shortNames[moduleId]}</h1>
-        {view === 'workspace' && <div className="dw-workspace-toolbar"><div className="dw-page-tabs" role="tablist" aria-label="Viste del modulo">{[['work', 'Panoramica', moduleId === 21 ? 'home' : 'grid'], ['activity', 'Attività', 'activity']].map(([id, label, icon]) => <button key={id} role="tab" id={`view-${id}`} aria-selected={tab === id} aria-controls="dashboard-view" onClick={() => setTab(id)}><Icon name={icon} size={15} />{label}</button>)}</div><Button icon="chat" onClick={() => setChat(true)}>Assistente</Button></div>}
+        {view === 'workspace' && <div className="dw-workspace-toolbar"><div className="dw-page-tabs" role="tablist" aria-label="Viste del modulo">{[['work', 'Panoramica', moduleId === 21 ? 'home' : 'grid'], ['activity', 'Attività', 'activity']].map(([id, label, icon]) => <button key={id} role="tab" id={`view-${id}`} aria-selected={tab === id} aria-controls="dashboard-view" onClick={() => setTab(id)}><Icon name={icon} size={15} />{label}</button>)}</div></div>}
         <div className="dw-page-content" id="dashboard-view" role={view === 'workspace' ? 'tabpanel' : undefined} aria-labelledby={view === 'workspace' ? `view-${tab}` : undefined} key={`${moduleId}-${data.styleId}-${view}-${tab}`}><PageBoundary>{view === 'styles' ? <StylesPage onCreate={() => setCreate(true)} onOpen={() => navigate(21)} /> : tab === 'activity' ? <ActivityPage moduleId={moduleId} onNavigate={navigate} onService={setService} /> : <Content onNavigate={navigate} onService={setService} onActivity={() => setTab('activity')} />}</PageBoundary></div>
       </main><footer className="dw-footer"><span>Atelier <i>/</i> {data.title}</span><span className="dw-code">{data.identityAssigned ? data.styleId : 'Bozza'}<span>·</span><span>Dati dimostrativi</span></span></footer></div>
     </div>
     {create && <CreateStyleDialog onClose={() => setCreate(false)} onCreated={created} />}
     {search && <WorkspaceSearch onNavigate={navigate} onClose={() => setSearch(false)} />}
     {service && <Dialog wide title={modules.find(m => m.id === service).title} note={`${shortNames[moduleId]} · ${data.title} / ${data.styleId}`} onClose={() => setService(null)}><ServiceContent serviceId={service} moduleId={moduleId} /></Dialog>}
-    {chat && <Dialog wide title="Assistente weave" note={`${shortNames[moduleId]} · ${data.title} / ${data.styleId}`} onClose={() => setChat(false)}><Assistant key={`${moduleId}-${data.styleId}`} moduleId={moduleId} embedded /></Dialog>}
+    <div className="dw-assistant-dock">
+      {chat && <section id="weave-assistant-panel" className="dw-assistant-panel" role="dialog" aria-label="Assistente weave" aria-modal="false"><Assistant key={`${moduleId}-${data.styleId}`} moduleId={moduleId} embedded onClose={() => setChat(false)} /></section>}
+      <div className="dw-assistant-launcher-row">
+        <button className={`dw-assistant-launcher ${chat ? 'is-open' : ''}`} type="button" aria-expanded={chat} aria-controls={chat ? 'weave-assistant-panel' : undefined} onClick={() => setChat(open => !open)}>
+          <span className="dw-assistant-launcher-copy"><small>Hai un dubbio?</small><strong>{chat ? 'Chiudi Filo' : 'Chiedi a Filo'}</strong></span>
+          <Icon name={chat ? 'close' : 'arrow'} size={17} />
+        </button>
+        <button className="dw-assistant-filo" type="button" aria-label={chat ? 'Chiudi Filo' : 'Apri l’assistente Filo'} aria-expanded={chat} aria-controls={chat ? 'weave-assistant-panel' : undefined} onClick={() => setChat(open => !open)}>
+          <img src="/mascot-filo.png" alt="" />
+        </button>
+      </div>
+    </div>
   </div>;
 }

@@ -294,10 +294,12 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-chat { display: flex; flex-direction: column; min-width: 0; height: min(680px, calc(100svh - 220px)); min-height: 450px; border: 1px solid #dad7d0; background: #fff; border-radius: var(--radius); overflow: hidden; }
 .dw-chat.embedded { height: min(630px, calc(100svh - 200px)); min-height: 340px; }
 .dw-chat-top { display: flex; gap: 12px; align-items: center; padding: 19px 22px; border-bottom: 1px solid #e9e7e2; }
-.dw-assistant-mark { background: #dad7d0; border-radius: var(--radius); width: 37px; height: 37px; display: grid; place-items: center; color: #57544e; }
+.dw-assistant-mark { background: #f3eadb; border-radius: var(--radius); width: 37px; height: 37px; display: grid; place-items: center; color: #57544e; overflow: hidden; flex: 0 0 auto; }
+.dw-assistant-mark img { width: 31px; height: 31px; object-fit: contain; }
 .dw-chat-top strong { font-size: 12px; font-weight: 550; }
 .dw-chat-top p { margin: 5px 0 0; font-size: 11px; color: #6b6760; }
 .dw-chat-top .dw-badge { margin-left: auto; }
+.dw-chat-close { flex: 0 0 auto; }
 .dw-chat-messages { flex: 1; overflow-y: auto; padding: 25px; overscroll-behavior: contain; min-height: 0; }
 .dw-chat-welcome { display: flex; align-items: center; flex-direction: column; justify-content: center; min-height: 100%; text-align: center; padding: 10px 20px; }
 .dw-chat-welcome > .dw-icon { color: #6b6760; }
@@ -317,6 +319,32 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-app .dw-chat-compose textarea { flex: 1; border: 0; background: transparent; box-shadow: none; resize: none; font-size: 12px; padding: 0; }
 .dw-chat-compose > button { width: 37px; height: 37px; align-self: end; background: #1d1c1a; color: #dad7d0; border: 0; border-radius: var(--radius); display: grid; place-items: center; }
 .dw-chat-note { margin: 10px 20px 15px; text-align: center; font-size: 11px; color: #6b6760; }
+.dw-assistant-dock { position: fixed; z-index: 55; right: 24px; bottom: 22px; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+.dw-assistant-launcher-row { display: flex; align-items: center; gap: 10px; }
+.dw-assistant-launcher { display: flex; align-items: center; justify-content: space-between; gap: 15px; width: 220px; min-height: 70px; padding: 12px 18px 12px 20px; border: 1px solid #eeece8; border-radius: 23px; background: #fff; color: #292722; box-shadow: 0 9px 20px #2927221a, 0 2px 4px #2927220d; text-align: left; cursor: pointer; transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease; }
+.dw-assistant-launcher-copy { display: grid; gap: 4px; }
+.dw-assistant-launcher-copy small { color: #8a8781; font-size: 12px; line-height: 1.2; }
+.dw-assistant-launcher-copy strong { color: #272622; font-size: 16px; line-height: 1.2; font-weight: 650; }
+.dw-assistant-launcher > .dw-icon { color: #2e2c28; flex: 0 0 auto; transition: transform 180ms ease; }
+.dw-assistant-launcher.is-open > .dw-icon { transform: rotate(90deg); }
+.dw-assistant-filo { display: grid; place-items: center; flex: 0 0 auto; width: 96px; height: 102px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.dw-assistant-filo img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 7px 8px #44351c18); transform-origin: 50% 82%; animation: dw-filo-float 3.4s ease-in-out infinite; }
+.dw-assistant-panel { width: min(410px, calc(100vw - 36px)); height: min(590px, calc(100svh - 110px)); min-height: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: 0 20px 60px #2927222b, 0 3px 12px #29272212; transform-origin: bottom right; animation: dw-assistant-enter 220ms cubic-bezier(.2,.8,.2,1) both; }
+.dw-assistant-panel .dw-chat,.dw-assistant-panel .dw-chat.embedded { width: 100%; height: 100%; min-height: 0; border: 0; border-radius: inherit; }
+.dw-assistant-panel .dw-chat-top { gap: 10px; padding: 14px; }
+.dw-assistant-panel .dw-chat-top > div { min-width: 0; }
+.dw-assistant-panel .dw-chat-top strong { white-space: nowrap; }
+.dw-assistant-panel .dw-chat-top p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dw-assistant-panel .dw-chat-top .dw-badge { display: none; }
+.dw-assistant-panel .dw-chat-welcome h2 { font-size: 25px; }
+.dw-assistant-panel .dw-chat-messages { padding: 17px; }
+.dw-assistant-panel .dw-chat-prompts { margin-top: 18px; }
+.dw-assistant-panel .dw-chat-prompts button { padding: 10px 12px; }
+.dw-assistant-panel .dw-chat-compose { margin: 0 12px; }
+.dw-assistant-panel .dw-chat-note { margin: 8px 12px 12px; font-size: 10px; }
+@keyframes dw-filo-float { 0%,100% { transform: translateY(1px) rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
+@keyframes dw-assistant-enter { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (hover: hover) { .dw-assistant-launcher:hover { transform: translateY(-2px); box-shadow: 0 12px 28px #29272222, 0 3px 8px #29272214; background: #fff; } .dw-assistant-filo:hover img { animation-duration: 1.8s; } }
 .dw-mini-product { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .dw-mini-product strong { display: block; font-size: 12px; font-weight: 500; }
 .dw-mini-product small { display: block; margin-top: 6px; color: #6b6760; font-size: 11px; }

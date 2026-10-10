@@ -50,7 +50,7 @@ function answer(question, id, data) {
   return { text: (context[id] || `Il capo ${data.title}, ${data.styleId}, appartiene alla collezione ${data.collection}. Posso confrontare tessuti e prezzi, controllare ritardi, leggere qualità e piazzamento. Prova una delle domande suggerite.`) + '\n\nRisposta simulata sui dati correnti della demo.' };
 }
 
-export default function Assistant({ moduleId = 22, embedded = false }) {
+export default function Assistant({ moduleId = 22, embedded = false, onClose }) {
   const { data, commit } = useDemo();
   const module = modules.find(m => m.id === moduleId);
   const key = String(moduleId);
@@ -84,7 +84,7 @@ export default function Assistant({ moduleId = 22, embedded = false }) {
     }, 'Decisione approvata: ' + message.actionLabel.toLowerCase(), moduleId);
   }
   return <div className={`dw-chat ${embedded ? 'embedded' : ''}`}>
-    <div className="dw-chat-top"><span className="dw-assistant-mark"><Icon name="spark" /></span><div><strong>Assistente weave</strong><p>{moduleId === 22 ? 'Contesto completo del capo selezionato.' : module.title + ` · ${data.styleId}`}</p></div><Badge>Assistente demo</Badge></div>
+    <div className="dw-chat-top"><span className="dw-assistant-mark"><img src="/favicon.png" alt="" /></span><div><strong>Filo · Assistente weave</strong><p>{moduleId === 22 ? 'Contesto completo del capo selezionato.' : module.title + ` · ${data.styleId}`}</p></div><Badge>Demo</Badge>{onClose && <button className="dw-icon-btn dw-chat-close" type="button" onClick={onClose} aria-label="Chiudi assistente"><Icon name="close" size={18} /></button>}</div>
     <div className="dw-chat-messages" aria-live="polite" aria-relevant="additions">
       {!messages.length && <div className="dw-chat-welcome"><Icon name="chat" size={32} /><h2>Da dove iniziamo?</h2><p>{moduleId === 22 ? 'Confrontiamo scenari, leggiamo i segnali e decidiamo il prossimo passo.' : `Ragioniamo su ${module.title.toLowerCase()}, usando i dati del tuo capo.`}</p><div className="dw-chat-prompts">{(prompts[moduleId] || prompts[22]).map(prompt => <button key={prompt} onClick={() => send(prompt)} disabled={busy}>{prompt}<Icon name="arrow" size={16} /></button>)}</div></div>}
       {messages.map(message => <div className={`dw-message ${message.role}`} key={message.id}><small>{message.role === 'user' ? 'Tu' : 'weave · assistente'}</small><p>{message.text}</p>{message.action && <Button primary={!message.applied} disabled={message.applied || busy} icon={message.applied ? 'check' : 'spark'} onClick={() => approve(message)}>{message.applied ? 'Decisione applicata' : message.actionLabel}</Button>}</div>)}
