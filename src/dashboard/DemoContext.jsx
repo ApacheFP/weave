@@ -5,64 +5,18 @@ import { additionalFabrics, groupProducts, newDemoProducts, productSpec, product
 
 export const euro = value => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
 export const number = (value, digits = 0) => new Intl.NumberFormat('it-IT', { maximumFractionDigits: digits }).format(value);
-export const fabrics = [
-  { id: 'base', name: 'Lana mista · Cammello', code: 'TES-017', price: 16, wool: 70, composition: '70% lana · 30% poliestere', supplier: 'Fornitore A', origin: 'Italia', weight: 280, tone: '#bda17d', certificate: 'Scheda di origine IT-7781' },
-  { id: 'premium', name: 'Lana vergine · Sabbia', code: 'TES-024', price: 20, wool: 100, composition: '100% lana vergine', supplier: 'Lanificio C', origin: 'Italia', weight: 310, tone: '#d5c5ac', certificate: 'Dichiarazione lana vergine IT-9024' },
-  { id: 'recycled', name: 'Lana riciclata · Pietra', code: 'TES-031', price: 17.5, wool: 70, composition: '70% lana riciclata · 30% poliestere', supplier: 'Filati D', origin: 'Italia', weight: 290, tone: '#b0aaa0', certificate: 'Certificato demo R-0031' },
-  ...additionalFabrics,
-];
+export const fabrics = additionalFabrics;
 export const minQuantity = data => Math.max(data.produced, data.retailSold + data.wholesaleOrders.reduce((sum, order) => sum + order.qty, 0));
 
-const demoActors = [
-  { name: 'Alex Rossi', email: 'demo@weave.it' },
-  { name: 'Marta Bianchi', email: 'marta@atelier.demo' },
-  { name: 'Luca Ferri', email: 'luca@atelier.demo' },
-  { name: 'Elena Conti', email: 'elena@atelier.demo' },
-];
-const demoEvents = [
-  [12, '09 ott · 16:40', 2, 'Aggiornato il lotto L-0421-A: 320 capi completati su 500.'],
-  [13, '09 ott · 15:25', 1, 'Aperta NC-018 sulla cucitura della spalla sinistra: 12 capi da ricontrollare.'],
-  [11, '09 ott · 14:10', 2, 'Segnalato il ritardo dei bottoni BOT-003. Richiesta una nuova data ad Accessori F.'],
-  [10, '09 ott · 11:50', 2, 'Impostata la priorità Alta per l’ordine OP-0421 da 500 capi.'],
-  [9, '09 ott · 10:30', 3, 'Registrati i listini di lavoro: wholesale 160 €, retail 320 €.'],
-  [7, '09 ott · 09:15', 1, 'Impostata l’altezza del tessuto a 150 cm. Piazzamento da ottimizzare.'],
-  [6, '08 ott · 16:35', 1, 'Verificata la costruzione delle tasche sul campione. Restano due controlli aperti.'],
-  [5, '08 ott · 15:20', 1, 'Impostata la progressione del torace a 4 cm tra le taglie.'],
-  [4, '08 ott · 14:45', 1, 'Configurato il modello v1.0: margini di cucitura 1 cm, tacche e drittofilo attivi.'],
-  [3, '08 ott · 12:10', 2, 'Selezionata la lana mista TES-017: 70% lana, 30% poliestere, 280 g/m².'],
-  [3, '08 ott · 11:40', 2, 'Preparata la distinta base con fodera viscosa, tela termoadesiva e tre bottoni corozo.'],
-  [2, '08 ott · 10:50', 1, 'Annotati i requisiti di lavoro: tre bottoni, due tasche con pattina e vestibilità regular. Tavola da generare.'],
-  [1, '08 ott · 10:15', 0, 'Inserita la richiesta del cliente: una giacca versatile per il quotidiano, senza eccessi.'],
-  [1, '08 ott · 09:45', 3, 'Aggiunto il contesto del brand e lo storico della Giacca Core AI 2026.'],
-  [1, '08 ott · 09:20', 0, 'Aperta la bozza Giacca Atelier nella collezione Autunno/Inverno 2027. Schizzo finale da caricare.'],
-  [19, '08 ott · 09:15', 3, 'Preparata l’anteprima del passaporto con composizione e indicazioni di cura. Pubblicazione da confermare.'],
-  [21, '08 ott · 09:00', 0, 'Creato lo spazio del capo e condiviso con il team di sviluppo prodotto.'],
-].map(([module, time, actor, text], index) => ({ id: `demo-${index}`, module, time, text, actor: demoActors[actor], demo: true }));
 const activityTime = () => new Intl.DateTimeFormat('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date());
-
-const initial = {
-  styleId: 'GJ-0421', orderId: 'OP-0421', lotId: 'L-0421-A', fabricLot: 'T-7781', sampleId: 'CAMP-0421-01', collection: 'Autunno/Inverno 2027',
-  profile: { firstName: 'Alex', lastName: 'Rossi', email: 'demo@weave.it' },
-  title: 'Giacca Atelier', brief: 'Una giacca monopetto regular, essenziale e strutturata. Toni terra, tre bottoni e due tasche. Una nuova idea di quotidiano per la collezione Autunno/Inverno 2027.',
-  variant: 'Cammello', references: [], creative: creativeDefaults(), conceptApproved: false, identityAssigned: false, techGenerated: false, technical: null, phaseReviews: {},
-  measurements: [{ point: 'Lunghezza centro dietro', value: 72 }, { point: 'Larghezza spalle', value: 44 }, { point: 'Circonferenza torace', value: 100 }, { point: 'Lunghezza manica', value: 62 }],
-  fabricId: 'base', fabricPrice: 16, consumption: 1.85,
-  trims: [{ id: 'lining', name: 'Fodera viscosa', code: 'FOD-006', qty: 1.3, unit: 'm', price: 4.5, supplier: 'Tessitura E' }, { id: 'canvas', name: 'Tela termoadesiva', code: 'TEL-011', qty: .6, unit: 'm', price: 2.2, supplier: 'Fornitore A' }, { id: 'buttons', name: 'Bottoni corozo', code: 'BOT-003', qty: 3, unit: 'pz', price: .45, supplier: 'Accessori F' }, { id: 'pack', name: 'Etichette e imballo', code: 'PKG-002', qty: 1, unit: 'set', price: .8, supplier: 'Pack G' }],
-  modelVersion: '1.0', seam: 1, grain: true, notches: true, gradingChest: 4,
-  sampleApproved: false, sampleChecks: [false, true, false],
-  markerWidth: 150, optimized: false, waste: 14,
-  quantity: 500, margin: 55, wholesale: 160, retail: 320, laborMinutes: 48, hourlyRate: 40, logisticsCost: 1.5,
-  factory: 'Laboratorio B', priority: 'Alta', start: '2027-04-10', end: '2027-05-20', delivery: '2027-06-15',
-  purchaseOrders: [{ id: 'ACQ-0271', material: 'Tessuto principale', supplier: 'Fornitore A', status: 'Consegnato', date: '2027-03-26' }, { id: 'ACQ-0272', material: 'Fodera viscosa', supplier: 'Tessitura E', status: 'Confermato', date: '2027-04-28' }, { id: 'ACQ-0273', material: 'Bottoni e accessori', supplier: 'Accessori F', status: 'In ritardo', date: '2027-04-30' }],
-  produced: 320, reworks: 12, actualWaste: 15, productionDays: [38, 46, 42, 53, 44, 52, 45], productionPaused: false,
-  qualityScore: 86, qualityResolved: false, qualityNote: 'Regolare la macchina lineare e ricontrollare la cucitura spalla sul lotto L-0421-A.',
-  wholesaleOrders: [{ id: 'W-0148', client: 'Boutique Y', qty: 80, shipped: 80, status: 'Consegnato' }, { id: 'W-0149', client: 'Negozio X', qty: 140, shipped: 80, status: 'Parziale' }, { id: 'W-0150', client: 'Studio Z', qty: 100, shipped: 0, status: 'Da preparare' }],
-  retailSold: 112, retailAverage: 296, retailFeedback: 4.3,
-  shipments: [{ id: 'TRK-88214', client: 'Negozio X', qty: 80, status: 'In consegna' }, { id: 'TRK-88210', client: 'Boutique Y', qty: 80, status: 'Consegnata' }, { id: 'TRK-88218', client: 'Studio Z', qty: 100, status: 'Da preparare' }],
-  lifecycle: [{ id: 'life-1', date: '2028-10-12', type: 'Riparazione', note: 'Sostituzione bottone · laboratorio autorizzato', future: true }, { id: 'life-2', date: '2029-03-06', type: 'Seconda vita', note: 'Rivendita dopo controllo condizioni', future: true }],
-  aiRuns: {}, chats: {},
-  events: demoEvents,
+const defaults = {
+  collection: 'Autunno/Inverno 2027', profile: { firstName: 'Alex', lastName: 'Rossi', email: 'demo@weave.it' },
+  references: [], creative: creativeDefaults(), conceptApproved: false, identityAssigned: false, techGenerated: false, technical: null, phaseReviews: {},
+  modelVersion: '1.0', grain: true, notches: true, sampleApproved: false, optimized: false,
+  margin: 55, hourlyRate: 40, logisticsCost: 1.5, priority: 'Alta', start: '2027-04-10', end: '2027-05-20', delivery: '2027-06-15',
+  productionPaused: false, qualityResolved: false, retailFeedback: 4.3, aiRuns: {}, chats: {},
 };
+const initial = newDemoProducts(defaults)[0];
 
 export function totals(data) {
   const materials = data.consumption * data.fabricPrice + data.trims.reduce((sum, row) => sum + row.qty * row.price, 0);
@@ -76,9 +30,8 @@ export function totals(data) {
 const Context = createContext(null);
 export function DemoProvider({ children }) {
   const [workspace, setWorkspace] = useState(() => {
-    const items = [{ ...structuredClone(initial), productId: 'GJ-0421' }, { ...structuredClone(initial), productId: 'GJ-0421', aliasTitle: 'Giacca Studio', styleId: 'GJ-0422', orderId: 'OP-0422', lotId: 'L-0422-A', fabricLot: 'T-7782', sampleId: 'CAMP-0422-01', title: 'Giacca Atelier', variant: 'Sabbia', fabricId: 'premium', fabricPrice: 20, quantity: 600, qualityNote: 'Regolare la macchina lineare e ricontrollare la cucitura spalla sul lotto L-0422-A.', events: [{ id: 'studio-1', text: 'Definita la variante Sabbia della Giacca Atelier in lana vergine.', module: 1, time: '08 ott · 14:00', actor: demoActors[0], demo: true }, { id: 'studio-2', text: 'Selezionata la lana vergine TES-024 del Lanificio C, 310 g/m².', module: 3, time: '08 ott · 13:40', actor: demoActors[2], demo: true }, { id: 'studio-3', text: 'Aperta la variante Sabbia della Giacca Atelier nella collezione Autunno/Inverno 2027.', module: 21, time: '08 ott · 13:30', actor: demoActors[0], demo: true }], brief: 'Variante Sabbia della Giacca Atelier, stesso modello monopetto regular con tre bottoni e due tasche con pattina, in lana vergine.' }];
-    items.push(...newDemoProducts(initial));
-    return { activeId: initial.styleId, selectedVariants: {}, collections: { [initial.collection]: collectionDefaults() }, items, ...seedWorkspaceData(items, initial.profile) };
+    const items = newDemoProducts(defaults);
+    return { activeId: items[0].styleId, selectedVariants: {}, collections: { [initial.collection]: collectionDefaults() }, items, ...seedWorkspaceData(items, initial.profile) };
   });
   const data = workspace.items.find(item => item.styleId === workspace.activeId);
   const products = groupProducts(workspace.items, workspace.activeId, workspace.selectedVariants, fabrics);

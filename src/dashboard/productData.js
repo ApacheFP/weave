@@ -3,24 +3,11 @@ export const additionalFabrics = [
   { id: 'riva-wool', name: 'Lana stretch · Pietra', code: 'TES-041', price: 24, wool: 98, composition: '98% lana vergine · 2% elastan', supplier: 'Lanificio Biellese', origin: 'Italia', weight: 240, unit: 'm', category: 'trousers', tone: '#a59b8d', certificate: 'Scheda tessuto demo IT-9041', asset: 'trousers-fabric' },
   { id: 'trama-canvas', name: 'Canvas di cotone · Argilla', code: 'TES-052', price: 18, wool: 0, composition: '100% cotone', supplier: 'Tessitura Pratese', origin: 'Italia', weight: 420, unit: 'm', category: 'bag', tone: '#a88c6a', certificate: 'Scheda canvas demo IT-9052', asset: 'bag-fabric' },
   { id: 'luce-yarn', name: 'Merino e cashmere · Avorio', code: 'FIL-063', price: 78, wool: 90, composition: '90% lana merino · 10% cashmere', supplier: 'Filatura Toscana', origin: 'Italia', weight: null, unit: 'kg', category: 'knit', tone: '#eee4d3', certificate: 'Scheda filato demo IT-9063 · Nm 2/28', asset: 'knit-fabric' },
+  { id: 'luce-salvia-yarn', name: 'Merino e cashmere · Salvia', code: 'FIL-064', price: 78, wool: 90, composition: '90% lana merino · 10% cashmere', supplier: 'Filatura Toscana', origin: 'Italia', weight: null, unit: 'kg', category: 'knit', tone: '#a3aea1', certificate: 'Scheda filato demo IT-9064 · Nm 2/28', asset: 'knit-salvia-fabric' },
+  { id: 'luce-grafite-yarn', name: 'Merino e cashmere · Grafite', code: 'FIL-065', price: 78, wool: 90, composition: '90% lana merino · 10% cashmere', supplier: 'Filatura Toscana', origin: 'Italia', weight: null, unit: 'kg', category: 'knit', tone: '#454541', certificate: 'Scheda filato demo IT-9065 · Nm 2/28', asset: 'knit-grafite-fabric' },
 ];
 
-const jacketPieces = [
-  ['Davanti', 'front', 2], ['Dietro', 'back', 2], ['Manica sopra', 'upper-sleeve', 2], ['Manica sotto', 'under-sleeve', 2], ['Colletto', 'collar', 1], ['Paramontura', 'facing', 2],
-];
 export const categorySpecs = {
-  jacket: {
-    label: 'Capospalla', sizes: [38, 40, 42, 44, 46, 48], baseSize: 42, increments: [.5, 1, 4, .5], gradeIndex: 2,
-    requirements: 'Giacca monopetto, vestibilità regular, tre bottoni e due tasche con pattina.', fit: 'Regular', tolerance: 1,
-    parts: { collar: 8, pocket: 14, seam: 1 }, partLabels: { collar: 'Colletto', pocket: 'Tasca', seam: 'Cuciture' },
-    revisionPrompts: ['Accorcia la manica di 1 cm', 'Allunga il capo di 2 cm', 'Allarga le spalle di 1 cm', 'Porta la tasca a 16 cm'],
-    pieces: jacketPieces, operations: [['Taglio e preparazione', 'Taglierina', 8], ['Assemblaggio davanti', 'Lineare', 9], ['Tasche e pattine', 'Lineare', 6], ['Unione spalle e fianchi', 'Lineare', 5], ['Montaggio maniche', 'Braccio libero', 7], ['Fodera e colletto', 'Lineare', 7], ['Bottoni e asole', 'Asolatrice', 3], ['Stiro e finitura', 'Stiro a vapore', 3]],
-    checks: ['Accorciata la manica di 1 cm', 'Vestibilità regular verificata', 'Cucitura spalla ricontrollata'], fitting: [1, 3, 2], deltas: [.8, 1, 0],
-    quality: { id: 'NC-018', title: 'Cucitura spalla', point: 'Spalla', description: 'La cucitura della spalla sinistra presenta un disallineamento. Possibile causa: tensione del filo o regolazione della macchina lineare.', deltas: [.8, .3], position: { right: '12%', top: '22%' } },
-    care: 'Lavaggio a secco. Non candeggiare. Stirare a temperatura moderata con un panno protettivo. Riporre su una gruccia, in un luogo asciutto.', repair: 'Bottoni sostituibili', lining: 'Viscosa', co2: '18,4 kg',
-    retailNote: 'Le taglie 42 e 44 guidano la domanda. I clienti apprezzano la struttura e la mano della lana.',
-    baselineConsumption: 1.85, markerBaseWidth: 150, materialLabel: 'Tessuto', materialNote: 'Tessuto, fodera, tela, bottoni, imballo', markerStages: ['Preparazione', 'Taglio', 'Confezione', 'Qualità e finitura'],
-  },
   trousers: {
     label: 'Pantalone', prefix: 'trousers', sizes: [38, 40, 42, 44, 46, 48], baseSize: 42, increments: [.5, 4, 4, .5], gradeIndex: 1,
     requirements: 'Pantalone a vita medio-alta, gamba dritta ampia, una piega per lato, tasche oblique e due filetti dietro. Cintura con passanti, zip coperta e bottone corozo.', fit: 'Relaxed', tolerance: .5,
@@ -31,7 +18,7 @@ export const categorySpecs = {
     checks: ['Lunghezza e piega centrale verificate', 'Vita e bacino verificati in fitting', 'Orlo invisibile ricontrollato'], fitting: [1, 2, 0], deltas: [.4, 0, .5],
     quality: { id: 'NC-021', title: 'Orlo gamba', point: 'Orlo', description: 'L’orlo della gamba destra presenta una lieve arricciatura. Ridurre la tensione del punto invisibile e vaporizzare senza schiacciare la lana.', deltas: [.4, .3], position: { right: '28%', top: '88%' } },
     care: 'Lavaggio a secco. Stirare a bassa temperatura con panno, seguendo la piega. Non asciugare in tamburo; riporre appeso dalla cintura.', repair: 'Zip e orlo riparabili', lining: 'Tasche in cotone', co2: '9,8 kg',
-    retailNote: 'Le taglie 40 e 42 guidano la domanda. La lana stretch e la gamba dritta sono apprezzate nel completo con Giacca Atelier.',
+    retailNote: 'Le taglie 40 e 42 guidano la domanda. La lana stretch e la gamba dritta accompagnano il girocollo Maglia Luce.',
     baselineConsumption: 1.45, markerBaseWidth: 150, materialLabel: 'Tessuto', materialNote: 'Lana stretch, sacchi tasca, cintura, zip e corozo', markerStages: ['Preparazione', 'Taglio', 'Confezione', 'Stiro e qualità'],
   },
   bag: {
@@ -44,7 +31,7 @@ export const categorySpecs = {
     checks: ['Dimensioni e apertura zip verificate', 'Manici verificati con carico di 5 kg', 'Travette attacco manici ricontrollate'], fitting: [0, 2, 3], deltas: [.2, 0, .3],
     quality: { id: 'NC-022', title: 'Attacco manico', point: 'Manico', description: 'La travetta del manico sinistro presenta punti irregolari. Rifare la cucitura sul rinforzo e ripetere la prova con carico di 5 kg.', deltas: [.2, .2], position: { right: '38%', top: '46%' } },
     care: 'Pulire il canvas con panno appena umido, senza immersione. Nutrire solo le parti in pelle con prodotto neutro. Asciugare all’ombra e riporre con carta di sostegno.', repair: 'Manici e zip sostituibili', lining: 'Cotone', co2: '6,2 kg',
-    retailNote: 'Taglia unica. I clienti apprezzano capienza, manici in pelle riparabili e canvas compatto; la palette Argilla accompagna i capispalla della capsule.',
+    retailNote: 'Taglia unica. I clienti apprezzano capienza, manici in pelle riparabili e canvas compatto; la palette Argilla accompagna la maglieria e il pantalone della capsule.',
     baselineConsumption: .65, markerBaseWidth: 140, materialLabel: 'Canvas', materialNote: 'Canvas, fodera cotone, manici e rinforzi pelle, zip', markerStages: ['Preparazione', 'Taglio canvas e pelle', 'Assemblaggio', 'Prova carico e qualità'],
   },
   knit: {
@@ -57,23 +44,24 @@ export const categorySpecs = {
     checks: ['Misure dopo stabilizzazione verificate', 'Girocollo e vestibilità relaxed verificati', 'Punti di rimaglio ai polsi ricontrollati'], fitting: [1, 3, 2], deltas: [.5, .5, 0],
     quality: { id: 'NC-023', title: 'Rimaglio polso', point: 'Polso', description: 'Un punto saltato nella giunzione del polso destro interrompe la costa. Riprendere la maglia con lo stesso filato e ricontrollare l’elasticità.', deltas: [.5, .4], position: { right: '13%', top: '83%' } },
     care: 'Lavare a mano a 30 °C con detergente per lana. Non torcere; asciugare in piano. Vaporizzare leggermente e riporre piegata con protezione antitarme.', repair: 'Rimaglio e rammendo del filato', lining: 'Non prevista', co2: '7,6 kg',
-    retailNote: 'Le taglie S e M guidano la domanda. Il girocollo Avorio e la mano morbida del merino e cashmere completano pantalone Riva e giacche sartoriali.',
+    retailNote: 'Le taglie S e M guidano la domanda. Il girocollo nelle varianti Avorio, Salvia e Grafite completa pantalone Riva e borsa Trama con la mano morbida del merino e cashmere.',
     baselineConsumption: .38, markerBaseWidth: 0, materialLabel: 'Filato', materialNote: 'Filato, bordi a costa, nastro spalla ed etichette', markerStages: ['Programmazione', 'Smacchinatura', 'Rimaglio', 'Stabilizzazione e qualità'],
   },
 };
 
-export const productSpec = data => categorySpecs[data.category || 'jacket'];
+export const productSpec = data => {
+  const spec = categorySpecs[data.category || 'knit'];
+  return data.qualityId ? { ...spec, quality: { ...spec.quality, id: data.qualityId } } : spec;
+};
 export const productSizes = data => productSpec(data).sizes;
 export const materialUnit = data => data.category === 'knit' ? 'kg' : 'm';
-export const categoryFabrics = (data, fabrics) => fabrics.filter(item => (item.category || 'jacket') === (data.category || 'jacket'));
+export const categoryFabrics = (data, fabrics) => fabrics.filter(item => item.category === (data.category || 'knit') && (item.category !== 'knit' || item.id === data.fabricId));
 export const piecesFor = data => productSpec(data).pieces.map(([name, key, qty]) => ({ name, key, qty, asset: `${productSpec(data).prefix ? `${productSpec(data).prefix}-pattern` : 'pattern'}-${key}` }));
 export const productMedia = (data, role) => {
   const spec = productSpec(data);
   if (data.category === 'bag' && role === 'grading' || data.category === 'knit' && role.startsWith('marker-')) return `${spec.prefix}-pattern`;
-  if (spec.prefix) return `${spec.prefix}-${role}`;
-  if (role === 'sample' && data.variant !== 'Cammello') return data.variant === 'Nero' ? 'jacket-black' : 'jacket-sand';
-  if (role === 'quality') return data.variant === 'Sabbia' ? 'quality-sand' : 'quality-seam';
-  return ({ front: 'technical-front', sketch: 'sketch', sample: 'sample', trims: 'trims', pattern: 'pattern-reference', grading: 'grading-reference', 'marker-base': 'marker-base', 'marker-optimized': 'marker-optimized' })[role];
+  if (spec.prefix) return `${data.category === 'knit' && ['front', 'back', 'sketch', 'fabric', 'trims', 'sample', 'quality'].includes(role) && ['Salvia', 'Grafite'].includes(data.variant) ? `knit-${data.variant.toLowerCase()}` : spec.prefix}-${role}`;
+
 };
 export function gradedRows(data) {
   const spec = productSpec(data), base = spec.sizes.indexOf(spec.baseSize);
@@ -81,9 +69,9 @@ export function gradedRows(data) {
 }
 export function markerConfiguration(data, width = data.markerWidth, optimized = data.optimized) {
   const spec = productSpec(data);
-  const ratio = data.category === 'knit' ? 1 : spec.markerBaseWidth / width;
-  const baseWaste = !data.category || data.category === 'jacket' ? 14 : data.category === 'knit' ? 6 : 11;
-  return { markerWidth: width, optimized, consumption: Number((spec.baselineConsumption * ratio * (optimized ? .86 / .89 : 1)).toFixed(4)), waste: Math.max(4, Math.min(25, Math.round((optimized ? baseWaste - 3 : baseWaste) + (data.category === 'knit' ? 0 : (spec.markerBaseWidth - width) * .12)))) };
+  const ratio = spec.prefix === 'knit' ? 1 : spec.markerBaseWidth / width;
+  const baseWaste = spec.prefix === 'knit' ? 6 : 11;
+  return { markerWidth: width, optimized, consumption: Number((spec.baselineConsumption * ratio * (optimized ? .86 / .89 : 1)).toFixed(4)), waste: Math.max(4, Math.min(25, Math.round((optimized ? baseWaste - 3 : baseWaste) + (spec.prefix === 'knit' ? 0 : (spec.markerBaseWidth - width) * .12)))) };
 }
 
 export function newDemoProducts(initial) {
@@ -95,18 +83,22 @@ export function newDemoProducts(initial) {
     { category: 'knit', styleId: 'MG-0425', title: 'Maglia Luce', variant: 'Avorio', fabricId: 'luce-yarn', fabricPrice: 78, quantity: 300, produced: 210, reworks: 5, retailSold: 48, wholesale: 100, retail: 200, retailAverage: 194, gradingChest: 4, measurements: [{ point: 'Lunghezza centro dietro', value: 62 }, { point: 'Larghezza spalle', value: 42 }, { point: 'Circonferenza torace', value: 104 }, { point: 'Lunghezza manica', value: 58 }], trims: [
       { id: 'tape', name: 'Nastro rinforzo spalla', code: 'NAS-063', qty: .3, unit: 'm', price: .6, supplier: 'Accessori Firenze' }, { id: 'pack', name: 'Etichetta e imballo', code: 'PKG-063', qty: 1, unit: 'set', price: .8, supplier: 'Pack G' }], qualityNote: 'Riprendere il punto al polso destro con FIL-063 e ricontrollare elasticità e rimaglio sul lotto L-0425-A.', lifecycleNote: 'Rammendo punto e vaporizzo · maglificio autorizzato' },
   ];
+  const knit = definitions.pop();
+  definitions.unshift({ ...knit, productId: 'MG-0425' },
+    { ...structuredClone(knit), productId: 'MG-0425', styleId: 'MG-0426', variant: 'Salvia', fabricId: 'luce-salvia-yarn', quantity: 240, produced: 168, reworks: 4, retailSold: 38, qualityId: 'NC-024', qualityNote: 'Riprendere il punto al polso destro con FIL-064 e ricontrollare elasticità e rimaglio sul lotto L-0426-A.' },
+    { ...structuredClone(knit), productId: 'MG-0425', styleId: 'MG-0427', variant: 'Grafite', fabricId: 'luce-grafite-yarn', quantity: 260, produced: 182, reworks: 4, retailSold: 40, qualityId: 'NC-025', qualityNote: 'Riprendere il punto al polso destro con FIL-065 e ricontrollare elasticità e rimaglio sul lotto L-0427-A.' });
   return definitions.map((definition, index) => {
     const spec = productSpec(definition), fabric = additionalFabrics.find(f => f.id === definition.fabricId), suffix = definition.styleId.split('-')[1];
     const primary = { id: `ACQ-${suffix}-1`, materialId: 'main', material: fabric.name, supplier: fabric.supplier, status: 'Consegnato', date: '2027-03-26' };
     const secondary = definition.trims.slice(0, 3).map((row, i) => ({ id: `ACQ-${suffix}-${i + 2}`, materialId: row.id, material: row.name, supplier: row.supplier, status: i === 2 ? 'Confermato' : 'Consegnato', date: '2027-04-05' }));
     const colors = [{ name: definition.variant, color: fabric.tone, code: `C-${suffix}`, material: fabric.code }];
-    const creative = { ...structuredClone(initial.creative), inputs: { request: spec.requirements, brand: 'Atelier · essenzialità, materia e sartorialità contemporanea', history: `Nuovo sviluppo ${spec.label.toLowerCase()} nella capsule con le varianti Cammello e Sabbia della Giacca Atelier. Dati demo.`, target: 'Contemporary · 30–45 anni' } };
+    const creative = { ...structuredClone(initial.creative), inputs: { request: spec.requirements, brand: 'Atelier · essenzialità, materia e sartorialità contemporanea', history: `Nuovo sviluppo ${spec.label.toLowerCase()} nella capsule Maglia Luce, Pantalone Riva e Borsa Trama. Dati demo.`, target: 'Contemporary · 30–45 anni' } };
     return { ...structuredClone(initial), ...definition, retailTarget: definition.quantity, factory: definition.category === 'bag' ? 'Pelletteria Toscana' : definition.category === 'knit' ? 'Maglificio Valdarno' : 'Confezioni Centro', brief: spec.requirements, creative, orderId: `OP-${suffix}`, lotId: `L-${suffix}-A`, sampleId: `CAMP-${suffix}-01`, fabricLot: `MAT-${suffix}`, consumption: spec.baselineConsumption, markerWidth: spec.markerBaseWidth, seam: spec.parts.seam, waste: definition.category === 'knit' ? 6 : 11, actualWaste: definition.category === 'knit' ? 7 : 12, laborMinutes: spec.operations.reduce((sum, row) => sum + row[2], 0), sampleChecks: [false, true, false], qualityScore: 89 + index, purchaseOrders: [primary, ...secondary],
       wholesaleOrders: [{ id: `W-${suffix}-1`, client: 'Boutique Y', qty: Math.floor(definition.quantity * .25), shipped: Math.floor(definition.quantity * .2), status: 'Parziale' }, { id: `W-${suffix}-2`, client: 'Studio Z', qty: Math.floor(definition.quantity * .2), shipped: 0, status: 'Da preparare' }],
       shipments: [{ id: `TRK-${suffix}01`, client: 'Boutique Y', qty: Math.floor(definition.quantity * .2), status: 'Consegnata' }], productionDays: [0, 1, 2, 3, 4, 5, 6].map(n => Math.floor(definition.produced / 7) + (n < definition.produced % 7 ? 1 : 0)),
       lifecycle: [{ id: `life-${suffix}`, date: '2028-10-12', type: 'Riparazione', note: definition.lifecycleNote, future: true }],
       technical: { requirements: spec.requirements, constraints: definition.category === 'knit' ? 'Finezza 7; misure dopo stabilizzazione; bordi inclusi nel filato principale e nel ciclo di smacchinatura.' : `Rispetta verso e mano del materiale; tolleranza ±${spec.tolerance} cm.`, fit: spec.fit, tolerance: spec.tolerance, colors, notes: [], versions: [], currentId: null, approvedId: null },
-      events: [[21, `Aperto ${definition.title} nella capsule Autunno/Inverno 2027.`], [3, `Selezionato ${fabric.name} · ${fabric.code}; distinta specifica ${spec.label.toLowerCase()}.`], [13, `${spec.quality.id}: ${spec.quality.title.toLowerCase()}, ${definition.reworks} articoli da ricontrollare.`], [8, `Definito il ciclo ${spec.label.toLowerCase()}: ${spec.operations.length} gruppi di lavorazione.`], [14, `Registrato lo stock del lotto L-${suffix}-A e le scorte di ${fabric.code}.`], [20, `Preparata la scheda ${spec.gradeIndex === null ? 'dimensionale a formato unico' : 'di sviluppo taglie'} di ${definition.title}.`]].map(([module, text], n) => ({ id: `${suffix}-event-${n}`, module, text, time: '09 ott · 14:00', actor: { name: 'Marta Bianchi', email: 'marta@atelier.demo' }, demo: true })),
+      events: [[21, `Aperto ${definition.title} · ${definition.variant} nella capsule Autunno/Inverno 2027.`], [3, `Selezionato ${fabric.name} · ${fabric.code}; distinta specifica ${spec.label.toLowerCase()}.`], [13, `${spec.quality.id}: ${spec.quality.title.toLowerCase()}, ${definition.reworks} articoli da ricontrollare.`], [8, `Definito il ciclo ${spec.label.toLowerCase()}: ${spec.operations.length} gruppi di lavorazione.`], [14, `Registrato lo stock del lotto L-${suffix}-A e le scorte di ${fabric.code}.`], [20, `Preparata la scheda ${spec.gradeIndex === null ? 'dimensionale a formato unico' : 'di sviluppo taglie'} di ${definition.title}.`]].map(([module, text], n) => ({ id: `${suffix}-event-${n}`, module, text, time: '09 ott · 14:00', actor: { name: 'Marta Bianchi', email: 'marta@atelier.demo' }, demo: true })),
     };
   });
 }

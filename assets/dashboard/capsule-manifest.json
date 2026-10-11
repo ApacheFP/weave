@@ -1,6 +1,6 @@
 {
   "collection": "Atelier · Autunno/Inverno 2027",
-  "direction": "Sartorialità quotidiana italiana; cammello, sabbia, pietra, argilla e avorio. Fondale avorio caldo, luce morbida diffusa, prodotto completo e centrato. Schizzi grafite; documenti vettoriali originali.",
+  "direction": "Materia e artigianalità quotidiana italiana; avorio, salvia, grafite, pietra e argilla. Fondale avorio caldo, luce morbida diffusa, prodotto completo e centrato. Schizzi grafite e colore; documenti vettoriali originali.",
   "assets": [
     {
       "key": "trousers-front",
@@ -192,11 +192,128 @@
       "generator": "image_gen built-in"
     },
     {
-      "key": "quality-sand",
-      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-6bb0bcbe-8600-4cf4-96d4-33fd1b1c15c0.png",
-      "output": "public/images/dashboard/quality-sand.webp",
-      "thumbnail": "public/images/dashboard/quality-sand-thumb.webp",
-      "prompt": "Use case: product-mockup. Asset type: WEAVE quality inspection evidence, portrait 4:5. Reference 1 is exact Giacca Studio identity and SAND wool color. Reference 2 is the framing and subtle seam defect technique, ONLY. Photograph a close-up of the LEFT shoulder seam of the sand wool three-button blazer from reference 1, visible fine diagonal wool twill, slight puckering/disalignment over a short shoulder seam section. Preserve SAND ivory beige tone from reference 1, not the camel hue of reference 2. Warm Italian atelier worktable, soft daylight, restrained realistic minor repairable quality defect. No other garment, no arrows, labels, text, logos or watermark.",
+      "key": "knit-salvia-front",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-73b5cd3d-09c6-44ea-9b5f-8d8cbf99fac4.png",
+      "prompt": "Edit target: the supplied Maglia Luce front image. Create this EXACT asset in its new SALVIA color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to muted dusty sage green, desaturated warm grey-green (#a3aea1). Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit.     A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-salvia-front.webp",
+      "thumbnail": "public/images/dashboard/knit-salvia-front-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-salvia-back",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-de4ad142-0edf-46ac-a0af-1d011efbdf35.png",
+      "prompt": "Edit target: the supplied Maglia Luce back image. Create this EXACT asset in its new SALVIA color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to muted dusty sage green, desaturated warm grey-green (#a3aea1). Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit.     A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-salvia-back.webp",
+      "thumbnail": "public/images/dashboard/knit-salvia-back-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-salvia-sketch",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-b0d7e351-3a8c-482b-9c08-c5294136ddf8.png",
+      "prompt": "Edit target: the supplied Maglia Luce sketch image. Create this EXACT asset in its new SALVIA color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to muted dusty sage green, desaturated warm grey-green (#a3aea1). Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit. Preserve hand-drawn graphite outline on ivory paper, use subtle colored pencil tint for this colorway; no photography.    A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-salvia-sketch.webp",
+      "thumbnail": "public/images/dashboard/knit-salvia-sketch-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-salvia-fabric",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-a84e00aa-a830-4186-aa26-3ecc0ea2aaab.png",
+      "prompt": "Edit target: the supplied Maglia Luce fabric image. Create this EXACT asset in its new SALVIA color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to muted dusty sage green, desaturated warm grey-green (#a3aea1). Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit.  Only the main central knit swatch and matching yarn cone use the new color; supporting cotton and wool fabric props stay neutral.   A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-salvia-fabric.webp",
+      "thumbnail": "public/images/dashboard/knit-salvia-fabric-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-salvia-trims",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-0a366ece-6ebb-43a0-9323-81f7eca9e7b6.png",
+      "prompt": "Edit target: the supplied Maglia Luce trims image. Create this EXACT asset in its new SALVIA color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to muted dusty sage green, desaturated warm grey-green (#a3aea1). Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit.   Recolor the neck rib, cuff ribs and knitted reinforcing strip, keep white care label unchanged.  A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-salvia-trims.webp",
+      "thumbnail": "public/images/dashboard/knit-salvia-trims-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-salvia-sample",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-7c6439dc-b563-4c18-a11f-7f56cffe336b.png",
+      "prompt": "Edit target: the supplied Maglia Luce sample image. Create this EXACT asset in its new SALVIA color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to muted dusty sage green, desaturated warm grey-green (#a3aea1). Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit.     A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-salvia-sample.webp",
+      "thumbnail": "public/images/dashboard/knit-salvia-sample-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-salvia-quality",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-0cf89720-2bdc-4a5d-99da-1147544d9cd9.png",
+      "prompt": "Edit target: the supplied Maglia Luce quality image. Create this EXACT asset in its new SALVIA color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to muted dusty sage green, desaturated warm grey-green (#a3aea1). Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit.    Preserve the small skipped stitch defect at cuff joining in exactly the same location. Only the knit color changes. A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-salvia-quality.webp",
+      "thumbnail": "public/images/dashboard/knit-salvia-quality-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-grafite-front",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-454d4437-6bb0-41d6-adad-6ac53171876b.png",
+      "prompt": "Edit target: the supplied Maglia Luce front image. Create this EXACT asset in its new GRAFITE color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to deep warm graphite charcoal grey (#454541), neither black nor blue. Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit.     A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-grafite-front.webp",
+      "thumbnail": "public/images/dashboard/knit-grafite-front-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-grafite-back",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-6cbef11f-0d42-443b-8ed1-e64edd6ae90c.png",
+      "prompt": "Edit target: the supplied Maglia Luce back image. Create this EXACT asset in its new GRAFITE color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to deep warm graphite charcoal grey (#454541), neither black nor blue. Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit.     A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-grafite-back.webp",
+      "thumbnail": "public/images/dashboard/knit-grafite-back-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-grafite-sketch",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-dbb6d6d0-db07-40f7-987a-881d486cf9b1.png",
+      "prompt": "Edit target: the supplied Maglia Luce sketch image. Create this EXACT asset in its new GRAFITE color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to deep warm graphite charcoal grey (#454541), neither black nor blue. Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit. Preserve hand-drawn graphite outline on ivory paper, use subtle colored pencil tint for this colorway; no photography.    A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-grafite-sketch.webp",
+      "thumbnail": "public/images/dashboard/knit-grafite-sketch-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-grafite-fabric",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-7934b681-4d2a-49d6-af75-8b114f36fc12.png",
+      "prompt": "Edit target: the supplied Maglia Luce fabric image. Create this EXACT asset in its new GRAFITE color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to deep warm graphite charcoal grey (#454541), neither black nor blue. Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit.  Only the main central knit swatch and matching yarn cone use the new color; supporting cotton and wool fabric props stay neutral.   A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-grafite-fabric.webp",
+      "thumbnail": "public/images/dashboard/knit-grafite-fabric-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-grafite-trims",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-33c26352-2313-4db8-959e-e86c98d19d39.png",
+      "prompt": "Edit target: the supplied Maglia Luce trims image. Create this EXACT asset in its new GRAFITE color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to deep warm graphite charcoal grey (#454541), neither black nor blue. Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit.   Recolor the neck rib, cuff ribs and knitted reinforcing strip, keep white care label unchanged.  A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-grafite-trims.webp",
+      "thumbnail": "public/images/dashboard/knit-grafite-trims-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-grafite-sample",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-e8138420-1e82-4899-895a-9ed486a34c9a.png",
+      "prompt": "Edit target: the supplied Maglia Luce sample image. Create this EXACT asset in its new GRAFITE color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to deep warm graphite charcoal grey (#454541), neither black nor blue. Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit.     A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-grafite-sample.webp",
+      "thumbnail": "public/images/dashboard/knit-grafite-sample-thumb.webp",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-grafite-quality",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-88e80032-7fab-4b66-a7bd-439481b5d766.png",
+      "prompt": "Edit target: the supplied Maglia Luce quality image. Create this EXACT asset in its new GRAFITE color variant. Change ONLY the sweater, knitted parts, main knitted material swatch and matching yarn color to deep warm graphite charcoal grey (#454541), neither black nor blue. Keep the original ivory background or atelier setting, light, framing, perspective, scale, texture, stitches and construction EXACTLY. It is the same relaxed merino90% cashmere10% crew-neck stockinette fine gauge7 sweater, set-in sleeves, fully fashioned armholes, 1x1ribbed neck hem cuffs; no buttons pockets cableknit.    Preserve the small skipped stitch defect at cuff joining in exactly the same location. Only the knit color changes. A single image, no collage, text, watermark or added garments. Original coherent Italian boutique capsule asset. Preserve aspect ratio.",
+      "output": "public/images/dashboard/knit-grafite-quality.webp",
+      "thumbnail": "public/images/dashboard/knit-grafite-quality-thumb.webp",
       "created": "2026-10-11",
       "generator": "image_gen built-in"
     }

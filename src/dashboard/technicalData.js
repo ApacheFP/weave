@@ -7,7 +7,7 @@ export function technicalDefaults(data) {
   return { requirements: spec.requirements, constraints: data.category === 'knit' ? 'Finezza 7; misure dopo stabilizzazione; filato principale include i bordi.' : `Cuciture a vista; tolleranza base ±${spec.tolerance} cm.`, fit: spec.fit, tolerance: spec.tolerance, notes: [], versions: [], currentId: null, approvedId: null, colors };
 }
 export function versionSnapshot(data, technical) {
-  return { category: data.category || 'jacket', baseSize: productSpec(data).baseSize, measurements: structuredClone(data.measurements), parts: { ...productSpec(data).parts, seam: data.seam }, fit: technical.fit, tolerance: technical.tolerance, colors: structuredClone(technical.colors), requirements: technical.requirements, constraints: technical.constraints, notes: structuredClone(technical.notes) };
+  return { category: data.category || 'knit', baseSize: productSpec(data).baseSize, measurements: structuredClone(data.measurements), parts: { ...productSpec(data).parts, seam: data.seam }, fit: technical.fit, tolerance: technical.tolerance, colors: structuredClone(technical.colors), requirements: technical.requirements, constraints: technical.constraints, notes: structuredClone(technical.notes) };
 }
 export const revisionPrompts = productSpec({}).revisionPrompts;
 // shortcut: revision intents are prepared demo actions; free-form AI comes with the backend.

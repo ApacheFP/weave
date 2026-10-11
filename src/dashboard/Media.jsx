@@ -1,45 +1,21 @@
 import React, { useState } from 'react';
 import { useDemo } from './DemoContext.jsx';
 import { Card, Dialog, Empty, Icon, Tabs } from './ui.jsx';
-import { additionalFabrics, categorySpecs } from './productData.js';
+import { additionalFabrics, categorySpecs, productMedia } from './productData.js';
 
 const root = '/images/dashboard/';
-export const media = {
-  'jacket-camel': { name: 'Giacca · Cammello', kind: 'Foto', alt: 'Fotografia della giacca monopetto in lana cammello, tre bottoni e due tasche con pattina' },
-  'jacket-sand': { name: 'Giacca · Sabbia', kind: 'Foto', alt: 'Fotografia della variante sabbia della giacca monopetto' },
-  'jacket-black': { name: 'Giacca · Nero', kind: 'Foto', alt: 'Fotografia della variante nera della giacca monopetto' },
-  'jacket-back': { name: 'Giacca · Retro Cammello', kind: 'Foto', alt: 'Fotografia del retro della giacca cammello, cucitura centrale e spacco' },
-  'jacket-sand-back': { name: 'Giacca · Retro Sabbia', kind: 'Foto', alt: 'Fotografia del retro della giacca sabbia' },
-  'jacket-black-back': { name: 'Giacca · Retro Nero', kind: 'Foto', alt: 'Fotografia del retro della giacca nera' },
-  sketch: { name: 'Studio della silhouette', kind: 'Tavole', alt: 'Schizzo a matita della giacca con rever, tre bottoni e tasche con pattina' },
-  'technical-front': { name: 'Tavola tecnica · Fronte', kind: 'Tavole', alt: 'Disegno tecnico in piano del davanti della giacca, con dettagli delle cuciture e delle tasche' },
-  'technical-back': { name: 'Tavola tecnica · Retro', kind: 'Tavole', alt: 'Disegno tecnico in piano del retro della giacca, con cuciture di costruzione e spacco' },
-  'fabric-camel': { name: 'Lana mista · Cammello', kind: 'Materiali', alt: 'Fotografia ravvicinata di un campione di lana a saia color cammello' },
-  'fabric-sand': { name: 'Lana vergine · Sabbia', kind: 'Materiali', alt: 'Fotografia ravvicinata di un campione di lana vergine color sabbia' },
-  'fabric-stone': { name: 'Lana riciclata · Pietra', kind: 'Materiali', alt: 'Fotografia ravvicinata di un campione di lana grigio pietra' },
-  trims: { name: 'Accessori di confezione', kind: 'Materiali', alt: 'Fodera viscosa, tela termoadesiva, tre bottoni corozo ed etichette su un piano da lavoro' },
-  sample: { name: 'Campione di riferimento · Cammello', kind: 'Foto', alt: 'Campione della giacca cammello su un manichino sartoriale in laboratorio' },
-  'quality-seam': { name: 'Evidenza NC-018 · Spalla', kind: 'Foto', alt: 'Dettaglio fotografico della cucitura della spalla della giacca cammello, con lieve arricciatura' },
-  'pattern-reference': { name: 'Studio del cartamodello', kind: 'Tavole', alt: 'Cartamodelli sartoriali di una giacca disposti sul tavolo, con linee di costruzione e drittofilo' },
-  'pattern-front': { name: 'Cartamodello · Davanti', kind: 'Tavole', alt: 'Tavola tecnica del davanti della giacca, con rever, pince e margini di cucitura' },
-  'pattern-back': { name: 'Cartamodello · Dietro', kind: 'Tavole', alt: 'Tavola tecnica del dietro della giacca, con giro manica, pince e spacco' },
-  'pattern-upper-sleeve': { name: 'Cartamodello · Manica sopra', kind: 'Tavole', alt: 'Tavola tecnica della manica superiore con testa sagomata e linee di costruzione' },
-  'pattern-under-sleeve': { name: 'Cartamodello · Manica sotto', kind: 'Tavole', alt: 'Tavola tecnica della manica inferiore sagomata al gomito' },
-  'pattern-collar': { name: 'Cartamodello · Colletto', kind: 'Tavole', alt: 'Tavola tecnica del colletto sartoriale con linea di piega e margini' },
-  'pattern-facing': { name: 'Cartamodello · Paramontura', kind: 'Tavole', alt: 'Tavola tecnica della paramontura anteriore della giacca' },
-  'grading-reference': { name: 'Sviluppo taglie · Tavola', kind: 'Tavole', alt: 'Tavola professionale di sviluppo taglie della giacca con profili annidati del davanti e della manica' },
-  'marker-base': { name: 'Piazzamento · Base', kind: 'Tavole', alt: 'Tavola di piazzamento con pezzi sartoriali della giacca orientati lungo il drittofilo e spazi residui' },
-  'marker-optimized': { name: 'Piazzamento · Ottimizzato', kind: 'Tavole', alt: 'Tavola di piazzamento compatto con davanti, dietro, maniche e piccoli pezzi della giacca' },
-};
+export const media = {};
 const roleNames = { front: 'Fronte', back: 'Retro', sketch: 'Schizzo designer', fabric: 'Materiale principale', trims: 'Accessori e finiture', sample: 'Campione atelier', quality: 'Evidenza qualità' };
 for (const spec of Object.values(categorySpecs).filter(item => item.prefix)) {
   for (const [role, name] of Object.entries(roleNames)) media[`${spec.prefix}-${role}`] = { name: `${spec.label} · ${name}`, kind: ['fabric', 'trims'].includes(role) ? 'Materiali' : role === 'sketch' ? 'Tavole' : 'Foto', alt: `${name} del ${spec.label.toLowerCase()} della capsule Atelier` };
   const documents = [['pattern', 'Modello base'], ...spec.pieces.map(([name, key]) => [`pattern-${key}`, name]), ...(spec.label === 'Borsa' ? [] : [['grading', 'Sviluppo taglie']]), ...(spec.label === 'Maglia' ? [] : [['marker-base', 'Piazzamento base'], ['marker-optimized', 'Piazzamento ottimizzato']])];
   for (const [key, name] of documents) media[`${spec.prefix}-${key}`] = { name: `${spec.label} · ${name}`, kind: 'Tavole', format: 'SVG', alt: `Tavola vettoriale ${name.toLowerCase()} del ${spec.label.toLowerCase()}` };
 }
-media['quality-sand'] = { name: 'Evidenza NC-018 · Spalla Sabbia', kind: 'Foto', alt: 'Cucitura della spalla della Giacca Atelier nella variante Sabbia con lieve disallineamento' };
-export const fabricAsset = id => additionalFabrics.find(item => item.id === id)?.asset || ({ base: 'fabric-camel', premium: 'fabric-sand', recycled: 'fabric-stone' }[id]);
-export const productAsset = (product, back = false) => categorySpecs[product.category]?.prefix ? `${categorySpecs[product.category].prefix}-${back ? 'back' : 'front'}` : ({ Cammello: back ? 'jacket-back' : 'jacket-camel', Sabbia: back ? 'jacket-sand-back' : 'jacket-sand', Nero: back ? 'jacket-black-back' : 'jacket-black' }[product.variant] || 'jacket-camel');
+for (const color of ['salvia', 'grafite']) for (const [role, name] of Object.entries(roleNames)) {
+  media[`knit-${color}-${role}`] = { ...media[`knit-${role}`], name: `Maglia Luce · ${color} · ${name}`, alt: `${name} della Maglia Luce nella variante ${color}` };
+}
+export const fabricAsset = id => additionalFabrics.find(item => item.id === id)?.asset;
+export const productAsset = (product, back = false) => productMedia(product, back ? 'back' : 'front');
 export const mediaSrc = key => `${root}${key}.${media[key]?.format === 'SVG' ? 'svg' : 'webp'}`;
 const mediaSrcSet = key => media[key]?.format === 'SVG' ? undefined : `${root}${key}-thumb.webp 480w, ${mediaSrc(key)} 1120w`;
 

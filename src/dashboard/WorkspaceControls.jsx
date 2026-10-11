@@ -44,14 +44,14 @@ export function StyleSwitcher({ onCreate, onSelect }) {
 export function CreateStyleDialog({ onClose, onCreated }) {
   const { data, styles, createStyle } = useDemo();
   const next = Math.max(420, ...styles.map(item => Number(item.styleId.match(/\d+$/)?.[0]) || 0)) + 1;
-  const [draft, setDraft] = useState({ title: '', styleId: `GJ-${String(next).padStart(4, '0')}`, collection: data.collection, quantity: 300, copy: false });
+  const [draft, setDraft] = useState({ title: '', styleId: `MG-${String(next).padStart(4, '0')}`, collection: data.collection, quantity: 300, copy: false });
   const [error, setError] = useState('');
   return <Dialog title="Nuovo capo" note="Atelier · crea uno spazio per il prossimo prodotto" onClose={onClose}><form className="dw-stack" onSubmit={event => { event.preventDefault(); if (!createStyle(draft)) { setError('Questo codice è già assegnato a un capo. Scegline un altro.'); return; } onCreated(); }}>
-    <Field label="Nome del capo"><input data-autofocus required maxLength={80} pattern=".*\S.*" placeholder="Es. Giacca Essential" value={draft.title} onChange={e => setDraft({ ...draft, title: e.target.value })} /></Field>
+    <Field label="Nome del capo"><input data-autofocus required maxLength={80} pattern=".*\S.*" placeholder="Es. Maglia Essential" value={draft.title} onChange={e => setDraft({ ...draft, title: e.target.value })} /></Field>
     <div className="dw-two"><Field label="Codice riservato" hint="Diventa lo Style ID al caricamento dello schizzo."><input required maxLength={24} pattern="[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*" value={draft.styleId} onChange={e => { setDraft({ ...draft, styleId: e.target.value.toUpperCase() }); setError(''); }} /></Field><Field label="Quantità prevista"><input required type="number" min={draft.copy ? minQuantity(data) : 1} max="10000" step="1" value={draft.quantity} onChange={e => setDraft({ ...draft, quantity: e.target.value })} /></Field></div>
     <Field label="Collezione"><input required maxLength={80} pattern=".*\S.*" value={draft.collection} onChange={e => setDraft({ ...draft, collection: e.target.value })} /></Field>
     <label className="dw-check"><input type="checkbox" checked={draft.copy} onChange={e => setDraft({ ...draft, copy: e.target.checked, quantity: e.target.checked ? Math.max(Number(draft.quantity), minQuantity(data)) : draft.quantity })} />Duplica specifiche e ordini di {data.title}</label>
-    <p className="dw-muted">Il modello base è una giacca: misure e materiali sono precompilati e modificabili. I nuovi capi restano disponibili durante questa sessione demo.</p>
+    <p className="dw-muted">Il modello base è una maglia: misure, filato e lavorazioni sono precompilati e modificabili. I nuovi capi restano disponibili durante questa sessione demo.</p>
     {error && <p className="dw-error" role="alert">{error}</p>}
     <div className="dw-dialog-actions"><Button onClick={onClose}>Annulla</Button><Button primary icon="plus" type="submit">Crea capo</Button></div>
   </form></Dialog>;
