@@ -42,8 +42,8 @@ const shortDate = value => {
 function Avatar({ actor }) {
   const { data } = useDemo();
   const name = actorName(actor);
-  const colors = { 'marta@atelier.demo': '#af7890', 'elena@atelier.demo': '#657e9c', 'luca@atelier.demo': '#7d8d72' };
-  return <span className="dw-personal-avatar" style={{ '--actor-color': colors[actor?.email] || '#8b84bd' }} aria-hidden="true">{actor?.email === data.profile.email ? <img src="/illustrations/profile-avatar.webp" alt="" /> : name.split(' ').filter(Boolean).map(word => word[0]).slice(0, 2).join('')}</span>;
+  const colors = { 'marta@atelier.demo': 'var(--rose)', 'elena@atelier.demo': 'var(--blue)', 'luca@atelier.demo': 'var(--green)' };
+  return <span className="dw-personal-avatar" style={{ '--actor-color': colors[actor?.email] || 'var(--violet)' }} aria-hidden="true">{actor?.email === data.profile.email ? <img src="/illustrations/profile-avatar.webp" alt="" /> : name.split(' ').filter(Boolean).map(word => word[0]).slice(0, 2).join('')}</span>;
 }
 
 export function InboxPage({ onOpenModule, initialSelectedId = null }) {

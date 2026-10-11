@@ -8,7 +8,7 @@
 .dw-workspace-task strong,.dw-workspace-deadline strong { display:block; font-size:12.5px; font-weight:500; }
 .dw-workspace-task small,.dw-workspace-deadline small { display:block; color:var(--text-3); margin-top:2px; font-size:11px; }
 .dw-workspace-task time,.dw-workspace-deadline time { flex-shrink:0; font-size:11px; color:var(--text-3); }
-.dw-workspace-task .dw-workspace-late,.dw-workspace-deadline .dw-workspace-late { color:#a54737; }
+.dw-workspace-task .dw-workspace-late,.dw-workspace-deadline .dw-workspace-late { color:var(--red); }
 .dw-workspace-style-link { display:flex; align-items:center; gap:8px; border:0; padding:0; text-align:left; background:none; }
 .dw-workspace-portfolio { min-width:560px; }
 .dw-workspace-deadline { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; padding:9px 14px; background:none; border:0; border-top:1px solid var(--divider); text-align:left; color:var(--text); }

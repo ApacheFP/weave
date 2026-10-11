@@ -61,7 +61,7 @@ export default function HomePage({ onNavigate, onService, onActivity }) {
     19: data.passportPublished ? 'Passaporto pubblicato' : 'Passaporto in bozza',
     22: 'Scenari e decisioni del capo',
   };
-  const costs = [['Materiali', materials, '#b89c72'], ['Lavorazione', labor, '#d1bfa2'], ['Logistica', data.logisticsCost, '#e7ded0']];
+  const costs = [['Materiali', materials, 'var(--blue)'], ['Lavorazione', labor, 'var(--violet)'], ['Logistica', data.logisticsCost, 'var(--amber)']];
   const openEvent = event => modules.find(item => item.id === event.module)?.serviceInfo || event.module === 20 ? onService(event.module) : onNavigate(event.module);
   const outputs = { 1: Boolean(data.sketchFile), 2: Boolean(data.technical?.approvedId && data.technical.approvedId === data.technical.currentId), 6: data.sampleApproved, 7: data.optimized, 11: data.purchaseOrders.length > 0 && data.purchaseOrders.every(order => order.status === 'Consegnato'), 12: data.produced >= data.quantity, 13: data.produced >= data.quantity && data.qualityResolved && !data.reworks, 19: data.passportPublished };
   const started = { 1: Boolean(data.brief.trim()) || data.references.length > 0, 6: data.sampleChecks.some(Boolean), 9: data.produced > 0, 10: data.purchaseOrders.length > 0 || data.produced > 0, 11: data.purchaseOrders.length > 0, 12: data.produced > 0, 13: data.produced > 0, 19: data.produced > 0 };

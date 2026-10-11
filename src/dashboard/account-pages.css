@@ -106,16 +106,18 @@
 .dw-theme-options > button { display:grid; gap:7px; padding:8px; border:1px solid var(--border); border-radius:10px; color:var(--text); background:var(--surface); text-align:left; cursor:pointer; }
 .dw-theme-options > button.selected { border-color:var(--accent); box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 20%,transparent); }
 .dw-theme-options > button > span:last-child { display:flex; align-items:center; gap:5px; font-size:12px; font-weight:500; }
-.dw-theme-preview { height:62px; display:grid; align-content:center; gap:5px; padding:12px; border-radius:6px; background:#fbfaf8; }
+.dw-theme-preview { position:relative; isolation:isolate; height:62px; display:grid; align-content:center; gap:5px; padding:12px; border-radius:6px; background:#fbfaf8; }
 .dw-theme-preview i { display:block; width:70%; height:5px; border-radius:4px; background:#dedbd5; }
 .dw-theme-preview i:nth-child(2) { width:48%; background:#4b5bd6; }
 .dw-theme-preview i:nth-child(3) { width:62%; }
 .dw-theme-preview.dark { background:#1d1d1c; }
 .dw-theme-preview.dark i { background:#45433f; }
 .dw-theme-preview.dark i:nth-child(2) { background:#8e9af3; }
-.dw-theme-preview.system { background:linear-gradient(90deg,#fbfaf8 50%,#1d1d1c 50%); }
-.dw-theme-preview.system i { background:#aaa; }
-.dw-theme-preview.system i:nth-child(2) { background:#6976db; }
+.dw-theme-preview.system { background:#1a1a19; }
+.dw-theme-preview.system::before { content:''; position:absolute; z-index:-1; inset:0 50% 0 0; border-radius:inherit; background:#fbfaf8; }
+.dw-theme-preview.system i { width:34%; background:#6b6760; }
+.dw-theme-preview.system i:nth-child(2) { width:25%; background:#4b5bd6; }
+.dw-theme-preview.system i:nth-child(3) { width:30%; background:#dad7d0; }
 .dw-accent-options { display:flex; gap:7px; }
 .dw-accent-options button { display:grid; place-items:center; width:18px; height:18px; padding:0; border:0; border-radius:50%; color:white; background:var(--swatch); cursor:pointer; }
 .dw-accent-options button.selected { outline:1px solid var(--swatch); outline-offset:3px; }
