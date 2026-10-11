@@ -56,5 +56,5 @@ export function seedWorkspaceData(items, profile, now = new Date()) {
     ['inbox-7', 'comment', atelier.styleId, 6, 'Marta ha aggiornato i controlli del campione', 'La costruzione delle tasche è verificata. Vestibilità e cucitura spalla sono ancora da confermare.', marta, 1550, true],
     ['inbox-8', 'assign', studio.styleId, 2, 'Elena ti ha assegnato la revisione delle proporzioni', 'Conferma lunghezza, spalla e volume della Giacca Studio entro la prossima revisione.', elena, 2880, true],
   ].map(([id, type, styleId, moduleId, title, body, actor, minutes, read]) => ({ id, type, styleId, moduleId, title, body, actor, at: at(minutes), read, replies: [], demo: true }));
-  return { tasks, inbox, preferences: { theme: 'dark', accent: 'indigo', sideDensity: 'comfortable', taskDensity: 'comfortable', motion: 'system', moduleAlerts: true, productNews: false } };
+  return { tasks, inbox, preferences: { theme: 'light', accent: 'indigo', sideDensity: 'comfortable', taskDensity: 'comfortable', motion: 'system', moduleAlerts: true, productNews: false } };
 }
