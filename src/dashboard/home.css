@@ -13,7 +13,7 @@
 .dw-home-metrics strong { font-size: 22px; font-weight: 600; line-height: 1.1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .dw-home-metrics small { color: var(--text-3); font-size: 11px; line-height: 1.4; }
 .dw-home-columns { display: grid; grid-template-columns: minmax(0,1.9fr) minmax(0,1fr); gap: 16px; align-items: start; }
-.dw-home-main,.dw-home-aside { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.dw-home-main,.dw-home-aside,.dw-home-side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 .dw-home .dw-card-head + .dw-card-flush { margin-top: 0; }
 .dw-home .dw-card-head .dw-btn { min-height: 26px; padding: 4px 6px; background: transparent; border-color: transparent; color: var(--text-2); font-size: 11.5px; }
 .dw-home-panel-count { font-size: 11px; color: var(--text-3); }
