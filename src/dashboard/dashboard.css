@@ -88,10 +88,6 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-code { font-family: var(--mono); font-size: 11px; font-weight: 400; }
 .dw-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .06em; color: var(--text-3); text-transform: uppercase; }
 .dw-workspace-toolbar { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
-.dw-page-tabs { display: flex; align-items: stretch; gap: 4px; min-width: 0; overflow-x: auto; scrollbar-width: none; border: 1px solid var(--border); border-radius: var(--radius); }
-.dw-page-tabs button { display: flex; align-items: center; gap: 6px; height: 40px; margin: 0; padding: 0 12px; border: 1px solid transparent; border-radius: 9px; white-space: nowrap; background: none; color: var(--text-3); font-size: 12.5px; font-weight: 500; }
-.dw-page-tabs button[aria-selected=true] { color: var(--text); }
-@media (hover: hover) { .dw-page-tabs button:hover { color: var(--text); } }
 .dw-page-tabs button > span { font-size: 10px; background: var(--surface-3); padding: 0 5px; border-radius: var(--radius); }
 .dw-toolbar-product { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-3); white-space: nowrap; }
 .dw-status-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
@@ -144,9 +140,7 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-inline-form > .dw-btn { margin-left: auto; }
 .dw-muted { color: var(--text-3); font-size: 12px; line-height: 1.6; }
 .dw-error { color: var(--red); font-size: 12px; }
-.dw-tabs { display: inline-flex; align-items: center; padding: 2px; gap: 2px; border: 1px solid var(--border); background: var(--surface-2); border-radius: var(--radius); max-width: 100%; }
-.dw-tabs button { padding: 4px 9px; background: none; border: 1px solid transparent; border-radius: var(--radius); font-size: 12px; color: var(--text-3); white-space: nowrap; }
-.dw-tabs button[aria-pressed=true] { background: var(--surface); border-color: var(--border); box-shadow: var(--shadow-sm); color: var(--text); }
+.dw-tabs { display: inline-flex; align-items: center; max-width: 100%; }
 .dw-table-wrap { overflow-x: auto; min-width: 0; }
 .dw-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: left; }
 .dw-table th { height: 34px; font-size: 12px; font-weight: 500; color: var(--text-2); background: var(--surface); border-bottom: 1px solid var(--border); padding: 5px 10px; white-space: nowrap; }
@@ -624,8 +618,6 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
   .dw-page-head .dw-btn .dw-icon { display: none; }
   .dw-page-kicker { font-size: 10px; }
   .dw-workspace-toolbar { margin-bottom: 18px; }
-  .dw-page-tabs { gap: 14px; }
-  .dw-page-tabs button { font-size: 12px; }
   .dw-page-tabs .dw-icon,.dw-toolbar-product { display: none; }
   .dw-card-head { flex-wrap: wrap; gap: 10px; }
   .dw-card-head > .dw-actions { margin-left: auto; }
@@ -669,10 +661,6 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-app :is(.profile-trigger,.profile-panel,.profile-icon-button,.profile-actions button,.profile-signout,.profile-save,.profile-demo-tag) { border-radius: var(--radius); }
 .dw-media-image { display: block; width: 100%; height: auto; object-fit: contain; background: var(--surface-2); }
 .dw-media-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; min-width: 0; gap: 10px 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface-2); }
-.dw-media-kinds { display: flex; gap: 4px; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
-.dw-media-kinds button { display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto; min-height: 36px; padding: 0 10px; font: 12px var(--font); border: 1px solid transparent; border-radius: var(--radius); background: none; color: var(--text-3); }
-.dw-media-kinds button[aria-pressed=true] { color: var(--text); background: var(--surface); border-color: var(--border); box-shadow: 0 1px 2px #1d1c1a05; }
-.dw-media-kinds button > span { border-radius: var(--radius); background: var(--surface-3); font-size: 10px; padding: 1px 5px; }
 .dw-media-tools { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 0; margin-left: auto; max-width: 100%; }
 .dw-media-search { display: flex; align-items: center; gap: 6px; width: 160px; max-width: 100%; padding: 0 8px; height: 36px; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius); color: var(--text-4); }
 .dw-app .dw-media-search input { padding: 0; border: 0; box-shadow: none; width: 100%; min-width: 0; background: transparent; font-size: 12px; }
@@ -745,8 +733,6 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
   .dw-page-head h1 { font-size: 22px; }
   .dw-page-head-main > .dw-page-icon { flex-basis: 38px; width: 38px; height: 38px; }
   .dw-page-head p { font-size: 12px; }
-  .dw-page-tabs { width: 100%; gap: 2px; }
-  .dw-page-tabs button { justify-content: center; flex: 1 0 auto; padding: 0 8px; font-size: 11.5px; }
   .dw-page-content,.dw-stack,.dw-two { gap: 12px; }
   .dw-page-head > .dw-actions { padding-top: 0; }
   .dw-page-head .dw-btn { min-height: 36px; }

@@ -61,7 +61,7 @@ export default function TechnicalPage({ onNavigate }) {
   const comparison = t.versions.find(v => v.id === compareId && v.id !== version?.id) || t.versions.find(v => v.id !== version?.id);
   const previewColor = snapshot.colors[colorIndex] || snapshot.colors[0];
   return <div className="dw-technical-workspace">
-    <div className="dw-technical-toolbar"><Tabs items={['Input', 'Tavola', 'Misure', 'Colori', 'Versioni']} selected={area} onChange={setArea} label="Disegno tecnico" /><span className="dw-technical-status">{version && <span className="dw-code">v{version.number}</span>}<Badge>{approved ? 'Approvata' : version ? 'In revisione' : 'Da generare'}</Badge></span></div>
+    <div className="dw-technical-toolbar"><Tabs items={['Input', 'Tavola', 'Misure', 'Colori', 'Versioni']} selected={area} onChange={setArea} label="Disegno tecnico" variant="underline" /><span className="dw-technical-status">{version && <span className="dw-code">v{version.number}</span>}<Badge>{approved ? 'Approvata' : version ? 'In revisione' : 'Da generare'}</Badge></span></div>
     {area === 'Input' && <div className="dw-technical-input-layout">
       <Card title="Schizzo di partenza" note={sketch ? `${data.styleId} · ${concept?.sourceModule === 2 ? 'Caricato qui' : 'Dal modulo 1'}` : 'Dal modulo 1 oppure da file'} actions={<Button icon="plus" onClick={() => input.current.click()}>{sketch ? 'Cambia file' : 'Carica schizzo'}</Button>}>
         <input ref={input} type="file" accept="image/jpeg,image/png,image/webp,application/pdf" hidden onChange={e => { upload(e.target.files[0]); e.target.value = ''; }} />

@@ -25,8 +25,8 @@ export function Metrics({ items }) {
   })}</div>;
 }
 export function Field({ label, hint, children }) { return <label className="dw-field"><span>{label}</span>{children}{hint && <small>{hint}</small>}</label>; }
-export function Tabs({ items, selected, onChange, label = 'Vista' }) {
-  return <div className="dw-tabs" role="group" aria-label={label}>{items.map(item => <button key={item} type="button" aria-pressed={selected === item} onClick={() => onChange(item)}>{item}</button>)}</div>;
+export function Tabs({ items, selected, onChange, label = 'Vista', variant = 'segmented' }) {
+  return <div className={`dw-tabs ${variant === 'underline' ? 'dw-tabs-underline' : ''}`} role="group" aria-label={label}>{items.map(item => <button key={item} type="button" aria-pressed={selected === item} onClick={() => onChange(item)}>{item}</button>)}</div>;
 }
 export function Progress({ value, label }) { return <div className="dw-progress" role="progressbar" aria-label={label} aria-valuenow={Math.round(value)} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${Math.max(0, Math.min(100, value))}%` }} /></div>; }
 export function Dialog({ title, note, children, onClose, wide, instant = false, className = '' }) {

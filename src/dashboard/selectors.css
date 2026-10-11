@@ -1,73 +1,168 @@
-/* One Prova 1 treatment for every segmented selector. */
-.dw-app :is(.dw-tabs,.dw-page-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds,.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-inbox-categories,.dw-size-selector) {
-  display: inline-flex;
+/* Prova1 .seg: compact segmented controls use 26px controls, 12px labels. */
+.dw-app :is(.dw-tabs:not(.dw-tabs-underline),.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-creative-routes,.dw-creative-mobile-switch) {
   align-items: center;
   padding: 2px;
   gap: 2px;
   max-width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border: 0;
+  border-radius: 6px;
   background: var(--surface-3);
   overflow-x: auto;
   scrollbar-width: none;
 }
-.dw-app :is(.dw-tabs,.dw-page-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds,.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-inbox-categories,.dw-size-selector) > button {
+.dw-app :is(.dw-tabs:not(.dw-tabs-underline),.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-creative-routes,.dw-creative-mobile-switch) > button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  height: 30px;
-  min-height: 30px;
+  gap: 5px;
+  height: 24px;
+  min-height: 24px;
   width: auto;
   margin: 0;
-  padding: 0 12px;
-  border: 1px solid transparent;
-  border-radius: 8px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: 5px;
   background: transparent;
   box-shadow: none;
   color: var(--text-2);
-  font: 500 15px var(--font);
+  font: 500 12px var(--font);
   white-space: nowrap;
   cursor: pointer;
   transform: none;
+  transition: background var(--dur), color var(--dur);
 }
-.dw-app :is(.dw-tabs,.dw-page-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds,.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-inbox-categories,.dw-size-selector) > button:is([aria-pressed=true],[aria-selected=true]) {
-  border-color: var(--border);
+.dw-app :is(.dw-tabs:not(.dw-tabs-underline),.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-creative-routes,.dw-creative-mobile-switch) > button[aria-pressed=true] {
   background: var(--surface);
   color: var(--text);
-  box-shadow: 0 1px 3px #00000014;
+  box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 0 0 1px var(--border);
 }
-.dw-app .dw-creative-result-indicator { display: none; }
-.dw-app :is(.dw-tabs,.dw-page-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds,.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-inbox-categories,.dw-size-selector) > button:focus-visible {
+.dw-app :is(.dw-tabs:not(.dw-tabs-underline),.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-creative-routes,.dw-creative-mobile-switch) > button:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: -2px;
 }
 @media (hover:hover) {
-  .dw-app :is(.dw-tabs,.dw-page-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds,.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-inbox-categories,.dw-size-selector) > button:hover { color: var(--text); }
+  .dw-app :is(.dw-tabs:not(.dw-tabs-underline),.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-creative-routes,.dw-creative-mobile-switch) > button:hover { color: var(--text); }
 }
-.dw-app .dw-workspace-toolbar { position: relative; justify-content: center; }
+
+/* Prova1 .tabs: page and section tabs keep the underline and 36px height. */
+.dw-app .dw-tabs.dw-tabs-underline {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  min-width: 0;
+  padding: 0;
+  overflow-x: auto;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+}
+.dw-app .dw-tabs.dw-tabs-underline > button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  min-height: 36px;
+  margin: 0;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-2);
+  font: 500 12.5px var(--font);
+  white-space: nowrap;
+  transition: color var(--dur);
+}
+.dw-app .dw-tabs.dw-tabs-underline > button[aria-pressed=true] {
+  color: var(--text);
+  background: transparent;
+  box-shadow: none;
+}
+.dw-app .dw-tabs.dw-tabs-underline > button[aria-pressed=true]::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+/* Prova1 .tabs active ink follows the theme: dark text in light mode, light in dark. */
+.dw-app .dw-page-tabs > button[aria-selected=true] { color: var(--text); }
+.dw-app .dw-page-tabs > button[aria-selected=true] > .dw-icon { color: currentColor; }
+.dw-app .dw-page-tabs > button[aria-selected=true]::after { background: currentColor; }
+.dw-app .dw-page-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+}
+.dw-app .dw-page-tabs > button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  min-height: 36px;
+  margin: 0;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-2);
+  font: 500 12.5px var(--font);
+  white-space: nowrap;
+  transition: color var(--dur);
+}
+.dw-app .dw-page-tabs > button[aria-selected=true]::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.dw-app .dw-workspace-toolbar { position: relative; justify-content: center; min-height: 50px; }
 .dw-app .dw-workspace-toolbar > .dw-btn { position: absolute; right: 0; }
-.dw-app .dw-workspace-toolbar { min-height: 50px; }
 .dw-app .dw-page-tabs[role=tablist] { width: auto; margin-inline: auto; }
-.dw-app .dw-inbox-categories { width: auto; margin: 8px 24px 0; padding: 2px; border-bottom: 0; }
-.dw-app .dw-inbox-categories > button[aria-selected=true]::after { display: none; }
-.dw-app :is(.dw-tabs,.dw-page-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds,.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-inbox-categories,.dw-size-selector) > button > .dw-icon { width: 16px; height: 16px; }
 
-
-/* Prova 1 selector treatment: muted track, raised selected option, compact chevron fields. */
+/* Prova1 native selects: 30px fields, 6px radius and the same chevron. */
 .dw-app select:not(.dw-personal-task-table select) {
   appearance: none;
-  min-height: 32px;
-  padding: 5px 28px 5px 10px;
-  border-radius: 9px;
+  height: 30px;
+  min-height: 30px;
+  padding: 0 28px 0 10px;
+  border-radius: 6px;
   background-color: var(--surface);
-  background-image: linear-gradient(45deg, transparent 50%, var(--text-3) 50%),linear-gradient(135deg, var(--text-3) 50%, transparent 50%);
-  background-position: calc(100% - 12px) 50%,calc(100% - 8px) 50%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239C988F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 9px center;
   background-repeat: no-repeat;
-  background-size: 4px 4px;
+  background-size: 12px 12px;
+  font: 13.5px/1.45 var(--font);
 }
+.dw-app select.dw-media-kind-select {
+  width: auto;
+  height: 26px;
+  min-height: 26px;
+  font-size: 12px;
+}
+
+/* Prova1's breadcrumb is plain text, not a colored pill. */
+.dw-app .dw-breadcrumb > strong { padding: 0; border-radius: 0; background: transparent; color: var(--text); }
+
 @media (max-width:560px) {
   .dw-app .dw-workspace-toolbar { flex-direction: column; }
   .dw-app .dw-workspace-toolbar > .dw-btn { position: static; align-self: flex-end; }
 }
-.dw-app .dw-breadcrumb > strong { padding: 7px 10px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); }

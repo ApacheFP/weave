@@ -121,9 +121,7 @@
 .dw-accent-options { display:flex; gap:7px; }
 .dw-accent-options button { display:grid; place-items:center; width:18px; height:18px; padding:0; border:0; border-radius:50%; color:white; background:var(--swatch); cursor:pointer; }
 .dw-accent-options button.selected { outline:1px solid var(--swatch); outline-offset:3px; }
-.dw-segmented { display:flex; padding:2px; border-radius:6px; background:var(--surface-2); }
-.dw-segmented button { min-height:24px; padding:3px 8px; border:0; border-radius:5px; color:var(--text-3); background:transparent; font:11px var(--font); cursor:pointer; }
-.dw-segmented button[aria-pressed=true] { color:var(--text); background:var(--surface); box-shadow:0 1px 2px #00000012; }
+.dw-segmented { display:inline-flex; }
 .dw-setting-row select { min-height:28px; padding:3px 24px 3px 8px; border:1px solid var(--border); border-radius:6px; color:var(--text); background:var(--surface); font:11px var(--font); }
 .dw-profile-summary { display:flex; align-items:center; gap:10px; margin:0 0 16px; }
 .dw-profile-summary img { border-radius:50%; object-fit:cover; }

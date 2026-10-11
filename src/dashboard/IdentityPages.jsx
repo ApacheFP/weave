@@ -32,7 +32,7 @@ export function PassportPage() {
         </Card>
       </div>
       <div className="dw-stack">
-        <Tabs items={['Identità', 'Tracciabilità', 'Cura e vita']} selected={tab} onChange={setTab} label="Sezioni del passaporto" />
+        <Tabs items={['Identità', 'Tracciabilità', 'Cura e vita']} selected={tab} onChange={setTab} label="Sezioni del passaporto" variant="underline" />
         {tab === 'Identità' && <>
           <Card title="Composizione e materiali">
             <ReferenceFile asset={fabricAsset(data.fabricId)} note={`${fabric.code} · ${fabric.supplier}`} />
