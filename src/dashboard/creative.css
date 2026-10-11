@@ -40,7 +40,6 @@
 .dw-mood-info input,.dw-mood-info textarea { font-size:11px;padding:7px 8px; }
 .dw-mood-info textarea { min-height:56px; }
 .dw-mood-actions { display:flex;justify-content:flex-start;gap:6px;margin-top:auto; }
-.dw-mood-actions .dw-btn { font-size:11px;min-height:28px;padding:4px 8px;gap:4px; }
 .dw-mood-pagination { display:none; }
 .dw-creative-colors { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px; }
 .dw-creative-colors>div { display:flex;flex-direction:column;gap:6px;min-width:0; }

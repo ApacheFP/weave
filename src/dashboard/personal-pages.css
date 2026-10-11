@@ -48,7 +48,7 @@
 .dw-inbox-preview-bar { display: flex; align-items: center; gap: 8px; height: 46px; padding: 0 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .dw-inbox-preview-bar > span:not(.dw-inbox-product-dot) { color: var(--text-2); font-size: 12.5px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dw-inbox-preview-bar > small { color: var(--text-3); font-size: 11px; font-family: var(--mono); }
-.dw-inbox-preview-bar > .dw-btn { margin-left: auto; white-space: nowrap; height: 26px; min-height: 26px; font-size: 12px; }
+.dw-inbox-preview-bar > .dw-btn { margin-left: auto; white-space: nowrap; }
 .dw-inbox-conversation { padding: 24px 28px; max-width: 720px; width: 100%; }
 .dw-inbox-conversation > h3 { font-size: 19px; line-height: 1.4; font-weight: 600; letter-spacing: -.015em; margin: 0 0 10px; overflow-wrap: anywhere; }
 .dw-inbox-conversation-module { margin: 0 0 18px; color: var(--text-3); font-size: 12.5px; }

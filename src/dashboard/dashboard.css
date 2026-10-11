@@ -2,7 +2,7 @@
    WEAVE keeps its product workflows and the shared twelve-pixel corners. */
 @font-face { font-family: 'Geist'; src: url('/fonts/geist.woff2') format('woff2'); font-style: normal; font-weight: 100 900; font-display: swap; }
 @font-face { font-family: 'Geist Mono'; src: url('/fonts/geist-mono.woff2') format('woff2'); font-style: normal; font-weight: 400; font-display: swap; }
-.dw-app,.dw-toast { --radius: 12px; }
+.dw-app,.dw-toast { --radius: 12px; --radius-sm: 6px; }
 html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-app {
   --bg: #f8f9fb; --bg-side: #f3f4f6; --surface: #fff; --surface-2: #f5f6f8; --surface-3: #eceef2; --sunken: #f6f7f9;
@@ -92,13 +92,16 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-toolbar-product { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-3); white-space: nowrap; }
 .dw-status-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
 .dw-page-content { display: flex; flex-direction: column; gap: 16px; min-width: 0;  }
-.dw-btn { min-height: 30px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 5px 11px; border-radius: var(--radius); font-size: 12.5px; font-weight: 500; line-height: 1.35; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); transition: background 150ms ease-out,border-color 150ms ease-out; text-decoration: none; }
+.dw-btn { height: 30px; min-height: 30px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 11px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 500; line-height: 1; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); transition: background 150ms ease-out,border-color 150ms ease-out,color 150ms ease-out,box-shadow 150ms ease-out,transform 150ms ease-out; text-decoration: none; white-space: nowrap; user-select: none; }
 @media (hover: hover) { .dw-btn:hover { background: var(--surface-2); border-color: var(--border-strong); } }
+.dw-btn:active:not(:disabled) { transform: scale(.97); }
 
 .dw-btn.dw-primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); box-shadow: inset 0 -1px 0 #0000001f; }
-@media (hover: hover) { .dw-btn.dw-primary:hover { background: var(--accent); border-color: var(--accent); } }
-.dw-icon-btn { display: inline-grid; place-items: center; width: 30px; height: 30px; border: 0; border-radius: var(--radius); color: var(--text-3); background: none; padding: 5px; flex: 0 0 auto; }
-@media (hover: hover) { .dw-icon-btn:hover { background: var(--surface-3); color: var(--text); } }
+@media (hover: hover) { .dw-btn.dw-primary:hover { background: color-mix(in srgb,var(--accent) 88%,var(--text)); border-color: var(--accent); } }
+.dw-btn.dw-primary:active:not(:disabled) { background: color-mix(in srgb,var(--accent) 78%,var(--text)); }
+.dw-icon-btn { display: inline-grid; place-items: center; width: 30px; height: 30px; border: 0; border-radius: var(--radius-sm); color: var(--text-2); background: none; padding: 0; flex: 0 0 auto; transition: background 150ms ease-out,color 150ms ease-out; }
+@media (hover: hover) { .dw-icon-btn:hover { background: var(--surface-2); color: var(--text); } }
+.dw-icon-btn:active { background: var(--surface-3); color: var(--text); }
 .dw-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border: 1px solid var(--border); border-radius: var(--radius); color: var(--text-2); background: var(--surface-2); font-size: 11px; font-weight: 500; line-height: 1.4; white-space: nowrap; }
 .dw-badge.warn { color: var(--amber); background: var(--amber-soft); border-color: color-mix(in srgb,var(--amber) 32%,transparent); }
 .dw-badge.success { color: var(--green); background: color-mix(in srgb,var(--green) 10%,var(--surface)); border-color: color-mix(in srgb,var(--green) 28%,transparent); }
@@ -614,8 +617,6 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
   .dw-page-head h1 { font-size: 22px; }
   .dw-page-head p { font-size: 12.5px; }
   .dw-page-head > .dw-actions { padding-top: 20px; }
-  .dw-page-head .dw-btn { padding: 6px 8px; font-size: 11px; }
-  .dw-page-head .dw-btn .dw-icon { display: none; }
   .dw-page-kicker { font-size: 10px; }
   .dw-workspace-toolbar { margin-bottom: 18px; }
   .dw-page-tabs .dw-icon,.dw-toolbar-product { display: none; }
@@ -675,7 +676,6 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-media-meta strong { display: block; font-weight: 500; font-size: 13px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .dw-media-meta small { display: block; font-size: 11px; color: var(--text-3); margin-top: 3px; }
 .dw-media-file-actions { display: flex; gap: 5px; margin-top: auto; padding: 8px 2px 2px; }
-.dw-media-file-actions .dw-icon-btn { width: 34px; height: 34px; border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius); text-decoration: none; }
 .dw-media-file-actions .dw-icon-btn:last-child:nth-child(3) { margin-left: auto; }
 .dw-media-mini { display: block; width: 56px; height: 44px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-2); overflow: hidden; }
 .dw-media-table { min-width: 480px; }
@@ -735,7 +735,6 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
   .dw-page-head p { font-size: 12px; }
   .dw-page-content,.dw-stack,.dw-two { gap: 12px; }
   .dw-page-head > .dw-actions { padding-top: 0; }
-  .dw-page-head .dw-btn { min-height: 36px; }
   .dw-card-head { padding: 12px 14px 10px; }
   .dw-card-body { padding: 14px; }
   .dw-card > .dw-card-flush { padding: 0; }
@@ -746,7 +745,6 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
   .dw-media-tools { width: 100%; justify-content: space-between; padding: 0; }
   .dw-media-search { flex: 1; width: auto; }
   .dw-media-preview { aspect-ratio: 1/1; }
-  .dw-media-file-actions .dw-icon-btn { width: 36px; height: 36px; }
   .dw-variants .dw-media-image { height: 150px; }
   .dw-variants > button > span { padding: 8px; flex-wrap: wrap; }
   .dw-technical-canvas > img,.dw-sample-canvas > img { height: 340px; }

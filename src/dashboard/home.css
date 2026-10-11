@@ -19,7 +19,6 @@
 .dw-home-columns { display: grid; grid-template-columns: minmax(0,1.9fr) minmax(0,1fr); gap: 16px; align-items: start; }
 .dw-home-main,.dw-home-aside,.dw-home-side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 .dw-home .dw-card-head + .dw-card-flush { margin-top: 0; }
-.dw-home .dw-card-head .dw-btn { min-height: 26px; padding: 4px 6px; background: transparent; border-color: transparent; color: var(--text-2); font-size: 11.5px; }
 .dw-home-panel-count { font-size: 11px; color: var(--text-3); }
 .dw-home-phase-overview { padding: 0 14px 12px; }
 .dw-home-phase-overview > div:first-child { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; font-size: 11px; color: var(--text-3); }

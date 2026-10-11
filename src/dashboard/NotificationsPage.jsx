@@ -55,7 +55,7 @@ export function NotificationsPage({ onSelectMessage, onOpenPage }) {
       <div><h2 id="dw-notifications-heading">Notifiche{unread > 0 && <span className="dw-notifications-count">{unread} da leggere</span>}</h2><p>Aggiornamenti sui capi e sulle attività che segui.</p></div>
       <div className="dw-notifications-actions">
         <div className="dw-notifications-filter" role="group" aria-label="Filtra notifiche">{[['all', 'Tutte'], ['unread', 'Da leggere']].map(([key, label]) => <button type="button" key={key} aria-pressed={filter === key} onClick={() => setFilter(key)}>{label}</button>)}</div>
-        <button type="button" className="dw-notifications-mark-all" disabled={!unread} onClick={markAllInboxRead}><Icon name="check" size={14} />Segna tutte come lette</button>
+        <button type="button" className="dw-btn dw-notifications-mark-all" disabled={!unread} onClick={markAllInboxRead}><Icon name="check-check" size={14} />Segna tutte come lette</button>
         {onOpenPage && <button type="button" className="dw-notifications-preferences" onClick={() => onOpenPage('settings?section=email')} aria-label="Preferenze notifiche" title="Preferenze notifiche"><Icon name="settings" size={16} /></button>}
       </div>
     </header>
