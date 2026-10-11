@@ -75,9 +75,9 @@ export default function CreativePage({ onNavigate }) {
   function editReference(id, patch) { commitCollection(previous => ({ moodboard: previous.moodboard.map(ref => ref.id === id ? { ...ref, ...patch } : ref) })); }
   function chooseReference(id = null) { setReplacing(id); moodInput.current.click(); }
   return <div className="dw-creative">
-    <div className="dw-creative-routes" role="group" aria-label="Come vuoi iniziare?">
-      <button type="button" aria-pressed={route === 'upload'} onClick={() => update({ route: 'upload' })}><Icon name="file" /><span>Carica il tuo schizzo</span></button>
-      <button type="button" aria-pressed={route === 'inspire'} onClick={() => update({ route: 'inspire' })}><Icon name="spark" /><span>Genera spunti</span></button>
+    <div className="dw-tabs dw-tabs-underline dw-creative-routes" role="group" aria-label="Come vuoi iniziare?">
+      <button type="button" aria-pressed={route === 'upload'} onClick={() => update({ route: 'upload' })}>Carica il tuo schizzo</button>
+      <button type="button" aria-pressed={route === 'inspire'} onClick={() => update({ route: 'inspire' })}>Genera spunti</button>
     </div>
     {route === 'inspire' && <><div className="dw-creative-mobile-switch" role="group" aria-label="Area creativa">{['Brief', 'Spunti'].map(name => <button key={name} type="button" aria-pressed={studioView === name} onClick={() => setStudioView(name)}>{name}</button>)}</div><div className="dw-creative-studio" data-area={studioView}>
       <div className="dw-creative-inputs">
@@ -89,11 +89,11 @@ export default function CreativePage({ onNavigate }) {
           <Field label="Target"><input maxLength={150} value={inputs.target} onChange={e => update({ inputs: { ...inputs, target: e.target.value } })} /></Field>
           </div></details>
           <details className="dw-creative-more" open={refs.length > 0 || undefined}><summary>Schizzo e riferimenti <span>{refs.length ? `${refs.length} allegati` : 'Facoltativi'}</span></summary><input ref={referenceInput} type="file" hidden accept="image/jpeg,image/png,image/webp,application/pdf" onChange={e => { readFile(e.target.files[0], ref => commit(previous => ({ creative: { ...previous.creative, referenceFiles: [...(previous.creative.referenceFiles || []), ref] } }), 'Riferimento creativo caricato', 1), notify); e.target.value = ''; }} /><div className="dw-creative-reference-tools"><Button icon="plus" onClick={() => referenceInput.current.click()}>Carica riferimento</Button><span>JPG, PNG, WebP o PDF · 8 MB</span></div><div className="dw-creative-input-refs">{refs.map(ref => <div className="dw-creative-ref" key={ref.id}><button type="button" onClick={() => setOpened(ref)}>{ref.type === 'application/pdf' ? <Icon name="file" /> : <img src={ref.src} alt={ref.name} />}<span>{ref.name}</span></button><Button icon="close" aria-label={`Rimuovi ${ref.name}`} onClick={() => update({ referenceFiles: refs.filter(item => item.id !== ref.id) }, 'Riferimento creativo rimosso')} /></div>)}</div></details>
-          <div className="dw-creative-brief-footer"><span className="dw-creative-note">Generazione simulata · demo</span><Button primary icon="spark" disabled={!(inputs.request.trim() || inputs.brand.trim() || refs.length)} onClick={generate}>{hasDirection ? 'Rigenera dagli input' : 'Genera moodboard e palette'}</Button></div>
+          <div className="dw-creative-brief-footer"><span className="dw-creative-note">Generazione simulata · demo</span><Button primary disabled={!(inputs.request.trim() || inputs.brand.trim() || refs.length)} onClick={generate}>{hasDirection ? 'Rigenera dagli input' : 'Genera moodboard e palette'}</Button></div>
         </div></Card>
       </div>
       <div className="dw-creative-results">
-        {!hasDirection ? <Card title="Moodboard e palette" note="Il tuo spazio di ricerca"><div className="dw-creative-empty"><Icon name="spark" size={24} /><strong>Inizia dal brief creativo</strong><p>Descrivi la richiesta e premi “Genera moodboard e palette”. Qui potrai scegliere e modificare i riferimenti.</p></div></Card> : <>
+        {!hasDirection ? <Card title="Moodboard e palette" note="Il tuo spazio di ricerca"><div className="dw-creative-empty"><strong>Inizia dal brief creativo</strong><p>Descrivi la richiesta e premi “Genera moodboard e palette”. Qui potrai scegliere e modificare i riferimenti.</p></div></Card> : <>
           <div className="dw-creative-result-toolbar"><Tabs items={['Moodboard', 'Palette', 'Rivedi']} selected={resultView} onChange={setResultView} label="Risultati creativi" variant="underline" /><Button icon="file" onClick={() => update({ route: 'upload' })}>Disegno finale</Button></div>
           <section className="dw-creative-result-panel" aria-label="Moodboard" hidden={resultView !== 'Moodboard'}>
           <Card title="Moodboard" note={`Riferimenti visivi · ${data.collection}`} actions={<Button icon="plus" onClick={() => chooseReference()}>Aggiungi immagine</Button>}>
@@ -116,7 +116,7 @@ export default function CreativePage({ onNavigate }) {
           <Card title="Palette di direzione" note="Sei colori indicativi · codici approssimativi"><div className="dw-creative-colors">{c.palette.map((color, index) => <div key={index}><input type="color" aria-label={`Colore ${index + 1}`} value={color.color} onChange={e => setColor(index, { color: e.target.value.toUpperCase() })} /><Field label={`Nome colore ${index + 1}`}><input value={color.name} maxLength={50} onChange={e => setColor(index, { name: e.target.value })} /></Field><span className="dw-code">≈ {color.color}</span></div>)}</div><p className="dw-creative-note">Cambia i colori e i nomi a mano. Sono una direzione visiva, non codici tessili definitivi.</p></Card>
           </section>
           <section className="dw-creative-result-panel" aria-label="Rivedi" hidden={resultView !== 'Rivedi'}>
-          <Card title="Rivedi la direzione" note="Puoi chiedere modifiche quante volte vuoi"><form className="dw-stack" onSubmit={e => { e.preventDefault(); generate(); }}><Field label="Cosa vuoi cambiare?"><textarea rows={3} maxLength={800} value={prompt} onChange={e => setPrompt(e.target.value)} placeholder="Più freddo, accenti salvia, un’atmosfera più urbana…" /></Field><div className="dw-actions"><Button primary type="submit" icon="spark" disabled={!prompt.trim()}>Applica modifica</Button></div></form></Card>
+          <Card title="Rivedi la direzione" note="Puoi chiedere modifiche quante volte vuoi"><form className="dw-stack" onSubmit={e => { e.preventDefault(); generate(); }}><Field label="Cosa vuoi cambiare?"><textarea rows={3} maxLength={800} value={prompt} onChange={e => setPrompt(e.target.value)} placeholder="Più freddo, accenti salvia, un’atmosfera più urbana…" /></Field><div className="dw-actions"><Button primary type="submit" disabled={!prompt.trim()}>Applica modifica</Button></div></form></Card>
 
           </section>
         </>}

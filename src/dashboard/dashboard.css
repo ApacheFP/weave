@@ -114,7 +114,7 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-card-head > div:first-child { flex: 1; min-width: 0; }
 .dw-card-head > .dw-actions { flex: 0 1 auto; margin-left: auto; }
 .dw-card-body { padding: 14px; }
-.dw-card-head + .dw-card-body { padding-top: 0; }
+.dw-card-head + .dw-card-body { padding-top: 6px; }
 .dw-card > .dw-card-flush { padding: 0; }
 .dw-card-body > .dw-btn { display: flex; width: fit-content; max-width: 100%; margin: 10px 0 0 auto; }
 .dw-card-body form > .dw-btn { display: flex; width: fit-content; max-width: 100%; margin-left: auto; }
@@ -125,9 +125,9 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-card-body h3 { font-size: 14.5px; font-weight: 600; }
 .dw-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px; }
 .dw-measurement-actions { margin-top: 10px; }
-.dw-stack { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
-.dw-two { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
-.dw-two-main,.dw-design-layout,.dw-pricing-layout,.dw-marker-layout,.dw-production-layout,.dw-passport-layout,.dw-decision-layout { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(270px,1fr); gap: 16px; align-items: start; }
+.dw-stack { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.dw-two { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+.dw-two-main,.dw-design-layout,.dw-pricing-layout,.dw-marker-layout,.dw-production-layout,.dw-passport-layout,.dw-decision-layout { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(270px,1fr); gap: 12px; align-items: start; }
 .dw-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; font-size: 12.5px; color: var(--text-2); }
 .dw-field > span { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-weight: 500; }
 .dw-field b { font-size: 12px; font-weight: 500; color: var(--text); }
@@ -685,7 +685,7 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-media-viewer-image { display: grid; place-items: center; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
 .dw-media-viewer-image img { display: block; max-height: 66svh; max-width: 100%; object-fit: contain; }
 .dw-media-viewer aside h3 { font-size: 17px; font-weight: 500; margin: 10px 0 18px; }
-.dw-reference-row { display: flex; width: 100%; align-items: center; gap: 12px; padding: 10px 0; border: 0; border-bottom: 1px solid var(--divider); background: none; color: var(--text); text-align: left; }
+.dw-reference-row { display: flex; width: 100%; align-items: center; gap: 12px; padding: 8px 0; border: 0; border-bottom: 1px solid var(--divider); background: none; color: var(--text); text-align: left; }
 .dw-reference-row:last-child { border-bottom: 0; }
 .dw-reference-row > img { width: 56px; height: 48px; border: 1px solid var(--border); border-radius: var(--radius); }
 .dw-reference-row > span { flex: 1; min-width: 0; }

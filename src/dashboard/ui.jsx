@@ -3,7 +3,7 @@ import { ICONS } from 'virtual:icons';
 import './selectors.css';
 
 export function Icon({ name = 'grid', size = 20 }) {
-  const icons = { arrow: 'arrow-right', back: 'arrow-left', chevron: 'chevron-down', exit: 'log-out', grid: 'layout-grid', chat: 'message-square', spark: 'sparkles', file: 'file-text', box: 'package', chevrons: 'chevrons-up-down', panel: 'panel-left', chart: 'chart-no-axes-column-increasing', help: 'circle-help', sort: 'arrow-down-up' };
+  const icons = { arrow: 'arrow-right', back: 'arrow-left', chevron: 'chevron-down', exit: 'log-out', grid: 'layout-grid', chat: 'message-square', file: 'file-text', box: 'package', chevrons: 'chevrons-up-down', panel: 'panel-left', chart: 'chart-no-axes-column-increasing', help: 'circle-help', sort: 'arrow-down-up' };
   const icon = icons[name] || name;
   return <svg className={`dw-icon lucide lucide-${icon}`} width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" dangerouslySetInnerHTML={{ __html: ICONS[icon] || ICONS['circle-help'] }} />;
 }
