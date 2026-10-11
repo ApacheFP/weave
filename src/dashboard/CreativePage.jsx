@@ -3,6 +3,7 @@ import { download, useDemo } from './DemoContext.jsx';
 import { Badge, Button, Card, Dialog, Field, Icon, Tabs } from './ui.jsx';
 import { creativeDefaults, prepareDirection, directionPresets } from './creativeData.js';
 import { readSketchFile as readFile, sketchHandoff } from './sketchHandoff.js';
+import { productMedia } from './productData.js';
 import { mediaSrc } from './Media.jsx';
 import './creative.css';
 import './technical.css';
@@ -48,10 +49,10 @@ export default function CreativePage({ onNavigate }) {
   async function uploadDemo() {
     setDemoLoading(true);
     try {
-      const response = await fetch(mediaSrc('sketch'));
+      const response = await fetch(mediaSrc(productMedia(data, 'sketch')));
       if (!response.ok) throw new Error('Demo sketch unavailable');
       const blob = await response.blob();
-      uploadFinal(new File([blob], 'schizzo-giacca-atelier-demo.webp', { type: 'image/webp' }));
+      uploadFinal(new File([blob], `${data.styleId}-schizzo-demo.webp`, { type: 'image/webp' }));
     } catch {
       notify('Non è stato possibile caricare lo schizzo demo. Riprova.');
     } finally {

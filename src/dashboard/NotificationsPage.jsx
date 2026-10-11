@@ -1,3 +1,4 @@
+import { styleLabel } from './productData.js';
 import React, { useState } from 'react';
 import { useDemo } from './DemoContext.jsx';
 import { Icon } from './ui.jsx';
@@ -43,7 +44,7 @@ export function NotificationsPage({ onSelectMessage, onOpenPage }) {
   const unread = inbox.filter(item => !item.read).length;
   const visible = [...inbox].sort((a, b) => timestamp(b.at) - timestamp(a.at)).filter(item => filter !== 'unread' || !item.read);
   const buckets = visible.reduce((groups, item) => { (groups[dayBucket(item.at)] ||= []).push(item); return groups; }, {});
-  const styleName = id => workspaceItems.find(item => item.styleId === id)?.title || id;
+  const styleName = id => styleLabel(workspaceItems.find(item => item.styleId === id)) || id;
 
   function select(item) {
     markInboxRead(item.id);

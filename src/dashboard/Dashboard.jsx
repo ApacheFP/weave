@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { modules } from '../modules.js';
 import ProfileMenu from '../ProfileMenu.jsx';
 import { useDemo } from './DemoContext.jsx';
+import { productSearchText, productVariantId } from './productData.js';
 import { Badge, Button, Card, Dialog, Empty, Icon, Tabs } from './ui.jsx';
 import { DesignPage, TechnicalPage, MaterialsPage, PatternPage, GradingPage, PrototypePage, MarkerPage } from './DesignPages.jsx';
 import { PricingPage, PlanningPage, ProcurementPage, ProductionPage, QualityPage } from './OperationsPages.jsx';
@@ -32,18 +33,18 @@ class PageBoundary extends React.Component {
 }
 
 function StylesPage({ onCreate, onOpen }) {
-  const { data, styles, selectStyle } = useDemo();
+  const { data, products, selectStyle } = useDemo();
   const [query, setQuery] = useState('');
   const [layout, setLayout] = useState('Griglia');
-  const rows = styles.filter(item => `${item.title} ${item.styleId} ${item.collection} ${item.variant}`.toLowerCase().includes(query.toLowerCase().trim()));
+  const rows = products.filter(item => productSearchText(item).includes(query.toLowerCase().trim()));
   const openStyle = id => { selectStyle(id); onOpen(); };
   return <div className="dw-styles-page">
-    <div className="dw-page-head"><div><h2>Capi</h2><p>{styles.length} capi in Atelier · {styles.filter(item => !item.identityAssigned).length} in bozza</p></div><Button primary icon="plus" onClick={onCreate}>Nuovo capo</Button></div>
+    <div className="dw-page-head"><div><h2>Capi</h2><p>{products.length} capi in Atelier · {products.filter(item => !item.identityAssigned).length} in bozza</p></div><Button primary icon="plus" onClick={onCreate}>Nuovo capo</Button></div>
     <div className="dw-styles-toolbar"><div className="dw-search"><span><Icon name="search" size={14} /><input aria-label="Cerca nella lista capi" placeholder="Cerca un capo…" value={query} onChange={e => setQuery(e.target.value)} /></span></div><Tabs items={['Griglia', 'Lista']} selected={layout} onChange={setLayout} label="Vista dei capi" /></div>
-    {layout === 'Griglia' ? <div className="dw-style-grid">{rows.map(item => <button type="button" className="dw-style-card" key={item.styleId} onClick={() => openStyle(item.styleId)} aria-label={`Apri ${item.title}`}>
-      <div className="dw-style-card-heading"><span className="dw-style-card-photo"><ProductPhoto variant={item.variant} sizes="48px" alt="" /></span><div><strong>{item.title}</strong><span className="dw-code">{item.identityAssigned ? item.styleId : 'Codice riservato · ' + item.styleId}</span></div><Badge>{data.styleId === item.styleId ? 'Selezionato' : item.identityAssigned ? 'In sviluppo' : 'Bozza'}</Badge></div>
-      <p>{item.collection}</p><div className="dw-style-card-footer"><span><Icon name="layers" size={13} />{item.variant}</span><span>{item.identityAssigned ? 'Schizzo caricato' : 'Schizzo da caricare'}</span><Icon name="arrow" size={14} /></div>
-    </button>)}</div> : <Card flush><div className="dw-table-wrap"><table className="dw-table"><thead><tr><th>Capo</th><th>Codice</th><th>Collezione</th><th>Variante</th><th /></tr></thead><tbody>{rows.map(item => <tr key={item.styleId}><td><span className="dw-product-cell"><span className="dw-style-card-photo"><ProductPhoto variant={item.variant} sizes="40px" alt="" /></span><strong>{item.title}</strong>{data.styleId === item.styleId && <Badge>Selezionato</Badge>}</span></td><td className="dw-code">{item.identityAssigned ? item.styleId : 'Bozza'}</td><td>{item.collection}</td><td>{item.variant}</td><td><Button onClick={() => openStyle(item.styleId)}>Apri capo<Icon name="arrow" size={14} /></Button></td></tr>)}</tbody></table></div></Card>}
+    {layout === 'Griglia' ? <div className="dw-style-grid">{rows.map(item => <button type="button" className="dw-style-card" key={item.styleId} onClick={() => openStyle(productVariantId(item, query))} aria-label={`Apri ${item.title}`}>
+      <div className="dw-style-card-heading"><span className="dw-style-card-photo"><ProductPhoto product={item} sizes="48px" alt="" /></span><div><strong>{item.title}</strong><span className="dw-code">{item.identityAssigned ? item.productId : 'Codice riservato · ' + item.productId}</span></div><Badge>{data.styleId === item.styleId ? 'Selezionato' : item.identityAssigned ? 'In sviluppo' : 'Bozza'}</Badge></div>
+      <p>{item.collection}</p><div className="dw-style-card-footer"><span><Icon name="layers" size={13} />{item.variantSummary}</span><span>{item.variants.length > 1 ? `${item.variants.length} varianti` : item.identityAssigned ? 'Schizzo caricato' : 'Schizzo da caricare'}</span><Icon name="arrow" size={14} /></div>
+    </button>)}</div> : <Card flush><div className="dw-table-wrap"><table className="dw-table"><thead><tr><th>Capo</th><th>Codice</th><th>Collezione</th><th>Variante</th><th /></tr></thead><tbody>{rows.map(item => <tr key={item.styleId}><td><span className="dw-product-cell"><span className="dw-style-card-photo"><ProductPhoto product={item} sizes="40px" alt="" /></span><strong>{item.title}</strong>{data.styleId === item.styleId && <Badge>Selezionato</Badge>}</span></td><td className="dw-code">{item.identityAssigned ? item.productId : 'Bozza'}</td><td>{item.collection}</td><td>{item.variantSummary}</td><td><Button onClick={() => openStyle(productVariantId(item, query))}>Apri capo<Icon name="arrow" size={14} /></Button></td></tr>)}</tbody></table></div></Card>}
     {!rows.length && <Empty>Nessun capo corrisponde alla ricerca.</Empty>}
   </div>;
 }

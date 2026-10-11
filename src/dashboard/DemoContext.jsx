@@ -1,17 +1,15 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { collectionDefaults, creativeDefaults } from './creativeData.js';
 import { profileActor, seedWorkspaceData, validTask } from './workspaceData.js';
+import { additionalFabrics, groupProducts, newDemoProducts, productSpec, productSizes, materialUnit } from './productData.js';
 
 export const euro = value => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
 export const number = (value, digits = 0) => new Intl.NumberFormat('it-IT', { maximumFractionDigits: digits }).format(value);
-export const sizes = [38, 40, 42, 44, 46, 48];
 export const fabrics = [
   { id: 'base', name: 'Lana mista · Cammello', code: 'TES-017', price: 16, wool: 70, composition: '70% lana · 30% poliestere', supplier: 'Fornitore A', origin: 'Italia', weight: 280, tone: '#bda17d', certificate: 'Scheda di origine IT-7781' },
   { id: 'premium', name: 'Lana vergine · Sabbia', code: 'TES-024', price: 20, wool: 100, composition: '100% lana vergine', supplier: 'Lanificio C', origin: 'Italia', weight: 310, tone: '#d5c5ac', certificate: 'Dichiarazione lana vergine IT-9024' },
   { id: 'recycled', name: 'Lana riciclata · Pietra', code: 'TES-031', price: 17.5, wool: 70, composition: '70% lana riciclata · 30% poliestere', supplier: 'Filati D', origin: 'Italia', weight: 290, tone: '#b0aaa0', certificate: 'Certificato demo R-0031' },
-];
-export const operations = [
-  ['Taglio e preparazione', 'Taglierina', 8], ['Assemblaggio davanti', 'Lineare', 9], ['Tasche e pattine', 'Lineare', 6], ['Unione spalle e fianchi', 'Lineare', 5], ['Montaggio maniche', 'Braccio libero', 7], ['Fodera e colletto', 'Lineare', 7], ['Bottoni e asole', 'Asolatrice', 3], ['Stiro e finitura', 'Stiro a vapore', 3],
+  ...additionalFabrics,
 ];
 export const minQuantity = data => Math.max(data.produced, data.retailSold + data.wholesaleOrders.reduce((sum, order) => sum + order.qty, 0));
 
@@ -78,10 +76,12 @@ export function totals(data) {
 const Context = createContext(null);
 export function DemoProvider({ children }) {
   const [workspace, setWorkspace] = useState(() => {
-    const items = [structuredClone(initial), { ...structuredClone(initial), styleId: 'GJ-0422', orderId: 'OP-0422', lotId: 'L-0422-A', fabricLot: 'T-7782', sampleId: 'CAMP-0422-01', title: 'Giacca Studio', variant: 'Sabbia', fabricId: 'premium', fabricPrice: 20, quantity: 600, events: [{ id: 'studio-1', text: 'Inserito il brief: giacca in lana vergine, linea morbida e palette sabbia.', module: 1, time: '08 ott · 14:00', actor: demoActors[0], demo: true }, { id: 'studio-2', text: 'Selezionata la lana vergine TES-024 del Lanificio C, 310 g/m².', module: 3, time: '08 ott · 13:40', actor: demoActors[2], demo: true }, { id: 'studio-3', text: 'Aperta la bozza Giacca Studio nella collezione Autunno/Inverno 2027.', module: 21, time: '08 ott · 13:30', actor: demoActors[0], demo: true }], brief: 'Giacca in lana vergine, linea morbida e palette sabbia. Una proposta sartoriale per il guardaroba quotidiano.' }];
-    return { activeId: initial.styleId, collections: { [initial.collection]: collectionDefaults() }, items, ...seedWorkspaceData(items, initial.profile) };
+    const items = [{ ...structuredClone(initial), productId: 'GJ-0421' }, { ...structuredClone(initial), productId: 'GJ-0421', aliasTitle: 'Giacca Studio', styleId: 'GJ-0422', orderId: 'OP-0422', lotId: 'L-0422-A', fabricLot: 'T-7782', sampleId: 'CAMP-0422-01', title: 'Giacca Atelier', variant: 'Sabbia', fabricId: 'premium', fabricPrice: 20, quantity: 600, qualityNote: 'Regolare la macchina lineare e ricontrollare la cucitura spalla sul lotto L-0422-A.', events: [{ id: 'studio-1', text: 'Definita la variante Sabbia della Giacca Atelier in lana vergine.', module: 1, time: '08 ott · 14:00', actor: demoActors[0], demo: true }, { id: 'studio-2', text: 'Selezionata la lana vergine TES-024 del Lanificio C, 310 g/m².', module: 3, time: '08 ott · 13:40', actor: demoActors[2], demo: true }, { id: 'studio-3', text: 'Aperta la variante Sabbia della Giacca Atelier nella collezione Autunno/Inverno 2027.', module: 21, time: '08 ott · 13:30', actor: demoActors[0], demo: true }], brief: 'Variante Sabbia della Giacca Atelier, stesso modello monopetto regular con tre bottoni e due tasche con pattina, in lana vergine.' }];
+    items.push(...newDemoProducts(initial));
+    return { activeId: initial.styleId, selectedVariants: {}, collections: { [initial.collection]: collectionDefaults() }, items, ...seedWorkspaceData(items, initial.profile) };
   });
   const data = workspace.items.find(item => item.styleId === workspace.activeId);
+  const products = groupProducts(workspace.items, workspace.activeId, workspace.selectedVariants, fabrics);
   const [notice, setNotice] = useState('');
   const timeout = useRef(null);
   useEffect(() => () => clearTimeout(timeout.current), []);
@@ -97,7 +97,7 @@ export function DemoProvider({ children }) {
       const next = { ...previous, ...changes };
       if (next.fabricId !== previous.fabricId) {
         const fabric = fabrics.find(f => f.id === next.fabricId);
-        next.purchaseOrders = next.purchaseOrders.map(row => row.id === 'ACQ-0271' ? { ...row, supplier: fabric.supplier, material: fabric.name } : row);
+        next.purchaseOrders = next.purchaseOrders.map(row => row.materialId === 'main' || row.id === 'ACQ-0271' ? { ...row, supplier: fabric.supplier, material: fabric.name } : row);
       }
       // Reopen a reviewed phase when its inputs change, including live edits.
       if (!Object.hasOwn(changes, 'phaseReviews')) {
@@ -140,13 +140,16 @@ export function DemoProvider({ children }) {
     if (message) notify(message);
   }
   function selectStyle(styleId) {
-    setWorkspace(current => current.items.some(item => item.styleId === styleId) ? { ...current, activeId: styleId } : current);
+    setWorkspace(current => {
+      const item = current.items.find(item => item.styleId === styleId);
+      return item ? { ...current, activeId: styleId, selectedVariants: { ...current.selectedVariants, [item.productId || item.styleId]: styleId } } : current;
+    });
   }
   function createStyle({ title, styleId, collection, quantity, copy }) {
     const code = styleId.trim().toUpperCase();
     if (workspace.items.some(item => item.styleId === code)) return false;
-    const suffix = code.replace(/^GJ-/, '');
-    const item = { ...structuredClone(copy ? data : initial), title: title.trim(), styleId: code, orderId: 'OP-' + suffix, lotId: 'L-' + suffix + '-A', fabricLot: 'T-' + suffix, sampleId: 'CAMP-' + suffix + '-01', collection: collection.trim(), quantity: Number(quantity), references: [], creative: creativeDefaults(), conceptApproved: false, identityAssigned: false, technical: null, techGenerated: false, sketch: null, sketchFile: null, sketchName: null, chats: {}, aiRuns: {}, phaseReviews: {}, passportPublished: false,
+    const suffix = code.replace(/^[A-Z]+-/, '');
+    const item = { ...structuredClone(copy ? data : initial), title: title.trim(), productId: undefined, aliasTitle: undefined, styleId: code, orderId: 'OP-' + suffix, lotId: 'L-' + suffix + '-A', fabricLot: 'T-' + suffix, sampleId: 'CAMP-' + suffix + '-01', collection: collection.trim(), quantity: Number(quantity), references: [], creative: creativeDefaults(), conceptApproved: false, identityAssigned: false, technical: null, techGenerated: false, sketch: null, sketchFile: null, sketchName: null, chats: {}, aiRuns: {}, phaseReviews: {}, passportPublished: false,
       profile: data.profile, qualityNote: copy ? data.qualityNote.replaceAll(data.lotId, 'L-' + suffix + '-A') : 'Nessuna non conformità registrata sul nuovo capo.',
       ...(copy ? {} : { brief: '', techGenerated: false, sampleApproved: false, sampleChecks: [false, false, false], produced: 0, reworks: 0, qualityScore: 100, qualityResolved: true, productionDays: [], purchaseOrders: [], wholesaleOrders: [], retailSold: 0, shipments: [], lifecycle: [] }),
       events: [{ id: crypto.randomUUID(), text: 'Creato il capo ' + title.trim(), module: 21, time: activityTime(), at: new Date().toISOString(), actor: profileActor(data.profile) }] };
@@ -201,7 +204,7 @@ export function DemoProvider({ children }) {
     setWorkspace(current => ({ ...current, preferences: { ...current.preferences, ...changes } }));
     notify('Preferenze salvate');
   }
-  return <Context.Provider value={{ data, workspaceItems: workspace.items, tasks: workspace.tasks, inbox: workspace.inbox, preferences: workspace.preferences, updateTask, createTask, markInboxRead, markAllInboxRead, replyInbox, updatePreferences, styles: workspace.items.map(({ styleId, title, collection, variant, identityAssigned }) => ({ styleId, title, collection, variant, identityAssigned })), selectStyle, createStyle, commit, notify, collectionData, commitCollection, ...totals(data) }}>{children}<div className="dw-toast" role="status" aria-live="polite">{notice && <span key={notice}>{notice}</span>}</div></Context.Provider>;
+  return <Context.Provider value={{ data, products, workspaceItems: workspace.items, tasks: workspace.tasks, inbox: workspace.inbox, preferences: workspace.preferences, updateTask, createTask, markInboxRead, markAllInboxRead, replyInbox, updatePreferences, styles: workspace.items.map(({ styleId, title, collection, variant, identityAssigned, category }) => ({ styleId, title, collection, variant, identityAssigned, category })), selectStyle, createStyle, commit, notify, collectionData, commitCollection, ...totals(data) }}>{children}<div className="dw-toast" role="status" aria-live="polite">{notice && <span key={notice}>{notice}</span>}</div></Context.Provider>;
 }
 export const useDemo = () => useContext(Context);
 
@@ -222,11 +225,12 @@ export async function techPack(data, drawings = []) {
   const version = data.technical?.exportVersion || data.technical?.versions.find(v => v.id === data.technical.approvedId) || data.technical?.versions.at(-1);
   const spec = version?.snapshot;
   const colors = spec?.colors || [];
+  const category = productSpec(data), unit = materialUnit(data);
   const sections = [
     ['01 / IDENTITA E DISEGNO', `WEAVE - TECH PACK ${data.styleId}`, data.title, `Collezione ${data.collection} - ${spec?.fit || 'Regular'} fit`, `Disegno v${version?.number || 1} - ${version && version.id === data.technical?.approvedId ? 'APPROVATO' : 'BOZZA'}`, spec?.requirements || data.brief, 'Schizzo: ' + (data.sketchName || 'Non caricato'), ...colors.map(c => `Variante ${c.name}: ${c.code} / ${c.color}`), 'Documento dimostrativo'],
-    ['02 / MISURE BASE - TAGLIA 42', ...(spec?.measurements || data.measurements).map(row => `${row.point}: ${row.value} cm / tolleranza +/-${spec?.tolerance || 1} cm`), `Colletto: ${spec?.parts.collar || 8} cm / Tasca: ${spec?.parts.pocket || 14} cm`, 'Taglie: 38 - 40 - 42 - 44 - 46 - 48', 'Sviluppo torace: +' + data.gradingChest + ' cm per taglia'],
-    ['03 / MATERIALI E DISTINTA BASE', t.fabric.name, t.fabric.composition, 'Origine: ' + t.fabric.origin, `Tessuto: ${data.consumption.toFixed(2)} m x ${data.fabricPrice.toFixed(2)} EUR`, ...data.trims.map(row => `${row.name}: ${row.qty} ${row.unit} x ${row.price.toFixed(2)} EUR`), `Totale materiali: ${t.materials.toFixed(2)} EUR`, 'Disponibilita e colori da confermare nel modulo 3'],
-    ['04 / COSTRUZIONE E NOTE', spec?.constraints || 'Cuciture a vista', ...(spec?.notes || []).map((n, i) => `Nota ${i + 1}: ${n.text} / punto ${n.x}%, ${n.y}%`), `Margine cucitura: ${spec?.parts.seam || data.seam} cm`, `Tempo standard: ${data.laborMinutes} minuti`, 'Macchine: lineare, braccio libero, asolatrice, stiro', `Ordine: ${data.orderId} / ${data.quantity} capi`, 'Revisione: ' + (version?.note || 'Base demo'), 'Approvazione campione: ' + (data.sampleApproved ? 'Approvato' : 'Da completare')],
+    [`02 / MISURE BASE - TAGLIA ${category.baseSize}`, ...(spec?.measurements || data.measurements).map(row => `${row.point}: ${row.value} cm / tolleranza +/-${spec?.tolerance || category.tolerance} cm`), ...Object.entries(category.partLabels).map(([key, label]) => `${label}: ${spec?.parts[key] ?? category.parts[key]} cm`), 'Taglie: ' + productSizes(data).join(' - '), category.gradeIndex === null ? 'Dimensione unica; nessuno sviluppo anatomico' : data.measurements[category.gradeIndex].point + ': +' + data.gradingChest + ' cm per taglia'],
+    ['03 / MATERIALI E DISTINTA BASE', t.fabric.name, t.fabric.composition, 'Origine: ' + t.fabric.origin, `${category.materialLabel}: ${data.consumption.toFixed(2)} ${unit} x ${data.fabricPrice.toFixed(2)} EUR`, ...data.trims.map(row => `${row.name}: ${row.qty} ${row.unit} x ${row.price.toFixed(2)} EUR`), `Totale materiali: ${t.materials.toFixed(2)} EUR`, 'Disponibilita e colori da confermare nel modulo 3'],
+    ['04 / COSTRUZIONE E NOTE', spec?.constraints || category.requirements, ...(spec?.notes || []).map((n, i) => `Nota ${i + 1}: ${n.text} / punto ${n.x}%, ${n.y}%`), `Margine ${data.category === 'knit' ? 'rimaglio' : 'cucitura'}: ${spec?.parts.seam || data.seam} cm`, `Tempo standard: ${data.laborMinutes} minuti`, 'Macchine: ' + [...new Set(category.operations.map(row => row[1]))].join(', '), `Ordine: ${data.orderId} / ${data.quantity} articoli`, 'Revisione: ' + (version?.note || 'Base demo'), 'Approvazione campione: ' + (data.sampleApproved ? 'Approvato' : 'Da completare')],
   ];
   const images = await Promise.all(drawings.map(async source => {
     const url = URL.createObjectURL(new Blob([source], { type: 'image/svg+xml' }));

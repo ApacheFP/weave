@@ -1,26 +1,30 @@
+import { additionalFabrics, productSpec } from './productData.js';
+
 export function technicalDefaults(data) {
-  return { requirements: 'Giacca monopetto, vestibilità regular, tre bottoni e due tasche con pattina.', constraints: 'Cuciture a vista; tolleranza base ±1 cm.', fit: 'Regular', tolerance: 1, notes: [], versions: [], currentId: null, approvedId: null, colors: (data.creative?.concept?.palette || []).map((color, i) => ({ ...color, code: `C-${101 + i}`, material: 'Da collegare nel modulo 3' })) };
+  const spec = productSpec(data), fabric = additionalFabrics.find(item => item.id === data.fabricId);
+  const palette = data.creative?.concept?.palette || [];
+  const colors = (fabric ? [{ name: data.variant, color: fabric.tone }, ...palette.filter(color => color.name !== data.variant)] : palette).map((color, i) => ({ ...color, code: `C-${101 + i}`, material: fabric?.code || 'Da collegare nel modulo 3' }));
+  return { requirements: spec.requirements, constraints: data.category === 'knit' ? 'Finezza 7; misure dopo stabilizzazione; filato principale include i bordi.' : `Cuciture a vista; tolleranza base ±${spec.tolerance} cm.`, fit: spec.fit, tolerance: spec.tolerance, notes: [], versions: [], currentId: null, approvedId: null, colors };
 }
 export function versionSnapshot(data, technical) {
-  return { measurements: structuredClone(data.measurements), parts: { collar: 8, pocket: 14, seam: data.seam }, fit: technical.fit, tolerance: technical.tolerance, colors: structuredClone(technical.colors), requirements: technical.requirements, constraints: technical.constraints, notes: structuredClone(technical.notes) };
+  return { category: data.category || 'jacket', baseSize: productSpec(data).baseSize, measurements: structuredClone(data.measurements), parts: { ...productSpec(data).parts, seam: data.seam }, fit: technical.fit, tolerance: technical.tolerance, colors: structuredClone(technical.colors), requirements: technical.requirements, constraints: technical.constraints, notes: structuredClone(technical.notes) };
 }
-export const revisionPrompts = ['Accorcia la manica di 1 cm', 'Allunga il capo di 2 cm', 'Allarga le spalle di 1 cm', 'Porta la tasca a 16 cm'];
-// shortcut: these four revision intents are prepared demo actions; free-form AI comes with the backend.
+export const revisionPrompts = productSpec({}).revisionPrompts;
+// shortcut: revision intents are prepared demo actions; free-form AI comes with the backend.
 export function reviseTechnical(snapshot, prompt) {
-  const next = structuredClone(snapshot);
-  const text = prompt.toLowerCase();
+  const next = structuredClone(snapshot), text = prompt.toLowerCase();
   const amount = Number((text.match(/\d+(?:[.,]\d+)?/) || ['1'])[0].replace(',', '.'));
   if (!Number.isFinite(amount) || amount <= 0 || amount > 20) return null;
-  if (text.includes('tasca')) next.parts.pocket = amount;
+  if (text.includes('tasca') && Object.hasOwn(next.parts, 'pocket')) next.parts.pocket = amount;
   else {
-    const index = text.includes('manica') ? 3 : text.includes('spall') ? 1 : text.includes('capo') || text.includes('lunghezza') ? 0 : -1;
+    const targets = snapshot.category === 'bag' ? [/larghezza/, /altezza/, /profondit/, /manico/] : snapshot.category === 'trousers' ? [/lunghezza|capo/, /vita/, /bacino/, /interno/] : [/capo|lunghezza/, /spall/, /torace/, /manica/];
+    const index = /interno/.test(text) && snapshot.category === 'trousers' ? 3 : targets.findIndex(pattern => pattern.test(text));
     if (index < 0 || !/accorcia|allunga|allarga|riduci|aumenta/.test(text)) return null;
     next.measurements[index].value += /accorcia|riduci/.test(text) ? -amount : amount;
     if (next.measurements[index].value < 1 || next.measurements[index].value > 250) return null;
   }
   return next;
 }
-
 export function validColors(colors) {
   return colors.length > 0 && colors.every(c => c.name.trim() && c.code.trim()) && new Set(colors.map(c => c.code.trim().toUpperCase())).size === colors.length;
 }

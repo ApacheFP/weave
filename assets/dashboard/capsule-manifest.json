@@ -1,0 +1,204 @@
+{
+  "collection": "Atelier · Autunno/Inverno 2027",
+  "direction": "Sartorialità quotidiana italiana; cammello, sabbia, pietra, argilla e avorio. Fondale avorio caldo, luce morbida diffusa, prodotto completo e centrato. Schizzi grafite; documenti vettoriali originali.",
+  "assets": [
+    {
+      "key": "trousers-front",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-9dab41a0-7078-4b88-8825-27f0bc659990.png",
+      "output": "public/images/dashboard/trousers-front.webp",
+      "thumbnail": "public/images/dashboard/trousers-front-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: WEAVE Italian boutique capsule catalog FRONT photograph, portrait 4:5. Reference image: existing camel blazer, visual direction only. Pantalone Riva: warm stone-grey wool twill tailored trousers, straight wide leg, one forward pleat on each side, medium-high waistband with belt loops, concealed zip fly, one small dark corozo button, slanted side pockets, pressed central crease, no cuffs. Exact straight-on FRONT view, a single product centered and entirely visible, fills 82% of frame, clean ghost mannequin/studio product photograph with realistic material details. Match reference catalog: warm off-white ivory seamless background, soft diffuse frontal-left studio light, very faint floor shadow, natural quiet tailoring mood, desaturated earth palette, same photographic scale and sophistication. No model, no hanger, no props, no text, labels, logos or watermark. Do not include blazer, coat or any other garment.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "bag-front",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-4b8d1993-6341-4e5b-9624-540a3e49edc9.png",
+      "output": "public/images/dashboard/bag-front.webp",
+      "thumbnail": "public/images/dashboard/bag-front-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: WEAVE Italian boutique capsule catalog FRONT photograph, portrait 4:5. Reference image: existing camel blazer, visual direction only. Borsa Trama: contemporary Italian structured medium tote, matte clay-taupe heavy cotton canvas, trapezoid body 34 cm wide 29 cm high 12 cm depth, two long narrow dark chocolate leather shoulder handles sewn on rectangular tabs near top, discreet dark leather piping at base corners, recessed top zipper with antique brushed brass pull, no external pockets, no decoration. Exact straight-on FRONT view, a single product centered and entirely visible, fills 82% of frame, clean ghost mannequin/studio product photograph with realistic material details. Match reference catalog: warm off-white ivory seamless background, soft diffuse frontal-left studio light, very faint floor shadow, natural quiet tailoring mood, desaturated earth palette, same photographic scale and sophistication. No model, no hanger, no props, no text, labels, logos or watermark. Do not include blazer, coat or any other garment.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-front",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-fee4d059-9f28-4e3a-9e7c-9ea836f75f41.png",
+      "output": "public/images/dashboard/knit-front.webp",
+      "thumbnail": "public/images/dashboard/knit-front-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: WEAVE Italian boutique capsule catalog FRONT photograph, portrait 4:5. Reference image: existing camel blazer, visual direction only. Maglia Luce: warm ivory fine merino and cashmere sweater, relaxed straight silhouette, round ribbed crew neck, long set-in sleeves, smooth fine stockinette texture, 5 cm ribbed cuffs and hem, restrained visible fully fashioned decrease marks at armholes, no buttons, no pockets, no cable patterns. Exact straight-on FRONT view, a single product centered and entirely visible, fills 82% of frame, clean ghost mannequin/studio product photograph with realistic material details. Match reference catalog: warm off-white ivory seamless background, soft diffuse frontal-left studio light, very faint floor shadow, natural quiet tailoring mood, desaturated earth palette, same photographic scale and sophistication. No model, no hanger, no props, no text, labels, logos or watermark. Do not include blazer, coat or any other garment.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "trousers-fabric",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-30be25db-b30d-4c5f-b116-fde7a62dea70.png",
+      "output": "public/images/dashboard/trousers-fabric.webp",
+      "thumbnail": "public/images/dashboard/trousers-fabric-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: main material swatch, square 1:1. Macro top-down tactile sample of the exact material/color in the reference on warm ivory atelier tabletop, one folded corner, soft daylight. Trousers: warm stone wool twill, finely visible diagonal weave. Bag: clay-taupe dense matte cotton canvas, clear woven cotton texture. Sweater: warm ivory fine merino cashmere stockinette swatch plus a small matching yarn cone, fine natural knit stitches. Do not show full product. No rulers, text, logos. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Pantalone Riva: warm stone-grey wool twill tailored trousers, straight wide leg, one forward pleat on each side, medium-high waistband with belt loops, concealed zip fly, one small dark corozo button, slanted side pockets, pressed central crease, no cuffs. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "trousers-back",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-8da8abf5-0636-4903-9ec6-a61d98a258c1.png",
+      "output": "public/images/dashboard/trousers-back.webp",
+      "thumbnail": "public/images/dashboard/trousers-back-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: catalog BACK photograph, portrait 4:5. Show exactly the back of this SAME product. Trousers: two narrow rear welt pockets, subtle rear darts, same waistband and straight crease legs. Bag: plain rear canvas face with same two leather handles and corner leather details, no external pockets. Sweater: plain round rear neckline, identical smooth stockinette and rib edges. Same framing, scale, material, color, warm ivory seamless background and soft diffuse studio light as the front. No front fly on rear trousers. No text. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Pantalone Riva: warm stone-grey wool twill tailored trousers, straight wide leg, one forward pleat on each side, medium-high waistband with belt loops, concealed zip fly, one small dark corozo button, slanted side pockets, pressed central crease, no cuffs. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "trousers-sketch",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-f7883a81-e5d9-4b82-b56e-4fceb0e5cba1.png",
+      "output": "public/images/dashboard/trousers-sketch.webp",
+      "thumbnail": "public/images/dashboard/trousers-sketch-thumb.webp",
+      "prompt": " Use case: illustration-story. Asset type: designer graphite sketch, portrait 4:5. Draw this exact SAME product from the front, entirely visible and centered, with fine hand-drawn graphite outlines and gentle pencil texture shading on warm ivory paper, precise believable garment/accessory construction matching all product features. No human figure, annotations, lettering, color blocks or other product. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Pantalone Riva: warm stone-grey wool twill tailored trousers, straight wide leg, one forward pleat on each side, medium-high waistband with belt loops, concealed zip fly, one small dark corozo button, slanted side pockets, pressed central crease, no cuffs. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "trousers-trims",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-c90160c6-e559-4266-af1b-3bfcc701b8b6.png",
+      "output": "public/images/dashboard/trousers-trims.webp",
+      "thumbnail": "public/images/dashboard/trousers-trims-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: actual bill of materials notions flat lay, square 1:1. Warm ivory atelier table, soft natural diffuse daylight, realistic top-down organized restrained arrangement. For TROUSERS: a matching stone cotton pocketing swatch, stone waistband fusible strip, one small dark corozo button, one concealed stone trouser zip, neutral unbranded care label. For BAG: two dark chocolate leather shoulder handle straps with sewn rectangular ends, matching small leather corner tabs, clay cotton lining swatch, one recessed antique brushed brass zipper, unbranded woven label. For SWEATER: warm ivory ribbed neck band and cuff samples in the SAME yarn, matching reinforcement knit tape and unbranded neutral care label, no buttons/zips/fusible woven cloth. Show ONLY notions for the product in reference, no other product. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Pantalone Riva: warm stone-grey wool twill tailored trousers, straight wide leg, one forward pleat on each side, medium-high waistband with belt loops, concealed zip fly, one small dark corozo button, slanted side pockets, pressed central crease, no cuffs. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "trousers-sample",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-6e514de5-94ed-4bab-8ec7-dc3ecaeaa37b.png",
+      "output": "public/images/dashboard/trousers-sample.webp",
+      "thumbnail": "public/images/dashboard/trousers-sample-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: prototype in atelier photograph, portrait 4:5. Show the exact same complete product with identical shape, color, features and proportions. Trousers hung cleanly at waistband on discreet wooden clamp hanger, full legs visible. Sweater on a linen dressmaker torso with round wooden neck finial, whole sweater visible. Bag standing on an artisan wood workbench, whole bag including both handles visible. Warm quiet Italian atelier, soft window daylight from left, blurred neutral tools and wood tabletop, no humans, no text, no unrelated garment. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Pantalone Riva: warm stone-grey wool twill tailored trousers, straight wide leg, one forward pleat on each side, medium-high waistband with belt loops, concealed zip fly, one small dark corozo button, slanted side pockets, pressed central crease, no cuffs. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "trousers-quality",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-5a252116-86a1-49b3-a601-71266586e280.png",
+      "output": "public/images/dashboard/trousers-quality.webp",
+      "thumbnail": "public/images/dashboard/trousers-quality-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: quality inspection evidence macro photograph, portrait 4:5. CLOSE-UP only of the exact same product and material in reference, on warm atelier tabletop with diffuse window light. TROUSERS: detail of lower leg blind hem, a short 2 cm section of uneven puckering at hem stitch, warm stone wool twill. BAG: close-up of one chocolate leather handle rectangular attachment sewn onto clay-taupe canvas, a short doubled uneven stitch line in one corner, matching brass zipper just out of focus. SWEATER: close-up of warm ivory rib cuff joined to stockinette sleeve, a single small dropped knit stitch at cuff join, fine merino cashmere yarn. Realistic subtle repairable defect, no severe damage, no callouts, arrows, text or clothing from another product. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Pantalone Riva: warm stone-grey wool twill tailored trousers, straight wide leg, one forward pleat on each side, medium-high waistband with belt loops, concealed zip fly, one small dark corozo button, slanted side pockets, pressed central crease, no cuffs. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "bag-back",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-c67c9803-67b4-464a-838a-c9373fe8ff6a.png",
+      "output": "public/images/dashboard/bag-back.webp",
+      "thumbnail": "public/images/dashboard/bag-back-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: catalog BACK photograph, portrait 4:5. Show exactly the back of this SAME product. Trousers: two narrow rear welt pockets, subtle rear darts, same waistband and straight crease legs. Bag: plain rear canvas face with same two leather handles and corner leather details, no external pockets. Sweater: plain round rear neckline, identical smooth stockinette and rib edges. Same framing, scale, material, color, warm ivory seamless background and soft diffuse studio light as the front. No front fly on rear trousers. No text. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Borsa Trama: contemporary Italian structured medium tote, matte clay-taupe heavy cotton canvas, trapezoid body 34 cm wide 29 cm high 12 cm depth, two long narrow dark chocolate leather shoulder handles sewn on rectangular tabs near top, discreet dark leather piping at base corners, recessed top zipper with antique brushed brass pull, no external pockets, no decoration. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "bag-sketch",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-dc0404e2-c571-4a88-b772-f78b06ea53a9.png",
+      "output": "public/images/dashboard/bag-sketch.webp",
+      "thumbnail": "public/images/dashboard/bag-sketch-thumb.webp",
+      "prompt": " Use case: illustration-story. Asset type: designer graphite sketch, portrait 4:5. Draw this exact SAME product from the front, entirely visible and centered, with fine hand-drawn graphite outlines and gentle pencil texture shading on warm ivory paper, precise believable garment/accessory construction matching all product features. No human figure, annotations, lettering, color blocks or other product. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Borsa Trama: contemporary Italian structured medium tote, matte clay-taupe heavy cotton canvas, trapezoid body 34 cm wide 29 cm high 12 cm depth, two long narrow dark chocolate leather shoulder handles sewn on rectangular tabs near top, discreet dark leather piping at base corners, recessed top zipper with antique brushed brass pull, no external pockets, no decoration. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "bag-fabric",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-d8314b13-9e5b-4236-ac3c-a23c1f1821a2.png",
+      "output": "public/images/dashboard/bag-fabric.webp",
+      "thumbnail": "public/images/dashboard/bag-fabric-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: main material swatch, square 1:1. Macro top-down tactile sample of the exact material/color in the reference on warm ivory atelier tabletop, one folded corner, soft daylight. Trousers: warm stone wool twill, finely visible diagonal weave. Bag: clay-taupe dense matte cotton canvas, clear woven cotton texture. Sweater: warm ivory fine merino cashmere stockinette swatch plus a small matching yarn cone, fine natural knit stitches. Do not show full product. No rulers, text, logos. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Borsa Trama: contemporary Italian structured medium tote, matte clay-taupe heavy cotton canvas, trapezoid body 34 cm wide 29 cm high 12 cm depth, two long narrow dark chocolate leather shoulder handles sewn on rectangular tabs near top, discreet dark leather piping at base corners, recessed top zipper with antique brushed brass pull, no external pockets, no decoration. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "bag-sample",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-7a4f939e-d7d7-4b5c-81c0-deb5c2dabe1f.png",
+      "output": "public/images/dashboard/bag-sample.webp",
+      "thumbnail": "public/images/dashboard/bag-sample-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: prototype in atelier photograph, portrait 4:5. Show the exact same complete product with identical shape, color, features and proportions. Trousers hung cleanly at waistband on discreet wooden clamp hanger, full legs visible. Sweater on a linen dressmaker torso with round wooden neck finial, whole sweater visible. Bag standing on an artisan wood workbench, whole bag including both handles visible. Warm quiet Italian atelier, soft window daylight from left, blurred neutral tools and wood tabletop, no humans, no text, no unrelated garment. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Borsa Trama: contemporary Italian structured medium tote, matte clay-taupe heavy cotton canvas, trapezoid body 34 cm wide 29 cm high 12 cm depth, two long narrow dark chocolate leather shoulder handles sewn on rectangular tabs near top, discreet dark leather piping at base corners, recessed top zipper with antique brushed brass pull, no external pockets, no decoration. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "bag-trims",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-cb1b11cf-2643-40ab-b26e-640e58e0d39a.png",
+      "output": "public/images/dashboard/bag-trims.webp",
+      "thumbnail": "public/images/dashboard/bag-trims-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: actual bill of materials notions flat lay, square 1:1. Warm ivory atelier table, soft natural diffuse daylight, realistic top-down organized restrained arrangement. For TROUSERS: a matching stone cotton pocketing swatch, stone waistband fusible strip, one small dark corozo button, one concealed stone trouser zip, neutral unbranded care label. For BAG: two dark chocolate leather shoulder handle straps with sewn rectangular ends, matching small leather corner tabs, clay cotton lining swatch, one recessed antique brushed brass zipper, unbranded woven label. For SWEATER: warm ivory ribbed neck band and cuff samples in the SAME yarn, matching reinforcement knit tape and unbranded neutral care label, no buttons/zips/fusible woven cloth. Show ONLY notions for the product in reference, no other product. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Borsa Trama: contemporary Italian structured medium tote, matte clay-taupe heavy cotton canvas, trapezoid body 34 cm wide 29 cm high 12 cm depth, two long narrow dark chocolate leather shoulder handles sewn on rectangular tabs near top, discreet dark leather piping at base corners, recessed top zipper with antique brushed brass pull, no external pockets, no decoration. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "bag-quality",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-9cf222c7-28fc-4d20-b25e-41cd0d1e8d53.png",
+      "output": "public/images/dashboard/bag-quality.webp",
+      "thumbnail": "public/images/dashboard/bag-quality-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: quality inspection evidence macro photograph, portrait 4:5. CLOSE-UP only of the exact same product and material in reference, on warm atelier tabletop with diffuse window light. TROUSERS: detail of lower leg blind hem, a short 2 cm section of uneven puckering at hem stitch, warm stone wool twill. BAG: close-up of one chocolate leather handle rectangular attachment sewn onto clay-taupe canvas, a short doubled uneven stitch line in one corner, matching brass zipper just out of focus. SWEATER: close-up of warm ivory rib cuff joined to stockinette sleeve, a single small dropped knit stitch at cuff join, fine merino cashmere yarn. Realistic subtle repairable defect, no severe damage, no callouts, arrows, text or clothing from another product. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Borsa Trama: contemporary Italian structured medium tote, matte clay-taupe heavy cotton canvas, trapezoid body 34 cm wide 29 cm high 12 cm depth, two long narrow dark chocolate leather shoulder handles sewn on rectangular tabs near top, discreet dark leather piping at base corners, recessed top zipper with antique brushed brass pull, no external pockets, no decoration. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-back",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-850c6c7f-5c07-40d2-b3d8-9989a6092899.png",
+      "output": "public/images/dashboard/knit-back.webp",
+      "thumbnail": "public/images/dashboard/knit-back-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: catalog BACK photograph, portrait 4:5. Show exactly the back of this SAME product. Trousers: two narrow rear welt pockets, subtle rear darts, same waistband and straight crease legs. Bag: plain rear canvas face with same two leather handles and corner leather details, no external pockets. Sweater: plain round rear neckline, identical smooth stockinette and rib edges. Same framing, scale, material, color, warm ivory seamless background and soft diffuse studio light as the front. No front fly on rear trousers. No text. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Maglia Luce: warm ivory fine merino and cashmere sweater, relaxed straight silhouette, round ribbed crew neck, long set-in sleeves, smooth fine stockinette texture, 5 cm ribbed cuffs and hem, restrained visible fully fashioned decrease marks at armholes, no buttons, no pockets, no cable patterns. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-sketch",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-acc3a773-c8fd-461d-bc44-339ad91d589c.png",
+      "output": "public/images/dashboard/knit-sketch.webp",
+      "thumbnail": "public/images/dashboard/knit-sketch-thumb.webp",
+      "prompt": " Use case: illustration-story. Asset type: designer graphite sketch, portrait 4:5. Draw this exact SAME product from the front, entirely visible and centered, with fine hand-drawn graphite outlines and gentle pencil texture shading on warm ivory paper, precise believable garment/accessory construction matching all product features. No human figure, annotations, lettering, color blocks or other product. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Maglia Luce: warm ivory fine merino and cashmere sweater, relaxed straight silhouette, round ribbed crew neck, long set-in sleeves, smooth fine stockinette texture, 5 cm ribbed cuffs and hem, restrained visible fully fashioned decrease marks at armholes, no buttons, no pockets, no cable patterns. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-trims",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-08755a02-df93-41af-9c1f-eb695eeb3a64.png",
+      "output": "public/images/dashboard/knit-trims.webp",
+      "thumbnail": "public/images/dashboard/knit-trims-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: actual bill of materials notions flat lay, square 1:1. Warm ivory atelier table, soft natural diffuse daylight, realistic top-down organized restrained arrangement. For TROUSERS: a matching stone cotton pocketing swatch, stone waistband fusible strip, one small dark corozo button, one concealed stone trouser zip, neutral unbranded care label. For BAG: two dark chocolate leather shoulder handle straps with sewn rectangular ends, matching small leather corner tabs, clay cotton lining swatch, one recessed antique brushed brass zipper, unbranded woven label. For SWEATER: warm ivory ribbed neck band and cuff samples in the SAME yarn, matching reinforcement knit tape and unbranded neutral care label, no buttons/zips/fusible woven cloth. Show ONLY notions for the product in reference, no other product. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Maglia Luce: warm ivory fine merino and cashmere sweater, relaxed straight silhouette, round ribbed crew neck, long set-in sleeves, smooth fine stockinette texture, 5 cm ribbed cuffs and hem, restrained visible fully fashioned decrease marks at armholes, no buttons, no pockets, no cable patterns. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-fabric",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-fbea40af-185d-4336-988c-0961ce1cc5d7.png",
+      "output": "public/images/dashboard/knit-fabric.webp",
+      "thumbnail": "public/images/dashboard/knit-fabric-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: main material swatch, square 1:1. Macro top-down tactile sample of the exact material/color in the reference on warm ivory atelier tabletop, one folded corner, soft daylight. Trousers: warm stone wool twill, finely visible diagonal weave. Bag: clay-taupe dense matte cotton canvas, clear woven cotton texture. Sweater: warm ivory fine merino cashmere stockinette swatch plus a small matching yarn cone, fine natural knit stitches. Do not show full product. No rulers, text, logos. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Maglia Luce: warm ivory fine merino and cashmere sweater, relaxed straight silhouette, round ribbed crew neck, long set-in sleeves, smooth fine stockinette texture, 5 cm ribbed cuffs and hem, restrained visible fully fashioned decrease marks at armholes, no buttons, no pockets, no cable patterns. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-sample",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-9fee1911-ab53-4bf0-a9e4-942ef12e7461.png",
+      "output": "public/images/dashboard/knit-sample.webp",
+      "thumbnail": "public/images/dashboard/knit-sample-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: prototype in atelier photograph, portrait 4:5. Show the exact same complete product with identical shape, color, features and proportions. Trousers hung cleanly at waistband on discreet wooden clamp hanger, full legs visible. Sweater on a linen dressmaker torso with round wooden neck finial, whole sweater visible. Bag standing on an artisan wood workbench, whole bag including both handles visible. Warm quiet Italian atelier, soft window daylight from left, blurred neutral tools and wood tabletop, no humans, no text, no unrelated garment. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Maglia Luce: warm ivory fine merino and cashmere sweater, relaxed straight silhouette, round ribbed crew neck, long set-in sleeves, smooth fine stockinette texture, 5 cm ribbed cuffs and hem, restrained visible fully fashioned decrease marks at armholes, no buttons, no pockets, no cable patterns. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "knit-quality",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-6dc1c140-c04e-493c-99e4-1c5b4a8dd981.png",
+      "output": "public/images/dashboard/knit-quality.webp",
+      "thumbnail": "public/images/dashboard/knit-quality-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: quality inspection evidence macro photograph, portrait 4:5. CLOSE-UP only of the exact same product and material in reference, on warm atelier tabletop with diffuse window light. TROUSERS: detail of lower leg blind hem, a short 2 cm section of uneven puckering at hem stitch, warm stone wool twill. BAG: close-up of one chocolate leather handle rectangular attachment sewn onto clay-taupe canvas, a short doubled uneven stitch line in one corner, matching brass zipper just out of focus. SWEATER: close-up of warm ivory rib cuff joined to stockinette sleeve, a single small dropped knit stitch at cuff join, fine merino cashmere yarn. Realistic subtle repairable defect, no severe damage, no callouts, arrows, text or clothing from another product. Reference image 1 is the EXACT product identity, preserve it. Subject specification: Maglia Luce: warm ivory fine merino and cashmere sweater, relaxed straight silhouette, round ribbed crew neck, long set-in sleeves, smooth fine stockinette texture, 5 cm ribbed cuffs and hem, restrained visible fully fashioned decrease marks at armholes, no buttons, no pockets, no cable patterns. Restrained Italian boutique capsule, original image, no watermark. Do not mix categories or show coat/blazer details.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "quality-sand",
+      "source": "/Users/chico/.codex/generated_images/01a12c2e-e56c-7770-8769-df3d51efc798/exec-6bb0bcbe-8600-4cf4-96d4-33fd1b1c15c0.png",
+      "output": "public/images/dashboard/quality-sand.webp",
+      "thumbnail": "public/images/dashboard/quality-sand-thumb.webp",
+      "prompt": "Use case: product-mockup. Asset type: WEAVE quality inspection evidence, portrait 4:5. Reference 1 is exact Giacca Studio identity and SAND wool color. Reference 2 is the framing and subtle seam defect technique, ONLY. Photograph a close-up of the LEFT shoulder seam of the sand wool three-button blazer from reference 1, visible fine diagonal wool twill, slight puckering/disalignment over a short shoulder seam section. Preserve SAND ivory beige tone from reference 1, not the camel hue of reference 2. Warm Italian atelier worktable, soft daylight, restrained realistic minor repairable quality defect. No other garment, no arrows, labels, text, logos or watermark.",
+      "created": "2026-10-11",
+      "generator": "image_gen built-in"
+    }
+  ]
+}

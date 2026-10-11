@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDemo } from './DemoContext.jsx';
+import { styleLabel } from './productData.js';
 import { modules } from '../modules.js';
 import { Badge, Button, Card, Empty, Icon, Tabs } from './ui.jsx';
 import { ProductPhoto } from './Media.jsx';
@@ -23,7 +24,7 @@ function eventTime(event) {
   return parts && month[parts[2]] != null ? new Date(new Date().getFullYear(), month[parts[2]], Number(parts[1]), Number(parts[3]), Number(parts[4])).getTime() : 0;
 }
 function eventsOf(items) {
-  return items.flatMap(item => item.events.map(event => ({ ...event, styleId: item.styleId, styleTitle: item.title }))).sort((a, b) => eventTime(b) - eventTime(a));
+  return items.flatMap(item => item.events.map(event => ({ ...event, styleId: item.styleId, productId: item.productId || item.styleId, styleTitle: styleLabel(item) }))).sort((a, b) => eventTime(b) - eventTime(a));
 }
 function EventRows({ events, onOpenModule }) {
   return <div className="dw-workspace-events">{events.map(event => <div className="dw-workspace-event" key={`${event.styleId}-${event.id}`}>
@@ -33,7 +34,7 @@ function EventRows({ events, onOpenModule }) {
 }
 
 export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
-  const { data, workspaceItems, tasks, inbox, updateTask } = useDemo();
+  const { data, products, workspaceItems, tasks, inbox, updateTask } = useDemo();
   const [taskView, setTaskView] = useState('Prossime');
   const today = todayKey();
   const mine = tasks.filter(task => task.assignee.email === data.profile.email);
@@ -47,12 +48,12 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Buongiorno' : hour < 18 ? 'Buon pomeriggio' : 'Buonasera';
   const date = new Intl.DateTimeFormat('it-IT', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
-  const styleName = id => workspaceItems.find(item => item.styleId === id)?.title || id;
+  const styleName = id => styleLabel(workspaceItems.find(item => item.styleId === id)) || id;
   return <div className="dw-workspace-home">
     <header className="dw-workspace-page-head"><div><h2>{greeting}, {data.profile.firstName}</h2><p>{date} · Il lavoro di oggi in Atelier.</p></div><Button primary icon="plus" onClick={onCreate}>Nuovo capo</Button></header>
     <div className="dw-home-metrics" aria-label="Riepilogo Atelier">
       {[
-        ['Capi', workspaceItems.length, 'Nella collezione e in sviluppo', 'shirt', 'capi', 'violet'],
+        ['Capi', products.length, 'Nella collezione e in sviluppo', 'shirt', 'capi', 'violet'],
         ['Le mie attività', open.length, `${mine.length} incarichi assegnati a te`, 'list', 'my-tasks', 'blue'],
         ['Inbox', unread, 'Aggiornamenti da leggere', 'inbox', 'inbox', 'teal'],
         ['In ritardo', overdue.length, overdue.length ? 'Incarichi da riprendere' : 'Scadenze sotto controllo', 'clock', 'my-tasks', 'red'],
@@ -70,9 +71,9 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
           {!lists[taskView].length && <Empty>{taskView === 'In ritardo' ? 'Nessun incarico in ritardo.' : 'Nessun incarico in questa vista.'}</Empty>}
         </Card>
         <Card flush title="Capi in Atelier" actions={<Button onClick={() => onOpenPage('capi')}>Tutti i capi</Button>}>
-          <div className="dw-table-wrap"><table className="dw-table dw-workspace-portfolio"><thead><tr><th>Capo</th><th>Fase attuale</th><th>Produzione</th><th>Consegna</th></tr></thead><tbody>{workspaceItems.map(item => <tr key={item.styleId}>
-            <td><button type="button" className="dw-workspace-style-link" onClick={() => onOpenModule(item.styleId, 21)}><span className="dw-style-card-photo"><ProductPhoto variant={item.variant} sizes="40px" alt="" /></span><span><strong>{item.title}</strong><small className="dw-code">{item.styleId}</small></span></button></td>
-            <td><Badge tone={stateTone(item)}>{stateLabel(item)}</Badge></td><td>{item.produced} / {item.quantity}</td><td>{dateLabel(item.delivery)}</td>
+          <div className="dw-table-wrap"><table className="dw-table dw-workspace-portfolio"><thead><tr><th>Capo</th><th>Fase attuale</th><th>Produzione</th><th>Consegna</th></tr></thead><tbody>{products.map(item => <tr key={item.styleId}>
+            <td><button type="button" className="dw-workspace-style-link" onClick={() => onOpenModule(item.styleId, 21)}><span className="dw-style-card-photo"><ProductPhoto product={item} sizes="40px" alt="" /></span><span><strong>{item.title}</strong><small className="dw-code">{item.productId}{item.variants.length > 1 && ` · ${item.variants.length} varianti`}</small></span></button></td>
+            <td><Badge tone={stateTone(item)}>{stateLabel(item)}</Badge></td><td>{item.totalProduced} / {item.totalQuantity}</td><td>{dateLabel(item.delivery)}</td>
           </tr>)}</tbody></table></div>
         </Card>
       </div>
@@ -89,12 +90,12 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
 }
 
 export function WorkspaceActivityPage({ onOpenModule }) {
-  const { workspaceItems } = useDemo();
+  const { products, workspaceItems } = useDemo();
   const [styleId, setStyleId] = useState('all');
   const [limit, setLimit] = useState(12);
-  const events = eventsOf(workspaceItems).filter(event => styleId === 'all' || event.styleId === styleId);
+  const events = eventsOf(workspaceItems).filter(event => styleId === 'all' || event.productId === styleId);
   return <div className="dw-workspace-activity">
-    <header className="dw-workspace-page-head"><div><h2>Attività della filiera</h2><p>Modifiche e decisioni sui capi di Atelier.</p></div><select aria-label="Filtra attività per capo" value={styleId} onChange={event => { setStyleId(event.target.value); setLimit(12); }}><option value="all">Tutti i capi</option>{workspaceItems.map(item => <option value={item.styleId} key={item.styleId}>{item.title}</option>)}</select></header>
+    <header className="dw-workspace-page-head"><div><h2>Attività della filiera</h2><p>Modifiche e decisioni sui capi di Atelier.</p></div><select aria-label="Filtra attività per capo" value={styleId} onChange={event => { setStyleId(event.target.value); setLimit(12); }}><option value="all">Tutti i capi</option>{products.map(item => <option value={item.productId} key={item.productId}>{item.title}</option>)}</select></header>
     <EventRows events={events.slice(0, limit)} onOpenModule={onOpenModule} />
     {!events.length && <Empty>Nessuna attività registrata per questo capo.</Empty>}
     {events.length > limit && <Button onClick={() => setLimit(count => count + 12)}>Mostra altre attività</Button>}

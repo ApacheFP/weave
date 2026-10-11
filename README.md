@@ -1,6 +1,6 @@
 # WEAVE prodotto
 
-Demo React della filiera tessile descritta in `filiera_tessile_input_output_dpp (1).docx`: 15 moduli, 7 servizi integrati e uno spazio Atelier con più capi. Il capo principale è **Giacca Atelier / GJ-0421 / Autunno-Inverno 2027**; Giacca Studio è un secondo esempio disponibile.
+Demo React della filiera tessile descritta in `filiera_tessile_input_output_dpp (1).docx`: 15 moduli, 7 servizi integrati e uno spazio Atelier con più capi. Il capo principale è **Giacca Atelier / GJ-0421 / Autunno-Inverno 2027**; La capsule presenta **quattro prodotti**: Giacca Atelier riunisce le varianti **Cammello / GJ-0421 / lana mista** e **Sabbia / GJ-0422 / lana vergine** (prima Giacca Studio), insieme a **Pantalone Riva / PT-0423 / Pietra**, **Borsa Trama / BG-0424 / Argilla** e **Maglia Luce / MG-0425 / Avorio**.
 
 ## Avvio
 
@@ -47,19 +47,19 @@ Un capo appena creato parte con tutte le fasi da iniziare, produzione e stock a 
 
 I pannelli bianchi riprendono `Prova1/src/styles/panels.css`. L'intestazione con icona, le griglie dei file, le barre dei filtri e le tabelle adattano i componenti di `Prova2/app/admin/`: `ui.tsx`, `admin.module.css`, `table.module.css` e `media/MediaBrowser.tsx`. Card, anteprime, campi, pulsanti e finestre della dashboard condividono un raggio di 12 px. Le intestazioni usano spaziatura e azioni uniformi; su mobile i riepiloghi sono su due colonne, con l’ultimo elemento dispari a tutta larghezza. I crediti della UI di Prova2 sono in `THIRD_PARTY_NOTICES.md`.
 
-Le visuali nelle dashboard sono **25 immagini generate con il tool integrato Imagegen**, salvate in `public/images/dashboard/` in WebP: fronte e retro delle tre varianti della giacca, schizzo, due tavole tecniche, tre campioni di lana, accessori, campione sul manichino, cucitura per il controllo qualità, tavola fotografica del cartamodello, sei tavole dei singoli pezzi, sviluppo taglie e due piazzamenti (base e ottimizzato). Le immagini complete sono larghe 1120 px; ogni visuale ha una miniatura di 480 px, usata tramite `srcset`, caricamento lazy e decoding asincrono. Non ci sono GIF o foto caricate da servizi esterni. I prompt e i riferimenti sono conservati in `assets/dashboard/imagegen-manifest.json`.
+Le visuali originali dei capispalla sono **25 immagini generate con il tool integrato Imagegen**, salvate in `public/images/dashboard/` in WebP: fronte e retro delle tre varianti della giacca, schizzo, due tavole tecniche, tre campioni di lana, accessori, campione sul manichino, cucitura per il controllo qualità, tavola fotografica del cartamodello, sei tavole dei singoli pezzi, sviluppo taglie e due piazzamenti (base e ottimizzato). Le immagini complete sono larghe 1120 px; ogni visuale ha una miniatura di 480 px, usata tramite `srcset`, caricamento lazy e decoding asincrono. Non ci sono GIF o foto caricate da servizi esterni. I prompt e i riferimenti sono conservati in `assets/dashboard/imagegen-manifest.json`. La capsule aggiunge **22 WebP con relative miniature**: sette visuali per ogni nuovo articolo (fronte, retro, schizzo, materiale, finiture, campione atelier, difetto) e un’evidenza dedicata alla variante Sabbia della Giacca Atelier. I prompt completi e le fonti del tool integrato sono in `assets/dashboard/capsule-manifest.json`, collegato dal manifest principale.
 
-Il moodboard offre filtri per categoria, ricerca, griglia/elenco, ordinamento del nome in elenco, anteprima ingrandita e download. Foto e varianti seguono il capo selezionato nei moduli, nella lista capi, nel retail, nella chat e nel passaporto. Modellistica, grading e piazzamento usano tavole di riferimento WebP al posto delle sagome SVG semplificate. Selezione pezzi e taglie, misure, revisioni, margini e calcoli di consumo rimangono interattivi; la scheda modello è esportabile in CSV e la tavola di piazzamento in WebP. Le immagini sono riferimenti dimostrativi: non costituiscono geometrie CAD validate e non cambiano quando si modificano le misure. I grafici dei dati e le icone di navigazione restano componenti nativi. Misure, versioni e codici sono testo HTML aggiornabile, senza valori fissi nelle immagini generate.
+Il moodboard offre filtri per categoria, ricerca, griglia/elenco, ordinamento del nome in elenco, anteprima ingrandita e download. Foto e varianti seguono il capo selezionato nei moduli, nella lista capi, nel retail, nella chat e nel passaporto. I capispalla mantengono le tavole di riferimento WebP. I nuovi prodotti usano **23 tavole SVG originali** di pannelli, pezzi, grading e piazzamento, riproducibili con `node scripts/create-capsule-patterns.mjs`. La borsa ha un formato unico; la maglia usa pannelli fully fashioned e consumo filato in kg, senza piazzamento di tessuto. Il disegno tecnico interattivo mantiene il componente comune e genera geometrie specifiche per categoria. Selezione pezzi e taglie, misure, revisioni, margini e calcoli di consumo rimangono interattivi; la scheda modello è esportabile in CSV e la tavola di piazzamento in WebP per i capispalla e SVG per i nuovi articoli. Le immagini sono riferimenti dimostrativi: non costituiscono geometrie CAD validate e non cambiano quando si modificano le misure. I grafici dei dati e le icone di navigazione restano componenti nativi. Misure, versioni e codici sono testo HTML aggiornabile, senza valori fissi nelle immagini generate.
 
 | Modulo | Azioni della demo |
 | --- | --- |
 | 1 · Ideazione e Design | Brief modificabile, moodboard in griglia/elenco con immagini locali, tre varianti, palette e checklist |
 | 2 · Disegno Tecnico | Carica schizzo, genera tavola preparata, fronte/retro, misure modificabili, tech pack PDF reale di 4 pagine |
-| 3 · Materiali e BOM | Tre tessuti alternativi, consumi e prezzi accessori modificabili, ricerca ed export CSV |
+| 3 · Materiali e BOM | Tre tessuti alternativi per capispalla; materiali dedicati alla capsule, consumi e prezzi accessori modificabili, ricerca ed export CSV |
 | 4 · Modellistica | Selezione dei pezzi, margine, tacche, drittofilo e revisioni |
-| 5 · Sviluppo Taglie | Sei taglie, viste sovrapposte/singole, regole, tabella ed export |
+| 5 · Sviluppo Taglie | Taglie 38–48 per capispalla e pantalone, XS–XL per maglia, formato unico per borsa; regole, tabella ed export |
 | 6 · Prototipazione | Fitting, checklist, approvazione campione e versione del modello |
-| 7 · Piazzamento | Larghezza, quantità, ottimizzazione simulata, consumi/scarto/costo e tavola WebP |
+| 7 · Piazzamento | Larghezza e marker per articoli tagliati; piano pannelli e filato per maglia, quantità, ottimizzazione simulata, consumi/scarto/costo ed export tavola |
 | 9 · Costificazione | Cursori prezzo tessuto, margine, quantità e tariffa, tre scenari, approvazione listini ed export |
 | 10 · Pianificazione | Calendario navigabile, timeline, laboratorio, capacità, priorità e date validate |
 | 11 · Procurement | Ricerca, filtri, modifica stati/date, creazione acquisti ed export |
@@ -73,7 +73,7 @@ Il moodboard offre filtri per categoria, ricerca, griglia/elenco, ordinamento de
 
 `src/dashboard/services.jsx` associa esplicitamente i servizi ai moduli. Ideazione, ad esempio, include segnali wholesale/retail e generazione dei concept; non include magazzino, logistica o industrializzazione.
 
-- **Industrializzazione:** 24 operazioni aggregate in 8 gruppi, macchine, tempi modificabili ed export.
+- **Industrializzazione:** ciclo specifico per categoria (8 gruppi per capospalla, 6 per i nuovi prodotti), macchine, tempi modificabili ed export.
 - **Magazzino:** materiali e residui in BOM/Acquisti; stock per taglia, lotto e ubicazione per il capo finito.
 - **Logistica:** tracking, conferme di consegna e spedizioni vincolate a stock e ordine.
 - **Wholesale:** retailer, listino, condizioni e nuovi ordini entro la quantità disponibile.
@@ -84,6 +84,8 @@ Il moodboard offre filtri per categoria, ricerca, griglia/elenco, ordinamento de
 Ogni dashboard operativa ha **Assistente**, una chat con contesto e cronologia propri. L’assistente risponde sui dati correnti: tessuti, misure, taglie, fitting, piazzamento, costi, ritardi, produzione, qualità o DPP. Proposte di tessuto, listino, marker, consegna prioritaria e ricontrollo modificano la demo dopo l’approvazione.
 
 ## Dati connessi
+
+`src/dashboard/productData.js` definisce specifiche per categoria, materiali, taglie, lavorazioni, fitting, cura e NC. Il pantalone impiega 1,45 m di lana stretch (98% lana, 2% elastan); la tote 0,65 m di canvas cotone con manici e rinforzi in pelle; la maglia 0,38 kg di filato 90% merino e 10% cashmere, bordi inclusi. Gli ordini di acquisto sono collegati alle righe della distinta; il fabbisogno segue quantità e consumi correnti. Ogni prodotto ha ordini, lotti, attività e difetti propri. Le due varianti della Giacca Atelier condividono l’identità del modello: selettore, catalogo, ricerca e riepilogo mostrano una sola scheda, con cambio colore/materiale nel selettore. I cinque record di variante mantengono ordini, lotti, stock e attività distinti; il riepilogo somma la produzione delle varianti. `groupProducts` raggruppa solo identità di modello esplicite, senza dedurre equivalenze dai nomi.
 
 `src/dashboard/DemoContext.jsx` conserva dati e cronologia connessi per ciascun capo. La base rispetta il documento: materiali **38,92 €/capo**, lavorazione **48 min × 40 €/h = 32 €**, logistica **1,50 €**, costo industriale **72,42 €**, listini **160/320 €**, ordine **500 capi**, produzione **320**, scarto teorico **14%** (11% ottimizzato), scarto reale **15%**, qualità **86/100**.
 
@@ -102,7 +104,7 @@ Le 22 illustrazioni Imagegen condividono lo stile bianco/grigio clay/paper: `pub
 - **Matcha Style** per titoli delle card del carosello: [DaFont](https://www.dafont.com/it/matcha-style.font), condizioni in `public/fonts/matcha-LICENSE.txt`.
 - **Stay With Me** per logo e accesso: condizioni in `public/fonts/FONT-LICENSE.txt`. La versione scaricata è per uso personale; l’autore richiede una [licenza commerciale](https://originfonts.com/product/stay-with-me/) per uso commerciale/promozionale.
 
-La build Vite è stata compilata. Il CLI Playwright ha controllato tutte le 22 card a 320×568, 375×667 e 430×932, senza sovrapposizioni fra descrizioni e pulsanti né overflow orizzontale; verificati anche screenshot a 390×844 e swipe touch. Questi controlli usano Chrome in emulazione mobile. Non sono stati aggiunti test alla suite del repository.
+La build Vite è stata compilata. Il CLI Playwright ha controllato tutte le 22 card a 320×568, 375×667 e 430×932, senza sovrapposizioni fra descrizioni e pulsanti né overflow orizzontale; verificati anche screenshot a 390×844 e swipe touch. Questi controlli usano Chrome in emulazione mobile. La suite attuale include anche otto test sui dati della capsule e sul raggruppamento delle varianti, per un totale di nove test.
 
 La dashboard usa un raggio comune di 12 px; i 15 moduli sono stati rivisti con il CLI Playwright a 1440 e 320 px, senza overflow della pagina o errori di rendering. Profili, ricerca globale, servizi e anteprime sono stati controllati anche a 390 px.
 

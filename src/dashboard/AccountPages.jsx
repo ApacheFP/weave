@@ -36,7 +36,7 @@ function AppearanceSettings({ preferences, updatePreferences }) {
 }
 
 export function SettingsPage({ section = 'appearance' }) {
-  const { data, styles, commit, preferences, updatePreferences } = useDemo();
+  const { data, products, commit, preferences, updatePreferences } = useDemo();
   const [selected, setSelected] = useState(section === 'profile' ? 'profile' : section === 'notifications' ? 'email' : section);
   const [draft, setDraft] = useState(data.profile);
   const [message, setMessage] = useState('');
@@ -58,7 +58,7 @@ export function SettingsPage({ section = 'appearance' }) {
     <div className="dw-settings-scroll"><div className="dw-settings-inner">
       {selected === 'appearance' && <AppearanceSettings preferences={preferences} updatePreferences={updatePreferences} />}
       {selected === 'profile' && <><h1>Profilo</h1><p className="dw-setting-lead">Informazioni del tuo profilo personale.</p><div className="dw-profile-summary"><img src="/illustrations/profile-avatar.webp" width="36" height="36" alt="" /><div><strong>{profile.firstName} {profile.lastName}</strong><span>Atelier · Designer</span></div></div><form className="dw-account-form" onSubmit={saveProfile}><div className="dw-account-form-grid"><Field label="Nome"><input value={draft.firstName} autoComplete="given-name" required maxLength={80} pattern=".*\S.*" onChange={event => setDraft({ ...draft, firstName: event.target.value })} /></Field><Field label="Cognome"><input value={draft.lastName} autoComplete="family-name" required maxLength={80} pattern=".*\S.*" onChange={event => setDraft({ ...draft, lastName: event.target.value })} /></Field></div><Field label="Email"><input type="email" value={draft.email} autoComplete="email" required maxLength={254} onChange={event => setDraft({ ...draft, email: event.target.value })} /></Field><div className="dw-account-form-footer"><p role="status">{message}</p><Button primary type="submit" disabled={!Object.keys(profile).some(key => (draft[key] || '').trim() !== profile[key])}>Salva modifiche</Button></div></form></>}
-      {selected === 'workspace' && <><h1>Spazio di lavoro</h1><p className="dw-setting-lead">Informazioni dello spazio Atelier.</p><div className="dw-setting-row"><div><strong>Nome</strong></div><span>Atelier</span></div><div className="dw-setting-row"><div><strong>Capi</strong></div><span>{styles.length}</span></div></>}
+      {selected === 'workspace' && <><h1>Spazio di lavoro</h1><p className="dw-setting-lead">Informazioni dello spazio Atelier.</p><div className="dw-setting-row"><div><strong>Nome</strong></div><span>Atelier</span></div><div className="dw-setting-row"><div><strong>Capi</strong></div><span>{products.length}</span></div></>}
       {['email', 'push', 'mentions', 'assignments'].includes(selected) && <><h1>{sectionLabel[selected]?.[1]}</h1><p className="dw-setting-lead">Preferenze per gli aggiornamenti dei capi e delle attività.</p><Preference label="Aggiornamenti dei moduli" description="Mostra gli aggiornamenti della filiera nella tua Inbox." checked={preferences?.moduleAlerts ?? true} onChange={value => updatePreferences({ moduleAlerts: value })} /><Preference label="Novità di Atelier" description="Ricevi aggiornamenti sul prodotto nella demo." checked={preferences?.productNews ?? false} onChange={value => updatePreferences({ productNews: value })} /></>}
       {unsupported && <><h1>{sectionLabel[selected]?.[1] || 'Impostazioni'}</h1><p className="dw-setting-lead">Questa sezione non è disponibile nella demo Atelier.</p></>}
     </div></div>

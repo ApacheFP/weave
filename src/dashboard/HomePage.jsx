@@ -1,3 +1,4 @@
+import { productSizes } from './productData.js';
 import React, { useState } from 'react';
 import { modules } from '../modules.js';
 import { euro, number, useDemo } from './DemoContext.jsx';
@@ -50,9 +51,9 @@ export default function HomePage({ onNavigate, onService, onActivity }) {
     2: data.technical?.approvedId === data.technical?.currentId && data.technical?.approvedId ? 'Disegno tecnico approvato' : data.techGenerated ? 'Disegno in revisione' : 'Da generare',
     3: `${data.trims.length + 1} materiali nella BOM`,
     4: `Modello v${data.modelVersion}`,
-    5: '6 taglie · 38–48',
+    5: `${productSizes(data).length} taglie · ${productSizes(data).join(' / ')}`,
     6: data.sampleApproved ? 'Campione approvato' : data.sampleChecks.some(Boolean) ? 'Fitting in corso' : 'Fitting da avviare',
-    7: data.optimized ? 'Marker ottimizzato' : 'Marker di base',
+    7: data.category === 'knit' ? data.optimized ? 'Piano filato ottimizzato' : 'Piano filato base' : data.optimized ? 'Marker ottimizzato' : 'Marker di base',
     9: `${euro(cost)} / capo`,
     10: `Consegna · ${date(data.delivery)}`,
     11: delayed.length ? `${delayed.length} ordini in ritardo` : `${data.purchaseOrders.length} ordini di acquisto`,
