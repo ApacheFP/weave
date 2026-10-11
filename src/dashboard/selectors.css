@@ -61,6 +61,24 @@
 }
 .dw-app :is(.dw-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds)[role] > button > .dw-icon { width: 16px; height: 16px; }
 
+/* Large three-state switch on the workspace home, matching Prova 1. */
+.dw-app .dw-workspace-task-tabs .dw-tabs[role] {
+  width: min(344px,100%);
+  height: 60px;
+  padding: 4px;
+  gap: 4px;
+  border-radius: 16px;
+  background: var(--surface-3);
+}
+.dw-app .dw-workspace-task-tabs .dw-tabs[role] > button {
+  flex: 1 1 0;
+  height: 48px;
+  min-height: 48px;
+  padding: 0 10px;
+  border-radius: 12px;
+  font-size: 15px;
+}
+
 /* Prova 1 selector treatment: muted track, raised selected option, compact chevron fields. */
 .dw-app :is(.dw-task-view,.dw-segmented,.dw-notifications-filter) {
   display: inline-flex;
@@ -97,5 +115,7 @@
 @media (max-width:560px) {
   .dw-app .dw-workspace-toolbar { flex-direction: column; }
   .dw-app .dw-workspace-toolbar > .dw-btn { position: static; align-self: flex-end; }
+  .dw-app .dw-workspace-task-tabs .dw-tabs[role] { width: 100%; }
+  .dw-app .dw-workspace-task-tabs .dw-tabs[role] > button { padding-inline: 6px; font-size: 13px; }
 }
 .dw-app .dw-breadcrumb > strong { padding: 7px 10px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); }
