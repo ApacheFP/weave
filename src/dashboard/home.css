@@ -10,6 +10,10 @@
 .dw-home-metrics > button { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; min-width: 0; border: 0; background: transparent; text-align: left; color: var(--text); font: inherit; }
 .dw-home-metrics > button + button { border-left: 1px solid var(--border); }
 .dw-home-metric-label { display: flex; align-items: center; gap: 6px; color: var(--text-2); font-size: 12px; }
+.dw-home-metrics > button[data-tone=violet] .dw-icon { color: var(--violet); }
+.dw-home-metrics > button[data-tone=blue] .dw-icon { color: var(--blue); }
+.dw-home-metrics > button[data-tone=teal] .dw-icon { color: var(--teal); }
+.dw-home-metrics > button[data-tone=red] .dw-icon { color: var(--red); }
 .dw-home-metrics strong { font-size: 22px; font-weight: 600; line-height: 1.1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .dw-home-metrics small { color: var(--text-3); font-size: 11px; line-height: 1.4; }
 .dw-home-columns { display: grid; grid-template-columns: minmax(0,1.9fr) minmax(0,1fr); gap: 16px; align-items: start; }

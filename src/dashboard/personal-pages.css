@@ -103,6 +103,10 @@
 .dw-task-group-chevron { display: flex; width: 22px; justify-content: center; transform: rotate(180deg); }
 .dw-task-group-chevron[data-open=true] { transform: rotate(-90deg); }
 .dw-task-group .dw-personal-count { font-size: 12.5px; font-weight: 500; }
+.dw-personal-task-table tbody[data-group=overdue] .dw-task-group .dw-icon { color: var(--red); }
+.dw-personal-task-table tbody[data-group=today] .dw-task-group .dw-icon { color: var(--amber); }
+.dw-personal-task-table tbody[data-group=upcoming] .dw-task-group .dw-icon { color: var(--blue); }
+.dw-personal-task-table tbody[data-group=completed] .dw-task-group .dw-icon { color: var(--green); }
 .dw-task-title-cell { display: flex; align-items: center; min-width: 0; }
 .dw-task-complete-control { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 30px; height: 32px; cursor: pointer; }
 .dw-app .dw-task-complete-control input[type=checkbox] { appearance: none; width: 15px; height: 15px; margin: 0; border: 1.5px solid var(--border-strong); border-radius: 50%; display: inline-grid; place-content: center; background: transparent; cursor: pointer; }
@@ -115,9 +119,12 @@
 .dw-task-completed .dw-task-title-cell strong { color: var(--text-3); text-decoration: line-through; }
 .dw-task-style-link { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; background: none; border: 0; padding: 0; color: var(--text-2); font-size: 12px; }
 .dw-task-style-link i { flex-shrink: 0; width: 6px; height: 6px; border-radius: 3px; background: var(--text-3); }
+.dw-task-style-link[data-style="GJ-0421"] i { background: var(--blue); }
+.dw-task-style-link[data-style="GJ-0422"] i { background: var(--amber); }
 .dw-task-style-link span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dw-task-status-cell { display: flex; align-items: center; gap: 4px; min-width: 0; }
 .dw-task-status-dot { flex-shrink: 0; width: 10px; height: 10px; border: 1.5px solid var(--text-4); border-radius: 50%; }
+.dw-task-status-dot[data-status="Da fare"] { border-color: var(--blue); background: color-mix(in srgb,var(--blue) 18%,var(--surface)); }
 .dw-task-status-dot[data-status="In corso"] { border-color: var(--amber); background: var(--amber); }
 .dw-task-status-dot[data-status="Completata"] { border-color: var(--green); background: var(--green); }
 .dw-app .dw-personal-task-table select { min-width: 0; max-width: 100%; height: 26px; min-height: 26px; padding: 0 3px; border: 0; background: transparent; border-radius: 5px; font-size: 12px; appearance: none; }

@@ -13,6 +13,8 @@ const dateLabel = value => value ? new Intl.DateTimeFormat('it-IT', { day: 'nume
 const moduleLabel = id => id === 21 ? 'Panoramica del capo' : modules.find(item => item.id === id)?.title || 'Filiera';
 const initials = name => name.split(/\s+/).filter(Boolean).map(part => part[0]).slice(0, 2).join('');
 const stateLabel = item => item.passportPublished ? 'Passaporto pubblicato' : item.produced ? 'In produzione' : item.technical?.approvedId ? 'Sviluppo tecnico' : item.sketchFile ? 'Concept pronto' : 'Concept in bozza';
+const stateTone = item => item.passportPublished || item.produced ? 'success' : item.technical?.approvedId ? 'info' : item.sketchFile ? 'violet' : '';
+const actorTone = email => ({ 'marta@atelier.demo': 'rose', 'luca@atelier.demo': 'green', 'elena@atelier.demo': 'blue', 'demo@weave.it': 'violet' }[email] || 'violet');
 
 function eventTime(event) {
   if (event.at) return Date.parse(event.at);
@@ -25,7 +27,7 @@ function eventsOf(items) {
 }
 function EventRows({ events, onOpenModule }) {
   return <div className="dw-workspace-events">{events.map(event => <div className="dw-workspace-event" key={`${event.styleId}-${event.id}`}>
-    <span className="dw-workspace-avatar" aria-label={event.actor?.name || 'WEAVE'}>{initials(event.actor?.name || 'WEAVE')}</span>
+    <span className="dw-workspace-avatar" style={{ '--actor-color': `var(--${actorTone(event.actor?.email)})` }} aria-label={event.actor?.name || 'WEAVE'}>{initials(event.actor?.name || 'WEAVE')}</span>
     <div><div className="dw-workspace-event-head"><strong>{event.actor?.name || 'WEAVE'}</strong><time>{event.time}</time></div><p>{event.text}</p><button type="button" onClick={() => onOpenModule(event.styleId, event.module)}>{event.styleTitle}<span>·</span>{moduleLabel(event.module)}</button></div>
   </div>)}</div>;
 }
@@ -50,11 +52,11 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
     <header className="dw-workspace-page-head"><div><h2>{greeting}, {data.profile.firstName}</h2><p>{date} · Il lavoro di oggi in Atelier.</p></div><Button primary icon="plus" onClick={onCreate}>Nuovo capo</Button></header>
     <div className="dw-home-metrics" aria-label="Riepilogo Atelier">
       {[
-        ['Capi', workspaceItems.length, 'Nella collezione e in sviluppo', 'shirt', 'capi'],
-        ['Le mie attività', open.length, `${mine.length} incarichi assegnati a te`, 'list', 'my-tasks'],
-        ['Inbox', unread, 'Aggiornamenti da leggere', 'inbox', 'inbox'],
-        ['In ritardo', overdue.length, overdue.length ? 'Incarichi da riprendere' : 'Scadenze sotto controllo', 'clock', 'my-tasks'],
-      ].map(([label, value, note, icon, target]) => <button key={label} type="button" onClick={() => onOpenPage(target)}><span className="dw-home-metric-label"><Icon name={icon} size={14} />{label}</span><strong>{value}</strong><small>{note}</small></button>)}
+        ['Capi', workspaceItems.length, 'Nella collezione e in sviluppo', 'shirt', 'capi', 'violet'],
+        ['Le mie attività', open.length, `${mine.length} incarichi assegnati a te`, 'list', 'my-tasks', 'blue'],
+        ['Inbox', unread, 'Aggiornamenti da leggere', 'inbox', 'inbox', 'teal'],
+        ['In ritardo', overdue.length, overdue.length ? 'Incarichi da riprendere' : 'Scadenze sotto controllo', 'clock', 'my-tasks', 'red'],
+      ].map(([label, value, note, icon, target, tone]) => <button key={label} type="button" data-tone={tone} onClick={() => onOpenPage(target)}><span className="dw-home-metric-label"><Icon name={icon} size={14} />{label}</span><strong>{value}</strong><small>{note}</small></button>)}
     </div>
     <div className="dw-home-columns">
       <div className="dw-home-main">
@@ -70,7 +72,7 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
         <Card flush title="Capi in Atelier" actions={<Button onClick={() => onOpenPage('capi')}>Tutti i capi</Button>}>
           <div className="dw-table-wrap"><table className="dw-table dw-workspace-portfolio"><thead><tr><th>Capo</th><th>Fase attuale</th><th>Produzione</th><th>Consegna</th></tr></thead><tbody>{workspaceItems.map(item => <tr key={item.styleId}>
             <td><button type="button" className="dw-workspace-style-link" onClick={() => onOpenModule(item.styleId, 21)}><span className="dw-style-card-photo"><ProductPhoto variant={item.variant} sizes="40px" alt="" /></span><span><strong>{item.title}</strong><small className="dw-code">{item.styleId}</small></span></button></td>
-            <td><Badge>{stateLabel(item)}</Badge></td><td>{item.produced} / {item.quantity}</td><td>{dateLabel(item.delivery)}</td>
+            <td><Badge tone={stateTone(item)}>{stateLabel(item)}</Badge></td><td>{item.produced} / {item.quantity}</td><td>{dateLabel(item.delivery)}</td>
           </tr>)}</tbody></table></div>
         </Card>
       </div>

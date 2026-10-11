@@ -128,8 +128,8 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
   }
   function openService(id) { setService({ id, contextModuleId: moduleId }); }
   function created() { setCreate(false); navigate(21); }
-  function navItem(label, icon, action, selected, count) {
-    return <button type="button" key={label} title={label} aria-current={selected ? 'page' : undefined} onClick={action}><Icon name={icon} size={16} /><span>{label}</span>{count > 0 && <small className="dw-nav-count">{count}</small>}</button>;
+  function navItem(label, icon, action, selected, count, moduleId) {
+    return <button type="button" key={label} title={label} data-module={moduleId} aria-current={selected ? 'page' : undefined} onClick={action}><Icon name={icon} size={16} /><span>{label}</span>{count > 0 && <small className="dw-nav-count">{count}</small>}</button>;
   }
   const globalContent = {
     home: <WorkspaceHome onOpenPage={openPage} onOpenModule={openModule} onCreate={() => setCreate(true)} />,
@@ -164,8 +164,8 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
             {navItem('Attività della filiera', 'activity', () => openPage('activity'), workspacePage === 'activity')}
           </nav>
           <nav className="dw-cap-nav" aria-label={`Moduli di ${data.title}`}>
-            <div className="dw-nav-group dw-cap-overview">{navItem('Panoramica del capo', 'grid', () => navigate(21), isModule && moduleId === 21)}</div>
-            {[['Sviluppo prodotto', [1, 2, 3, 4, 5, 6, 7]], ['Operazioni', [9, 10, 11, 12, 13]], ['Identità e intelligence', [19, 22]]].map(([label, ids]) => <div className="dw-nav-group" key={label}><span>{label}</span>{ids.map(id => <button key={id} type="button" title={shortNames[id]} aria-current={isModule && moduleId === id ? 'page' : undefined} onClick={() => navigate(id)}><Icon name={moduleIcons[id]} size={16} /><span>{shortNames[id]}</span>{id === 11 && data.purchaseOrders.some(order => order.status === 'In ritardo') && <i className="dw-nav-dot" />}</button>)}</div>)}
+            <div className="dw-nav-group dw-cap-overview">{navItem('Panoramica del capo', 'grid', () => navigate(21), isModule && moduleId === 21, 0, 21)}</div>
+            {[['Sviluppo prodotto', [1, 2, 3, 4, 5, 6, 7]], ['Operazioni', [9, 10, 11, 12, 13]], ['Identità e intelligence', [19, 22]]].map(([label, ids]) => <div className="dw-nav-group" key={label}><span>{label}</span>{ids.map(id => <button key={id} type="button" title={shortNames[id]} data-module={id} aria-current={isModule && moduleId === id ? 'page' : undefined} onClick={() => navigate(id)}><Icon name={moduleIcons[id]} size={16} /><span>{shortNames[id]}</span>{id === 11 && data.purchaseOrders.some(order => order.status === 'In ritardo') && <i className="dw-nav-dot" />}</button>)}</div>)}
           </nav>
         </div>
         <div className="dw-sidebar-bottom">

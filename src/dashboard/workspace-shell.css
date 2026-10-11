@@ -3,6 +3,22 @@
 .dw-sidebar-workspace { font-size:12px; font-weight:500; color:var(--text-2); margin-left:8px; }
 .dw-personal-nav { margin:6px 0 14px; }
 .dw-atelier-nav { margin-top:0; }
+.dw-cap-nav button[data-module] .dw-icon { color:var(--module-color,var(--text-3)); }
+.dw-cap-nav button[data-module="1"] { --module-color:var(--violet); }
+.dw-cap-nav button[data-module="2"] { --module-color:var(--blue); }
+.dw-cap-nav button[data-module="3"] { --module-color:var(--teal); }
+.dw-cap-nav button[data-module="4"] { --module-color:var(--rose); }
+.dw-cap-nav button[data-module="5"] { --module-color:var(--orange); }
+.dw-cap-nav button[data-module="6"] { --module-color:var(--rose); }
+.dw-cap-nav button[data-module="7"] { --module-color:var(--green); }
+.dw-cap-nav button[data-module="9"] { --module-color:var(--green); }
+.dw-cap-nav button[data-module="10"] { --module-color:var(--blue); }
+.dw-cap-nav button[data-module="11"] { --module-color:var(--amber); }
+.dw-cap-nav button[data-module="12"] { --module-color:var(--teal); }
+.dw-cap-nav button[data-module="13"] { --module-color:var(--red); }
+.dw-cap-nav button[data-module="19"] { --module-color:var(--violet); }
+.dw-cap-nav button[data-module="21"] { --module-color:var(--accent); }
+.dw-cap-nav button[data-module="22"] { --module-color:var(--blue); }
 .dw-sidebar > .dw-sidebar-top { border-bottom:1px solid var(--border); padding-bottom:8px; }
 .dw-cap-overview { margin-top:4px; }
 .dw-nav-count { margin-left:auto; padding:0 5px; min-width:20px; text-align:center; font-size:10px; font-weight:500; color:var(--text-3); background:var(--surface-3); border-radius:8px; }

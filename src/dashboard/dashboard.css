@@ -5,9 +5,9 @@
 .dw-app,.dw-toast { --radius: 12px; }
 html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-app {
-  --bg: #fbfaf8; --bg-side: #f4f3f0; --surface: #fff; --surface-2: #f6f5f2; --surface-3: #eeede9; --sunken: #f7f6f3;
+  --bg: #f8f9fb; --bg-side: #f3f4f6; --surface: #fff; --surface-2: #f5f6f8; --surface-3: #eceef2; --sunken: #f6f7f9;
   --overlay: rgba(24,22,19,.28);
-  --border: #e9e7e2; --border-strong: #dad7d0; --divider: #f0eeea; --text: #1d1c1a; --text-2: #57544e; --text-3: #6b6760; --text-4: #8c8880;
+  --border: #e4e7ec; --border-strong: #d4d8e0; --divider: #eceef2; --text: #1d1f23; --text-2: #555b65; --text-3: #69717d; --text-4: #8b929c;
   --acc-l: #4b5bd6; --acc-d: #8e9af3; --accent: var(--acc-l); --accent-soft: color-mix(in srgb,var(--accent) 10%,transparent); --accent-line: color-mix(in srgb,var(--accent) 38%,transparent); --on-accent: #fff; --text-inv: #fff;
   --green: #25754b; --amber: #8f5e0e; --red: #b23c30; --blue: #3570c4; --violet: #7652c2; --teal: #1e8580; --rose: #bc4270; --orange: #c0612b; --gray: #8a867e;
   --green-soft: color-mix(in srgb,var(--green) 11%,transparent); --amber-soft: color-mix(in srgb,var(--amber) 12%,transparent); --red-soft: color-mix(in srgb,var(--red) 10%,transparent);
@@ -104,7 +104,10 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-icon-btn { display: inline-grid; place-items: center; width: 30px; height: 30px; border: 0; border-radius: var(--radius); color: var(--text-3); background: none; padding: 5px; flex: 0 0 auto; }
 @media (hover: hover) { .dw-icon-btn:hover { background: var(--surface-3); color: var(--text); } }
 .dw-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border: 1px solid var(--border); border-radius: var(--radius); color: var(--text-2); background: var(--surface-2); font-size: 11px; font-weight: 500; line-height: 1.4; white-space: nowrap; }
-.dw-badge.warn { color: var(--amber); background: var(--amber-soft); border-color: var(--accent-line); }
+.dw-badge.warn { color: var(--amber); background: var(--amber-soft); border-color: color-mix(in srgb,var(--amber) 32%,transparent); }
+.dw-badge.success { color: var(--green); background: color-mix(in srgb,var(--green) 10%,var(--surface)); border-color: color-mix(in srgb,var(--green) 28%,transparent); }
+.dw-badge.info { color: var(--blue); background: color-mix(in srgb,var(--blue) 10%,var(--surface)); border-color: color-mix(in srgb,var(--blue) 28%,transparent); }
+.dw-badge.violet { color: var(--violet); background: color-mix(in srgb,var(--violet) 10%,var(--surface)); border-color: color-mix(in srgb,var(--violet) 28%,transparent); }
 .dw-card { box-shadow: none; min-width: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
 .dw-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; padding: 12px 14px 10px; }
 .dw-card-head h2 { font-size: 13.5px; font-weight: 600; margin: 0; line-height: 1.45; }
