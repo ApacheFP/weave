@@ -114,7 +114,7 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-card-head > div:first-child { flex: 1; min-width: 0; }
 .dw-card-head > .dw-actions { flex: 0 1 auto; margin-left: auto; }
 .dw-card-body { padding: 14px; }
-.dw-card-head + .dw-card-body { padding-top: 6px; }
+.dw-card-head + .dw-card-body { padding-top: 10px; }
 .dw-card > .dw-card-flush { padding: 0; }
 .dw-card-body > .dw-btn { display: flex; width: fit-content; max-width: 100%; margin: 10px 0 0 auto; }
 .dw-card-body form > .dw-btn { display: flex; width: fit-content; max-width: 100%; margin-left: auto; }
@@ -125,9 +125,9 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-card-body h3 { font-size: 14.5px; font-weight: 600; }
 .dw-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px; }
 .dw-measurement-actions { margin-top: 10px; }
-.dw-stack { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.dw-two { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
-.dw-two-main,.dw-design-layout,.dw-pricing-layout,.dw-marker-layout,.dw-production-layout,.dw-passport-layout,.dw-decision-layout { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(270px,1fr); gap: 12px; align-items: start; }
+.dw-stack { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.dw-two { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.dw-two-main,.dw-design-layout,.dw-pricing-layout,.dw-marker-layout,.dw-production-layout,.dw-passport-layout,.dw-decision-layout { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(270px,1fr); gap: 16px; align-items: start; }
 .dw-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; font-size: 12.5px; color: var(--text-2); }
 .dw-field > span { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-weight: 500; }
 .dw-field b { font-size: 12px; font-weight: 500; color: var(--text); }
@@ -236,7 +236,7 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-search > span:first-child:focus-within { border-color: var(--text-3); }
 .dw-card-flush > .dw-table-wrap { border: 0; border-radius: 0; }
 .dw-table tbody tr:last-child td { border-bottom: 0; }
-.dw-kv { column-gap: 16px; row-gap: 8px; }
+.dw-kv { column-gap: 16px; row-gap: 12px; }
 .dw-icon :is(path,rect,circle) { vector-effect: non-scaling-stroke; }
 .dw-dialog,.dw-workspace-popover,.dw-header .profile-panel { box-shadow: var(--shadow-popover); }
 .dw-dialog,.dw-style-list,.dw-chat-messages,.dw-command-results,.dw-table-wrap { overscroll-behavior: contain; }
@@ -685,13 +685,17 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-media-viewer-image { display: grid; place-items: center; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
 .dw-media-viewer-image img { display: block; max-height: 66svh; max-width: 100%; object-fit: contain; }
 .dw-media-viewer aside h3 { font-size: 17px; font-weight: 500; margin: 10px 0 18px; }
-.dw-reference-row { display: flex; width: 100%; align-items: center; gap: 12px; padding: 8px 0; border: 0; border-bottom: 1px solid var(--divider); background: none; color: var(--text); text-align: left; }
+.dw-reference-row { display: flex; width: 100%; align-items: center; gap: 12px; padding: 10px 0; border: 0; border-bottom: 1px solid var(--divider); background: none; color: var(--text); text-align: left; }
 .dw-reference-row:last-child { border-bottom: 0; }
 .dw-reference-row > img { width: 56px; height: 48px; border: 1px solid var(--border); border-radius: var(--radius); }
 .dw-reference-row > span { flex: 1; min-width: 0; }
 .dw-reference-row strong { display: block; font-weight: 500; font-size: 12.5px; }
 .dw-reference-row small { display: block; font-size: 11px; color: var(--text-3); margin-top: 3px; }
 @media (hover: hover) { .dw-reference-row:hover > span { color: var(--text-2); } }
+.dw-grading-rules-card .dw-card-body { display: grid; gap: 16px; padding: 14px 16px 18px; }
+.dw-grading-rules-card .dw-field { gap: 8px; }
+.dw-grading-rules-card .dw-kv { row-gap: 14px; margin: 0; }
+.dw-grading-rules-card .dw-muted { margin: 0; line-height: 1.7; }
 .dw-variants { gap: 12px; }
 .dw-variants > button { padding: 0; overflow: hidden; text-align: left; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
 @media (hover: hover) { .dw-variants > button:hover { border-color: var(--border-strong); } }
