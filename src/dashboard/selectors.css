@@ -60,6 +60,40 @@
   .dw-app .dw-page-tabs[role=tablist] > button[aria-selected=true]:hover { color: var(--text); }
 }
 .dw-app :is(.dw-tabs,.dw-creative-result-switch,.dw-creative-routes,.dw-creative-mobile-switch,.dw-media-kinds)[role] > button > .dw-icon { width: 16px; height: 16px; }
+
+/* Prova 1 selector treatment: muted track, raised selected option, compact chevron fields. */
+.dw-app :is(.dw-task-view,.dw-segmented,.dw-notifications-filter) {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface-3);
+}
+.dw-app :is(.dw-task-view,.dw-segmented,.dw-notifications-filter) > button {
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-2);
+}
+.dw-app :is(.dw-task-view,.dw-segmented,.dw-notifications-filter) > button[aria-pressed=true] {
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 2px #1d1c1a08;
+}
+.dw-app select:not(.dw-personal-task-table select) {
+  appearance: none;
+  min-height: 32px;
+  padding: 5px 28px 5px 10px;
+  border-radius: 9px;
+  background-color: var(--surface);
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-3) 50%),linear-gradient(135deg, var(--text-3) 50%, transparent 50%);
+  background-position: calc(100% - 12px) 50%,calc(100% - 8px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+}
 @media (max-width:560px) {
   .dw-app .dw-workspace-toolbar { flex-direction: column; }
   .dw-app .dw-workspace-toolbar > .dw-btn { position: static; align-self: flex-end; }
