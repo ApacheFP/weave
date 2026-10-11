@@ -22,11 +22,9 @@
 .dw-inbox-mark-all,.dw-inbox-read,.dw-inbox-back { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 0; border: 0; background: none; color: var(--text-2); border-radius: 5px; }
 .dw-inbox-mark-all,.dw-inbox-back { width: 26px; height: 26px; }
 .dw-inbox-mark-all:disabled { opacity: .4; cursor: default; }
-.dw-inbox-categories { display: flex; gap: 16px; padding: 0 24px; margin-top: 8px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; flex-shrink: 0; }
+.dw-inbox-categories { flex-shrink: 0; }
 .dw-inbox-categories::-webkit-scrollbar,.dw-inbox-list::-webkit-scrollbar { display: none; }
-.dw-inbox-categories button { position: relative; height: 36px; padding: 0; display: inline-flex; align-items: center; gap: 6px; font: 500 12.5px var(--font); color: var(--text-2); border: 0; border-radius: 0; background: none; white-space: nowrap; flex-shrink: 0; }
-.dw-inbox-categories button[aria-selected=true] { color: var(--text); }
-.dw-inbox-categories button[aria-selected=true]::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px; background: var(--text); }
+.dw-inbox-categories button { flex-shrink: 0; }
 .dw-inbox-categories button > span { color: var(--text-3); font-size: 11px; font-weight: 500; }
 .dw-inbox-list { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
 .dw-inbox-row { position: relative; display: flex; align-items: flex-start; gap: 10px; padding: 12px 24px; border-bottom: 1px solid var(--divider); }
