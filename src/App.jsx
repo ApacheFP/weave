@@ -141,7 +141,12 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
       </footer>
 
       <p className="sr-only" aria-live="polite" aria-atomic="true">Card {index + 1} di {items.length}: {items[index].title}. {items[index].copy.join(' ')}</p>
-      <ol className={error ? 'carousel-fallback' : 'sr-only'}>{items.map(module => <li key={module.id}>{module.title}. {module.copy.join(' ')}</li>)}</ol>
+      <ol className={error ? 'carousel-fallback' : 'carousel-access sr-only'} aria-label="Accesso ai moduli e ai servizi">{items.map(module => <li key={module.id}>
+        {module.serviceInfo
+          ? <details><summary>{module.title}</summary><p>{module.serviceInfo}</p></details>
+          : <button type="button" onClick={() => onEnter(module.routeId)}>Entra in {module.title}</button>}
+        <span>{module.copy.join(' ')}</span>
+      </li>)}</ol>
     </section>
   );
 }
@@ -159,7 +164,7 @@ function ProductPage({ onSignOut, onEnter, index, onIndexChange }) {
     <main className="demo-page" ref={page} tabIndex={-1}>
       <header className="demo-header">
         <ProfileMenu onSignOut={onSignOut} />
-        <h1>weave<span className="brand-dot" aria-hidden="true">.</span></h1>
+        <h1>weave</h1>
         <p className="carousel-context" id="carousel-context">Dall’idea al passaporto digitale, tutti i moduli della filiera tessile in un unico percorso.</p>
       </header>
       <CardCarousel group={carouselGroup} onReady={onReady} onEnter={onEnter} startIndex={index} onIndexChange={onIndexChange} />

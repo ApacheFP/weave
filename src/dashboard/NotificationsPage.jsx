@@ -2,6 +2,7 @@ import { styleLabel } from './productData.js';
 import React, { useState } from 'react';
 import { useDemo } from './DemoContext.jsx';
 import { Icon } from './ui.jsx';
+import { actorStyle } from './workspaceData.js';
 import './notifications.css';
 
 const actorName = actor => actor?.name || 'Team Atelier';
@@ -34,7 +35,7 @@ function titleParts(item) {
 }
 function NotificationAvatar({ actor, profile }) {
   const name = actorName(actor);
-  return <span className="dw-notification-avatar" aria-hidden="true">{actor?.email === profile.email ? <img src="/illustrations/profile-avatar.webp" alt="" /> : name.split(' ').filter(Boolean).map(word => word[0]).slice(0, 2).join('')}</span>;
+  return <span className="dw-notification-avatar" style={actorStyle(actor)} aria-hidden="true">{actor?.email === profile.email ? <img src={profile.avatar || '/illustrations/profile-avatar.webp'} alt="" /> : name.split(' ').filter(Boolean).map(word => word[0]).slice(0, 2).join('')}</span>;
 }
 
 // Prova1 pageNotifications: compact header, day labels and bordered notification rows.

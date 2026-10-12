@@ -1,0 +1,111 @@
+/* Dashboard foundation. The carousel and access screens keep their own visual identity. */
+.dw-app {
+  --radius: 12px;
+  --radius-sm: 6px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --card-padding: 14px;
+  --control-height: 30px;
+  --segment-height: 24px;
+  --tab-height: 36px;
+  --module-tab-height: 40px;
+  --bg: #f8f9fb;
+  --bg-side: #f3f4f6;
+  --surface: #fff;
+  --surface-2: #f5f6f8;
+  --surface-3: #eceef2;
+  --sunken: #f6f7f9;
+  --overlay: rgba(24,22,19,.28);
+  --border: #e4e7ec;
+  --border-strong: #d4d8e0;
+  --divider: #eceef2;
+  --text: #1d1f23;
+  --text-2: #555b65;
+  --text-3: #69717d;
+  --text-4: #8b929c;
+  --text-inv: #fff;
+  --acc-l: #4b5bd6;
+  --acc-d: #8e9af3;
+  --accent: var(--acc-l);
+  --accent-soft: color-mix(in srgb,var(--accent) 10%,transparent);
+  --accent-line: color-mix(in srgb,var(--accent) 38%,transparent);
+  --on-accent: #fff;
+  --green: #25754b;
+  --amber: #8f5e0e;
+  --red: #b23c30;
+  --blue: #3570c4;
+  --violet: #7652c2;
+  --teal: #1e8580;
+  --rose: #bc4270;
+  --orange: #c0612b;
+  --gray: #8a867e;
+  --green-soft: color-mix(in srgb,var(--green) 11%,transparent);
+  --amber-soft: color-mix(in srgb,var(--amber) 12%,transparent);
+  --red-soft: color-mix(in srgb,var(--red) 10%,transparent);
+  --st-backlog: #a29e96;
+  --st-todo: #7c7870;
+  --st-progress: #c88a14;
+  --st-review: #7652c2;
+  --st-done: #2e8456;
+  --font: 'Geist', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'Geist Mono', ui-monospace, monospace;
+  --fs: 13.5px;
+  --fs-sm: 12.5px;
+  --fs-xs: 12px;
+  --dur: 140ms;
+  --band: var(--bg);
+  --shadow-sm: 0 1px 2px rgba(28,25,20,.05);
+  --shadow-popover: 0 12px 32px -8px rgba(28,25,20,.16),0 2px 6px -2px rgba(28,25,20,.06),0 0 0 1px var(--border);
+  --ease-out: cubic-bezier(.23,1,.32,1);
+}
+
+/* Dashboard resolves the system preference so the dark palette has one definition. */
+.dw-app[data-ui-theme=dark] {
+  --bg: #1a1a19;
+  --bg-side: #151514;
+  --overlay: rgba(0,0,0,.55);
+  --surface: #1d1d1c;
+  --surface-2: #252524;
+  --surface-3: #2d2d2b;
+  --sunken: #181817;
+  --border: #2c2b29;
+  --border-strong: #3a3936;
+  --divider: #252523;
+  --text: #eceae5;
+  --text-2: #b5b2ab;
+  --text-3: #9a968f;
+  --text-4: #6f6c66;
+  --text-inv: #151514;
+  --accent: var(--acc-d);
+  --on-accent: #12131c;
+  --green: #5cba86;
+  --amber: #d8a443;
+  --red: #e57d70;
+  --blue: #72a5ea;
+  --violet: #a98deb;
+  --teal: #58c0b6;
+  --rose: #e68aab;
+  --orange: #e3925f;
+  --gray: #8f8b84;
+  --pc-mix: 72%;
+  --st-backlog: #6f6c66;
+  --st-todo: #a6a39c;
+  --st-progress: #d8a443;
+  --st-review: #a98deb;
+  --st-done: #5cba86;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-card: 0 0 0 1px var(--border);
+  --shadow-popover: 0 16px 40px -10px rgba(0,0,0,.6),0 0 0 1px var(--border-strong);
+  --shadow-drag: 0 18px 40px -10px rgba(0,0,0,.7),0 0 0 1px var(--border-strong);
+  color-scheme: dark;
+}
+.dw-app[data-ui-theme=light] { color-scheme: light; }
+.dw-app[data-ui-accent=indigo] { --acc-l:#4b5bd6; --acc-d:#8e9af3; }
+.dw-app[data-ui-accent=blue] { --acc-l:#2f6cd4; --acc-d:#74a7f0; }
+.dw-app[data-ui-accent=violet] { --acc-l:#7348cc; --acc-d:#ae93f0; }
+.dw-app[data-ui-accent=teal] { --acc-l:#1a7f7a; --acc-d:#5cc4ba; }
+.dw-app[data-ui-accent=rose] { --acc-l:#b93d68; --acc-d:#ec8dae; }
+.dw-app[data-ui-accent=graphite] { --acc-l:#34332f; --acc-d:#d9d6cf; }

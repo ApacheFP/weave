@@ -10,6 +10,7 @@
 .dw-home-metrics > button { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; min-width: 0; border: 0; background: transparent; text-align: left; color: var(--text); font: inherit; }
 .dw-home-metrics > button + button { border-left: 1px solid var(--border); }
 .dw-home-metric-label { display: flex; align-items: center; gap: 6px; color: var(--text-2); font-size: 12px; }
+.dw-home-metrics > button .dw-icon { color: var(--module-color); }
 .dw-home-metrics > button[data-tone=violet] .dw-icon { color: var(--violet); }
 .dw-home-metrics > button[data-tone=blue] .dw-icon { color: var(--blue); }
 .dw-home-metrics > button[data-tone=teal] .dw-icon { color: var(--teal); }
@@ -19,6 +20,7 @@
 .dw-home-columns { display: grid; grid-template-columns: minmax(0,1.9fr) minmax(0,1fr); gap: 16px; align-items: start; }
 .dw-home-main,.dw-home-aside,.dw-home-side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 .dw-home .dw-card-head + .dw-card-flush { margin-top: 0; }
+.dw-home .dw-card[data-module] .dw-progress > span { background: var(--module-color); }
 .dw-home-panel-count { font-size: 11px; color: var(--text-3); }
 .dw-home-phase-overview { padding: 0 14px 12px; }
 .dw-home-phase-overview > div:first-child { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; font-size: 11px; color: var(--text-3); }
@@ -30,6 +32,8 @@
 .dw-home-phases i,.dw-home-state i { flex: 0 0 auto; width: 6px; height: 6px; border: 1px solid var(--text-4); border-radius: 50%; background: transparent; }
 .dw-home [data-phase=done] i { background: var(--green); border-color: var(--green); }
 .dw-home [data-phase=active] i { background: var(--accent); border-color: var(--accent-line); }
+.dw-home-phases li[data-phase=pending] i { border-color: color-mix(in srgb,var(--module-color) 48%,var(--text-4)); }
+.dw-home .dw-home-phases li[data-phase=active] i { background: var(--module-color); border-color: var(--module-color); }
 .dw-home-module-table { min-width: 620px; }
 .dw-home-module-table th:first-child { width: 28%; }
 .dw-home-module-table th:nth-child(2) { width: 18%; }
@@ -37,7 +41,7 @@
 .dw-home-module-table td { padding: 9px 14px; font-size: 12px; }
 .dw-home-module-table td:nth-child(3) { color: var(--text-3); }
 .dw-home-module-link { display: flex; align-items: center; gap: 8px; padding: 0; min-height: 24px; border: 0; background: transparent; color: var(--text); font: inherit; font-weight: 500; text-align: left; white-space: nowrap; }
-.dw-home-module-icon { display: grid; place-items: center; flex: 0 0 auto; width: 24px; height: 24px; border-radius: 6px; background: var(--surface-2); color: var(--text-2); }
+.dw-home-module-icon { display: grid; place-items: center; flex: 0 0 auto; width: 24px; height: 24px; border-radius: 6px; background: color-mix(in srgb,var(--module-color) 12%,var(--surface)); color: var(--module-color); }
 .dw-home-state { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-size: 11px; color: var(--text-2); }
 .dw-home-review { display: flex; align-items: center; gap: 6px; min-height: 24px; color: var(--text-3); font-size: 11px; white-space: nowrap; cursor: pointer; }
 .dw-home-review input { width: 13px; height: 13px; margin: 0; accent-color: var(--accent); cursor: pointer; }
@@ -54,7 +58,7 @@
 .dw-home-tasks { list-style: none; padding: 0; margin: 0; }
 .dw-home-tasks li + li { border-top: 1px solid var(--divider); }
 .dw-home-tasks button { display: flex; align-items: center; gap: 9px; width: 100%; padding: 9px 14px; border: 0; background: transparent; text-align: left; color: var(--text); font: inherit; }
-.dw-home-task-icon { display: grid; place-items: center; width: 24px; height: 24px; flex: 0 0 auto; color: var(--text-3); }
+.dw-home-task-icon { display: grid; place-items: center; width: 24px; height: 24px; flex: 0 0 auto; border-radius: 6px; color: var(--module-color); background: color-mix(in srgb,var(--module-color) 11%,var(--surface)); }
 .dw-home-task-icon.urgent { color: var(--red); }
 .dw-home-task-copy { flex: 1; min-width: 0; }
 .dw-home-task-copy strong { display: block; font-size: 12px; font-weight: 500; line-height: 1.45; }
@@ -86,7 +90,7 @@
 .dw-home-feed { display: flex; flex-direction: column; }
 .dw-home-feed > button { position: relative; display: flex; align-items: flex-start; gap: 8px; width: 100%; padding: 9px 0; border: 0; background: transparent; text-align: left; font: inherit; color: var(--text-2); }
 .dw-home-feed > button:not(:last-child)::before { content: ''; position: absolute; left: 10px; top: 32px; bottom: -3px; width: 1px; background: var(--border); }
-.dw-home-avatar { position: relative; z-index: 1; display: grid; place-items: center; flex: 0 0 auto; width: 22px; height: 22px; margin-top: 1px; border-radius: 50%; background: var(--surface-3); color: var(--text-3); font-size: 8px; font-weight: 600; overflow: hidden; }
+.dw-home-avatar { position: relative; z-index: 1; display: grid; place-items: center; flex: 0 0 auto; width: 22px; height: 22px; margin-top: 1px; border-radius: 50%; background: color-mix(in srgb,var(--actor-color) 16%,var(--surface)); color: var(--actor-color); font-size: 8px; font-weight: 600; overflow: hidden; }
 .dw-home-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; outline: none; }
 .dw-home-feed-copy { min-width: 0; flex: 1; font-size: 11.5px; line-height: 1.45; overflow-wrap: anywhere; }
 .dw-home-feed-copy strong { font-weight: 500; color: var(--text); margin-right: 4px; }

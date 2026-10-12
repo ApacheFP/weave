@@ -1,16 +1,16 @@
 import { styleLabel } from './productData.js';
 import React, { useEffect, useRef, useState } from 'react';
-import { modules } from '../modules.js';
+import { modules, moduleGroups } from '../modules.js';
 import { useDemo } from './DemoContext.jsx';
 import { Button, Dialog, Field, Icon } from './ui.jsx';
+import { actorStyle, localDate, taskStatuses, taskPriorities } from './workspaceData.js';
 import './personal-pages.css';
 
 const categories = [
   ['all', 'Tutte'], ['mention', 'Menzioni'], ['assign', 'Assegnate'],
   ['comment', 'Commenti'], ['update', 'Novità'],
 ];
-const taskStatuses = ['Da fare', 'In corso', 'Completata'];
-const taskModuleIds = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 19, 21, 22];
+const taskModuleIds = moduleGroups[0].items.map(item => item.id);
 const moduleName = id => id === 21 ? 'Panoramica del capo' : id === 22 ? 'Assistente' : modules.find(item => item.id === Number(id))?.title || 'Modulo';
 const actorName = actor => actor?.name || 'Team Atelier';
 const fullDate = value => {
@@ -29,13 +29,9 @@ const summaryTitle = item => {
   const first = actorName(item.actor).split(' ')[0];
   return item.title.startsWith(`${first} `) ? item.title.slice(first.length + 1) : item.title;
 };
-const dayKey = () => {
-  const today = new Date();
-  return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-};
 const shortDate = value => {
   if (!value) return 'Da definire';
-  if (value === dayKey()) return 'Oggi';
+  if (value === localDate()) return 'Oggi';
   const parsed = new Date(`${value}T12:00:00`);
   return Number.isNaN(parsed.getTime()) ? 'Da definire' : new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'short', ...(parsed.getFullYear() !== new Date().getFullYear() ? { year: 'numeric' } : {}) }).format(parsed);
 };
@@ -43,8 +39,7 @@ const shortDate = value => {
 function Avatar({ actor }) {
   const { data } = useDemo();
   const name = actorName(actor);
-  const colors = { 'marta@atelier.demo': 'var(--rose)', 'elena@atelier.demo': 'var(--blue)', 'luca@atelier.demo': 'var(--green)' };
-  return <span className="dw-personal-avatar" style={{ '--actor-color': colors[actor?.email] || 'var(--violet)' }} aria-hidden="true">{actor?.email === data.profile.email ? <img src="/illustrations/profile-avatar.webp" alt="" /> : name.split(' ').filter(Boolean).map(word => word[0]).slice(0, 2).join('')}</span>;
+  return <span className="dw-personal-avatar" style={actorStyle(actor)} aria-hidden="true">{actor?.email === data.profile.email ? <img src={data.profile.avatar || '/illustrations/profile-avatar.webp'} alt="" /> : name.split(' ').filter(Boolean).map(word => word[0]).slice(0, 2).join('')}</span>;
 }
 
 export function InboxPage({ onOpenModule, initialSelectedId = null }) {
@@ -149,7 +144,7 @@ export function CreateTaskDialog({ onClose, initialDue = '', initialStatus = 'Da
     <form className="dw-new-task-form" onSubmit={create}>
       <Field label="Attività"><input data-autofocus required maxLength={120} value={title} onChange={event => { setTitle(event.target.value); setError(''); }} placeholder="Es. Rivedere le misure del campione" /></Field>
       <div className="dw-new-task-pair"><Field label="Capo"><select value={styleId} onChange={event => setStyleId(event.target.value)}>{workspaceItems.map(item => <option key={item.styleId} value={item.styleId}>{styleLabel(item)} · {item.styleId}</option>)}</select></Field><Field label="Modulo"><select value={moduleId} onChange={event => setModuleId(Number(event.target.value))}>{taskModuleIds.map(id => <option key={id} value={id}>{moduleName(id)}</option>)}</select></Field></div>
-      <div className="dw-new-task-pair"><Field label="Scadenza" hint="Facoltativa"><input type="date" value={due} onChange={event => setDue(event.target.value)} /></Field><Field label="Priorità"><select value={priority} onChange={event => setPriority(event.target.value)}>{['Alta', 'Media', 'Bassa'].map(item => <option key={item}>{item}</option>)}</select></Field></div>
+      <div className="dw-new-task-pair"><Field label="Scadenza" hint="Facoltativa"><input type="date" value={due} onChange={event => setDue(event.target.value)} /></Field><Field label="Priorità"><select value={priority} onChange={event => setPriority(event.target.value)}>{taskPriorities.map(item => <option key={item}>{item}</option>)}</select></Field></div>
       <Field label="Note" hint="Facoltative"><textarea rows={3} maxLength={2000} value={note} onChange={event => setNote(event.target.value)} placeholder="Indicazioni per svolgere l’attività" /></Field>
       {error && <p className="dw-error" role="alert">{error}</p>}
       <div className="dw-dialog-actions"><Button onClick={onClose}>Annulla</Button><Button type="submit" primary icon="plus">Crea attività</Button></div>
@@ -158,7 +153,6 @@ export function CreateTaskDialog({ onClose, initialDue = '', initialStatus = 'Da
 }
 
 const taskKey = item => item.key || `ACT-${/task-(\d+)$/.test(item.id) ? item.id.match(/task-(\d+)$/)[1].padStart(3, '0') : item.id.slice(-6).toUpperCase()}`;
-const dateKey = date => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
 function TasksCalendar({ items, onOpenModule, onAdd, styleFor }) {
   const [month, setMonth] = useState(() => new Date(new Date().getFullYear(), new Date().getMonth(), 1));
@@ -167,10 +161,10 @@ function TasksCalendar({ items, onOpenModule, onAdd, styleFor }) {
   const cells = Array.from({ length: Math.ceil((startOffset + totalDays) / 7) * 7 }, (_, index) => new Date(month.getFullYear(), month.getMonth(), index - startOffset + 1));
   const monthTitle = new Intl.DateTimeFormat('it-IT', { month: 'long', year: 'numeric' }).format(month);
   return <div className="dw-tasks-calendar">
-    <header className="dw-calendar-heading"><h3>{monthTitle}</h3><div><button type="button" aria-label="Mese precedente" onClick={() => setMonth(value => new Date(value.getFullYear(), value.getMonth() - 1, 1))}><Icon name="back" size={15} /></button><Button onClick={() => setMonth(new Date(new Date().getFullYear(), new Date().getMonth(), 1))}>Oggi</Button><button type="button" aria-label="Mese successivo" onClick={() => setMonth(value => new Date(value.getFullYear(), value.getMonth() + 1, 1))}><Icon name="back" size={15} /></button></div></header>
+    <header className="dw-calendar-heading"><h3>{monthTitle}</h3><div><button type="button" aria-label="Mese precedente" onClick={() => setMonth(value => new Date(value.getFullYear(), value.getMonth() - 1, 1))}><Icon name="back" size={15} /></button><Button onClick={() => setMonth(new Date(new Date().getFullYear(), new Date().getMonth(), 1))}>Oggi</Button><button type="button" aria-label="Mese successivo" onClick={() => setMonth(value => new Date(value.getFullYear(), value.getMonth() + 1, 1))}><Icon name="arrow" size={15} /></button></div></header>
     <div className="dw-calendar-scroll"><div className="dw-calendar-week">{['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'].map(day => <span key={day}>{day}</span>)}</div><div className="dw-calendar-grid">{cells.map(date => {
-      const key = dateKey(date);
-      return <section key={key} className={`dw-calendar-day ${date.getMonth() !== month.getMonth() ? 'outside' : ''} ${key === dayKey() ? 'today' : ''}`} aria-label={new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long' }).format(date)}><span className="dw-calendar-day-number">{date.getDate()}</span><button type="button" className="dw-calendar-add" aria-label={`Nuova attività per ${shortDate(key)}`} onClick={() => onAdd(key)}><Icon name="plus" size={13} /></button>{items.filter(item => item.due === key).map(item => <button key={item.id} type="button" className={`dw-calendar-task ${item.status === 'Completata' ? 'completed' : ''}`} title={`${item.title} · ${styleLabel(styleFor(item.styleId)) || item.styleId}`} onClick={() => onOpenModule(item.styleId, item.moduleId)}><span className="dw-task-status-dot" data-status={item.status} /><span>{item.title}</span></button>)}</section>;
+      const key = localDate(date);
+      return <section key={key} className={`dw-calendar-day ${date.getMonth() !== month.getMonth() ? 'outside' : ''} ${key === localDate() ? 'today' : ''}`} aria-label={new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long' }).format(date)}><span className="dw-calendar-day-number">{date.getDate()}</span><button type="button" className="dw-calendar-add" aria-label={`Nuova attività per ${shortDate(key)}`} onClick={() => onAdd(key)}><Icon name="plus" size={13} /></button>{items.filter(item => item.due === key).map(item => <button key={item.id} type="button" className={`dw-calendar-task ${item.status === 'Completata' ? 'completed' : ''}`} title={`${item.title} · ${styleLabel(styleFor(item.styleId)) || item.styleId}`} onClick={() => onOpenModule(item.styleId, item.moduleId)}><span className="dw-task-status-dot" data-status={item.status} /><span>{item.title}</span></button>)}</section>;
     })}</div></div>
     {items.some(item => !item.due) && <p className="dw-calendar-undated">{items.filter(item => !item.due).length} attività senza scadenza sono disponibili nella vista Lista.</p>}
   </div>;
@@ -189,7 +183,7 @@ export function MyTasksPage({ onOpenModule }) {
   const [collapsed, setCollapsed] = useState({ completed: true });
   const filterRef = useRef(null);
   const sortRef = useRef(null);
-  const today = dayKey();
+  const today = localDate();
   const yesterday = new Date(`${today}T12:00:00`);
   yesterday.setDate(yesterday.getDate() - 1);
   const mine = tasks.filter(item => item.assignee?.email === data.profile.email);
@@ -201,7 +195,7 @@ export function MyTasksPage({ onOpenModule }) {
     return sort === 'priority' ? (ranks[a.priority] ?? 1) - (ranks[b.priority] ?? 1) || byDue : sort === 'title' ? a.title.localeCompare(b.title, 'it-IT') : byDue;
   });
   const groups = [
-    { id: 'overdue', title: 'In ritardo', icon: 'clock', items: visible.filter(item => item.status !== 'Completata' && item.due && item.due < today), due: dateKey(yesterday) },
+    { id: 'overdue', title: 'In ritardo', icon: 'clock', items: visible.filter(item => item.status !== 'Completata' && item.due && item.due < today), due: localDate(yesterday) },
     { id: 'today', title: 'Oggi', icon: 'calendar', items: visible.filter(item => item.status !== 'Completata' && item.due === today), due: today },
     { id: 'upcoming', title: 'Prossime', icon: 'calendar', items: visible.filter(item => item.status !== 'Completata' && (!item.due || item.due > today)), due: '' },
     { id: 'completed', title: 'Completate', icon: 'check', items: visible.filter(item => item.status === 'Completata'), due: '' },

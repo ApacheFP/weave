@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { useDemo } from './dashboard/DemoContext.jsx';
 import './dashboard/account-pages.css';
 
-const initialProfile = { firstName: 'Alex', lastName: 'Rossi', email: 'demo@weave.it' };
+const initialProfile = { firstName: 'Alex', lastName: 'Rossi', email: 'demo@weave.it', avatar: '/illustrations/profile-avatar.webp' };
 const avatar = '/illustrations/profile-avatar.webp';
 
 function Icon({ name }) {
@@ -94,8 +94,19 @@ export default function ProfileMenu({ onSignOut, sidebar = false, compact = fals
 
   function saveProfile(event) {
     event.preventDefault();
-    commit({ profile: { firstName: draft.firstName.trim(), lastName: draft.lastName.trim(), email: draft.email.trim() } });
+    commit({ profile: { firstName: draft.firstName.trim(), lastName: draft.lastName.trim(), email: draft.email.trim(), avatar: draft.avatar || null } });
     setMessage('Profilo aggiornato nella demo.');
+  }
+
+  function chooseAvatar(event) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (!file.type.startsWith('image/') || file.size > 2 * 1024 * 1024) { setMessage('Scegli un’immagine fino a 2 MB.'); return; }
+    const reader = new FileReader();
+    reader.onload = () => { setDraft(current => ({ ...current, avatar: String(reader.result) })); setMessage('Foto pronta. Salva il profilo per applicarla.'); };
+    reader.onerror = () => setMessage('Non sono riuscito a leggere questa immagine.');
+    reader.readAsDataURL(file);
   }
 
   function openAccountPage(callback, fallback) {
@@ -112,7 +123,7 @@ export default function ProfileMenu({ onSignOut, sidebar = false, compact = fals
   return (
     <div className={`profile-menu${sidebar ? ' dw-profile-sidebar' : ''}${compact ? ' dw-profile-compact' : ''}`} data-collapsed={sidebar && collapsed} ref={root}>
       <button className="profile-trigger" type="button" ref={trigger} aria-label={`Profilo di ${fullName}`} aria-haspopup="dialog" aria-expanded={Boolean(view)} aria-controls={view ? panelId : undefined} onClick={() => view ? closePanel(true) : show('menu')}>
-        <img src={avatar} width={sidebar ? '26' : '36'} height={sidebar ? '26' : '36'} alt="" />
+        <img src={profile.avatar || avatar} width={sidebar ? '26' : '36'} height={sidebar ? '26' : '36'} alt="" />
         <span className="profile-trigger-name">{fullName}</span>
         <span className="profile-caret" data-open={Boolean(view)}><Icon name={sidebar ? 'chevrons' : 'chevron'} /></span>
       </button>
@@ -125,7 +136,7 @@ export default function ProfileMenu({ onSignOut, sidebar = false, compact = fals
           </div>
 
           {view === 'menu' ? <>
-            <div className="profile-summary"><img src={avatar} width="52" height="52" alt="Ritratto del profilo demo" /><div><strong>{fullName}</strong><span>{profile.email}</span><small>Designer · WEAVE</small></div></div>
+            <div className="profile-summary"><img src={profile.avatar || avatar} width="52" height="52" alt="Ritratto del profilo demo" /><div><strong>{fullName}</strong><span>{profile.email}</span><small>Designer · WEAVE</small></div></div>
             <div className="profile-actions">
               <button type="button" onClick={() => openAccountPage(onProfile, 'profile')}><Icon name="user" /><span>Il tuo profilo</span><Icon name="chevron" /></button>
               <button type="button" onClick={() => openAccountPage(onSettings, 'settings')}><Icon name="settings" /><span>Impostazioni</span><Icon name="chevron" /></button>
@@ -135,6 +146,7 @@ export default function ProfileMenu({ onSignOut, sidebar = false, compact = fals
             <h2>Il tuo profilo</h2>
             <p className="profile-description">Il tuo spazio, la tua identità.</p>
             <form onSubmit={saveProfile}>
+              <div className="profile-avatar-edit"><img src={draft.avatar || avatar} width="48" height="48" alt="Anteprima foto profilo" /><label>Cambia foto<input type="file" accept="image/*" onChange={chooseAvatar} /></label>{draft.avatar && draft.avatar !== avatar && <button type="button" onClick={() => { setDraft(current => ({ ...current, avatar: null })); setMessage('Foto rimossa. Salva il profilo per applicare la modifica.'); }}>Rimuovi</button>}</div>
               {[
                 ['firstName', 'Nome', 'text'],
                 ['lastName', 'Cognome', 'text'],

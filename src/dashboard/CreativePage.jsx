@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { download, useDemo } from './DemoContext.jsx';
+import { useDemo } from './DemoContext.jsx';
+import { download } from './exportFiles.js';
 import { Badge, Button, Card, Dialog, Field, Icon, Tabs } from './ui.jsx';
 import { creativeDefaults, prepareDirection, directionPresets } from './creativeData.js';
 import { readSketchFile as readFile, sketchHandoff } from './sketchHandoff.js';

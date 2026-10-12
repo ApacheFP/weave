@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { download, euro, useDemo } from './DemoContext.jsx';
+import { useDemo } from './DemoContext.jsx';
+import { euro } from './domain.js';
+import { download } from './exportFiles.js';
 import { Lifecycle } from './services.jsx';
 import { Badge, Button, Card, Icon, Metrics, Tabs } from './ui.jsx';
 import { productMedia, productSizes, productSpec } from './productData.js';

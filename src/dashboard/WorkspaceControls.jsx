@@ -1,43 +1,63 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { moduleGroups } from '../modules.js';
-import { minQuantity, useDemo } from './DemoContext.jsx';
+import { useDemo } from './DemoContext.jsx';
+import { minQuantity } from './domain.js';
 import { Badge, Button, Dialog, Empty, Field, Icon } from './ui.jsx';
 import { ProductPhoto } from './Media.jsx';
 import { productSearchText, productVariantId } from './productData.js';
 import './workspace-switcher.css';
 
-export function StyleSwitcher({ onCreate, onSelect }) {
+export function StyleSwitcher({ onCreate, onSelect, selected = true }) {
   const { data, products, selectStyle } = useDemo();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const root = useRef(null); const trigger = useRef(null);
+  const [popoverStyle, setPopoverStyle] = useState(null);
+  const root = useRef(null); const trigger = useRef(null); const popover = useRef(null);
   const matchingStyles = products.filter(item => productSearchText(item).includes(query.toLowerCase().trim()));
   const activeProduct = products.find(item => item.variants.some(variant => variant.styleId === data.styleId));
   const season = collection => collection.replace('Autunno/Inverno', 'AI').replace('Primavera/Estate', 'PE');
   useEffect(() => {
     if (!open) return;
-    const outside = event => { if (!root.current?.contains(event.target)) setOpen(false); };
+    const outside = event => { if (!root.current?.contains(event.target) && !popover.current?.contains(event.target)) setOpen(false); };
     const escape = event => { if (event.key === 'Escape') { setOpen(false); trigger.current?.focus(); } };
     document.addEventListener('pointerdown', outside); document.addEventListener('keydown', escape);
     return () => { document.removeEventListener('pointerdown', outside); document.removeEventListener('keydown', escape); };
   }, [open]);
+  useLayoutEffect(() => {
+    if (!open) return;
+    const updatePosition = () => {
+      const rect = trigger.current?.getBoundingClientRect();
+      if (!rect) return;
+      const margin = 12;
+      const width = Math.min(320, window.innerWidth - margin * 2);
+      const left = Math.max(margin, Math.min(rect.left, window.innerWidth - width - margin));
+      const below = window.innerHeight - rect.bottom - 16;
+      const top = below >= 260 ? rect.bottom + 8 : Math.max(margin, rect.top - Math.min(440, window.innerHeight - margin * 2));
+      setPopoverStyle({ left, top, width, maxHeight: Math.max(220, window.innerHeight - top - margin) });
+    };
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+    return () => { window.removeEventListener('resize', updatePosition); window.removeEventListener('scroll', updatePosition, true); };
+  }, [open]);
   return <div className="dw-switcher" ref={root}>
-    <button type="button" ref={trigger} className="dw-workspace-trigger" aria-label={`Cambia capo: ${data.title}`} aria-expanded={open} aria-controls={open ? 'style-switcher' : undefined} onClick={() => { setOpen(!open); setQuery(''); }}>
-      <span className="dw-workspace-photo"><ProductPhoto variant={data.variant} sizes="48px" alt="" /></span>
-      <span className="dw-workspace-name"><strong title={data.title}>{data.title}</strong><small title={data.collection}>{data.identityAssigned ? data.styleId : 'Bozza'}{activeProduct.variants.length > 1 && ` · ${data.variant}`}<span aria-hidden="true"> · </span>{season(data.collection)}</small></span>
-      <span className="dw-workspace-chevron"><Icon name="back" size={14} /></span>
+    <button type="button" ref={trigger} className="dw-workspace-trigger" aria-label={selected ? `Cambia capo: ${data.title}` : 'Seleziona il capo'} aria-expanded={open} aria-controls={open ? 'style-switcher' : undefined} onClick={() => { setOpen(!open); setQuery(''); }}>
+      {selected && <span className="dw-workspace-photo"><ProductPhoto variant={data.variant} sizes="48px" alt="" /></span>}
+      <span className="dw-workspace-name"><strong title={selected ? data.title : 'Seleziona il capo'}>{selected ? data.title : 'Seleziona il capo'}</strong><small title={selected ? data.collection : 'Scegli un capo per iniziare'}>{selected ? <>{data.identityAssigned ? data.styleId : 'Bozza'}{activeProduct.variants.length > 1 && ` · ${data.variant}`}<span aria-hidden="true"> · </span>{season(data.collection)}</> : 'Scegli un capo per iniziare'}</small></span>
+      <span className="dw-workspace-chevron"><Icon name="chevron" size={14} /></span>
     </button>
-    {open && <div id="style-switcher" className="dw-workspace-popover" role="region" aria-label="Cambia capo">
-      <div className="dw-switcher-heading"><strong>I tuoi capi</strong><span>Atelier · {products.length} {products.length === 1 ? 'capo' : 'capi'}</span></div>
+    {open && popoverStyle && createPortal(<div id="style-switcher" className="dw-switcher dw-workspace-popover dw-switcher-portal" ref={popover} role="region" aria-label="Seleziona il capo" style={popoverStyle}>
+      <div className="dw-switcher-heading"><div><strong>Seleziona un capo</strong><small>{products.length} {products.length === 1 ? 'capo disponibile' : 'capi disponibili'}</small></div></div>
       <div className="dw-popover-search"><Icon name="search" size={16} /><input autoFocus aria-label="Cerca capo" placeholder="Nome, codice o collezione…" value={query} onChange={e => setQuery(e.target.value)} /></div>
-      <div className="dw-style-list">{matchingStyles.map(item => <button type="button" key={item.styleId} aria-pressed={item.styleId === data.styleId} onClick={() => { selectStyle(productVariantId(item, query)); setOpen(false); trigger.current?.focus(); onSelect?.(); }}>
+      <div className="dw-style-list">{matchingStyles.map(item => <button type="button" key={item.styleId} aria-pressed={selected && item.styleId === data.styleId} onClick={() => { selectStyle(productVariantId(item, query)); setOpen(false); trigger.current?.focus(); onSelect?.(); }}>
         <span className="dw-style-thumb"><ProductPhoto product={item} sizes="48px" alt="" /></span>
         <span className="dw-style-description"><strong title={item.title}>{item.title}</strong><small>{item.identityAssigned ? item.productId : 'Bozza'} · {item.variants.length > 1 ? `${item.variants.length} varianti` : item.variant}</small><span>{season(item.collection)}</span></span>
-        {item.styleId === data.styleId && <span className="dw-style-selected" aria-label="Capo selezionato"><Icon name="check" size={12} /></span>}
+        {selected && item.styleId === data.styleId && <span className="dw-style-selected" aria-label="Capo selezionato"><Icon name="check" size={12} /></span>}
       </button>)}{!matchingStyles.length && <Empty>Nessun capo trovato. Prova un altro nome o codice.</Empty>}</div>
-      {activeProduct.variants.length > 1 && <div className="dw-switcher-footer"><Field label="Variante · colore e materiale"><select value={data.styleId} onChange={event => { selectStyle(event.target.value); setOpen(false); trigger.current?.focus(); }}>{activeProduct.variants.map(item => <option key={item.styleId} value={item.styleId}>{item.variant} · {item.materialName.split(' · ')[0]}</option>)}</select></Field></div>}
+      {selected && activeProduct.variants.length > 1 && <div className="dw-switcher-footer"><Field label="Variante · colore e materiale"><select value={data.styleId} onChange={event => { selectStyle(event.target.value); setOpen(false); trigger.current?.focus(); }}>{activeProduct.variants.map(item => <option key={item.styleId} value={item.styleId}>{item.variant} · {item.materialName.split(' · ')[0]}</option>)}</select></Field></div>}
       <div className="dw-switcher-footer"><button type="button" className="dw-create-style" onClick={() => { setOpen(false); onCreate(); }}><Icon name="plus" size={16} />Nuovo capo<Icon name="arrow" size={14} /></button></div>
-    </div>}
+    </div>, root.current?.closest('.dw-app') || document.body)}
   </div>;
 }
 
@@ -46,7 +66,7 @@ export function CreateStyleDialog({ onClose, onCreated }) {
   const next = Math.max(420, ...styles.map(item => Number(item.styleId.match(/\d+$/)?.[0]) || 0)) + 1;
   const [draft, setDraft] = useState({ title: '', styleId: `MG-${String(next).padStart(4, '0')}`, collection: data.collection, quantity: 300, copy: false });
   const [error, setError] = useState('');
-  return <Dialog title="Nuovo capo" note="Atelier · crea uno spazio per il prossimo prodotto" onClose={onClose}><form className="dw-stack" onSubmit={event => { event.preventDefault(); if (!createStyle(draft)) { setError('Questo codice è già assegnato a un capo. Scegline un altro.'); return; } onCreated(); }}>
+  return <Dialog title="Nuovo capo" note="Atelier · crea uno spazio per il prossimo prodotto" onClose={onClose}><form className="dw-stack" onSubmit={event => { event.preventDefault(); if (!createStyle(draft)) { setError('Verifica nome, collezione, quantità e codice: il codice deve essere univoco.'); return; } onCreated(); }}>
     <Field label="Nome del capo"><input data-autofocus required maxLength={80} pattern=".*\S.*" placeholder="Es. Maglia Essential" value={draft.title} onChange={e => setDraft({ ...draft, title: e.target.value })} /></Field>
     <div className="dw-two"><Field label="Codice riservato" hint="Diventa lo Style ID al caricamento dello schizzo."><input required maxLength={24} pattern="[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*" value={draft.styleId} onChange={e => { setDraft({ ...draft, styleId: e.target.value.toUpperCase() }); setError(''); }} /></Field><Field label="Quantità prevista"><input required type="number" min={draft.copy ? minQuantity(data) : 1} max="10000" step="1" value={draft.quantity} onChange={e => setDraft({ ...draft, quantity: e.target.value })} /></Field></div>
     <Field label="Collezione"><input required maxLength={80} pattern=".*\S.*" value={draft.collection} onChange={e => setDraft({ ...draft, collection: e.target.value })} /></Field>

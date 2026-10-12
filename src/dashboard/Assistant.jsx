@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { modules } from '../modules.js';
-import { euro, fabrics, totals, useDemo } from './DemoContext.jsx';
+import { useDemo } from './DemoContext.jsx';
+import { euro, fabrics, totals } from './domain.js';
 import { categoryFabrics, markerConfiguration, materialUnit, piecesFor, productSizes, productSpec } from './productData.js';
 import { Badge, Button, Icon } from './ui.jsx';
 
@@ -56,21 +57,31 @@ export default function Assistant({ moduleId = 22, embedded = false, onClose }) 
   const { data, commit } = useDemo();
   const module = modules.find(m => m.id === moduleId);
   const key = String(moduleId);
-  const messages = data.chats[key] || [];
+  const [activeThreads, setActiveThreads] = useState({});
+  const threadKey = activeThreads[key] || data.activeChats?.[key] || key;
+  const messages = data.chats[threadKey] || [];
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const timer = useRef(null);
   const end = useRef(null);
   useEffect(() => () => clearTimeout(timer.current), []);
   useEffect(() => { end.current?.scrollIntoView({ block: 'nearest', behavior: 'auto' }); }, [messages.length, busy]);
+  function newChat() {
+    const nextKey = `${key}:${crypto.randomUUID()}`;
+    clearTimeout(timer.current);
+    setBusy(false);
+    setInput('');
+    setActiveThreads(previous => ({ ...previous, [key]: nextKey }));
+    commit(previous => ({ activeChats: { ...(previous.activeChats || {}), [key]: nextKey } }));
+  }
   function send(value = input) {
     const question = value.trim().slice(0, 1500);
     if (!question || busy) return;
     const reply = answer(question, moduleId, data);
     setInput(''); setBusy(true);
-    commit(previous => ({ chats: { ...previous.chats, [key]: [...(previous.chats[key] || []), { id: crypto.randomUUID(), role: 'user', text: question }] } }));
+    commit(previous => ({ chats: { ...previous.chats, [threadKey]: [...(previous.chats[threadKey] || []), { id: crypto.randomUUID(), role: 'user', text: question }] } }));
     timer.current = setTimeout(() => {
-      commit(previous => ({ chats: { ...previous.chats, [key]: [...(previous.chats[key] || []), { id: crypto.randomUUID(), role: 'assistant', ...reply }] } }));
+      commit(previous => ({ chats: { ...previous.chats, [threadKey]: [...(previous.chats[threadKey] || []), { id: crypto.randomUUID(), role: 'assistant', ...reply }] } }));
       setBusy(false);
     }, 650);
   }
@@ -82,11 +93,11 @@ export default function Assistant({ moduleId = 22, embedded = false, onClose }) 
       if (message.action === 'price') { patch.wholesale = totals(previous).suggestedWholesale; patch.retail = patch.wholesale * 2; }
       if (message.action === 'purchase') patch.purchaseOrders = previous.purchaseOrders.map(row => row.status === 'In ritardo' ? { ...row, status: 'Confermato' } : row);
       if (message.action === 'quality') { patch.qualityResolved = true; patch.qualityScore = 96; patch.reworks = 0; }
-      return { ...patch, chats: { ...previous.chats, [key]: previous.chats[key].map(row => row.id === message.id ? { ...row, applied: true } : row) } };
+      return { ...patch, chats: { ...previous.chats, [threadKey]: previous.chats[threadKey].map(row => row.id === message.id ? { ...row, applied: true } : row) } };
     }, 'Decisione approvata: ' + message.actionLabel.toLowerCase(), moduleId);
   }
   return <div className={`dw-chat ${embedded ? 'embedded' : ''}`}>
-    <div className="dw-chat-top"><span className="dw-assistant-mark"><img src="/favicon.png" alt="" /></span><div><strong>Filo · Assistente weave</strong><p>{moduleId === 22 ? 'Contesto completo del capo selezionato.' : module.title + ` · ${data.styleId}`}</p></div><Badge>Demo</Badge>{onClose && <button className="dw-icon-btn dw-chat-close" type="button" onClick={onClose} aria-label="Chiudi assistente"><Icon name="close" size={18} /></button>}</div>
+    <div className="dw-chat-top"><span className="dw-assistant-mark"><img src="/mascot-filo.png" alt="" /></span><div><strong>Filo · Assistente weave</strong><p>{moduleId === 22 ? 'Contesto completo del capo selezionato.' : module.title + ` · ${data.styleId}`}</p></div><button className="dw-chat-new" type="button" onClick={newChat}><Icon name="plus" size={14} />Nuova chat</button>{onClose && <button className="dw-icon-btn dw-chat-close" type="button" onClick={onClose} aria-label="Chiudi assistente"><Icon name="close" size={18} /></button>}</div>
     <div className="dw-chat-messages" aria-live="polite" aria-relevant="additions">
       {!messages.length && <div className="dw-chat-welcome"><Icon name="chat" size={32} /><h2>Da dove iniziamo?</h2><p>{moduleId === 22 ? 'Confrontiamo scenari, leggiamo i segnali e decidiamo il prossimo passo.' : `Ragioniamo su ${module.title.toLowerCase()}, usando i dati del tuo capo.`}</p><div className="dw-chat-prompts">{(moduleId === 5 ? [productSpec(data).gradeIndex === null ? 'Controlla le dimensioni della borsa' : `Confronta le taglie ${productSizes(data)[0]} e ${productSizes(data).at(-1)}`, 'Controlla le regole di sviluppo'] : prompts[moduleId] || prompts[22]).map(text => data.category === 'knit' ? text.replace('tessuto', 'filato') : text).map(prompt => <button key={prompt} onClick={() => send(prompt)} disabled={busy}>{prompt}<Icon name="arrow" size={16} /></button>)}</div></div>}
       {messages.map(message => <div className={`dw-message ${message.role}`} key={message.id}><small>{message.role === 'user' ? 'Tu' : 'weave · assistente'}</small><p>{message.text}</p>{message.action && <Button primary={!message.applied} disabled={message.applied || busy} icon={message.applied ? 'check' : undefined} onClick={() => approve(message)}>{message.applied ? 'Decisione applicata' : message.actionLabel}</Button>}</div>)}

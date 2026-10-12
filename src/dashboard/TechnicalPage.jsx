@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { csv, download, techPack, useDemo } from './DemoContext.jsx';
+import { useDemo } from './DemoContext.jsx';
+import { csv, download, techPack } from './exportFiles.js';
 import { Badge, Button, Card, Field, Icon, Tabs } from './ui.jsx';
 import { readSketchFile, sketchHandoff } from './sketchHandoff.js';
 import { technicalDefaults, versionSnapshot, reviseTechnical, validColors } from './technicalData.js';

@@ -113,3 +113,14 @@ La dashboard usa un raggio comune di 12 px; i 15 moduli sono stati rivisti con i
 Materiali e BOM importava l’icona di ricerca senza dichiararla: l’import è stato corretto. L’effetto di scorrimento della chat ora scarta esplicitamente il valore restituito dal browser, evitando errori React al cambio di vista. Le 15 pagine e le 7 tipologie di servizio sono state aperte durante il debugging dell’anteprima locale; creazione del capo e salvataggio del brief sono stati riprodotti nella demo.
 
 Il redesign OpsLoop mantiene la sidebar laterale e il raggio comune di 12 px. I riepiloghi con avanzamento mostrano tacche calcolate sui dati della demo; hover solo sui dispositivi compatibili, pressione `.96` in 150 ms, rispetto di reduced motion e contenimento dello scroll nelle finestre. Nessuna dipendenza aggiunta.
+
+
+## Consolidamento del 12 ottobre 2026
+
+La revisione attuale e la roadmap sono in [docs/hardening-2026-10-12.md](docs/hardening-2026-10-12.md). Le descrizioni delle revisioni UI precedenti sopra documentano anche versioni storiche: i token effettivi della console attuale usano Geist; Mulish rimane disponibile come asset locale.
+
+`DemoContext.jsx` gestisce la sessione e le azioni; i calcoli e i vincoli verificabili sono in `domain.js`, le basi demo in `demoDefaults.js` e `accountData.js`, gli export browser in `exportFiles.js`. La UI condivisa resta in `ui.jsx`; palette, altezze e spazi comuni sono in `ui-tokens.css`, le varianti dei selettori in `selectors.css`. Nessuna nuova dipendenza.
+
+Vendite retail e ordini wholesale rispettano la quantità pianificata complessivamente impegnata. Modifiche a materiale, misure o modello riaprono il fitting; snapshot identici non annullano le approvazioni. La creazione dei capi valida i dati anche nell'azione, e le notifiche di assegnazione rispettano la preferenza corrente. Le opzioni di lingua, fuso e pagina iniziale restano anteprime della sessione, come indicato nelle impostazioni.
+
+Per la verifica corrente eseguire `npm test` e `npm run build`. Esiti, collaudo browser e limiti sono nel report; non sono una certificazione di produzione. Persistenza, autenticazione e permessi server restano da implementare.

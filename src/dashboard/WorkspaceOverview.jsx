@@ -4,18 +4,14 @@ import { styleLabel } from './productData.js';
 import { modules } from '../modules.js';
 import { Badge, Button, Card, Empty, Icon, Tabs } from './ui.jsx';
 import { ProductPhoto } from './Media.jsx';
+import { actorStyle, localDate } from './workspaceData.js';
 import './workspace-overview.css';
 
-const todayKey = () => {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-};
 const dateLabel = value => value ? new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'short' }).format(new Date(value + 'T12:00:00')) : 'Senza scadenza';
 const moduleLabel = id => id === 21 ? 'Panoramica del capo' : modules.find(item => item.id === id)?.title || 'Filiera';
 const initials = name => name.split(/\s+/).filter(Boolean).map(part => part[0]).slice(0, 2).join('');
 const stateLabel = item => item.passportPublished ? 'Passaporto pubblicato' : item.produced ? 'In produzione' : item.technical?.approvedId ? 'Sviluppo tecnico' : item.sketchFile ? 'Concept pronto' : 'Concept in bozza';
 const stateTone = item => item.passportPublished || item.produced ? 'success' : item.technical?.approvedId ? 'info' : item.sketchFile ? 'violet' : '';
-const actorTone = email => ({ 'marta@atelier.demo': 'rose', 'luca@atelier.demo': 'green', 'elena@atelier.demo': 'blue', 'demo@weave.it': 'violet' }[email] || 'violet');
 
 function eventTime(event) {
   if (event.at) return Date.parse(event.at);
@@ -28,7 +24,7 @@ function eventsOf(items) {
 }
 function EventRows({ events, onOpenModule }) {
   return <div className="dw-workspace-events">{events.map(event => <div className="dw-workspace-event" key={`${event.styleId}-${event.id}`}>
-    <span className="dw-workspace-avatar" style={{ '--actor-color': `var(--${actorTone(event.actor?.email)})` }} aria-label={event.actor?.name || 'WEAVE'}>{initials(event.actor?.name || 'WEAVE')}</span>
+    <span className="dw-workspace-avatar" style={actorStyle(event.actor)} aria-label={event.actor?.name || 'WEAVE'}>{initials(event.actor?.name || 'WEAVE')}</span>
     <div><div className="dw-workspace-event-head"><strong>{event.actor?.name || 'WEAVE'}</strong><time>{event.time}</time></div><p>{event.text}</p><button type="button" onClick={() => onOpenModule(event.styleId, event.module)}>{event.styleTitle}<span>·</span>{moduleLabel(event.module)}</button></div>
   </div>)}</div>;
 }
@@ -36,7 +32,7 @@ function EventRows({ events, onOpenModule }) {
 export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
   const { data, products, workspaceItems, tasks, inbox, updateTask } = useDemo();
   const [taskView, setTaskView] = useState('Prossime');
-  const today = todayKey();
+  const today = localDate();
   const mine = tasks.filter(task => task.assignee.email === data.profile.email);
   const open = mine.filter(task => task.status !== 'Completata');
   const overdue = open.filter(task => task.due && task.due < today);

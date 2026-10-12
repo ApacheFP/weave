@@ -5,7 +5,7 @@
   gap: 2px;
   max-width: 100%;
   border: 0;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background: var(--surface-3);
   overflow-x: auto;
   scrollbar-width: none;
@@ -15,8 +15,8 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  height: 24px;
-  min-height: 24px;
+  height: var(--segment-height);
+  min-height: var(--segment-height);
   width: auto;
   margin: 0;
   padding: 0 9px;
@@ -25,7 +25,8 @@
   background: transparent;
   box-shadow: none;
   color: var(--text-2);
-  font: 500 12px var(--font);
+  font: 500 var(--fs-xs) var(--font);
+  line-height: 1;
   white-space: nowrap;
   cursor: pointer;
   transform: none;
@@ -34,7 +35,7 @@
 .dw-app :is(.dw-tabs:not(.dw-tabs-underline),.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-creative-routes,.dw-creative-mobile-switch) > button[aria-pressed=true] {
   background: var(--surface);
   color: var(--text);
-  box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 0 0 1px var(--border);
+  box-shadow: 0 0 0 1px var(--border);
 }
 .dw-app :is(.dw-tabs:not(.dw-tabs-underline),.dw-task-view,.dw-segmented,.dw-notifications-filter,.dw-creative-routes,.dw-creative-mobile-switch) > button:focus-visible {
   outline: 2px solid var(--accent);
@@ -65,8 +66,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 36px;
-  min-height: 36px;
+  height: var(--tab-height);
+  min-height: var(--tab-height);
   margin: 0;
   padding: 0 10px;
   border: 0;
@@ -74,7 +75,7 @@
   background: transparent;
   box-shadow: none;
   color: var(--text-2);
-  font: 500 12.5px var(--font);
+  font: 500 var(--fs-sm) var(--font);
   white-space: nowrap;
   transition: color var(--dur);
 }
@@ -102,9 +103,9 @@
   min-width: 0;
   overflow-x: auto;
   scrollbar-width: none;
-  padding: 4px;
+  padding: var(--space-1);
   border: 1px solid var(--text);
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--text);
 }
 .dw-app .dw-page-tabs::-webkit-scrollbar { display: none; }
@@ -112,8 +113,8 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  height: 40px;
-  min-height: 40px;
+  height: var(--module-tab-height);
+  min-height: var(--module-tab-height);
   margin: 0;
   padding: 0 16px;
   border: 1px solid transparent;
@@ -136,35 +137,4 @@
   .dw-app .dw-page-tabs > button:not([aria-selected=true]):hover { color: var(--text-inv); }
   .dw-app .dw-page-tabs > button[aria-selected=true]:hover { color: var(--text); }
 }
-.dw-app .dw-workspace-toolbar { position: relative; justify-content: center; min-height: 50px; }
-.dw-app .dw-workspace-toolbar > .dw-btn { position: absolute; right: 0; }
 .dw-app .dw-page-tabs[role=tablist] { width: auto; margin-inline: auto; }
-
-/* Prova1 native selects: 30px fields, 6px radius and the same chevron. */
-.dw-app select:not(.dw-personal-task-table select) {
-  appearance: none;
-  height: 30px;
-  min-height: 30px;
-  padding: 0 28px 0 10px;
-  border-radius: 6px;
-  background-color: var(--surface);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239C988F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-position: right 9px center;
-  background-repeat: no-repeat;
-  background-size: 12px 12px;
-  font: 13.5px/1.45 var(--font);
-}
-.dw-app select.dw-media-kind-select {
-  width: auto;
-  height: 26px;
-  min-height: 26px;
-  font-size: 12px;
-}
-
-/* Prova1's breadcrumb is plain text, not a colored pill. */
-.dw-app .dw-breadcrumb > strong { padding: 0; border-radius: 0; background: transparent; color: var(--text); }
-
-@media (max-width:560px) {
-  .dw-app .dw-workspace-toolbar { flex-direction: column; }
-  .dw-app .dw-workspace-toolbar > .dw-btn { position: static; align-self: flex-end; }
-}

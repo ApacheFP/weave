@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { csv, euro, fabrics, number, minQuantity, useDemo } from './DemoContext.jsx';
+import { useDemo } from './DemoContext.jsx';
+import { euro, fabrics, number, minQuantity } from './domain.js';
+import { csv } from './exportFiles.js';
 import { Badge, Button, Card, Field, Icon, Metrics, Tabs } from './ui.jsx';
 import { MediaImage, ProductPhoto, ReferenceFile, fabricAsset, mediaSrc } from './Media.jsx';
 

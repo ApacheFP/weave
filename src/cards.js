@@ -3,15 +3,19 @@ import { modules } from './modules.js';
 const font = 'system-ui, -apple-system, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif';
 const artworkCache = new Map();
 
-// Ivory and richer sand gradients with restrained ochre accents.
-const themes = [
-  { base: '#f3eada', blobs: [[140,120,520,'#ffffff',.8],[170,640,540,'#dcc5a1',.55],[860,520,540,'#efe0c8',.65],[560,760,360,'#c3a36e',.38],[900,1160,520,'#fffdf8',.65]] },
-  { base: '#e8d8bf', blobs: [[900,250,520,'#fffdf8',.75],[720,620,470,'#cfaf7b',.42],[560,1000,700,'#f6eddf',.65],[230,360,540,'#dcc5a1',.4],[820,1060,260,'#bd9b64',.28],[960,1200,420,'#ffffff',.8]] },
-  { base: '#dfc9a8', blobs: [[600,560,360,'#bd9e6b',.4],[860,240,560,'#f9f2e6',.8],[290,720,520,'#cfaf7d',.42],[150,1160,460,'#eaddc6',.65],[820,1010,540,'#fffdf8',.7]] },
-  { base: '#f1e6d4', blobs: [[80,700,440,'#dcc3a0',.48],[100,1250,420,'#e8d5b8',.55],[520,320,540,'#ffffff',.85],[500,760,540,'#d4b788',.48],[520,770,330,'#bc9c64',.34],[950,1150,520,'#fffdf8',.7]] },
-  { base: '#e5d4b9', blobs: [[560,700,380,'#bea16e',.38],[840,300,540,'#fffdf8',.8],[250,520,500,'#d2b78d',.4],[300,1110,580,'#f4eada',.7],[920,1110,400,'#ffffff',.6]] },
-  { base: '#ecdec6', blobs: [[880,250,580,'#fffdf8',.8],[170,1090,640,'#d9bc8d',.6],[560,620,430,'#c1a16c',.38],[960,1210,380,'#faf4e9',.7]] },
-];
+const palettes = {
+  violet: { base: '#eee8f7', blobs: [[150, 170, 560, '#d9c9ee', .48], [850, 430, 620, '#f8f5fc', .72], [360, 1040, 640, '#e3d8f1', .56], [930, 1120, 500, '#d4c3e9', .3]] },
+  blue: { base: '#e8eef8', blobs: [[160, 230, 600, '#d0def1', .48], [850, 430, 630, '#f7f9fd', .72], [380, 1060, 650, '#dbe5f4', .56], [930, 1140, 500, '#c8d8ee', .3]] },
+  teal: { base: '#e6f1ef', blobs: [[150, 180, 600, '#c8e2dc', .46], [850, 450, 620, '#f7fbfa', .72], [360, 1060, 660, '#d5e9e4', .56], [940, 1140, 500, '#bddbd3', .3]] },
+  rose: { base: '#f5e9ee', blobs: [[150, 180, 580, '#edcfda', .46], [850, 430, 640, '#fcf7f9', .72], [360, 1060, 650, '#f0dce4', .56], [940, 1140, 500, '#e7c5d3', .3]] },
+  orange: { base: '#f5ece5', blobs: [[150, 180, 580, '#ead3c1', .46], [850, 430, 640, '#fcf8f4', .72], [360, 1060, 650, '#f0dfd2', .56], [940, 1140, 500, '#e3c6ae', .3]] },
+  green: { base: '#eaf1eb', blobs: [[150, 180, 580, '#d1e2d3', .46], [850, 430, 640, '#f8fbf8', .72], [360, 1060, 650, '#dce9dd', .56], [940, 1140, 500, '#c9ddcc', .3]] },
+};
+const modulePalettes = {
+  1: 'violet', 2: 'blue', 3: 'teal', 4: 'rose', 5: 'orange', 6: 'rose',
+  7: 'green', 9: 'green', 10: 'blue', 12: 'teal', 15: 'blue',
+  17: 'rose', 19: 'violet', 22: 'blue',
+};
 
 function text(ctx, value, x, y, size, alpha = .93, family = font) {
   ctx.save();
@@ -89,7 +93,7 @@ export async function createModuleCards(items = modules) {
   return items.map((module, index) => {
     return {
       id: module.id,
-      ...themes[(module.id - 1) % themes.length],
+      ...(palettes[modulePalettes[module.id]] || palettes.blue),
       draw(ctx) {
         ctx.font = '400 104px "Matcha Style"';
         const titleSize = Math.min(104, ...module.lines.map((line, row) => {

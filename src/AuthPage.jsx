@@ -17,8 +17,13 @@ export default function AuthPage({ onEnter }) {
 
   return (
     <main className="auth-page">
-      <header className="demo-header"><h1>weave<span className="brand-dot" aria-hidden="true">.</span></h1></header>
-      <section className="auth-panel" aria-label="Accesso a WEAVE">
+      <header className="demo-header"><h1>weave</h1></header>
+      <div className="auth-card-wrap">
+        <section className="auth-panel" aria-label="Accesso a WEAVE">
+        <picture className="auth-mascot" aria-hidden="true">
+          <source srcSet="/filo-saluta.gif" type="image/gif" media="(prefers-reduced-motion: no-preference)" />
+          <img src="/mascot-filo.png" alt="" />
+        </picture>
         <div className="module-selector auth-selector" role="group" aria-label="Accedi o registrati" style={{ '--selected': signup ? 1 : 0 }}>
           <span className="selector-pill" aria-hidden="true" />
           <button type="button" aria-pressed={!signup} onClick={() => changeMode('login')}><span className="auth-button-label">Accedi</span></button>
@@ -42,12 +47,13 @@ export default function AuthPage({ onEnter }) {
             </div>
             <button className="auth-submit" type="submit">
               <span className="auth-button-label">{signup ? 'Crea account demo' : 'Entra in weave'}</span>
-              <span className="auth-submit-arrow" aria-hidden="true"><svg viewBox="0 0 40 28" fill="none"><path d="M4 20C13 23 14 6 8 7C2 8 6 15 16 14H34" /><path d="m28 8 6 6-6 6" /></svg></span>
+              <span className="auth-submit-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4.5 12h15m-6-6 6 6-6 6" /></svg></span>
             </button>
           </form>
           <p className="auth-note">È una demo. Puoi usare i dati già compilati.</p>
         </div>
-      </section>
+        </section>
+      </div>
     </main>
   );
 }
