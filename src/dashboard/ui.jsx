@@ -30,7 +30,7 @@ export function Progress({ value, label }) {
   const percentage = Number.isFinite(value) ? Math.max(0, Math.min(100, value)) : 0;
   return <div className="dw-progress" role="progressbar" aria-label={label} aria-valuenow={Math.round(percentage)} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${percentage}%` }} /></div>;
 }
-export function Dialog({ title, note, children, onClose, wide, instant = false, className = '' }) {
+export function Dialog({ title, note, children, onClose, beforeClose, wide, instant = false, className = '' }) {
   const ref = useRef(null);
   useEffect(() => {
     const dialog = ref.current, opener = document.activeElement;
@@ -41,6 +41,7 @@ export function Dialog({ title, note, children, onClose, wide, instant = false, 
       if (opener?.isConnected) opener.focus({ preventScroll: true });
     };
   }, []);
-  return <dialog className={`dw-dialog ${wide ? 'wide' : ''} ${instant ? 'dw-instant' : ''} ${className}`} ref={ref} onClose={event => { if (!event.currentTarget.open) onClose?.(); }} aria-label={title} onClick={event => { if (event.target !== event.currentTarget) return; const r = event.currentTarget.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) event.currentTarget.close(); }}><header><div><h2>{title}</h2>{note && <p>{note}</p>}</div><button type="button" className="dw-icon-btn" onClick={() => ref.current.close()} aria-label="Chiudi finestra"><Icon name="close" /></button></header><div className="dw-dialog-body">{children}</div></dialog>;
+  function requestClose(event) { event?.preventDefault(); if (beforeClose?.() !== false) ref.current.close(); }
+  return <dialog className={`dw-dialog ${wide ? 'wide' : ''} ${instant ? 'dw-instant' : ''} ${className}`} ref={ref} onCancel={requestClose} onClose={event => { if (!event.currentTarget.open) onClose?.(); }} aria-label={title} onClick={event => { if (event.target !== event.currentTarget) return; const r = event.currentTarget.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) requestClose(event); }}><header><div><h2>{title}</h2>{note && <p>{note}</p>}</div><button type="button" className="dw-icon-btn" onClick={requestClose} aria-label="Chiudi finestra"><Icon name="close" /></button></header><div className="dw-dialog-body">{children}</div></dialog>;
 }
 export function Empty({ children }) { return <div className="dw-empty"><Icon name="search" /><p>{children}</p></div>; }

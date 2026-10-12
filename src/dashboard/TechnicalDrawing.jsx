@@ -1,13 +1,15 @@
 import React from 'react';
 import { productSpec } from './productData.js';
 
-export default function TechnicalDrawing({ snapshot, view = 'Fronte', selected, onSelect, color = '#e9e4db', exportMode = false }) {
+export default function TechnicalDrawing({ snapshot, view = 'Fronte', selected, onSelect, color = '#e9e4db', exportMode = false, baseOnly = false }) {
+  const artwork = !baseOnly && snapshot.artwork?.[view];
+  if (artwork) return <img className="dw-technical-vector dw-vector-preview" src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(artwork.svg)}`} alt={`Tavola vettoriale manuale · ${view}`} />;
   const m = snapshot.measurements;
   const shoulder = m[1].value * 3.8, chest = m[2].value * 1.9, body = m[0].value * 4, sleeve = m[3].value * 3.8;
   const left = 300 - chest / 2, right = 300 + chest / 2, top = 100, hem = top + body;
   const height = Math.max(500, hem + 80, top + sleeve + 80);
   const minX = Math.min(-40, left - 140, 240 - shoulder / 2), width = Math.max(640, right + 140, 360 + shoulder / 2) - minX;
-  const part = (key, label, children) => <g role={exportMode ? undefined : 'button'} tabIndex={exportMode ? undefined : 0} aria-label={exportMode ? undefined : `Seleziona ${label}`} onClick={() => onSelect?.(key)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect?.(key); } }} stroke={selected === key ? 'var(--accent,#8e9af3)' : 'var(--text-2,#b5b2ab)'} strokeWidth={selected === key ? 3 : 1.5} style={{ cursor: exportMode ? undefined : 'pointer' }}>{children}</g>;
+  const part = (key, label, children) => <g data-label={label} role={exportMode ? undefined : 'button'} tabIndex={exportMode ? undefined : 0} aria-label={exportMode ? undefined : `Seleziona ${label}`} onClick={() => onSelect?.(key)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect?.(key); } }} stroke={selected === key ? 'var(--accent,#8e9af3)' : 'var(--text-2,#b5b2ab)'} strokeWidth={selected === key ? 3 : 1.5} style={{ cursor: exportMode ? undefined : 'pointer' }}>{children}</g>;
   const quote = (x1, y1, x2, y2, label, tx, ty) => <g stroke="var(--text-3,#9a968f)" strokeWidth="1" fill="none"><path d={`M${x1} ${y1} L${x2} ${y2}`} /><path d={`M${x1 - 4} ${y1 - 4}l8 8M${x2 - 4} ${y2 - 4}l8 8`} /><text x={tx} y={ty} fill="var(--text-2,#b5b2ab)" stroke="none" fontSize="12" textAnchor="middle">{label}</text></g>;
   if (snapshot.category && snapshot.category !== 'jacket') {
     const spec = productSpec(snapshot), back = view === 'Retro';

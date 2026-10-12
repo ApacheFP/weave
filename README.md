@@ -134,3 +134,18 @@ Le impostazioni hanno percorsi propri, ad esempio `/atelier/impostazioni/aspetto
 `vercel.json` include il fallback SPA per apertura diretta e ricaricamento ([documentazione Vercel](https://vercel.com/docs/frameworks/frontend/vite)). Nessuna dipendenza aggiunta. Il capo selezionato resta nel workspace locale: gli indirizzi dei moduli non identificano ancora un capo condivisibile fra utenti. Il QR continua a puntare alla demo locale sulla porta 5174 e va rigenerato sul dominio pubblico prima della pubblicazione.
 
 Verifica della migrazione: 61 test passati e build riuscita; nel browser controllati i 15 bookmark dei moduli, tutte le 21 sezioni delle impostazioni, indietro/avanti, apertura diretta e reload di impostazioni e conversazioni, recupero degli indirizzi sconosciuti e layout a 320 px. Configurazione Vercel aggiornata; il deployment pubblico non è stato collaudato in questa verifica locale.
+
+
+## Tavola vettoriale manuale · modulo 2
+
+Da **Disegno tecnico → Apri editor vettoriale** si apre una tavola da 1600×1200 pixel, anche senza schizzo caricato. L’editor usa [Fabric.js](https://fabricjs.com/) 7.4, con licenza MIT conservata in `public/licenses/fabric-LICENSE.txt`, caricata solo all’apertura. Il disegno parametrico esistente viene importato come tracciati e gruppi modificabili.
+
+Selezione, trascinamento, ridimensionamento e rotazione usano i controlli nativi della libreria. Sono disponibili nodi dei tracciati, penna a vertici, matita libera, linea, rettangolo, ellisse, testo, colori/tratto, duplicazione, livelli, raggruppamento e separazione; zoom e spostamento della vista non alterano il documento. Per modificare i nodi di un gruppo, separarlo prima. Annulla/ripeti conserva fino a 40 stati nella sessione di lavoro.
+
+**Salva nuova revisione** conserva JSON vettoriale e SVG per la vista corrente (Fronte, Retro o Dettagli), senza sovrascrivere le revisioni precedenti. Le tavole passano attraverso la validazione del workspace e la persistenza IndexedDB già esistente; il banner di salvataggio indica l’esito sul dispositivo. Anteprima, export SVG e tech pack usano il disegno manuale salvato. La chiusura della finestra chiede di scartare una bozza modificata; il browser avvisa prima di ricaricare/chiudere una bozza non salvata, ove supportato.
+
+**Confine grafica/misure:** le dimensioni grafiche sono in pixel; le quote tecniche in centimetri restano nella vista Misure. Allargare un tracciato non ricalcola automaticamente misure, modellistica o BOM. L’approvazione di una grafica diversa riapre il fitting; una nuova bozza non revoca da sola l’approvazione precedente. I colori delle tavole manuali si modificano nell’editor, non tramite l’anteprima delle varianti.
+
+Non è una replica completa di Illustrator né un CAD sartoriale: mancano operazioni booleane, vincoli dimensionali, import arbitrario di file AI/SVG, collaborazione e salvataggio remoto. La penna crea segmenti a vertici; i controlli dei nodi consentono di modificare anche le curve presenti. Sono ammessi al massimo 500 elementi complessivi, inclusi quelli nei gruppi, e 2 MB ciascuno di JSON/SVG per vista; immagini e riferimenti esterni non sono ammessi nelle tavole. Una bozza non salvata resta nella memoria dell’editor.
+
+Verifica: `npm test` copre documenti, validazione, isolamento delle viste e riapertura del fitting; `npm run build` compila l’editor in un chunk dedicato. Il collaudo browser e i suoi limiti sono in [docs/vector-editor-2026-10-12.md](docs/vector-editor-2026-10-12.md).

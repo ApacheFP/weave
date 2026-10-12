@@ -2,6 +2,7 @@ export const preferenceBooleans = ['moduleAlerts', 'productNews', 'emailDigest',
 export const preferenceChoices = { theme: ['light', 'dark', 'system'], accent: ['indigo', 'blue', 'violet', 'teal', 'rose', 'graphite'], sideDensity: ['comfortable', 'compact'], taskDensity: ['comfortable', 'compact'], motion: ['system', 'reduce'], language: ['it', 'en'], contentLanguage: ['it', 'en'], timezone: ['Europe/Rome', 'Europe/Paris', 'Europe/London', 'America/New_York'], dateFormat: ['local', 'iso'], timeFormat: ['24h', '12h'], weekStartsOn: ['monday', 'sunday'], defaultLanding: ['home', 'my-tasks', 'inbox'] };
 import { categorySpecs, additionalFabrics } from './productData.js';
 import { validTask } from './workspaceData.js';
+import { validArtwork } from './vectorDocument.js';
 
 export const workspaceSchemaVersion = 1;
 export class WorkspaceDataError extends Error {
@@ -28,7 +29,7 @@ function technical(value, category) {
   if (!array(value.versions, version => {
     if (!object(version)) return false;
     const snapshot = version.snapshot;
-    return strings(version, ['id', 'note']) && finite(version.number) && strings(snapshot, ['fit', 'requirements', 'constraints']) && snapshot.category === category && measurements(snapshot.measurements) && object(snapshot.parts) && Object.keys(categorySpecs[category].parts).every(key => nonnegative(snapshot.parts[key])) && colors(snapshot.colors) && notes(snapshot.notes) && nonnegative(snapshot.tolerance);
+    return strings(version, ['id', 'note']) && finite(version.number) && strings(snapshot, ['fit', 'requirements', 'constraints']) && snapshot.category === category && measurements(snapshot.measurements) && object(snapshot.parts) && Object.keys(categorySpecs[category].parts).every(key => nonnegative(snapshot.parts[key])) && colors(snapshot.colors) && notes(snapshot.notes) && nonnegative(snapshot.tolerance) && validArtwork(snapshot.artwork);
   }) || !uniqueIds(value.versions)) return false;
   return ['approvedId', 'currentId'].every(key => value[key] == null || value.versions.some(version => version.id === value[key]));
 }

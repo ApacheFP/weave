@@ -58,7 +58,9 @@ export function applyProductPatch(previous, changes) {
     }
   }
   // A fitting approval belongs to the checked material and model dimensions.
-  if (changes.sampleApproved !== true && ['fabricId', 'measurements', 'seam', 'modelVersion'].some(changed)) {
+  const approvedDrawing = product => product.technical?.versions?.find(version => version.id === product.technical.approvedId)?.snapshot?.artwork;
+  const drawingChanged = next.technical?.approvedId && changed('technical') && JSON.stringify(approvedDrawing(previous)) !== JSON.stringify(approvedDrawing(next));
+  if (changes.sampleApproved !== true && (drawingChanged || ['fabricId', 'measurements', 'seam', 'modelVersion'].some(changed))) {
     next.sampleApproved = false;
     next.sampleChecks = previous.sampleChecks.map(() => false);
   }
