@@ -24,7 +24,11 @@ export default function VectorEditor({ initialScene, sourceSvg, onSave, onDirty 
 
   function scene() {
     const c = canvas.current;
-    return { schemaVersion: 1, ...artboardSize, json: c.toObject(['id', 'name']), svg: c.toSVG({ suppressPreamble: true, width: '1600', height: '1200', viewBox: { x: 0, y: 0, ...artboardSize } }) };
+    const bounds = c.getObjects().filter(object => !object.excludeFromExport && object.visible).map(object => object.getBoundingRect());
+    const left = bounds.length ? Math.floor(Math.min(...bounds.map(rect => rect.left)) - 24) : 0, top = bounds.length ? Math.floor(Math.min(...bounds.map(rect => rect.top)) - 24) : 0;
+    const right = bounds.length ? Math.ceil(Math.max(...bounds.map(rect => rect.left + rect.width)) + 24) : artboardSize.width, bottom = bounds.length ? Math.ceil(Math.max(...bounds.map(rect => rect.top + rect.height)) + 24) : artboardSize.height;
+    const width = Math.max(1, right - left), height = Math.max(1, bottom - top);
+    return { schemaVersion: 1, ...artboardSize, json: c.toObject(['id', 'name']), svg: c.toSVG({ suppressPreamble: true, width: String(width), height: String(height), viewBox: { x: left, y: top, width, height } }) };
   }
   function refresh() {
     const c = canvas.current;
@@ -206,13 +210,15 @@ export default function VectorEditor({ initialScene, sourceSvg, onSave, onDirty 
             object.name = node.closest('[data-label]')?.getAttribute('data-label') || (object.text ? 'Quota: ' + object.text : 'Tracciato');
           }, { signal: abort.signal });
           if (!active) return;
-          const parts = new Map();
+          const parts = new Map(), details = [];
           result.objects.filter(object => object && !object.excludeFromExport).forEach(object => {
             object.set({ left: object.left + 500, top: object.top + 275 });
             const key = object.name;
-            if (key && !key.startsWith('Quota:') && key !== 'Tracciato') { if (!parts.has(key)) parts.set(key, []); parts.get(key).push(object); }
+            if (key === 'Tracciato') details.push(object);
+            else if (key && !key.startsWith('Quota:')) { if (!parts.has(key)) parts.set(key, []); parts.get(key).push(object); }
             else c.add(object);
           });
+          if (details.length) parts.set('Dettagli grafici', details);
           for (const [name, members] of parts) { const part = members.length === 1 ? members[0] : new Group(members); part.name = name; c.add(part); }
         }
         if (!active) return;

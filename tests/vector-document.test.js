@@ -6,7 +6,7 @@ import { technicalDefaults, versionSnapshot } from '../src/dashboard/technicalDa
 import { assertWorkspace } from '../src/dashboard/workspaceSchema.js';
 import { applyProductPatch } from '../src/dashboard/domain.js';
 
-const scene = () => ({ schemaVersion: 1, ...artboardSize, json: { version: '7.4.0', background: '#ffffff', objects: [{ type: 'Path', id: 'path-1', left: 30, top: 40, fill: '#ffffff', stroke: '#000000', scaleX: 1.2, scaleY: 1, angle: 20, path: [['M', 0, 0], ['L', 20, 30], ['C', 0, 2, 5, 3, 10, 4], ['Z']] }] }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200"><path d="M 30 40 L 50 70 Z"/></svg>' });
+const scene = () => ({ schemaVersion: 1, ...artboardSize, json: { version: '7.4.0', background: '#ffffff', objects: [{ type: 'Path', id: 'path-1', left: 30, top: 40, fill: '#ffffff', stroke: '#000000', scaleX: 1.2, scaleY: 1, angle: 20, path: [['M', 0, 0], ['L', 20, 30], ['H', 12], ['V', 18], ['S', 0, 2, 5, 3], ['Q', 0, 2, 5, 3], ['C', 0, 2, 5, 3, 10, 4], ['A', 5, 4, 0, 0, 1, 30, 40], ['Z']] }] }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200"><path d="M 30 40 L 50 70 Z"/></svg>' });
 test('vector scenes preserve paths and transforms through JSON serialization', () => {
   const original = scene();
   assert.equal(validVectorScene(original), true);
@@ -39,6 +39,7 @@ test('unsafe SVG, external images, unknown object types, excessive documents and
     value => { value.json.objects[0].fill = { type: 'Pattern', source: 'https://external.example' }; },
     value => { value.json.objects[0].path = [['INVALID', 0, 1]]; },
     value => { value.json.objects[0].path = [['C', 0, 1]]; },
+    value => { value.json.objects[0].path = [['A', 5, 4, 0, 2, 0, 30, 40]]; },
     value => { value.json.objects = [{ type: 'Group', objects: Array.from({ length: 500 }, () => ({ type: 'Rect' })) }]; },
     value => { value.json.objects = Array.from({ length: 501 }, () => ({ type: 'Rect' })); },
     value => { value.svg = '<svg>' + ' '.repeat(2e6) + '</svg>'; },

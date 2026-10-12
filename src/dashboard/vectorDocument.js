@@ -13,7 +13,11 @@ function safeValues(value, depth = 0) {
 function vectorObject(value, budget) {
   if (++budget.count > 500) return false;
   if (!object(value) || typeof value.type !== 'string' || !vectorTypes.has(value.type.toLowerCase()) || !safeValues(value) || !['fill', 'stroke'].every(key => value[key] == null || typeof value[key] === 'string' && !/url\(/i.test(value[key]))) return false;
-  if (value.type.toLowerCase() === 'path' && (!Array.isArray(value.path) || !value.path.every(command => Array.isArray(command) && typeof command[0] === 'string' && /^[MLCQZ]$/i.test(command[0]) && command.length === ({ M: 3, L: 3, C: 7, Q: 5, Z: 1 })[command[0].toUpperCase()] && command.slice(1).every(coordinate => typeof coordinate === 'number' && Number.isFinite(coordinate))))) return false;
+  const pathArity = { M: 3, L: 3, T: 3, H: 2, V: 2, C: 7, S: 5, Q: 5, A: 8, Z: 1 };
+  if (value.type.toLowerCase() === 'path' && (!Array.isArray(value.path) || !value.path.every(command => {
+    const arity = typeof command?.[0] === 'string' ? pathArity[command[0].toUpperCase()] : undefined;
+    return arity && command.length === arity && command.slice(1).every(coordinate => typeof coordinate === 'number' && Number.isFinite(coordinate)) && (command[0].toUpperCase() !== 'A' || [command[4], command[5]].every(flag => flag === 0 || flag === 1));
+  }))) return false;
   return (!value.objects || Array.isArray(value.objects) && value.objects.length <= 500 && value.objects.every(child => vectorObject(child, budget))) && (!value.clipPath || vectorObject(value.clipPath, budget));
 }
 export function validVectorScene(scene) {
