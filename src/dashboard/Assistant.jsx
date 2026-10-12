@@ -54,7 +54,7 @@ function answer(question, id, data) {
 }
 
 export default function Assistant({ moduleId = 22, embedded = false, onClose }) {
-  const { data, commit } = useDemo();
+  const { data, saveChat, applyDecision } = useDemo();
   const module = modules.find(m => m.id === moduleId);
   const key = String(moduleId);
   const [activeThreads, setActiveThreads] = useState({});
@@ -72,21 +72,21 @@ export default function Assistant({ moduleId = 22, embedded = false, onClose }) 
     setBusy(false);
     setInput('');
     setActiveThreads(previous => ({ ...previous, [key]: nextKey }));
-    commit(previous => ({ activeChats: { ...(previous.activeChats || {}), [key]: nextKey } }));
+    saveChat(previous => ({ activeChats: { ...(previous.activeChats || {}), [key]: nextKey } }));
   }
   function send(value = input) {
     const question = value.trim().slice(0, 1500);
     if (!question || busy) return;
     const reply = answer(question, moduleId, data);
     setInput(''); setBusy(true);
-    commit(previous => ({ chats: { ...previous.chats, [threadKey]: [...(previous.chats[threadKey] || []), { id: crypto.randomUUID(), role: 'user', text: question }] } }));
+    saveChat(previous => ({ chats: { ...previous.chats, [threadKey]: [...(previous.chats[threadKey] || []), { id: crypto.randomUUID(), role: 'user', text: question }] } }));
     timer.current = setTimeout(() => {
-      commit(previous => ({ chats: { ...previous.chats, [threadKey]: [...(previous.chats[threadKey] || []), { id: crypto.randomUUID(), role: 'assistant', ...reply }] } }));
+      saveChat(previous => ({ chats: { ...previous.chats, [threadKey]: [...(previous.chats[threadKey] || []), { id: crypto.randomUUID(), role: 'assistant', ...reply }] } }));
       setBusy(false);
     }, 650);
   }
   function approve(message) {
-    commit(previous => {
+    applyDecision(previous => {
       const patch = {};
       if (message.action === 'fabric') { const f = fabrics.find(f => f.id === message.payload); patch.fabricId = f.id; patch.fabricPrice = f.price; }
       if (message.action === 'marker' && !previous.optimized) { Object.assign(patch, markerConfiguration(previous, previous.markerWidth, true)); }

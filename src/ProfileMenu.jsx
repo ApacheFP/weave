@@ -21,14 +21,14 @@ function Icon({ name }) {
 export default function ProfileMenu({ onSignOut, sidebar = false, compact = false, collapsed = false, onSettings, onProfile }) {
   const [view, setView] = useState(null);
   const [transition, setTransition] = useState('');
-  const { data, commit, preferences, updatePreferences } = useDemo();
+  const { data, updateProfile, preferences, updatePreferences } = useDemo();
   const panelId = useId();
   const profile = data.profile;
   const [draft, setDraft] = useState(initialProfile);
   const moduleAlerts = preferences?.moduleAlerts ?? data.moduleAlerts ?? true;
   const productNews = preferences?.productNews ?? data.productNews ?? false;
-  const setModuleAlerts = value => updatePreferences ? updatePreferences({ moduleAlerts: typeof value === 'function' ? value(moduleAlerts) : value }) : commit(previous => ({ moduleAlerts: typeof value === 'function' ? value(previous.moduleAlerts ?? true) : value }));
-  const setProductNews = value => updatePreferences ? updatePreferences({ productNews: typeof value === 'function' ? value(productNews) : value }) : commit(previous => ({ productNews: typeof value === 'function' ? value(previous.productNews ?? false) : value }));
+  const setModuleAlerts = value => updatePreferences({ moduleAlerts: typeof value === 'function' ? value(moduleAlerts) : value });
+  const setProductNews = value => updatePreferences({ productNews: typeof value === 'function' ? value(productNews) : value });
   const [message, setMessage] = useState('');
   const root = useRef(null);
   const trigger = useRef(null);
@@ -94,7 +94,7 @@ export default function ProfileMenu({ onSignOut, sidebar = false, compact = fals
 
   function saveProfile(event) {
     event.preventDefault();
-    commit({ profile: { firstName: draft.firstName.trim(), lastName: draft.lastName.trim(), email: draft.email.trim(), avatar: draft.avatar || null } });
+    if (!updateProfile({ firstName: draft.firstName.trim(), lastName: draft.lastName.trim(), email: draft.email.trim(), avatar: draft.avatar || null })) { setMessage('Verifica i dati del profilo.'); return; }
     setMessage('Profilo aggiornato nella demo.');
   }
 

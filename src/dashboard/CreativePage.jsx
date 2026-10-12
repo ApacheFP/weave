@@ -10,7 +10,7 @@ import './creative.css';
 import './technical.css';
 
 export default function CreativePage({ onNavigate }) {
-  const { data, commit, notify, collectionData: c, commitCollection } = useDemo();
+  const { data, saveCreative, notify, collectionData: c, saveCollectionDirection } = useDemo();
   const creative = data.creative || creativeDefaults();
   const inputs = creative.inputs;
   const route = creative.route || 'upload';
@@ -32,18 +32,18 @@ export default function CreativePage({ onNavigate }) {
   const [drag, setDrag] = useState(false);
   const [demoLoading, setDemoLoading] = useState(false);
   const finalInput = useRef(null); const referenceInput = useRef(null); const moodInput = useRef(null);
-  function update(patch, message) { commit(previous => ({ creative: { ...(previous.creative || creativeDefaults()), ...patch } }), message, 1); }
+  function update(patch, message) { saveCreative(previous => ({ creative: { ...(previous.creative || creativeDefaults()), ...patch } }), message, 1); }
   function generate() {
     const revisionPrompt = hasDirection ? prompt.trim() : '';
     const next = prepareDirection(inputs, revisionPrompt, c);
-    commitCollection({ ...next, directionHistory: [] }, hasDirection ? 'Spunti sostituiti con una nuova generazione · demo' : 'Moodboard e palette preparati · demo');
+    saveCollectionDirection({ ...next, directionHistory: [] }, hasDirection ? 'Spunti sostituiti con una nuova generazione · demo' : 'Moodboard e palette preparati · demo');
     update({ round: creative.round + 1, inputSnapshot: { ...inputs }, lastPrompt: revisionPrompt });
     setPrompt('');
     setResultView('Moodboard'); setStudioView('Spunti'); setMoodPage(0);
   }
   function uploadFinal(file) {
     readFile(file, sketch => {
-      commit(previous => sketchHandoff(previous, sketch), `Schizzo caricato · Style ID ${data.styleId}`, 1);
+      saveCreative(previous => sketchHandoff(previous, sketch), `Schizzo caricato · Style ID ${data.styleId}`, 1);
       setFileView('Schizzo');
     }, notify);
   }
@@ -60,7 +60,7 @@ export default function CreativePage({ onNavigate }) {
       setDemoLoading(false);
     }
   }
-  function updateConcept(patch, message) { commit(previous => ({ creative: { ...previous.creative, concept: { ...previous.creative.concept, ...patch, ...('palette' in patch ? { paletteChosen: true } : {}), ...('moodboard' in patch ? { moodboardChosen: true } : {}) } } }), message, 1); }
+  function updateConcept(patch, message) { saveCreative(previous => ({ creative: { ...previous.creative, concept: { ...previous.creative.concept, ...patch, ...('palette' in patch ? { paletteChosen: true } : {}), ...('moodboard' in patch ? { moodboardChosen: true } : {}) } } }), message, 1); }
   function attachPalette() { updateConcept({ palette: structuredClone(c.palette), paletteOrigin: 'Spunti' }, 'Palette degli spunti collegata allo schizzo'); }
   function manualPalette() { updateConcept({ palette: Array.from({ length: 6 }, (_, i) => ({ name: `Colore ${i + 1}`, color: '#EFEAE1' })), paletteOrigin: 'Manuale' }, 'Palette manuale da compilare'); }
   function conceptColor(index, patch) { updateConcept({ palette: concept.palette.map((color, i) => i === index ? { ...color, ...patch } : color), paletteOrigin: 'Manuale' }); }
@@ -68,13 +68,13 @@ export default function CreativePage({ onNavigate }) {
     if (ref.type === 'application/pdf') { notify('Per il moodboard scegli un’immagine.'); return; }
     updateConcept({ moodboard: [...concept.moodboard, { ...ref, caption: '' }], moodboardOrigin: 'Manuale' }, 'Riferimento collegato allo schizzo');
   }, notify); }
-  function setColor(index, patch) { commitCollection({ palette: c.palette.map((color, i) => i === index ? { ...color, ...patch } : color) }); }
+  function setColor(index, patch) { saveCollectionDirection({ palette: c.palette.map((color, i) => i === index ? { ...color, ...patch } : color) }); }
   function replaceMood(file) { readFile(file, ref => {
     if (ref.type === 'application/pdf') { notify('Per il moodboard scegli un’immagine JPG, PNG o WebP.'); return; }
-    commitCollection(previous => ({ moodboard: replacing ? previous.moodboard.map(item => item.id === replacing ? { ...item, src: ref.src, type: ref.type } : item) : [...previous.moodboard, { ...ref, atmosphere: true, caption: '' }] }), replacing ? 'Riferimento del moodboard sostituito' : 'Riferimento aggiunto al moodboard');
+    saveCollectionDirection(previous => ({ moodboard: replacing ? previous.moodboard.map(item => item.id === replacing ? { ...item, src: ref.src, type: ref.type } : item) : [...previous.moodboard, { ...ref, atmosphere: true, caption: '' }] }), replacing ? 'Riferimento del moodboard sostituito' : 'Riferimento aggiunto al moodboard');
     setReplacing(null);
   }, notify); }
-  function editReference(id, patch) { commitCollection(previous => ({ moodboard: previous.moodboard.map(ref => ref.id === id ? { ...ref, ...patch } : ref) })); }
+  function editReference(id, patch) { saveCollectionDirection(previous => ({ moodboard: previous.moodboard.map(ref => ref.id === id ? { ...ref, ...patch } : ref) })); }
   function chooseReference(id = null) { setReplacing(id); moodInput.current.click(); }
   return <div className="dw-creative">
     <div className="dw-tabs dw-tabs-underline dw-creative-routes" role="group" aria-label="Come vuoi iniziare?">
@@ -90,7 +90,7 @@ export default function CreativePage({ onNavigate }) {
           <Field label="Collezioni e vendite passate"><textarea rows={3} maxLength={1000} value={inputs.history} onChange={e => update({ inputs: { ...inputs, history: e.target.value } })} /></Field>
           <Field label="Target"><input maxLength={150} value={inputs.target} onChange={e => update({ inputs: { ...inputs, target: e.target.value } })} /></Field>
           </div></details>
-          <details className="dw-creative-more" open={refs.length > 0 || undefined}><summary>Schizzo e riferimenti <span>{refs.length ? `${refs.length} allegati` : 'Facoltativi'}</span></summary><input ref={referenceInput} type="file" hidden accept="image/jpeg,image/png,image/webp,application/pdf" onChange={e => { readFile(e.target.files[0], ref => commit(previous => ({ creative: { ...previous.creative, referenceFiles: [...(previous.creative.referenceFiles || []), ref] } }), 'Riferimento creativo caricato', 1), notify); e.target.value = ''; }} /><div className="dw-creative-reference-tools"><Button icon="plus" onClick={() => referenceInput.current.click()}>Carica riferimento</Button><span>JPG, PNG, WebP o PDF · 8 MB</span></div><div className="dw-creative-input-refs">{refs.map(ref => <div className="dw-creative-ref" key={ref.id}><button type="button" onClick={() => setOpened(ref)}>{ref.type === 'application/pdf' ? <Icon name="file" /> : <img src={ref.src} alt={ref.name} />}<span>{ref.name}</span></button><Button icon="close" aria-label={`Rimuovi ${ref.name}`} onClick={() => update({ referenceFiles: refs.filter(item => item.id !== ref.id) }, 'Riferimento creativo rimosso')} /></div>)}</div></details>
+          <details className="dw-creative-more" open={refs.length > 0 || undefined}><summary>Schizzo e riferimenti <span>{refs.length ? `${refs.length} allegati` : 'Facoltativi'}</span></summary><input ref={referenceInput} type="file" hidden accept="image/jpeg,image/png,image/webp,application/pdf" onChange={e => { readFile(e.target.files[0], ref => saveCreative(previous => ({ creative: { ...previous.creative, referenceFiles: [...(previous.creative.referenceFiles || []), ref] } }), 'Riferimento creativo caricato', 1), notify); e.target.value = ''; }} /><div className="dw-creative-reference-tools"><Button icon="plus" onClick={() => referenceInput.current.click()}>Carica riferimento</Button><span>JPG, PNG, WebP o PDF · 8 MB</span></div><div className="dw-creative-input-refs">{refs.map(ref => <div className="dw-creative-ref" key={ref.id}><button type="button" onClick={() => setOpened(ref)}>{ref.type === 'application/pdf' ? <Icon name="file" /> : <img src={ref.src} alt={ref.name} />}<span>{ref.name}</span></button><Button icon="close" aria-label={`Rimuovi ${ref.name}`} onClick={() => update({ referenceFiles: refs.filter(item => item.id !== ref.id) }, 'Riferimento creativo rimosso')} /></div>)}</div></details>
           <div className="dw-creative-brief-footer"><span className="dw-creative-note">Generazione simulata · demo</span><Button primary disabled={!(inputs.request.trim() || inputs.brand.trim() || refs.length)} onClick={generate}>{hasDirection ? 'Rigenera dagli input' : 'Genera moodboard e palette'}</Button></div>
         </div></Card>
       </div>
@@ -101,7 +101,7 @@ export default function CreativePage({ onNavigate }) {
           <Card title="Moodboard" note={`Riferimenti visivi · ${data.collection}`} actions={<Button icon="plus" onClick={() => chooseReference()}>Aggiungi immagine</Button>}>
             <input ref={moodInput} hidden type="file" accept="image/jpeg,image/png,image/webp" onChange={e => { replaceMood(e.target.files[0]); e.target.value = ''; }} />
             <div className="dw-mood-grid">{c.moodboard.map((ref, index) => <article className={`dw-mood-reference ${Math.floor(index / 2) === activeMoodPage ? '' : 'dw-mood-mobile-hidden'}`} key={ref.id}>
-              <Button icon="close" className="dw-mood-remove" aria-label={`Rimuovi dal moodboard ${ref.name}`} onClick={() => commitCollection(previous => ({ moodboard: previous.moodboard.filter(item => item.id !== ref.id) }), 'Riferimento rimosso dal moodboard')} />
+              <Button icon="close" className="dw-mood-remove" aria-label={`Rimuovi dal moodboard ${ref.name}`} onClick={() => saveCollectionDirection(previous => ({ moodboard: previous.moodboard.filter(item => item.id !== ref.id) }), 'Riferimento rimosso dal moodboard')} />
               <button className="dw-creative-atmosphere" type="button" onClick={() => setOpened(ref)} aria-label={`Ingrandisci ${ref.name}`}><img src={ref.src} alt={ref.caption || ref.name} loading="lazy" decoding="async" /></button>
               <div className="dw-mood-info">
                 <strong className="dw-mood-title">{ref.name}</strong>

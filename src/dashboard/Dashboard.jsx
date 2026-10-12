@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { modules } from '../modules.js';
 import ProfileMenu from '../ProfileMenu.jsx';
 import { useDemo } from './DemoContext.jsx';
+import { sameActor } from './workspaceIdentity.js';
+import WorkspaceStorageStatus from './WorkspaceStorageStatus.jsx';
 import { Badge, Button, Card, Dialog, Empty, Icon, Tabs } from './ui.jsx';
 import { DesignPage, TechnicalPage, MaterialsPage, PatternPage, GradingPage, PrototypePage, MarkerPage } from './DesignPages.jsx';
 import { PricingPage, PlanningPage, ProcurementPage, ProductionPage, QualityPage } from './OperationsPages.jsx';
@@ -50,7 +52,7 @@ function StylesPage({ onCreate, onOpen }) {
 }
 
 export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSection, onOpenPage, onNavigate, onHome, onSignOut }) {
-  const { data, notice, hasSelectedStyle, tasks, inbox, selectStyle, preferences, updatePreferences } = useDemo();
+  const { data, notice, hasSelectedStyle, tasks, inbox, selectStyle, preferences, updatePreferences, storage, retrySave, reloadSavedWorkspace, exportWorkspace } = useDemo();
   const [menu, setMenu] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [service, setService] = useState(null);
@@ -75,7 +77,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
   const Content = components[moduleId];
   const title = isModule ? shortNames[moduleId] : pageNames[workspacePage];
   const unread = inbox.filter(item => !item.read).length;
-  const mineOpen = tasks.filter(task => task.assignee.email === data.profile.email && task.status !== 'Completata').length;
+  const mineOpen = tasks.filter(task => sameActor(task.assignee, data.profile) && task.status !== 'Completata').length;
   const theme = !preferences?.theme || preferences.theme === 'system' ? systemDark ? 'dark' : 'light' : preferences.theme;
 
   useEffect(() => {
@@ -175,13 +177,13 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
           <button className="dw-brand" onClick={() => openPage('home')} aria-label="Home di WEAVE"><strong>weave</strong></button>
           <button className="dw-icon-btn dw-collapse" aria-label={collapsed ? 'Espandi sidebar' : 'Riduci sidebar'} onClick={() => setCollapsed(!collapsed)}><Icon name="panel" size={16} /></button>
         </div>
-        <div className="dw-sidebar-workspace">
-          <details className="dw-company-switcher">
-            <summary><span className="dw-company-label"><strong>{preferences?.workspaceName || 'Atelier'}</strong><span className="dw-company-demo">Demo</span></span><Icon name="chevron" size={15} /></summary>
-            <div className="dw-company-options"><button type="button" aria-current="true"><span><strong>{preferences?.workspaceName || 'Atelier'}</strong><small>Azienda attiva</small></span><Icon name="check" size={15} /></button><button type="button" disabled><span><strong>Atelier Studio</strong><small>Dati demo · anteprima</small></span><Badge>Demo</Badge></button></div>
-          </details>
-        </div>
-        <div className="dw-side-scroll">
+        <div className="dw-sidebar-workspace-nav">
+          <div className="dw-sidebar-workspace">
+            <details className="dw-company-switcher">
+              <summary><span className="dw-company-label"><strong>{preferences?.workspaceName || 'Atelier'}</strong><span className="dw-company-demo">Demo</span></span><Icon name="chevron" size={15} /></summary>
+              <div className="dw-company-options"><button type="button" aria-current="true"><span><strong>{preferences?.workspaceName || 'Atelier'}</strong><small>Azienda attiva</small></span><Icon name="check" size={15} /></button><button type="button" disabled><span><strong>Atelier Studio</strong><small>Dati demo · anteprima</small></span><Badge>Demo</Badge></button></div>
+            </details>
+          </div>
           <nav className="dw-nav-quick dw-personal-nav" aria-label="Navigazione principale"><div className="dw-nav-group-card">
             {navItem('Home', 'home', () => openPage('home'), workspacePage === 'home', 0, undefined, 'home')}
             {navItem('Inbox', 'inbox', () => openPage('inbox'), workspacePage === 'inbox', unread, undefined, 'inbox')}
@@ -191,6 +193,8 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
             {navItem('Attività della filiera', 'activity', () => openPage('activity'), workspacePage === 'activity', 0, undefined, 'activity')}
           </div>
           </nav>
+        </div>
+        <div className="dw-side-scroll">
           <div className="dw-sidebar-top"><span className="dw-sidebar-kicker">{hasSelectedStyle ? 'CAPO SELEZIONATO' : 'SELEZIONA CAPO'}</span><div className="dw-sidebar-product-card"><StyleSwitcher selected={hasSelectedStyle} onCreate={() => setCreate(true)} onSelect={() => navigate(21)} />
             {hasSelectedStyle && <nav className="dw-nav-group dw-cap-overview" aria-label="Panoramica del capo">{navItem('Panoramica del capo', 'grid', () => navigate(21), isModule && moduleId === 21, 0, 21, 'overview')}</nav>}
           </div></div>
@@ -214,7 +218,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
         <header className="dw-header">
           <button ref={mobileTrigger} className="dw-icon-btn dw-mobile-menu" aria-label={menu ? 'Chiudi navigazione' : 'Apri navigazione'} aria-expanded={menu} aria-controls="workspace-nav" onClick={() => setMenu(!menu)}><Icon name={menu ? 'close' : 'menu'} /></button>
           <nav className="dw-breadcrumb" aria-label="Percorso">{hasSelectedStyle && isModule && moduleId !== 21 && <><button className="dw-breadcrumb-product" onClick={() => navigate(21)}>{data.title}</button><span>/</span></>}<strong>{hasSelectedStyle ? isModule && moduleId === 21 ? data.title : title : 'Seleziona un capo'}</strong></nav>
-          <div className="dw-header-tools">
+          <div className="dw-header-tools"><WorkspaceStorageStatus storage={storage} onRetry={retrySave} onReload={reloadSavedWorkspace} onExport={exportWorkspace} />
             <button className="dw-header-search" onClick={() => setSearch(true)} aria-label="Cerca pagine, moduli e capi"><Icon name="search" size={15} /><span>Cerca in Atelier…</span><kbd>⌘ K</kbd></button>
             <button className="dw-icon-btn dw-header-inbox" aria-label={`Notifiche${unread ? `, ${unread} da leggere` : ''}`} onClick={() => openPage('notifications')}><Icon name="bell" size={17} />{unread > 0 && <i aria-hidden="true" />}</button>
             <div className="dw-header-new" ref={newRoot}>

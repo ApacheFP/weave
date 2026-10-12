@@ -3,7 +3,8 @@ import { carouselGroup, moduleGroups } from './modules.js';
 import { createModuleCards } from './cards.js';
 import AuthPage from './AuthPage.jsx';
 import ProfileMenu from './ProfileMenu.jsx';
-import { DemoProvider } from './dashboard/DemoContext.jsx';
+import { DemoProvider, useDemo } from './dashboard/DemoContext.jsx';
+import { Button, Dialog } from './dashboard/ui.jsx';
 import Dashboard from './dashboard/Dashboard.jsx';
 
 function Arrow({ direction }) {
@@ -181,6 +182,10 @@ function readRoute() {
 }
 
 function Workspace({ onSignOut }) {
+  const { flushWorkspace, exportWorkspace } = useDemo();
+  const [confirmExit, setConfirmExit] = useState(false);
+  async function signOut() { if (await flushWorkspace()) onSignOut(); else setConfirmExit(true); }
+
   const [route, setRoute] = useState(readRoute);
   const [index, setIndex] = useState(0);
   useEffect(() => {
@@ -198,9 +203,10 @@ function Workspace({ onSignOut }) {
   }, []);
   const rememberIndex = useCallback((_id, nextIndex) => setIndex(nextIndex), []);
   function home() { window.location.hash = '/moduli'; setRoute(null); }
-  return route
-    ? <Dashboard moduleId={route.moduleId} workspacePage={route.page} inboxId={route.inboxId} settingsSection={route.settingsSection} onOpenPage={openPage} onNavigate={navigate} onHome={home} onSignOut={onSignOut} />
-    : <ProductPage onSignOut={onSignOut} onEnter={navigate} index={index} onIndexChange={rememberIndex} />;
+  const content = route
+    ? <Dashboard moduleId={route.moduleId} workspacePage={route.page} inboxId={route.inboxId} settingsSection={route.settingsSection} onOpenPage={openPage} onNavigate={navigate} onHome={home} onSignOut={signOut} />
+    : <ProductPage onSignOut={signOut} onEnter={navigate} index={index} onIndexChange={rememberIndex} />;
+  return <>{content}{confirmExit && <Dialog title="Uscire con modifiche non salvate?" onClose={() => setConfirmExit(false)}><p>Il browser non ha completato il salvataggio. Scarica una copia per conservare le modifiche prima di uscire.</p><div className="dw-dialog-actions"><Button onClick={() => setConfirmExit(false)}>Resta nello spazio</Button><Button onClick={exportWorkspace}>Scarica una copia</Button><Button primary onClick={onSignOut}>Esci e scarta modifiche</Button></div></Dialog>}</>;
 }
 
 export default function App() {

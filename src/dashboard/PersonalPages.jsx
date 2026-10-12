@@ -4,6 +4,7 @@ import { modules, moduleGroups } from '../modules.js';
 import { useDemo } from './DemoContext.jsx';
 import { Button, Dialog, Field, Icon } from './ui.jsx';
 import { actorStyle, localDate, taskStatuses, taskPriorities } from './workspaceData.js';
+import { sameActor } from './workspaceIdentity.js';
 import './personal-pages.css';
 
 const categories = [
@@ -39,7 +40,7 @@ const shortDate = value => {
 function Avatar({ actor }) {
   const { data } = useDemo();
   const name = actorName(actor);
-  return <span className="dw-personal-avatar" style={actorStyle(actor)} aria-hidden="true">{actor?.email === data.profile.email ? <img src={data.profile.avatar || '/illustrations/profile-avatar.webp'} alt="" /> : name.split(' ').filter(Boolean).map(word => word[0]).slice(0, 2).join('')}</span>;
+  return <span className="dw-personal-avatar" style={actorStyle(actor)} aria-hidden="true">{sameActor(actor, data.profile) ? <img src={data.profile.avatar || '/illustrations/profile-avatar.webp'} alt="" /> : name.split(' ').filter(Boolean).map(word => word[0]).slice(0, 2).join('')}</span>;
 }
 
 export function InboxPage({ onOpenModule, initialSelectedId = null }) {
@@ -71,7 +72,7 @@ export function InboxPage({ onOpenModule, initialSelectedId = null }) {
     if (!selected || !reply.trim()) return;
     if (replyInbox(selected.id, reply.trim()) !== false) {
       setReply('');
-      setFeedback('Risposta salvata nella conversazione demo.');
+      setFeedback('Risposta aggiunta alla conversazione.');
     }
   };
 
@@ -114,7 +115,7 @@ export function InboxPage({ onOpenModule, initialSelectedId = null }) {
             {(selected.replies || []).map(item => <article key={item.id} className="dw-inbox-message"><Avatar actor={item.actor} /><div><div className="dw-inbox-message-meta"><strong>{actorName(item.actor)}</strong><time dateTime={item.at}>{fullDate(item.at)}</time></div><p>{item.body}</p></div></article>)}
             <form className="dw-inbox-composer" onSubmit={submitReply}>
               <Field label="Rispondi alla conversazione"><textarea value={reply} maxLength={2000} rows={3} placeholder="Rispondi…" onChange={event => { setReply(event.target.value); setFeedback(''); }} onKeyDown={event => { if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') { event.preventDefault(); submitReply(event); } }} /></Field>
-              <div><span>Risposta demo · salvata nella sessione</span><Button type="submit" primary disabled={!reply.trim()}>Rispondi</Button></div>
+              <div><span>Risposta demo · conservata su questo dispositivo</span><Button type="submit" primary disabled={!reply.trim()}>Rispondi</Button></div>
               <p className="dw-inbox-feedback" role="status">{feedback}</p>
             </form>
           </div>
@@ -186,7 +187,7 @@ export function MyTasksPage({ onOpenModule }) {
   const today = localDate();
   const yesterday = new Date(`${today}T12:00:00`);
   yesterday.setDate(yesterday.getDate() - 1);
-  const mine = tasks.filter(item => item.assignee?.email === data.profile.email);
+  const mine = tasks.filter(item => sameActor(item.assignee, data.profile));
   const styleFor = id => workspaceItems.find(item => item.styleId === id);
   const text = query.trim().toLocaleLowerCase('it-IT');
   const visible = mine.filter(item => (style === 'all' || item.styleId === style) && (status === 'Tutte' || item.status === status) && (!text || `${item.title} ${item.note || ''} ${taskKey(item)} ${item.styleId} ${styleLabel(styleFor(item.styleId))} ${moduleName(item.moduleId)}`.toLocaleLowerCase('it-IT').includes(text))).sort((a, b) => {

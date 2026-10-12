@@ -5,6 +5,7 @@ import { modules } from '../modules.js';
 import { Badge, Button, Card, Empty, Icon, Tabs } from './ui.jsx';
 import { ProductPhoto } from './Media.jsx';
 import { actorStyle, localDate } from './workspaceData.js';
+import { sameActor } from './workspaceIdentity.js';
 import './workspace-overview.css';
 
 const dateLabel = value => value ? new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'short' }).format(new Date(value + 'T12:00:00')) : 'Senza scadenza';
@@ -33,7 +34,7 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
   const { data, products, workspaceItems, tasks, inbox, updateTask } = useDemo();
   const [taskView, setTaskView] = useState('Prossime');
   const today = localDate();
-  const mine = tasks.filter(task => task.assignee.email === data.profile.email);
+  const mine = tasks.filter(task => sameActor(task.assignee, data.profile));
   const open = mine.filter(task => task.status !== 'Completata');
   const overdue = open.filter(task => task.due && task.due < today);
   const done = mine.filter(task => task.status === 'Completata');
@@ -81,7 +82,7 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
         <Card flush title="Attività recente" actions={<Button onClick={() => onOpenPage('activity')}>Vedi tutte</Button>}><EventRows events={recent} onOpenModule={onOpenModule} /></Card>
       </div>
     </div>
-    <p className="dw-workspace-session">Incarichi e conversazioni dimostrativi · le modifiche restano in questa sessione.</p>
+    <p className="dw-workspace-session">Incarichi e conversazioni dimostrativi · i dati vengono salvati su questo dispositivo.</p>
   </div>;
 }
 

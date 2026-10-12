@@ -9,7 +9,7 @@ import { productSpec } from './productData.js';
 import './technical.css';
 
 export default function TechnicalPage({ onNavigate }) {
-  const { data, commit, notify } = useDemo();
+  const { data, saveTechnical, notify } = useDemo();
   const t = data.technical || technicalDefaults(data);
   const [area, setArea] = useState(t.versions.length ? 'Tavola' : 'Input');
   const [side, setSide] = useState('Fronte');
@@ -32,14 +32,14 @@ export default function TechnicalPage({ onNavigate }) {
   const approved = Boolean(version && t.approvedId === version.id);
   const spec = productSpec(data), labels = data.measurements.map(row => row.point);
   const revisionPrompts = spec.revisionPrompts;
-  function update(patch) { commit({ technical: { ...t, ...patch } }); }
+  function update(patch) { saveTechnical({ technical: { ...t, ...patch } }); }
   function addVersion(next, label) {
     const id = crypto.randomUUID();
     const created = { id, number: t.versions.length + 1, note: label, date: new Date().toISOString(), snapshot: structuredClone(next) };
-    commit({ technical: { ...t, versions: [...t.versions, created], currentId: id, colors: next.colors, fit: next.fit, tolerance: next.tolerance }, techGenerated: true }, `Disegno tecnico v${created.number} · ${label}`, 2);
+    saveTechnical({ technical: { ...t, versions: [...t.versions, created], currentId: id, colors: next.colors, fit: next.fit, tolerance: next.tolerance }, techGenerated: true }, `Disegno tecnico v${created.number} · ${label}`, 2);
     setSelectedVersion(id); setPartValue(''); setArea('Tavola');
   }
-  function upload(file) { readSketchFile(file, sketch => { commit(previous => sketchHandoff(previous, sketch, 2), `Schizzo caricato nel modulo 2 · ${data.styleId}`, 2); setSelectedVersion(null); setArea('Input'); }, notify); }
+  function upload(file) { readSketchFile(file, sketch => { saveTechnical(previous => sketchHandoff(previous, sketch, 2), `Schizzo caricato nel modulo 2 · ${data.styleId}`, 2); setSelectedVersion(null); setArea('Input'); }, notify); }
   function revision(text = prompt) {
     const next = reviseTechnical(snapshot, text);
     if (!next) { notify('Nella demo prova uno dei quattro prompt proposti, oppure modifica una parte a mano.'); return; }
@@ -57,7 +57,7 @@ export default function TechnicalPage({ onNavigate }) {
   function saveMetadata(e) { e.preventDefault(); if (!validColors(t.colors)) { notify('Inserisci nomi e codici colore univoci.'); return; } addVersion({ ...structuredClone(snapshot), colors: structuredClone(t.colors), fit: t.fit, tolerance: Number(t.tolerance) }, 'Colori e specifiche aggiornati'); }
   function approve() {
     if (!version || !validColors(version.snapshot.colors)) { notify('Definisci almeno una variante con nome e codice univoco prima di approvare.'); setArea('Colori'); return; }
-    commit({ technical: { ...t, approvedId: version.id, currentId: version.id }, measurements: structuredClone(version.snapshot.measurements), seam: version.snapshot.parts.seam, variant: version.snapshot.colors[0].name, techGenerated: true }, `Approvato disegno tecnico v${version.number}`, 2);
+    saveTechnical({ technical: { ...t, approvedId: version.id, currentId: version.id }, measurements: structuredClone(version.snapshot.measurements), seam: version.snapshot.parts.seam, variant: version.snapshot.colors[0].name, techGenerated: true }, `Approvato disegno tecnico v${version.number}`, 2);
   }
   const noteLabel = typeof selectedPart === 'number' ? labels[selectedPart] : spec.partLabels[selectedPart];
   const partCurrent = typeof selectedPart === 'number' ? snapshot.measurements[selectedPart].value : snapshot.parts[selectedPart];

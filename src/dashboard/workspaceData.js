@@ -16,7 +16,7 @@ export const actorTone = email => ({
 export const actorStyle = actor => ({ '--actor-color': `var(--${actorTone(actor?.email)})` });
 
 export function profileActor(profile) {
-  return { name: `${profile.firstName} ${profile.lastName}`.trim(), email: profile.email };
+  return { ...(profile.id ? { id: profile.id } : {}), name: `${profile.firstName} ${profile.lastName}`.trim(), email: profile.email };
 }
 
 export function validTask(task, items) {

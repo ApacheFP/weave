@@ -9,7 +9,7 @@ import { MediaImage, ProductPhoto, ReferenceFile, fabricAsset } from './Media.js
 import Assistant from './Assistant.jsx';
 
 export function PassportPage() {
-  const { data, fabric, cost, commit, notify } = useDemo();
+  const { data, fabric, cost, savePassport, notify } = useDemo();
   const spec = productSpec(data);
   const [role, setRole] = useState('Consumatore'); const [tab, setTab] = useState('Identità');
   const exportPassport = () => {
@@ -32,7 +32,7 @@ export function PassportPage() {
             <a href="#/moduli/19" aria-label={`Apri il passaporto digitale ${data.styleId}`}><img src="/illustrations/dpp-qr.svg" width="72" height="72" alt={`QR del passaporto locale dimostrativo ${data.styleId}`} /></a>
             <div><strong>{data.styleId}</strong><p>Passaporto digitale</p><small>QR per la demo locale sulla porta 5174.</small></div>
           </div>
-          <div className="dw-actions"><Button icon="download" onClick={exportPassport}>Esporta passaporto</Button>{role === 'Brand' && <Button primary disabled={data.passportPublished} onClick={() => commit({ passportPublished: true }, `Passaporto ${data.styleId} pubblicato nella demo`, 19)}>{data.passportPublished ? 'Pubblicato' : 'Pubblica demo'}</Button>}</div>
+          <div className="dw-actions"><Button icon="download" onClick={exportPassport}>Esporta passaporto</Button>{role === 'Brand' && <Button primary disabled={data.passportPublished} onClick={() => savePassport({ passportPublished: true }, `Passaporto ${data.styleId} pubblicato nella demo`, 19)}>{data.passportPublished ? 'Pubblicato' : 'Pubblica demo'}</Button>}</div>
         </Card>
       </div>
       <div className="dw-stack">

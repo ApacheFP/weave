@@ -1,4 +1,7 @@
-import { creativeDefaults } from './creativeData.js';
+import { creativeDefaults, collectionDefaults } from './creativeData.js';
+import { newDemoProducts } from './productData.js';
+import { seedWorkspaceData } from './workspaceData.js';
+import { normalizeWorkspaceIdentity } from './workspaceIdentity.js';
 
 export const demoDefaults = {
   collection: 'Autunno/Inverno 2027', profile: { firstName: 'Alex', lastName: 'Rossi', email: 'demo@weave.it', avatar: '/illustrations/profile-avatar.webp' },
@@ -7,3 +10,8 @@ export const demoDefaults = {
   margin: 55, hourlyRate: 40, logisticsCost: 1.5, priority: 'Alta', start: '2027-04-10', end: '2027-05-20', delivery: '2027-06-15',
   productionPaused: false, qualityResolved: false, retailFeedback: 4.3, aiRuns: {}, chats: {},
 };
+
+export function createDemoWorkspace() {
+  const items = newDemoProducts(demoDefaults);
+  return normalizeWorkspaceIdentity({ activeId: items[0].styleId, hasSelectedStyle: false, selectedVariants: {}, collections: { [items[0].collection]: collectionDefaults() }, items, ...seedWorkspaceData(items, demoDefaults.profile) });
+}

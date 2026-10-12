@@ -11,9 +11,11 @@ import './workspace-switcher.css';
 export function StyleSwitcher({ onCreate, onSelect, selected = true }) {
   const { data, products, selectStyle } = useDemo();
   const [open, setOpen] = useState(false);
+  const [renderPopover, setRenderPopover] = useState(false);
+  const [closing, setClosing] = useState(false);
   const [query, setQuery] = useState('');
   const [popoverStyle, setPopoverStyle] = useState(null);
-  const root = useRef(null); const trigger = useRef(null); const popover = useRef(null);
+  const root = useRef(null); const trigger = useRef(null); const popover = useRef(null); const closeTimer = useRef(null);
   const matchingStyles = products.filter(item => productSearchText(item).includes(query.toLowerCase().trim()));
   const activeProduct = products.find(item => item.variants.some(variant => variant.styleId === data.styleId));
   const season = collection => collection.replace('Autunno/Inverno', 'AI').replace('Primavera/Estate', 'PE');
@@ -24,6 +26,20 @@ export function StyleSwitcher({ onCreate, onSelect, selected = true }) {
     document.addEventListener('pointerdown', outside); document.addEventListener('keydown', escape);
     return () => { document.removeEventListener('pointerdown', outside); document.removeEventListener('keydown', escape); };
   }, [open]);
+  useEffect(() => {
+    window.clearTimeout(closeTimer.current);
+    if (open) {
+      setRenderPopover(true);
+      setClosing(false);
+      return;
+    }
+    if (!renderPopover) return;
+    setClosing(true);
+    const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 150;
+    closeTimer.current = window.setTimeout(() => { setRenderPopover(false); setClosing(false); }, duration);
+    return () => window.clearTimeout(closeTimer.current);
+  }, [open, renderPopover]);
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
   useLayoutEffect(() => {
     if (!open) return;
     const updatePosition = () => {
@@ -47,7 +63,7 @@ export function StyleSwitcher({ onCreate, onSelect, selected = true }) {
       <span className="dw-workspace-name"><strong title={selected ? data.title : 'Seleziona il capo'}>{selected ? data.title : 'Seleziona il capo'}</strong><small title={selected ? data.collection : 'Scegli un capo per iniziare'}>{selected ? <>{data.identityAssigned ? data.styleId : 'Bozza'}{activeProduct.variants.length > 1 && ` · ${data.variant}`}<span aria-hidden="true"> · </span>{season(data.collection)}</> : 'Scegli un capo per iniziare'}</small></span>
       <span className="dw-workspace-chevron"><Icon name="chevron" size={14} /></span>
     </button>
-    {open && popoverStyle && createPortal(<div id="style-switcher" className="dw-switcher dw-workspace-popover dw-switcher-portal" ref={popover} role="region" aria-label="Seleziona il capo" style={popoverStyle}>
+    {renderPopover && popoverStyle && createPortal(<div id="style-switcher" className="dw-switcher dw-workspace-popover dw-switcher-portal" data-closing={closing || undefined} aria-hidden={closing} inert={closing} ref={popover} role="region" aria-label="Seleziona il capo" style={popoverStyle}>
       <div className="dw-switcher-heading"><div><strong>Seleziona un capo</strong><small>{products.length} {products.length === 1 ? 'capo disponibile' : 'capi disponibili'}</small></div></div>
       <div className="dw-popover-search"><Icon name="search" size={16} /><input autoFocus aria-label="Cerca capo" placeholder="Nome, codice o collezione…" value={query} onChange={e => setQuery(e.target.value)} /></div>
       <div className="dw-style-list">{matchingStyles.map(item => <button type="button" key={item.styleId} aria-pressed={selected && item.styleId === data.styleId} onClick={() => { selectStyle(productVariantId(item, query)); setOpen(false); trigger.current?.focus(); onSelect?.(); }}>
@@ -71,7 +87,7 @@ export function CreateStyleDialog({ onClose, onCreated }) {
     <div className="dw-two"><Field label="Codice riservato" hint="Diventa lo Style ID al caricamento dello schizzo."><input required maxLength={24} pattern="[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*" value={draft.styleId} onChange={e => { setDraft({ ...draft, styleId: e.target.value.toUpperCase() }); setError(''); }} /></Field><Field label="Quantità prevista"><input required type="number" min={draft.copy ? minQuantity(data) : 1} max="10000" step="1" value={draft.quantity} onChange={e => setDraft({ ...draft, quantity: e.target.value })} /></Field></div>
     <Field label="Collezione"><input required maxLength={80} pattern=".*\S.*" value={draft.collection} onChange={e => setDraft({ ...draft, collection: e.target.value })} /></Field>
     <label className="dw-check"><input type="checkbox" checked={draft.copy} onChange={e => setDraft({ ...draft, copy: e.target.checked, quantity: e.target.checked ? Math.max(Number(draft.quantity), minQuantity(data)) : draft.quantity })} />Duplica specifiche e ordini di {data.title}</label>
-    <p className="dw-muted">Il modello base è una maglia: misure, filato e lavorazioni sono precompilati e modificabili. I nuovi capi restano disponibili durante questa sessione demo.</p>
+    <p className="dw-muted">Il modello base è una maglia: misure, filato e lavorazioni sono precompilati e modificabili. I capi vengono salvati in questo browser, su questo dispositivo.</p>
     {error && <p className="dw-error" role="alert">{error}</p>}
     <div className="dw-dialog-actions"><Button onClick={onClose}>Annulla</Button><Button primary icon="plus" type="submit">Crea capo</Button></div>
   </form></Dialog>;

@@ -113,13 +113,13 @@ export function purchaseMaterial(data, order, fabric) {
 export function groupProducts(items, activeId, selectedVariants = {}, fabrics = []) {
   const groups = new Map();
   for (const item of items) {
-    const id = item.productId || item.styleId;
+    const id = item.modelId || item.productId || item.styleId;
     if (!groups.has(id)) groups.set(id, []);
     groups.get(id).push(item);
   }
-  return [...groups].map(([productId, variants]) => {
-    const selected = variants.find(item => item.styleId === activeId) || variants.find(item => item.styleId === selectedVariants[productId]) || variants[0];
-    return { ...selected, productId, variants: variants.map(item => ({ ...item, materialName: fabrics.find(fabric => fabric.id === item.fabricId)?.name || item.fabricId })), identityAssigned: variants.some(item => item.identityAssigned), variantSummary: variants.map(item => item.variant).join(' / '), totalQuantity: variants.reduce((sum, item) => sum + item.quantity, 0), totalProduced: variants.reduce((sum, item) => sum + item.produced, 0) };
+  return [...groups].map(([modelId, variants]) => {
+    const selected = variants.find(item => item.styleId === activeId) || variants.find(item => item.styleId === selectedVariants[modelId]) || variants[0];
+    return { ...selected, productId: selected.productId || variants[0].styleId, variants: variants.map(item => ({ ...item, materialName: fabrics.find(fabric => fabric.id === item.fabricId)?.name || item.fabricId })), identityAssigned: variants.some(item => item.identityAssigned), variantSummary: variants.map(item => item.variant).join(' / '), totalQuantity: variants.reduce((sum, item) => sum + item.quantity, 0), totalProduced: variants.reduce((sum, item) => sum + item.produced, 0) };
   });
 }
 export const productSearchText = product => [product.title, product.collection, product.productId, ...product.variants.flatMap(item => [item.styleId, item.aliasTitle, item.variant, item.materialName])].join(' ').toLowerCase();

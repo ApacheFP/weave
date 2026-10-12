@@ -5,6 +5,7 @@ import { useDemo } from './DemoContext.jsx';
 import { euro, number } from './domain.js';
 import { Button, Card, Icon, Progress, Tabs } from './ui.jsx';
 import { actorStyle } from './workspaceData.js';
+import { sameActor } from './workspaceIdentity.js';
 import './home.css';
 
 const groups = [
@@ -30,7 +31,7 @@ const date = value => {
 const moduleName = id => id === 21 ? 'Home' : modules.find(item => item.id === id)?.title;
 
 export default function HomePage({ onNavigate, onService, onActivity }) {
-  const { data, cost, stock, approved, materials, labor, fabric, commit } = useDemo();
+  const { data, cost, stock, approved, materials, labor, fabric, savePhaseReview } = useDemo();
   const [group, setGroup] = useState('Sviluppo');
   const delayed = data.purchaseOrders.filter(order => order.status === 'In ritardo');
   const qualityAlert = !data.qualityResolved;
@@ -75,7 +76,7 @@ export default function HomePage({ onNavigate, onService, onActivity }) {
   const phaseIds = path.flatMap(item => item.ids);
   const complete = phaseIds.filter(id => phaseState(id) === 'done').length;
   const inProgress = phaseIds.filter(id => phaseState(id) === 'active').length;
-  const reviewPhase = (id, checked) => commit(previous => ({ phaseReviews: { ...previous.phaseReviews, [id]: checked } }), `${checked ? 'Confermata' : 'Riaperta'} la revisione: ${moduleName(id)}`, id);
+  const reviewPhase = (id, checked) => savePhaseReview(previous => ({ phaseReviews: { ...previous.phaseReviews, [id]: checked } }), `${checked ? 'Confermata' : 'Riaperta'} la revisione: ${moduleName(id)}`, id);
 
   const metricItems = [
     { label: 'Produzione', value: `${number(data.produced)} / ${number(data.quantity)}`, note: `${progress}% dell’ordine completato`, icon: 'activity', target: 12 },
@@ -133,7 +134,7 @@ export default function HomePage({ onNavigate, onService, onActivity }) {
           <div className="dw-home-feed">{data.events.slice(0, 4).map(event => {
             const name = event.actor?.name || 'Utente non registrato';
             const initials = name.split(' ').map(word => word[0]).slice(0, 2).join('');
-            return <button type="button" key={event.id} onClick={() => openEvent(event)}><span className="dw-home-avatar" style={actorStyle(event.actor)} aria-hidden="true">{event.actor?.email === data.profile.email ? <img src={data.profile.avatar || '/illustrations/profile-avatar.webp'} alt="" /> : initials}</span><span className="dw-home-feed-copy"><strong>{name}</strong><span>{event.text}</span><small>{moduleName(event.module) || 'Servizi'} · {event.time.split(/[·,]/)[0].trim()}</small></span><time>{event.time.split(/[·,]/).at(-1).trim()}</time></button>;
+            return <button type="button" key={event.id} onClick={() => openEvent(event)}><span className="dw-home-avatar" style={actorStyle(event.actor)} aria-hidden="true">{sameActor(event.actor, data.profile) ? <img src={data.profile.avatar || '/illustrations/profile-avatar.webp'} alt="" /> : initials}</span><span className="dw-home-feed-copy"><strong>{name}</strong><span>{event.text}</span><small>{moduleName(event.module) || 'Servizi'} · {event.time.split(/[·,]/)[0].trim()}</small></span><time>{event.time.split(/[·,]/).at(-1).trim()}</time></button>;
           })}</div>
         </Card>
 

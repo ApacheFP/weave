@@ -1,19 +1,22 @@
 /* Prova1 shell: personal navigation, capo context and a fixed account footer. */
 .dw-sidebar-brand .dw-brand { display:flex; align-items:center; padding:0; font:400 36px/1 'Stay With Me',sans-serif !important; text-align:left; transform:translateY(2px); }
 .dw-sidebar-brand .dw-brand strong { font-weight:400; }
-.dw-sidebar-workspace { padding:8px 8px 0; border:0; }
-.dw-company-switcher { position:relative; margin-bottom:0; padding:4px; border:1px solid var(--border); border-radius:12px; background:var(--surface); box-shadow:var(--shadow-sm); }
-.dw-company-switcher summary { display:flex; align-items:center; justify-content:space-between; min-height:42px; padding:5px 8px; border:1px solid transparent; border-radius:8px; cursor:pointer; list-style:none; }
+.dw-sidebar-workspace-nav { flex:0 0 auto; margin:8px 8px 0; padding:4px; border:1px solid var(--border); border-radius:12px; background:var(--surface); box-shadow:var(--shadow-sm); }
+.dw-sidebar-workspace { padding:0 4px 4px; border-bottom:1px solid var(--divider); }
+.dw-company-switcher { position:relative; margin-bottom:0; padding:0; border:0; border-radius:8px; background:transparent; box-shadow:none; }
+.dw-company-switcher summary { display:flex; align-items:center; justify-content:space-between; min-height:46px; padding:5px 8px; border:1px solid transparent; border-radius:8px; cursor:pointer; list-style:none; }
 .dw-company-switcher summary::-webkit-details-marker { display:none; }
 .dw-company-switcher summary > span,.dw-company-options button > span { min-width:0; }
 .dw-company-switcher summary > .dw-company-label { display:flex; align-items:center; gap:8px; }
-.dw-company-switcher summary strong,.dw-company-options button strong { display:block; color:var(--text); font-size:12.5px; font-weight:600; }
+.dw-company-switcher summary strong { display:block; color:var(--text); font-size:14px; font-weight:700; line-height:1.2; }
+.dw-company-options button strong { display:block; color:var(--text); font-size:12.5px; font-weight:600; }
 .dw-company-switcher summary small,.dw-company-options button small { display:block; margin-top:2px; color:var(--text-3); font-size:10px; }
 .dw-company-demo { display:inline-flex; align-items:center; min-height:18px; padding:1px 7px; border:1px solid color-mix(in srgb,#4b5bd6 16%,transparent); border-radius:999px; background:#eef0ff; color:#4b5bd6; font-size:9px; font-weight:600; line-height:1; }
 .dw-company-switcher summary > .dw-icon { color:var(--text-3); opacity:.72; transition:transform 220ms ease, opacity 220ms ease; }
 .dw-company-switcher summary:hover > .dw-icon,.dw-company-switcher[open] summary > .dw-icon { opacity:1; }
 .dw-company-switcher[open] summary > .dw-icon { transform:rotate(180deg); }
-.dw-company-options { position:absolute; z-index:46; top:calc(100% + 4px); left:0; right:0; padding:5px; border:1px solid var(--border); border-radius:11px; background:var(--surface); box-shadow:var(--shadow-popover); }
+.dw-company-options { position:absolute; z-index:46; top:calc(100% + 4px); left:0; right:0; display:block; padding:5px; border:1px solid var(--border); border-radius:11px; background:var(--surface); box-shadow:var(--shadow-popover); opacity:0; visibility:hidden; pointer-events:none; transform:translateY(-4px); transition:opacity 150ms ease,transform 150ms ease,visibility 0s linear 150ms; }
+.dw-company-switcher[open] .dw-company-options { opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0); transition-delay:0s; }
 .dw-company-options button { display:flex; align-items:center; justify-content:space-between; width:100%; min-height:42px; padding:6px 8px; border:0; border-radius:7px; background:transparent; text-align:left; }
 .dw-company-options button[aria-current=true] { background:var(--accent-soft); }
 .dw-company-options button[aria-current=true] > .dw-icon { color:var(--accent); }
@@ -22,7 +25,7 @@
 .dw-sidebar-kicker { display:block; padding:0 8px 5px; color:var(--text-3); font-size:9px; font-weight:650; letter-spacing:.08em; }
 .dw-sidebar-top .dw-sidebar-kicker { padding:0 8px 5px; font-size:11px; font-weight:600; letter-spacing:.06em; }
 .dw-sidebar-kicker,.dw-sidebar .dw-nav-group > span { color:var(--text); font-weight:700; }
-.dw-personal-nav { margin:8px 0 12px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+.dw-personal-nav { margin:4px 0 0; padding:0; border:0; }
 .dw-cap-nav button[data-module] .dw-icon { color:var(--module-color,var(--text-3)); }
 .dw-cap-nav button[data-module="1"] { --module-color:var(--violet); }
 .dw-cap-nav button[data-module="2"] { --module-color:var(--blue); }
@@ -48,7 +51,7 @@
 .dw-sidebar button[aria-current="page"] { border-color:transparent; background:color-mix(in srgb,var(--nav-color,var(--module-color,var(--accent))) 12%,var(--surface)); box-shadow:none; color:var(--text); }
 .dw-cap-overview { margin-top:0; margin-bottom:4px; }
 .dw-cap-nav > .dw-nav-group { margin-top:8px; }
-.dw-sidebar .dw-nav-group-card { padding:4px; border:1px solid var(--border); border-radius:12px; background:var(--surface); box-shadow:var(--shadow-sm); }
+.dw-sidebar .dw-nav-group-card { padding:0; border:0; border-radius:8px; background:transparent; box-shadow:none; }
 .dw-sidebar button[data-nav-tone] { --nav-color:var(--accent); }
 .dw-sidebar button[data-nav-tone="home"] { --nav-color:var(--accent); }
 .dw-sidebar button[data-nav-tone="inbox"] { --nav-color:var(--blue); }
@@ -59,10 +62,10 @@
 .dw-sidebar button[data-nav-tone="activity"] { --nav-color:var(--teal); }
 .dw-sidebar button[data-nav-tone] .dw-icon { color:var(--nav-color); }
 .dw-sidebar button[data-nav-tone] .dw-nav-count { background:color-mix(in srgb,var(--nav-color) 12%,var(--surface)); color:var(--nav-color); }
+.dw-sidebar button[data-nav-tone][aria-current="page"] .dw-nav-count { background:color-mix(in srgb,var(--nav-color) 26%,var(--surface)); color:color-mix(in srgb,var(--nav-color) 78%,var(--text)); }
 .dw-collapsed .dw-sidebar-top { margin:8px 0 4px; padding:0; }
 .dw-collapsed .dw-sidebar-top .dw-sidebar-kicker { display:none; }
 .dw-collapsed .dw-sidebar-product-card { padding:0; border:0; background:transparent; box-shadow:none; }
-.dw-collapsed .dw-sidebar .dw-nav-group-card { padding:0; border:0; background:transparent; box-shadow:none; }
 .dw-nav-count { margin-left:auto; padding:0 5px; min-width:20px; text-align:center; font-size:10px; font-weight:500; color:var(--text-3); background:var(--surface-3); border-radius:8px; }
 .dw-sidebar .dw-sidebar-bottom { display:flex; flex-direction:column; align-items:stretch; gap:4px; padding:8px; border-top:0; }
 .dw-sidebar-bottom-card { width:100%; padding:4px; border:1px solid var(--border); border-radius:12px; background:var(--surface); box-shadow:var(--shadow-sm); }
