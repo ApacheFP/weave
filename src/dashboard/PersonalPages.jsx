@@ -43,7 +43,7 @@ function Avatar({ actor }) {
   return <span className="dw-personal-avatar" style={actorStyle(actor)} aria-hidden="true">{sameActor(actor, data.profile) ? <img src={data.profile.avatar || '/illustrations/profile-avatar.webp'} alt="" /> : name.split(' ').filter(Boolean).map(word => word[0]).slice(0, 2).join('')}</span>;
 }
 
-export function InboxPage({ onOpenModule, initialSelectedId = null }) {
+export function InboxPage({ onOpenModule, onSelectMessage, initialSelectedId = null }) {
   const { workspaceItems, inbox, markInboxRead, markAllInboxRead, replyInbox } = useDemo();
   const [category, setCategory] = useState('Tutte');
   const [unread, setUnread] = useState(false);
@@ -65,6 +65,7 @@ export function InboxPage({ onOpenModule, initialSelectedId = null }) {
   const select = item => {
     setSelectedId(item.id);
     markInboxRead(item.id);
+    onSelectMessage?.(item.id);
     requestAnimationFrame(() => previewRef.current?.focus());
   };
   const submitReply = event => {

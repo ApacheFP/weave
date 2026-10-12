@@ -160,13 +160,13 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
   }
   const globalContent = {
     home: <WorkspaceHome onOpenPage={openPage} onOpenModule={openModule} onCreate={() => setCreate(true)} />,
-    inbox: <InboxPage initialSelectedId={inboxId} onOpenModule={openModule} />,
+    inbox: <InboxPage initialSelectedId={inboxId} onSelectMessage={id => openPage(`inbox?message=${encodeURIComponent(id)}`)} onOpenModule={openModule} />,
     notifications: <NotificationsPage onSelectMessage={id => openPage(`inbox?message=${encodeURIComponent(id)}`)} onOpenPage={openPage} />,
     'my-tasks': <MyTasksPage onOpenModule={openModule} />,
     capi: <StylesPage onCreate={() => setCreate(true)} onOpen={() => navigate(21)} />,
     activity: <WorkspaceActivityPage onOpenModule={openModule} />,
-    settings: <SettingsPage section={settingsSection || 'appearance'} />,
-    profile: <SettingsPage section="profile" />,
+    settings: <SettingsPage section={settingsSection || 'appearance'} onSectionChange={section => openPage(`settings?section=${section}`)} />,
+    profile: <SettingsPage section="profile" onSectionChange={section => openPage(`settings?section=${section}`)} />,
   };
   return <div className={`dw-app ${collapsed ? 'dw-collapsed' : ''}`} data-module={isModule ? moduleId : undefined} data-workspace-page={workspacePage || undefined} data-ui-theme={theme} data-ui-accent={preferences?.accent || 'graphite'} data-sidebar-density={preferences?.sideDensity || 'comfortable'} data-task-density={preferences?.taskDensity || 'comfortable'} data-motion={preferences?.motion || 'system'}>
     <a className="dw-skip" href="#module-workspace" onClick={event => { event.preventDefault(); page.current?.focus(); content.current?.scrollTo(0, 0); }}>Vai al contenuto</a>

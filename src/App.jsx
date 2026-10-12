@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { carouselGroup, moduleGroups } from './modules.js';
+import { carouselGroup } from './modules.js';
 import { createModuleCards } from './cards.js';
 import AuthPage from './AuthPage.jsx';
 import ProfileMenu from './ProfileMenu.jsx';
 import { DemoProvider, useDemo } from './dashboard/DemoContext.jsx';
-import { Button, Dialog } from './dashboard/ui.jsx';
+import { Button, Card, Dialog } from './dashboard/ui.jsx';
 import Dashboard from './dashboard/Dashboard.jsx';
+import { explorePath, modulePath, pagePath, readCurrentRoute, resolveRoute, navigateTo } from './routes.js';
 
 function Arrow({ direction }) {
   return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d={direction === 'left' ? 'm14 6-6 6 6 6' : 'm10 6 6 6-6 6'} /></svg>;
@@ -173,37 +174,31 @@ function ProductPage({ onSignOut, onEnter, index, onIndexChange }) {
   );
 }
 
-function readRoute() {
-  const match = window.location.hash.match(/^#\/moduli\/(\d+)$/);
-  const id = match ? Number(match[1]) : null;
-  if (moduleGroups[0].items.some(module => module.id === id)) return { moduleId: id, page: null };
-  const [page, query] = window.location.hash.slice(2).split('?');
-  return ['home', 'inbox', 'my-tasks', 'notifications', 'capi', 'activity', 'settings', 'profile'].includes(page) ? { moduleId: 21, page, inboxId: new URLSearchParams(query).get('message'), settingsSection: new URLSearchParams(query).get('section') } : null;
-}
-
 function Workspace({ onSignOut }) {
   const { flushWorkspace, exportWorkspace } = useDemo();
   const [confirmExit, setConfirmExit] = useState(false);
   async function signOut() { if (await flushWorkspace()) onSignOut(); else setConfirmExit(true); }
 
-  const [route, setRoute] = useState(readRoute);
+  const [route, setRoute] = useState(() => resolveRoute(window.location));
   const [index, setIndex] = useState(0);
   useEffect(() => {
-    const change = () => setRoute(readRoute());
+    const change = () => setRoute(readCurrentRoute());
+    change();
+    window.addEventListener('popstate', change);
     window.addEventListener('hashchange', change);
-    return () => window.removeEventListener('hashchange', change);
+    return () => { window.removeEventListener('popstate', change); window.removeEventListener('hashchange', change); };
   }, []);
   const navigate = useCallback(id => {
-    window.location.hash = `/moduli/${id}`;
-    setRoute({ moduleId: id, page: null });
+    navigateTo(modulePath(id));
   }, []);
   const openPage = useCallback(page => {
-    window.location.hash = `/${page}`;
-    setRoute(readRoute());
+    navigateTo(pagePath(page));
   }, []);
   const rememberIndex = useCallback((_id, nextIndex) => setIndex(nextIndex), []);
-  function home() { window.location.hash = '/moduli'; setRoute(null); }
-  const content = route
+  function home() { navigateTo(explorePath); }
+  const content = route.kind === 'not-found'
+    ? <div className="dw-app"><main className="dw-page"><Card title="Pagina non trovata"><p>Questo indirizzo non corrisponde a una pagina di WEAVE.</p><Button primary onClick={() => openPage('home')}>Torna ad Atelier</Button></Card></main></div>
+    : route.kind !== 'explore'
     ? <Dashboard moduleId={route.moduleId} workspacePage={route.page} inboxId={route.inboxId} settingsSection={route.settingsSection} onOpenPage={openPage} onNavigate={navigate} onHome={home} onSignOut={signOut} />
     : <ProductPage onSignOut={signOut} onEnter={navigate} index={index} onIndexChange={rememberIndex} />;
   return <>{content}{confirmExit && <Dialog title="Uscire con modifiche non salvate?" onClose={() => setConfirmExit(false)}><p>Il browser non ha completato il salvataggio. Scarica una copia per conservare le modifiche prima di uscire.</p><div className="dw-dialog-actions"><Button onClick={() => setConfirmExit(false)}>Resta nello spazio</Button><Button onClick={exportWorkspace}>Scarica una copia</Button><Button primary onClick={onSignOut}>Esci e scarta modifiche</Button></div></Dialog>}</>;
@@ -211,7 +206,8 @@ function Workspace({ onSignOut }) {
 
 export default function App() {
   const [entered, setEntered] = useState(false);
+  useEffect(() => { readCurrentRoute(); }, []);
   return entered
-    ? <DemoProvider><Workspace onSignOut={() => { setEntered(false); history.replaceState(null, '', `${location.pathname}${location.search}#/moduli`); }} /></DemoProvider>
+    ? <DemoProvider><Workspace onSignOut={() => { setEntered(false); navigateTo(explorePath, { replace: true }); }} /></DemoProvider>
     : <AuthPage onEnter={() => setEntered(true)} />;
 }

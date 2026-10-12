@@ -79,7 +79,9 @@ export function DemoProvider({ children }) {
     }, 'Attività creata');
   }
   function markInboxRead(id, read = true) {
-    setWorkspace(current => ({ ...current, inbox: current.inbox.map(item => item.id === id ? { ...item, read: Boolean(read) } : item) }));
+    setWorkspace(current => current.inbox.some(item => item.id === id && item.read !== Boolean(read))
+      ? { ...current, inbox: current.inbox.map(item => item.id === id ? { ...item, read: Boolean(read) } : item) }
+      : current);
   }
   function markAllInboxRead() {
     setWorkspace(current => ({ ...current, inbox: current.inbox.map(item => ({ ...item, read: true })) }));

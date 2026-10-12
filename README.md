@@ -27,7 +27,7 @@ Il motore limita il DPR a 1,5 desktop e 2 mobile; a DPR 2 le texture sono 1280×
 
 ## Dashboard
 
-Navigazione hash `#/moduli/ID`, cronologia del browser e ritorno al carosello con gruppo e posizione conservati. La shell comune ha header WEAVE, profilo, breadcrumb e footer. La console riprende i token, la sidebar compatta e riducibile, i pannelli, i pulsanti e le tabelle di **Prova1**. File, miniature, metadati e finestre di modifica seguono i pattern di **Prova2**. Il contenuto della console segue ora il riferimento **OpsLoop** allegato: font **Mulish** locale, statistiche in card separate, titoli più leggibili, ricerca nell’header e grafici sulla griglia di lettura; i titoli scritti a mano restano nel carosello e nel logo. Su mobile la navigazione si apre dal menu e le aree operative si dispongono in una colonna.
+Navigazione con percorsi leggibili come `/atelier/modellistica`, cronologia del browser e ritorno al carosello con gruppo e posizione conservati. La shell comune ha header WEAVE, profilo, breadcrumb e footer. La console riprende i token, la sidebar compatta e riducibile, i pannelli, i pulsanti e le tabelle di **Prova1**. File, miniature, metadati e finestre di modifica seguono i pattern di **Prova2**. Il contenuto della console segue ora il riferimento **OpsLoop** allegato: font **Mulish** locale, statistiche in card separate, titoli più leggibili, ricerca nell’header e grafici sulla griglia di lettura; i titoli scritti a mano restano nel carosello e nel logo. Su mobile la navigazione si apre dal menu e le aree operative si dispongono in una colonna.
 
 In cima alla sidebar il selettore mostra il capo corrente: permette di cercare e cambiare capo oppure crearne uno nuovo. **Capi** apre la lista con ricerca e azioni. **Nuovo capo** raccoglie nome, codice univoco, collezione e quantità; può duplicare specifiche e ordini del capo corrente. Ogni capo ha dati, servizi, cronologia e conversazioni separati, conservati nel salvataggio locale. La copia assegna nuove identità e rimappa i codici e i collegamenti degli ordini; il capo originale resta invariato. I codici di prodotto, ordine, campione e lotto nelle viste e negli export seguono il capo selezionato. Il profilo rimane comune.
 
@@ -35,7 +35,7 @@ La ricerca globale si apre dall’header, accanto al profilo, o da **⌘/Ctrl K*
 
 ### Home del capo
 
-Il Context Engine è ora **Home**, prima voce della sidebar sotto il selettore del capo. Creazione, cambio capo, apertura dalla lista e selezione di un prodotto nella ricerca globale portano a `#/moduli/21`. La Home riprende le azioni e le attività di Prova1, l’identità e gli accessi di Prova2 e le statistiche di OpsLoop.
+Il Context Engine è ora **Home**, prima voce della sidebar sotto il selettore del capo. Creazione, cambio capo, apertura dalla lista e selezione di un prodotto nella ricerca globale portano a `/atelier/panoramica-capo`. La Home riprende le azioni e le attività di Prova1, l’identità e gli accessi di Prova2 e le statistiche di OpsLoop.
 
 Il percorso raggruppa 13 fasi operative in Concept, Sviluppo tecnico, Validazione, Produzione e Passaporto. Ogni fase distingue **Completata**, **In corso** e **Da iniziare**. Brief con checklist completa, tech pack, campione approvato, marker ottimizzato, acquisti consegnati, produzione completata, qualità risolta sul lotto completo e passaporto pubblicato determinano gli stati automatici. Materiali, modellistica, grading, pricing, pianificazione e marker di base possono essere confermati come revisionati nella Home; modificare i relativi input riapre la revisione. L’assistente è un accesso continuo, escluso dal conteggio delle fasi.
 
@@ -93,7 +93,7 @@ La fotografia temporale è coerente: 12 dei 320 capi sono in rilavorazione; 308 
 
 Cambiare tessuto aggiorna composizione, fornitore, BOM, acquisti, costo e DPP. Ottimizzare il marker aggiorna consumi e fabbisogni. Produzione e chiusura di una non conformità aggiornano lo stock. Le azioni compaiono nella Home del capo e nel registro Attività. La scelta del ruolo DPP è una presentazione dimostrativa, non un’autorizzazione reale.
 
-Il QR in `public/illustrations/dpp-qr.svg` è reale e punta al passaporto **locale** `http://127.0.0.1:5174/#/moduli/19`. Per pubblicarlo va rigenerato con l’URL pubblico. Nessuna dipendenza QR aggiunta all’app.
+Il QR in `public/illustrations/dpp-qr.svg` è reale e punta al passaporto **locale** `http://127.0.0.1:5174/atelier/passaporto-digitale`. Per pubblicarlo va rigenerato con l’URL pubblico. Nessuna dipendenza QR aggiunta all’app.
 
 ## Asset e font
 
@@ -124,3 +124,13 @@ L'audit iniziale è in [docs/hardening-2026-10-12.md](docs/hardening-2026-10-12.
 Vendite retail e ordini wholesale rispettano la quantità pianificata complessivamente impegnata. Modifiche a materiale, misure o modello riaprono il fitting; snapshot identici non annullano le approvazioni. La creazione dei capi valida i dati anche nell'azione, e le notifiche di assegnazione rispettano la preferenza corrente. Le opzioni di lingua, fuso e pagina iniziale vengono conservate, ma restano anteprime e non sono applicate globalmente.
 
 Per la verifica corrente eseguire `npm test` e `npm run build`. Esiti, collaudo browser e limiti sono nei report; non sono una certificazione di produzione. La persistenza locale è implementata; backend, autenticazione e permessi server restano da sviluppare.
+
+## Indirizzi e navigazione
+
+I percorsi sono centralizzati in `src/routes.js`: `/esplora` per il carosello, `/atelier` per lo spazio comune, `/atelier/capi`, `/atelier/inbox`, `/atelier/le-mie-attivita`, `/atelier/notifiche`, `/atelier/attivita` e `/atelier/profilo`. I moduli usano slug espliciti: `ideazione`, `disegno-tecnico`, `materiali`, `modellistica`, `sviluppo-taglie`, `prototipi`, `piazzamento`, `costi-e-pricing`, `pianificazione`, `acquisti`, `produzione`, `qualita`, `passaporto-digitale`, `panoramica-capo`, `assistente`, tutti sotto `/atelier/`.
+
+Le impostazioni hanno percorsi propri, ad esempio `/atelier/impostazioni/aspetto` e `/atelier/impostazioni/membri`. Le conversazioni hanno `/atelier/inbox/:id`, con identità codificata come singolo segmento. I vecchi bookmark hash, i percorsi `/moduli/:id` e gli alias delle pagine sono convertiti senza aggiungere una voce alla cronologia. Indietro/avanti funzionano tramite History API; un indirizzo sconosciuto mostra una pagina dedicata.
+
+`vercel.json` include il fallback SPA per apertura diretta e ricaricamento ([documentazione Vercel](https://vercel.com/docs/frameworks/frontend/vite)). Nessuna dipendenza aggiunta. Il capo selezionato resta nel workspace locale: gli indirizzi dei moduli non identificano ancora un capo condivisibile fra utenti. Il QR continua a puntare alla demo locale sulla porta 5174 e va rigenerato sul dominio pubblico prima della pubblicazione.
+
+Verifica della migrazione: 61 test passati e build riuscita; nel browser controllati i 15 bookmark dei moduli, tutte le 21 sezioni delle impostazioni, indietro/avanti, apertura diretta e reload di impostazioni e conversazioni, recupero degli indirizzi sconosciuti e layout a 320 px. Configurazione Vercel aggiornata; il deployment pubblico non è stato collaudato in questa verifica locale.

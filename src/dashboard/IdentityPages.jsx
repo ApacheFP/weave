@@ -7,6 +7,7 @@ import { Badge, Button, Card, Icon, Metrics, Tabs } from './ui.jsx';
 import { productMedia, productSizes, productSpec } from './productData.js';
 import { MediaImage, ProductPhoto, ReferenceFile, fabricAsset } from './Media.jsx';
 import Assistant from './Assistant.jsx';
+import { modulePath, navigateTo } from '../routes.js';
 
 export function PassportPage() {
   const { data, fabric, cost, savePassport, notify } = useDemo();
@@ -29,7 +30,7 @@ export function PassportPage() {
         </Card>
         <Card title="Etichetta del capo">
           <div className="dw-qr-label">
-            <a href="#/moduli/19" aria-label={`Apri il passaporto digitale ${data.styleId}`}><img src="/illustrations/dpp-qr.svg" width="72" height="72" alt={`QR del passaporto locale dimostrativo ${data.styleId}`} /></a>
+            <a href={modulePath(19)} aria-label={`Apri il passaporto digitale ${data.styleId}`} onClick={event => { if (!event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && event.button === 0) { event.preventDefault(); navigateTo(modulePath(19)); } }}><img src="/illustrations/dpp-qr.svg" width="72" height="72" alt={`QR del passaporto locale dimostrativo ${data.styleId}`} /></a>
             <div><strong>{data.styleId}</strong><p>Passaporto digitale</p><small>QR per la demo locale sulla porta 5174.</small></div>
           </div>
           <div className="dw-actions"><Button icon="download" onClick={exportPassport}>Esporta passaporto</Button>{role === 'Brand' && <Button primary disabled={data.passportPublished} onClick={() => savePassport({ passportPublished: true }, `Passaporto ${data.styleId} pubblicato nella demo`, 19)}>{data.passportPublished ? 'Pubblicato' : 'Pubblica demo'}</Button>}</div>
