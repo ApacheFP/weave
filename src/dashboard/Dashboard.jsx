@@ -30,7 +30,7 @@ class PageBoundary extends React.Component {
   state = { failed: false };
   static getDerivedStateFromError() { return { failed: true }; }
   componentDidCatch(error) { console.error('WEAVE · pagina modulo:', error); }
-  render() { return this.state.failed ? <Card title="La vista non si è caricata"><p>Puoi riaprire questo modulo oppure scegliere un altro modulo dalla sidebar.</p><Button onClick={() => this.setState({ failed: false })}>Riapri modulo</Button></Card> : this.props.children; }
+  render() { return this.state.failed ? <Card title="La vista non si è caricata"><p>Il browser non ha completato il caricamento. Ricarica la pagina per riprovare oppure scegli un altro modulo dalla sidebar.</p><Button onClick={() => window.location.reload()}>Ricarica la pagina</Button></Card> : this.props.children; }
 }
 
 function StylesPage({ onCreate, onOpen }) {
