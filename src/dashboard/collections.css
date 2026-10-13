@@ -1,0 +1,92 @@
+.dw-collections-page { display:grid; gap:18px; }
+.dw-collections-page > .dw-page-head { margin-bottom:0; }
+.dw-collections-summary { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+.dw-collections-summary > div { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px 14px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); color:var(--text-2); font-size:12px; }
+.dw-collections-summary strong { color:var(--text); font-size:17px; font-variant-numeric:tabular-nums; }
+.dw-collection-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr)); gap:12px; }
+.dw-collection-card { display:flex; flex-direction:column; align-items:flex-start; gap:9px; min-width:0; padding:16px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); color:var(--text); text-align:left; }
+.dw-collection-card > strong { overflow:hidden; max-width:100%; font-size:15px; font-weight:600; text-overflow:ellipsis; white-space:nowrap; }
+.dw-collection-card-count { color:var(--text-3); font-size:12px; }
+.dw-collection-card-actions { display:flex; width:100%; gap:8px; margin-top:7px; padding-top:12px; border-top:1px solid var(--divider); }
+.dw-collection-card-actions > .dw-btn { flex:1; min-width:0; padding-inline:8px; font-size:11px; }
+.dw-collection-detail-head { align-items:flex-end; }
+.dw-collection-back { display:flex; align-items:center; gap:5px; margin:0 0 9px; padding:0; border:0; background:transparent; color:var(--text-3); font-size:11px; cursor:pointer; }
+.dw-collection-back:hover { color:var(--text); }
+.dw-collection-detail-head h2 { margin-bottom:5px; }
+.dw-collections-page > .dw-card .dw-card-head h2 { font-size:18px; font-weight:650; }
+.dw-collection-settings .dw-card-body { display:flex; align-items:center; }
+.dw-collection-settings .dw-field { width:min(300px,100%); }
+.dw-collection-products { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(210px,100%),1fr)); gap:12px; }
+.dw-collection-product { position:relative; display:block; min-width:0; aspect-ratio:4 / 5; padding:0; overflow:hidden; border:1px solid var(--border); border-radius:18px; background:var(--surface-2); color:var(--text); text-align:left; isolation:isolate; }
+.dw-collection-product::before { position:absolute; z-index:1; right:0; bottom:0; left:0; height:25%; overflow:hidden; border-radius:inherit; content:''; background:rgb(255 255 255 / 14%); -webkit-backdrop-filter:blur(14px) saturate(1.15); backdrop-filter:blur(14px) saturate(1.15); -webkit-mask-image:linear-gradient(to top,#000 0%,rgb(0 0 0 / 92%) 24%,rgb(0 0 0 / 68%) 48%,rgb(0 0 0 / 32%) 72%,transparent 100%); mask-image:linear-gradient(to top,#000 0%,rgb(0 0 0 / 92%) 24%,rgb(0 0 0 / 68%) 48%,rgb(0 0 0 / 32%) 72%,transparent 100%); pointer-events:none; }
+.dw-collection-product::after { position:absolute; z-index:2; right:0; bottom:0; left:0; height:25%; border-radius:inherit; content:''; background:linear-gradient(to top,rgb(255 255 255 / 84%) 0%,rgb(255 255 255 / 62%) 34%,rgb(255 255 255 / 30%) 68%,rgb(255 255 255 / 8%) 88%,transparent 100%); pointer-events:none; }
+.dw-collection-product-image { position:absolute; inset:0; display:block; overflow:hidden; border-radius:inherit; }
+.dw-collection-product-image img { width:100%; height:100%; object-fit:cover; transition:transform 220ms ease,filter 180ms ease; }
+.dw-collection-product-info { position:absolute; z-index:3; inset:0; display:flex; flex-direction:column; align-items:stretch; justify-content:flex-end; gap:5px; padding:17px 14px 9px; }
+.dw-collection-product-heading { display:grid; justify-items:start; gap:3px; text-align:left; }
+.dw-collection-product-heading strong { max-width:100%; overflow:hidden; color:var(--text); text-overflow:ellipsis; white-space:nowrap; font-size:18px; font-weight:700; letter-spacing:-.02em; }
+.dw-collection-product-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.dw-collection-product-variant { color:var(--text); font-size:11px; font-weight:400; }
+.dw-collection-product-action { display:grid; min-width:96px; justify-items:end; }
+.dw-collection-product-model,.dw-collection-product-cta { grid-area:1 / 1; }
+.dw-collection-product-model { color:var(--text); font-size:11px; font-weight:600; }
+.dw-collection-product-cta { position:absolute; z-index:4; top:50%; left:50%; display:flex; min-height:32px; align-items:center; justify-content:center; gap:8px; padding:0 13px; border:1px solid #ffffff; border-radius:999px; background:#ffffff; box-shadow:0 2px 8px #00000018; color:#171717; font-size:11px; font-weight:600; opacity:0; pointer-events:none; transform:translate(-50%,-50%) scale(.96); transition:opacity 160ms ease,transform 160ms ease,background-color 140ms ease,color 140ms ease,border-color 140ms ease; visibility:hidden; white-space:nowrap; }
+.dw-collection-add-list strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12px; font-weight:550; }
+.dw-collection-add-list small { color:var(--text-3); font-size:10px; }
+.dw-collection-product > .dw-icon { margin-left:auto; color:var(--text-3); }
+.dw-collection-add-list { display:grid; gap:5px; }
+.dw-collection-add-list > div { display:flex; min-width:0; align-items:center; gap:9px; padding:7px; border:1px solid var(--border); border-radius:var(--radius); }
+.dw-collection-add-list > div > span:nth-child(2) { display:grid; min-width:0; flex:1; gap:4px; }
+.dw-collection-add-list .dw-btn { min-height:30px; padding:5px 9px; font-size:11px; }
+.dw-collection-team { display:grid; gap:14px; }
+.dw-collection-team-section { display:grid; gap:7px; }
+.dw-collection-team-card .dw-collection-team-section > h3 { margin:0; color:var(--text-3); font-size:12px; font-weight:600; letter-spacing:.04em; line-height:1.3; text-transform:uppercase; }
+.dw-collection-team-members { display:flex; flex-wrap:wrap; align-items:center; padding:2px 0; }
+.dw-collection-teammate { position:relative; display:grid; place-items:center; flex:0 0 40px; width:40px; height:40px; margin:0 0 0 -9px; padding:2px; border:2px solid var(--surface); border-radius:50%; background:var(--surface); cursor:help; transition:transform 140ms ease,box-shadow 140ms ease; }
+.dw-collection-teammate:first-child { margin-left:0; }
+.dw-collection-teammate::after { position:absolute; z-index:3; bottom:calc(100% + 7px); left:50%; padding:5px 8px; border-radius:6px; background:var(--text); color:var(--surface); content:attr(data-name); font-size:10px; font-weight:550; line-height:1.2; opacity:0; pointer-events:none; transform:translate(-50%,3px); transition:opacity 120ms ease,transform 120ms ease; white-space:nowrap; }
+.dw-collection-teammate:hover,.dw-collection-teammate:focus-visible { z-index:4; box-shadow:0 2px 8px #00000022; transform:translateY(-2px); }
+.dw-collection-teammate:disabled { cursor:default; }
+.dw-collection-teammate:hover::after,.dw-collection-teammate:focus-visible::after { opacity:1; transform:translate(-50%,0); }
+.dw-collection-avatar { display:grid; place-items:center; width:100%; height:100%; overflow:hidden; border-radius:50%; background:color-mix(in srgb,var(--actor-color) 15%,var(--surface)); color:var(--actor-color); font-size:11px; font-weight:600; }
+.dw-collection-avatar img { width:100%; height:100%; object-fit:cover; }
+.dw-dialog.dw-collection-contact-dialog { width:min(460px,calc(100% - 28px)); overflow:hidden; border-radius:18px; box-shadow:0 24px 70px -24px #11182755,0 0 0 1px color-mix(in srgb,var(--border) 78%,transparent); }
+.dw-collection-contact-dialog > header { position:relative; padding:22px 22px 14px; border:0; background:var(--surface); }
+.dw-collection-contact-dialog > header h2 { font-size:19px; font-weight:650; letter-spacing:-.025em; }
+.dw-collection-contact-dialog > header p { margin-top:5px; font-size:12.5px; }
+.dw-collection-contact-dialog > .dw-dialog-body { gap:18px; padding:4px 22px 22px; }
+.dw-collection-contact-recipient { display:flex; align-items:center; gap:12px; min-width:0; padding:12px; border:1px solid var(--border); border-radius:14px; background:var(--surface-2); }
+.dw-collection-contact-avatar { display:grid; flex:0 0 46px; width:46px; height:46px; place-items:center; overflow:hidden; border:1px solid var(--border); border-radius:50%; background:var(--surface); }
+.dw-collection-contact-avatar .dw-collection-avatar { font-size:13px; }
+.dw-collection-contact-recipient-copy { display:grid; min-width:0; gap:2px; }
+.dw-collection-contact-recipient-copy > small { color:var(--text-3); font-size:9px; font-weight:650; letter-spacing:.09em; }
+.dw-collection-contact-recipient-copy > strong { overflow:hidden; font-size:14px; font-weight:650; text-overflow:ellipsis; white-space:nowrap; }
+.dw-collection-contact-recipient-copy > span { overflow:hidden; color:var(--text-3); font-size:11px; text-overflow:ellipsis; white-space:nowrap; }
+.dw-collection-contact-actions { display:grid; gap:9px; }
+.dw-collection-contact-prompt { margin:0 0 1px; color:var(--text-2); font-size:11px; font-weight:600; }
+.dw-collection-contact-option { display:grid; grid-template-columns:42px minmax(0,1fr) 18px; align-items:center; gap:12px; min-height:74px; padding:11px 13px; border:1px solid var(--border); border-radius:14px; background:var(--surface); color:var(--text); text-align:left; transition:border-color 140ms ease,background 140ms ease,transform 140ms ease,box-shadow 140ms ease; }
+.dw-collection-contact-option:hover { border-color:var(--accent-line); background:color-mix(in srgb,var(--accent-soft) 55%,var(--surface)); box-shadow:0 5px 16px -12px #11182755; transform:translateY(-1px); }
+.dw-collection-contact-option-icon { display:grid; width:42px; height:42px; place-items:center; border-radius:13px; background:var(--accent-soft); color:var(--accent); }
+.dw-collection-contact-option.is-reminder .dw-collection-contact-option-icon { background:color-mix(in srgb,var(--amber) 12%,var(--surface)); color:var(--amber); }
+.dw-collection-contact-option-copy { display:grid; gap:3px; }
+.dw-collection-contact-option-copy strong { font-size:13px; font-weight:650; }
+.dw-collection-contact-option-copy small { color:var(--text-3); font-size:11px; }
+.dw-collection-contact-option > .dw-icon { color:var(--text-4); }
+.dw-collection-contact-form { display:grid; gap:16px; }
+.dw-collection-contact-form .dw-field { gap:8px; color:var(--text); font-size:12px; }
+.dw-collection-contact-form .dw-field textarea { min-height:124px; padding:12px 13px; border-radius:12px; background:var(--surface-2); font-size:13px; line-height:1.5; resize:vertical; }
+.dw-collection-contact-footer { display:grid; gap:12px; }
+.dw-collection-contact-footer > span { color:var(--text-3); font-size:10.5px; }
+.dw-collection-contact-footer .dw-dialog-actions { padding-top:13px; }
+@media (hover:hover) {
+  .dw-collection-card:hover,.dw-collection-product:hover { border-color:var(--border-strong); box-shadow:0 4px 12px -6px #0000001a; }
+  .dw-collection-product:hover .dw-collection-product-image img { filter:blur(4px); transform:scale(1.04); }
+}
+.dw-collection-product:hover .dw-collection-product-cta,.dw-collection-product:focus-visible .dw-collection-product-cta { opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); visibility:visible; }
+.dw-collection-product-cta:hover { border-color:#171717; background:#171717; color:#ffffff; }
+.dw-collection-product:focus-visible .dw-collection-product-image img { filter:blur(4px); transform:scale(1.04); }
+@media (max-width:600px) {
+  .dw-collections-summary { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .dw-collection-detail-head { align-items:flex-start; }
+  .dw-collection-detail-head > .dw-actions { padding-top:18px; }
+}

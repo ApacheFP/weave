@@ -34,41 +34,7 @@ function drawArtwork(ctx, artwork) {
   ctx.shadowColor = 'rgba(74,57,33,.2)';
   ctx.shadowBlur = 24;
   ctx.shadowOffsetY = 12;
-  ctx.drawImage(artwork, 222, 360, 580, 580);
-  ctx.restore();
-}
-
-function drawCardCopy(ctx, module) {
-  const left = 72;
-  const copyWidth = 528;
-  const centerY = 1153.5;
-  const fontSize = 42;
-  const lineHeight = 58;
-  const lines = [];
-
-  ctx.save();
-  ctx.font = `400 ${fontSize}px ${font}`;
-  for (const sourceLine of module.copy) {
-    let line = '';
-    for (const word of sourceLine.split(/\s+/)) {
-      const candidate = line ? `${line} ${word}` : word;
-      if (line && ctx.measureText(candidate).width > copyWidth) {
-        lines.push(line);
-        line = word;
-      } else {
-        line = candidate;
-      }
-    }
-    if (line) lines.push(line);
-  }
-
-  ctx.fillStyle = '#4d473d';
-  ctx.textBaseline = 'middle';
-  const textHeight = lines.length * lineHeight;
-  lines.forEach((line, index) => {
-    ctx.fillText(line, left, centerY - textHeight / 2 + lineHeight * (index + .5));
-  });
-
+  ctx.drawImage(artwork, 232, 440, 560, 560);
   ctx.restore();
 }
 
@@ -100,25 +66,11 @@ export async function createModuleCards(items = modules) {
           const metrics = ctx.measureText(line);
           return 104 * (row ? 880 : 704) / Math.max(metrics.width, metrics.actualBoundingBoxRight);
         }));
-        module.lines.forEach((line, row) => text(ctx, line, 72, 254 + row * 104, titleSize, .93, '"Matcha Style"'));
         ctx.save();
-        ctx.fillStyle = 'rgba(255,255,255,.65)';
-        ctx.beginPath();
-        ctx.roundRect(808, 108, 144, 64, 32);
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(74,57,33,.1)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        ctx.font = `400 30px ${font}`;
-        ctx.fillStyle = '#514b41';
-        ctx.globalAlpha = .82;
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(`${String(index + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`, 880, 140);
+        module.lines.forEach((line, row) => text(ctx, line, 512, 300 + row * 104, titleSize, .93, '"Matcha Style"'));
         ctx.restore();
-
         drawArtwork(ctx, artwork[index]);
-        drawCardCopy(ctx, module);
       },
     };
   });

@@ -7,7 +7,7 @@ export const moduleSlugs = {
 };
 export const pagePaths = {
   home: '/atelier', inbox: '/atelier/inbox', 'my-tasks': '/atelier/le-mie-attivita',
-  notifications: '/atelier/notifiche', capi: '/atelier/capi', activity: '/atelier/attivita',
+  notifications: '/atelier/notifiche', capi: '/atelier/capi', collections: '/atelier/collezioni', activity: '/atelier/attivita',
   settings: '/atelier/impostazioni', profile: '/atelier/profilo',
 };
 export const settingsSlugs = {

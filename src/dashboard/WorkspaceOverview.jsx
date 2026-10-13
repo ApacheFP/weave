@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useDemo } from './DemoContext.jsx';
 import { styleLabel } from './productData.js';
 import { modules } from '../modules.js';
-import { Badge, Button, Card, Empty, Icon, Tabs } from './ui.jsx';
-import { ProductPhoto } from './Media.jsx';
+import { Button, Card, Empty, Icon, Tabs } from './ui.jsx';
 import { actorStyle, localDate } from './workspaceData.js';
 import { sameActor } from './workspaceIdentity.js';
 import './workspace-overview.css';
@@ -11,8 +10,6 @@ import './workspace-overview.css';
 const dateLabel = value => value ? new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'short' }).format(new Date(value + 'T12:00:00')) : 'Senza scadenza';
 const moduleLabel = id => id === 21 ? 'Panoramica del capo' : modules.find(item => item.id === id)?.title || 'Filiera';
 const initials = name => name.split(/\s+/).filter(Boolean).map(part => part[0]).slice(0, 2).join('');
-const stateLabel = item => item.passportPublished ? 'Passaporto pubblicato' : item.produced ? 'In produzione' : item.technical?.approvedId ? 'Sviluppo tecnico' : item.sketchFile ? 'Concept pronto' : 'Concept in bozza';
-const stateTone = item => item.passportPublished || item.produced ? 'success' : item.technical?.approvedId ? 'info' : item.sketchFile ? 'violet' : '';
 
 function eventTime(event) {
   if (event.at) return Date.parse(event.at);
@@ -31,7 +28,7 @@ function EventRows({ events, onOpenModule }) {
 }
 
 export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
-  const { data, products, workspaceItems, tasks, inbox, updateTask } = useDemo();
+  const { data, products, workspaceItems, workspaceCollections, tasks, inbox, updateTask } = useDemo();
   const [taskView, setTaskView] = useState('Prossime');
   const today = localDate();
   const mine = tasks.filter(task => sameActor(task.assignee, data.profile));
@@ -42,6 +39,7 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
   const ordered = list => [...list].sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999'));
   const unread = inbox.filter(item => !item.read).length;
   const recent = eventsOf(workspaceItems).slice(0, 4);
+  const collectionNames = [...new Set([...Object.keys(workspaceCollections), ...workspaceItems.map(item => item.collection)])].sort((a, b) => a.localeCompare(b, 'it-IT'));
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Buongiorno' : hour < 18 ? 'Buon pomeriggio' : 'Buonasera';
   const date = new Intl.DateTimeFormat('it-IT', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
@@ -67,10 +65,9 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
           </div>)}
           {!lists[taskView].length && <Empty>{taskView === 'In ritardo' ? 'Nessun incarico in ritardo.' : 'Nessun incarico in questa vista.'}</Empty>}
         </Card>
-        <Card flush title="Capi in Atelier" actions={<Button onClick={() => onOpenPage('capi')}>Tutti i capi</Button>}>
-          <div className="dw-table-wrap"><table className="dw-table dw-workspace-portfolio"><thead><tr><th>Capo</th><th>Fase attuale</th><th>Produzione</th><th>Consegna</th></tr></thead><tbody>{products.map(item => <tr key={item.styleId}>
-            <td><button type="button" className="dw-workspace-style-link" onClick={() => onOpenModule(item.styleId, 21)}><span className="dw-style-card-photo"><ProductPhoto product={item} sizes="40px" alt="" /></span><span><strong>{item.title}</strong><small className="dw-code">{item.productId}{item.variants.length > 1 && ` · ${item.variants.length} varianti`}</small></span></button></td>
-            <td><Badge tone={stateTone(item)}>{stateLabel(item)}</Badge></td><td>{item.totalProduced} / {item.totalQuantity}</td><td>{dateLabel(item.delivery)}</td>
+        <Card flush title="Collezioni in Atelier" actions={<Button onClick={() => onOpenPage('collections')}>Tutte le collezioni</Button>}>
+          <div className="dw-table-wrap"><table className="dw-table"><thead><tr><th>Collezione</th><th>Capi associati</th></tr></thead><tbody>{collectionNames.map(name => <tr key={name}>
+            <td><strong>{name}</strong></td><td>{workspaceItems.filter(item => item.collection === name).length}</td>
           </tr>)}</tbody></table></div>
         </Card>
       </div>

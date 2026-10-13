@@ -1,0 +1,689 @@
+/* ========================================================
+   STANDALONE PROFILE DASHBOARD (WEAVE)
+   Profilo singolo autonomo in attesa di atelier/team
+   ======================================================== */
+
+@font-face {
+  font-family: 'Stay With Me';
+  src: url('/fonts/stay-with-me.otf') format('opentype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+.dw-standalone-shell {
+  min-height: 100vh;
+  background: #fbfbfb;
+  color: #242424;
+  font-family: var(--sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif);
+  display: flex;
+  flex-direction: column;
+}
+
+/* TOP BAR */
+.dw-standalone-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: #ffffff;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.dw-standalone-brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dw-standalone-brand {
+  font: 400 34px/1 'Stay With Me', sans-serif !important;
+  color: #242424;
+  letter-spacing: 0;
+  display: inline-flex;
+  align-items: center;
+  transform: translateY(2px);
+}
+
+.dw-standalone-brand-badge {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 600;
+  color: #777;
+  padding: 2px 8px;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+}
+
+.dw-standalone-user-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.dw-standalone-user-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 20px;
+  background: #f5f5f5;
+  border: 1px solid #e5e5e5;
+  font-size: 12px;
+}
+
+.dw-standalone-user-avatar-mini {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dw-standalone-user-name {
+  font-weight: 600;
+  color: #242424;
+}
+
+.dw-standalone-user-handle {
+  color: #777777;
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+}
+
+.dw-standalone-signout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #555555;
+  cursor: pointer;
+  transition: all 120ms;
+}
+
+.dw-standalone-signout-btn:hover {
+  background: #f0f0f0;
+  color: #242424;
+  border-color: #c5c5c5;
+}
+
+/* MAIN CONTAINER */
+.dw-standalone-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.dw-standalone-card {
+  width: 100%;
+  max-width: 620px;
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
+  padding: 32px 36px;
+}
+
+/* STATUS BAR */
+.dw-standalone-status-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f4f4f4;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+  padding: 4px 12px;
+  margin-bottom: 24px;
+}
+
+.dw-standalone-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #242424;
+}
+
+.dw-standalone-status-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: #444444;
+  letter-spacing: 0.02em;
+}
+
+/* PROFILE HEADER */
+.dw-standalone-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.dw-standalone-avatar-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px solid #242424;
+  padding: 2px;
+  flex-shrink: 0;
+}
+
+.dw-standalone-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.dw-standalone-profile-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.dw-standalone-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #242424;
+  margin: 0;
+}
+
+.dw-standalone-handle {
+  font-family: var(--mono, monospace);
+  font-size: 13px;
+  color: #666666;
+}
+
+.dw-standalone-role-badge {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 4px;
+  background: #242424;
+  color: #ffffff;
+  padding: 3px 10px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* NOTICE TEXT */
+.dw-standalone-notice {
+  background: #fafafa;
+  border-left: 3px solid #242424;
+  padding: 14px 18px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 24px;
+}
+
+.dw-standalone-notice-lead {
+  font-size: 13px;
+  font-weight: 600;
+  color: #242424;
+  margin: 0 0 6px;
+  line-height: 1.45;
+}
+
+.dw-standalone-notice-sub {
+  font-size: 12.5px;
+  color: #666666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* DATA BOX */
+.dw-standalone-data-box {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.dw-standalone-data-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+}
+
+.dw-standalone-data-row:last-child {
+  border-bottom: none;
+}
+
+.dw-standalone-data-label {
+  color: #777777;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.dw-standalone-data-value {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dw-standalone-data-value code {
+  font-family: var(--mono, monospace);
+  font-size: 12.5px;
+  background: #f5f5f5;
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: #242424;
+}
+
+.dw-standalone-data-value strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: #242424;
+}
+
+.dw-standalone-copy-mini-btn {
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #444444;
+  cursor: pointer;
+  transition: all 120ms;
+}
+
+.dw-standalone-copy-mini-btn:hover {
+  background: #f7f7f7;
+  border-color: #242424;
+  color: #242424;
+}
+
+.dw-copied-badge {
+  color: #1a7f37;
+  font-weight: 600;
+}
+
+.dw-standalone-skills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.dw-standalone-skill-chip {
+  background: #f4f4f4;
+  color: #444444;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  border: 1px solid #e0e0e0;
+}
+
+/* MAIN ACTION SECTION */
+.dw-standalone-action-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.dw-standalone-share-btn {
+  width: 100%;
+  height: 48px;
+  border-radius: 10px;
+  background: #242424;
+  color: #ffffff;
+  border: none;
+  font-size: 14.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  cursor: pointer;
+  transition: all 140ms;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dw-standalone-share-btn:hover {
+  background: #111111;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.dw-standalone-toast {
+  font-size: 12px;
+  color: #1a7f37;
+  font-weight: 600;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 6px 14px;
+  border-radius: 6px;
+  animation: onbToastFade 250ms ease-out;
+}
+
+@keyframes onbToastFade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* DEMO SIMULATION FOOTER */
+.dw-standalone-demo-box {
+  background: #fcfcfc;
+  border: 1px dashed #d5d5d5;
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.dw-standalone-demo-text strong {
+  display: block;
+  font-size: 12px;
+  color: #333333;
+  margin-bottom: 2px;
+}
+
+.dw-standalone-demo-text p {
+  font-size: 11.5px;
+  color: #777777;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.dw-standalone-join-btn {
+  background: #ffffff;
+  border: 1px solid #242424;
+  color: #242424;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 120ms;
+}
+
+.dw-standalone-join-btn:hover {
+  background: #242424;
+  color: #ffffff;
+}
+
+/* MODAL */
+.dw-standalone-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.dw-standalone-modal {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.16);
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  animation: onbModalIn 180ms ease-out;
+}
+
+@keyframes onbModalIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.dw-standalone-modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 24px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.dw-standalone-modal-head h2 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: #242424;
+}
+
+.dw-standalone-modal-head p {
+  font-size: 12px;
+  color: #666666;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.dw-standalone-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: #888888;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.dw-standalone-modal-close:hover {
+  color: #242424;
+}
+
+.dw-standalone-modal-body {
+  padding: 20px 24px;
+}
+
+.dw-standalone-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.dw-standalone-modal-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #444444;
+}
+
+.dw-standalone-modal-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  font-family: inherit;
+  font-size: 12.5px;
+  color: #242424;
+  line-height: 1.5;
+  background: #fbfbfb;
+  resize: none;
+  outline: none;
+}
+
+.dw-standalone-modal-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dw-standalone-modal-copy-btn {
+  flex: 1;
+  min-width: 180px;
+  height: 38px;
+  background: #242424;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 120ms;
+}
+
+.dw-standalone-modal-copy-btn:hover {
+  background: #111111;
+}
+
+.dw-standalone-modal-mini-copy {
+  height: 38px;
+  padding: 0 12px;
+  background: #f5f5f5;
+  border: 1px solid #dcdcdc;
+  color: #333333;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 120ms;
+}
+
+.dw-standalone-modal-mini-copy:hover {
+  background: #eaeaea;
+  border-color: #242424;
+}
+
+.dw-standalone-modal-foot {
+  padding: 14px 24px;
+  background: #fafafa;
+  border-top: 1px solid #ebebeb;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dw-standalone-modal-done-btn {
+  padding: 6px 18px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  color: #242424;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.dw-standalone-modal-done-btn:hover {
+  background: #f0f0f0;
+}
+
+@media (max-width: 640px) {
+  .dw-standalone-topbar {
+    padding: 10px 14px;
+    gap: 10px;
+  }
+
+  .dw-standalone-brand {
+    font-size: 26px;
+  }
+
+  .dw-standalone-brand-badge {
+    display: none;
+  }
+
+  .dw-standalone-user-controls {
+    gap: 8px;
+  }
+
+  .dw-standalone-user-handle {
+    display: none;
+  }
+
+  .dw-standalone-user-pill {
+    padding: 3px 8px 3px 3px;
+    font-size: 11px;
+  }
+
+  .dw-standalone-main {
+    padding: 16px 10px;
+  }
+
+  .dw-standalone-card {
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  .dw-standalone-profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .dw-standalone-avatar-wrap {
+    margin: 0 auto;
+  }
+
+  .dw-standalone-role-badge {
+    align-self: center;
+  }
+
+  .dw-standalone-notice {
+    padding: 12px 14px;
+  }
+
+  .dw-standalone-notice-lead {
+    font-size: 12.5px;
+  }
+
+  .dw-standalone-notice-sub {
+    font-size: 11.5px;
+  }
+
+  .dw-standalone-data-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 10px 12px;
+  }
+
+  .dw-standalone-data-value {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .dw-standalone-data-value code {
+    font-size: 11.5px;
+  }
+
+  .dw-standalone-share-btn {
+    height: 46px;
+    font-size: 13.5px;
+  }
+
+  .dw-standalone-demo-box {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .dw-standalone-join-btn {
+    text-align: center;
+    width: 100%;
+  }
+
+  .dw-standalone-modal {
+    margin: 10px;
+    max-height: 90dvh;
+    overflow-y: auto;
+  }
+
+  .dw-standalone-modal-buttons {
+    flex-direction: column;
+  }
+
+  .dw-standalone-modal-copy-btn,
+  .dw-standalone-modal-mini-copy {
+    width: 100%;
+    text-align: center;
+  }
+}

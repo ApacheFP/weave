@@ -6,6 +6,7 @@ import ProfileMenu from './ProfileMenu.jsx';
 import { DemoProvider, useDemo } from './dashboard/DemoContext.jsx';
 import { Button, Card, Dialog } from './dashboard/ui.jsx';
 import Dashboard from './dashboard/Dashboard.jsx';
+import StandaloneProfileDashboard from './dashboard/StandaloneProfileDashboard.jsx';
 import { explorePath, modulePath, pagePath, readCurrentRoute, resolveRoute, navigateTo } from './routes.js';
 
 function Arrow({ direction }) {
@@ -95,7 +96,7 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
     else if (event.key === 'ArrowRight') carousel.current.go(1);
     else if (event.key === 'Home') carousel.current.show(0);
     else if (event.key === 'End') carousel.current.show(items.length - 1);
-    else if (event.key === 'Enter' && !items[index].serviceInfo && ready) onEnter(items[index].routeId);
+    else if (event.key === 'Enter' && ready && items[index].routeId) onEnter(items[index].routeId, items[index].serviceId);
     else return;
     event.preventDefault();
   }
@@ -113,22 +114,19 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
     <section className="carousel" id={`carousel-${group.id}`} aria-describedby="carousel-context carousel-hint" aria-roledescription="carosello" onKeyDown={handleKey}>
       <div className="carousel-stage" ref={host} tabIndex={0} aria-label={`Esplora ${label.toLowerCase()} con le frecce della tastiera`} aria-describedby="carousel-hint">
         <div className="card-entry" ref={entry} data-positioned="false">
-          <div className="card-entry-footer"><p aria-hidden="true">{items[index].copy.join(' ')}</p>{!items[index].serviceInfo
-            ? <button type="button" className="card-enter-button" disabled={!ready} aria-label={`Entra nel modulo ${items[index].title}`} onClick={event => { event.stopPropagation(); onEnter(items[index].routeId); }} onKeyDown={event => event.stopPropagation()}><span>Entra</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5" /></svg></button>
-            : <button ref={infoButton} type="button" className="card-enter-button card-details-button" disabled={!ready} aria-label={`Scopri di più su ${items[index].title}`} aria-expanded={Boolean(infoState)} aria-controls={infoState ? `service-info-${items[index].id}` : undefined} onClick={event => { event.stopPropagation(); setInfoCard({ id: items[index].id, state: 'opening' }); }} onKeyDown={event => event.stopPropagation()}><span>Scopri di più</span></button>
-          }</div>
-          {items[index].serviceInfo && <>
-            {infoState && <div id={`service-info-${items[index].id}`} className={`service-info-back is-${infoState}`} role="group" aria-label={`Informazioni sul servizio ${items[index].title}`} onAnimationEnd={event => {
+          <span className="card-index-top" aria-hidden="true">{String(index + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}</span>
+          <button ref={infoButton} type="button" className="card-info-top" disabled={!ready} aria-label={`Informazioni su ${items[index].title}`} aria-expanded={Boolean(infoState)} aria-controls={infoState ? `service-info-${items[index].id}` : undefined} onClick={event => { event.stopPropagation(); setInfoCard({ id: items[index].id, state: 'opening' }); }} onKeyDown={event => event.stopPropagation()}>i</button>
+          <button type="button" className="card-enter-button" disabled={!ready || !items[index].routeId} aria-label={`Entra in ${items[index].title}`} onClick={event => { event.stopPropagation(); onEnter(items[index].routeId, items[index].serviceId); }} onKeyDown={event => event.stopPropagation()}><span>Entra</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5" /></svg></button>
+          {infoState && <div id={`service-info-${items[index].id}`} className={`service-info-back is-${infoState}`} role="group" aria-label={`Informazioni su ${items[index].title}`} onAnimationEnd={event => {
               if (event.animationName === 'service-info-flip-out') {
                 setInfoCard(null);
                 infoButton.current?.focus({ preventScroll: true });
               }
             }}>
-              <h2>{items[index].lines.map(line => <span key={line}>{line}</span>)}</h2>
-              <p>{items[index].serviceInfo}</p>
+              <h2>{items[index].title}</h2>
+              <p>{items[index].serviceInfo || items[index].copy.join(' ')}</p>
               <button type="button" className="service-info-return card-info-button" aria-label="Torna alla card" onClick={closeServiceInfo}><span className="card-info-mark card-return-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m14 6-6 6 6 6" /></svg></span><span>Torna alla card</span></button>
             </div>}
-          </>}
         </div>
       </div>
       {!ready && <p className="carousel-message" role="status">{error || `Caricamento ${label.toLowerCase()}…`}</p>}
@@ -144,9 +142,8 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
 
       <p className="sr-only" aria-live="polite" aria-atomic="true">Card {index + 1} di {items.length}: {items[index].title}. {items[index].copy.join(' ')}</p>
       <ol className={error ? 'carousel-fallback' : 'carousel-access sr-only'} aria-label="Accesso ai moduli e ai servizi">{items.map(module => <li key={module.id}>
-        {module.serviceInfo
-          ? <details><summary>{module.title}</summary><p>{module.serviceInfo}</p></details>
-          : <button type="button" onClick={() => onEnter(module.routeId)}>Entra in {module.title}</button>}
+        {module.serviceInfo && <details><summary>{module.title}</summary><p>{module.serviceInfo}</p></details>}
+        {module.routeId && <button type="button" onClick={() => onEnter(module.routeId, module.serviceId)}>Entra in {module.title}</button>}
         <span>{module.copy.join(' ')}</span>
       </li>)}</ol>
     </section>
@@ -174,13 +171,15 @@ function ProductPage({ onSignOut, onEnter, index, onIndexChange }) {
   );
 }
 
-function Workspace({ onSignOut }) {
+function Workspace({ onSignOut, onboardedProfile }) {
   const { flushWorkspace, exportWorkspace } = useDemo();
   const [confirmExit, setConfirmExit] = useState(false);
+  const [joinedTeam, setJoinedTeam] = useState(false);
   async function signOut() { if (await flushWorkspace()) onSignOut(); else setConfirmExit(true); }
 
   const [route, setRoute] = useState(() => resolveRoute(window.location));
   const [index, setIndex] = useState(0);
+  const [entryServiceId, setEntryServiceId] = useState(null);
   useEffect(() => {
     const change = () => setRoute(readCurrentRoute());
     change();
@@ -191,23 +190,62 @@ function Workspace({ onSignOut }) {
   const navigate = useCallback(id => {
     navigateTo(modulePath(id));
   }, []);
+  const enterModule = useCallback((id, serviceId) => {
+    setEntryServiceId(serviceId || null);
+    navigateTo(modulePath(id));
+  }, []);
+  const clearEntryService = useCallback(() => setEntryServiceId(null), []);
   const openPage = useCallback(page => {
     navigateTo(pagePath(page));
   }, []);
   const rememberIndex = useCallback((_id, nextIndex) => setIndex(nextIndex), []);
   function home() { navigateTo(explorePath); }
+
+  if (onboardedProfile?.mode === 'post-login' && !joinedTeam) {
+    return (
+      <StandaloneProfileDashboard
+        profile={onboardedProfile}
+        onJoinDemoTeam={() => setJoinedTeam(true)}
+        onSignOut={signOut}
+      />
+    );
+  }
+
   const content = route.kind === 'not-found'
     ? <div className="dw-app"><main className="dw-page"><Card title="Pagina non trovata"><p>Questo indirizzo non corrisponde a una pagina di WEAVE.</p><Button primary onClick={() => openPage('home')}>Torna ad Atelier</Button></Card></main></div>
     : route.kind !== 'explore'
-    ? <Dashboard moduleId={route.moduleId} workspacePage={route.page} inboxId={route.inboxId} settingsSection={route.settingsSection} onOpenPage={openPage} onNavigate={navigate} onHome={home} onSignOut={signOut} />
-    : <ProductPage onSignOut={signOut} onEnter={navigate} index={index} onIndexChange={rememberIndex} />;
+    ? <Dashboard moduleId={route.moduleId} workspacePage={route.page} inboxId={route.inboxId} settingsSection={route.settingsSection} initialServiceId={entryServiceId} onInitialServiceOpened={clearEntryService} onOpenPage={openPage} onNavigate={navigate} onHome={home} onSignOut={signOut} />
+    : <ProductPage onSignOut={signOut} onEnter={enterModule} index={index} onIndexChange={rememberIndex} />;
   return <>{content}{confirmExit && <Dialog title="Uscire con modifiche non salvate?" onClose={() => setConfirmExit(false)}><p>Il browser non ha completato il salvataggio. Scarica una copia per conservare le modifiche prima di uscire.</p><div className="dw-dialog-actions"><Button onClick={() => setConfirmExit(false)}>Resta nello spazio</Button><Button onClick={exportWorkspace}>Scarica una copia</Button><Button primary onClick={onSignOut}>Esci e scarta modifiche</Button></div></Dialog>}</>;
 }
 
 export default function App() {
   const [entered, setEntered] = useState(false);
+  const [onboardedProfile, setOnboardedProfile] = useState(null);
   useEffect(() => { readCurrentRoute(); }, []);
+
+  function handleEnter(options) {
+    if (options?.profile) {
+      setOnboardedProfile(options.profile);
+    }
+    if (options?.target) {
+      navigateTo(options.target);
+    }
+    setEntered(true);
+  }
+
   return entered
-    ? <DemoProvider><Workspace onSignOut={() => { setEntered(false); navigateTo(explorePath, { replace: true }); }} /></DemoProvider>
-    : <AuthPage onEnter={() => setEntered(true)} />;
+    ? (
+      <DemoProvider initialProfile={onboardedProfile}>
+        <Workspace
+          onboardedProfile={onboardedProfile}
+          onSignOut={() => {
+            setEntered(false);
+            setOnboardedProfile(null);
+            navigateTo(explorePath, { replace: true });
+          }}
+        />
+      </DemoProvider>
+    )
+    : <AuthPage onEnter={handleEnter} />;
 }

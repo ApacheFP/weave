@@ -147,27 +147,32 @@ input { font: inherit; }
 .carousel-stage:focus-visible { outline: 1px solid #9b9b9b; outline-offset: -8px; border-radius: 14px; }
 .card-entry { position: absolute; z-index: 2; pointer-events: none; border-radius: 12px; opacity: 1; transition: opacity 140ms; }
 .card-entry[data-positioned="false"] { opacity: 0; visibility: hidden; }
-.card-entry-footer { position: absolute; left: 7%; right: 7%; bottom: 6.5%; display: grid; grid-template-columns: 60% 30%; column-gap: 10%; align-items: center; }
-.card-entry-footer p { margin: 0; color: #444; font-size: clamp(11px, var(--card-copy-size), 18px); line-height: 1.45; text-wrap: pretty; opacity: 0; }
 .card-details-button { line-height: 1.2; }
-.card-enter-button { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; min-height: 42px; padding: 11px 6px; pointer-events: auto; border: 1px solid #282828; border-radius: 999px; background: #282828; color: #fff; font-size: clamp(11px, var(--card-copy-size), 13px); font-weight: 500; cursor: pointer; box-shadow: 0 4px 10px #00000018; transition: background 180ms, color 180ms, border-color 180ms, box-shadow 180ms; }
+.card-enter-button { position: absolute; bottom: 8%; left: 50%; display: flex; align-items: center; justify-content: center; gap: 7px; width: auto; min-width: 112px; min-height: 38px; padding: 8px 15px; pointer-events: auto; transform: translateX(-50%); border: 1px solid rgba(74,57,33,.1); border-radius: 999px; background: rgba(255,255,255,.65); color: #514b41; font: 500 13px/1 system-ui,sans-serif; cursor: pointer; box-shadow: 0 3px 10px rgba(74,57,33,.08); transition: background 180ms, color 180ms, box-shadow 180ms; }
 .card-enter-button svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .card-enter-button:focus-visible { outline: 2px solid #555; outline-offset: 4px; }
-.card-enter-button:hover { background: #555; color: #fff; border-color: #555; box-shadow: 0 5px 14px #00000020; }
-.card-enter-button:active { background: #444; box-shadow: none; }
+.card-enter-button:hover, .card-enter-button:active { background: rgba(255,255,255,.9); color: #2d2a25; }
+.card-index-top, .card-info-top { position:absolute; top:4%; z-index:3; display:grid; height:34px; place-items:center; padding:0 10px; pointer-events:auto; border:1px solid rgba(74,57,33,.1); border-radius:999px; background:rgba(255,255,255,.65); color:#514b41; font:500 12px/1 system-ui,sans-serif; box-shadow:0 3px 10px rgba(74,57,33,.08); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+.card-index-top { left:6.5%; white-space:nowrap; font-variant-numeric:tabular-nums; }
+.card-info-top { right:6.5%; width:34px; padding:0; border-radius:50%; font-size:15px; font-weight:600; cursor:pointer; transition:background 180ms,color 180ms; }
+.card-info-top:hover { background:rgba(255,255,255,.9); color:#2d2a25; }
+.card-info-top:focus-visible { outline:2px solid #555; outline-offset:3px; }
 .card-info-button { position: absolute; right: 6.5%; bottom: 6%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 34px; padding: 4px 11px 4px 5px; pointer-events: auto; border: 1px solid #888; border-radius: 999px; background: #fff; color: #444; font: 500 10px/1 system-ui, sans-serif; white-space: nowrap; cursor: pointer; box-shadow: 0 3px 10px #0000001c; transition: transform 180ms, background 180ms, color 180ms; }
 .card-info-mark { display: grid; place-items: center; width: 23px; aspect-ratio: 1; border: 1px solid #999; border-radius: 50%; background: #f5f5f5; color: #444; font: italic 600 15px/1 Georgia, serif; }
 .card-return-mark svg { display: block; width: 12px; height: 12px; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .card-info-button:hover { transform: scale(1.04); background: #282828; color: #fff; }
 .card-info-button:hover .card-info-mark { border-color: #fff; background: #fff; color: #282828; }
 .card-info-button:focus-visible, .service-info-return:focus-visible { outline: 2px solid #555; outline-offset: 3px; }
-.service-info-back { position: absolute; z-index: 4; inset: 0; display: flex; flex-direction: column; align-items: flex-start; padding: clamp(14px, 6%, 28px); overflow: hidden; pointer-events: auto; border: 1px solid #ccc; border-radius: 15px; background: linear-gradient(145deg, #fff, #eee 72%, #ddd); color: #353535; box-shadow: 0 16px 38px #00000025, inset 0 1px #fff9; backface-visibility: hidden; transform-origin: center; }
+.service-info-back { position: absolute; z-index: 4; inset: 0; display: flex; flex-direction: column; align-items: stretch; padding: clamp(14px, 6%, 28px); overflow: hidden; pointer-events: auto; border: 1px solid rgba(74,57,33,.12); border-radius: 15px; background: linear-gradient(180deg, rgba(255,255,255,.08) 44%, rgba(255,255,255,.92) 100%), rgba(255,255,255,.42); color: #2d2a25; box-shadow: 0 8px 24px rgba(74,57,33,.1), inset 0 1px #ffffffb8; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); backface-visibility: hidden; transform-origin: center; }
 .service-info-back.is-opening { animation: service-info-flip-in 360ms cubic-bezier(.2, .72, .22, 1) both; }
 .service-info-back.is-closing { animation: service-info-flip-out 300ms cubic-bezier(.55, 0, .8, .35) both; }
-.service-info-back h2 { max-width: 100%; margin: 0 0 14px; font-family: 'Matcha Style', system-ui, sans-serif; font-size: clamp(18px, 5vw, 32px); font-weight: 400; line-height: 1.05; }
-.service-info-back h2 span { display: block; }
-.service-info-back p { min-height: 0; flex: 1; max-width: 100%; margin: 0; overflow-y: auto; overscroll-behavior: contain; color: #666; font-size: clamp(11px, 2.5vw, 14px); line-height: 1.6; }
-.service-info-return { position: static; flex-shrink: 0; margin-top: 16px; align-self: flex-end; }
+.service-info-back h2 { width: 100%; max-width: 100%; margin: 0 0 14px; color: #2d2a25; font-family: 'Matcha Style', system-ui, sans-serif; font-size: clamp(20px, 6vw, 32px); font-weight: 400; line-height: 1.05; text-align: center; text-wrap: pretty; }
+.service-info-back p { min-height: 0; flex: 1; max-width: 100%; margin: 0; overflow-y: auto; overscroll-behavior: contain; color: #514b41; font-size: clamp(12px, 2.8vw, 15px); line-height: 1.55; white-space: pre-line; }
+.service-info-return { position: static; flex-shrink: 0; align-self: center; min-height: 42px; margin-top: 16px; padding: 9px 16px; border-color: rgba(74,57,33,.1); background: rgba(255,255,255,.72); color: #514b41; font: 500 13px/1 system-ui,sans-serif; box-shadow: 0 3px 10px rgba(74,57,33,.08); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.service-info-return:hover, .service-info-return:active { transform: translateY(-1px); border-color: rgba(74,57,33,.12); background: rgba(255,255,255,.92); color: #2d2a25; box-shadow: 0 5px 14px rgba(74,57,33,.12); }
+.service-info-return .card-info-mark { width: auto; aspect-ratio: auto; border: 0; background: transparent; color: currentColor; }
+.service-info-return .card-return-mark svg { width: 15px; height: 15px; }
+.service-info-return:hover .card-info-mark { border: 0; background: transparent; color: currentColor; }
 .carousel-fallback, .carousel-access:focus-within { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; position: absolute; z-index: 5; inset: 70px 20px 90px; width: auto; height: auto; margin: 0; overflow: auto; clip: auto; white-space: normal; list-style: none; padding: 0; }
 .carousel-fallback li, .carousel-access li { padding: 14px; background: #eee; border-radius: 10px; font-size: 11px; line-height: 1.6; }
 .carousel-fallback button, .carousel-access button, .carousel-fallback summary, .carousel-access summary { display: block; text-align: left; border: 0; background: transparent; padding: 0; margin-bottom: 8px; color: inherit; font: inherit; font-weight: 600; cursor: pointer; }
@@ -205,10 +210,9 @@ input { font: inherit; }
   .carousel-controls { gap: 24px; }
   .carousel-controls button { width: 44px; height: 44px; padding: 10px; }
   .carousel-footer p { margin-top: 8px; font-size: 10px; }
-  .card-entry-footer p { font-size: clamp(12px, var(--card-copy-size), 15px); }
-  .card-enter-button { min-height: 44px; font-size: 12px; padding: 9px 6px; gap: 5px; }
-  .card-enter-button svg { width: 11px; height: 11px; }
-  .service-info-back p { font-size: 13px; }
+  .card-enter-button { min-height: 38px; font-size: 13px; }
+  .card-enter-button svg { width: 14px; height: 14px; }
+  .service-info-back p { font-size: 14px; }
   .service-info-return { min-height: 44px; font-size: 11px; }
 }
 
@@ -266,7 +270,7 @@ input { font: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   .carousel-controls button, .selector-pill, .module-selector button { transition: none; }
-  .card-info-button, .service-info-back.is-opening, .service-info-back.is-closing { animation: none; transition: none; transform: none; }
+  .card-info-button, .card-info-top, .service-info-back.is-opening, .service-info-back.is-closing { animation: none; transition: none; transform: none; }
   .auth-page, .auth-content, .auth-mascot, .profile-panel, .profile-panel.is-leaving, .profile-panel.is-entering, .profile-panel.is-closing { animation: none; }
   .auth-field input, .auth-submit, .auth-submit-arrow, .password-toggle, .profile-trigger, .profile-caret, .profile-actions button, .profile-signout, .profile-save, .profile-switch, .profile-switch > span { transition: none; }
   .auth-submit:hover, .auth-submit:hover .auth-submit-arrow, .auth-submit:focus-visible .auth-submit-arrow { transform: none; }
@@ -278,11 +282,9 @@ input { font: inherit; }
   .demo-page > .demo-header > .carousel-context { font-size: clamp(16px, 5vw, 20px); }
   .carousel-stage { flex: 0 1 min(67svh, 130vw, max(0px, calc(100svh - 270px))); min-height: min(67svh, 130vw, max(0px, calc(100svh - 270px))); }
   .carousel-footer { margin-top: 24px; }
-  .card-entry-footer { grid-template-columns: minmax(0, 1fr) auto; column-gap: 8%; align-items: end; }
-  .card-entry-footer p { max-width: 100%; font-size: clamp(12px, 3.5vw, 14px); }
-  .card-enter-button:not(.card-details-button) { width: 40px; min-height: 40px; padding: 0; aspect-ratio: 1; }
-  .card-enter-button:not(.card-details-button) span { display: none; }
-  .card-enter-button:not(.card-details-button) svg { width: 16px; height: 16px; }
+  .card-enter-button { min-height: 38px; }
+  .card-enter-button span { display: inline; }
+  .card-enter-button svg { width: 14px; height: 14px; }
   .card-details-button { width: auto; min-height: 44px; padding: 9px 12px; }
 }
 

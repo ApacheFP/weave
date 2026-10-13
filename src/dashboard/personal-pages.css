@@ -52,6 +52,7 @@
 .dw-inbox-conversation { padding: 24px 28px; max-width: 720px; width: 100%; }
 .dw-inbox-conversation > h3 { font-size: 19px; line-height: 1.4; font-weight: 600; letter-spacing: -.015em; margin: 0 0 10px; overflow-wrap: anywhere; }
 .dw-inbox-conversation-module { margin: 0 0 18px; color: var(--text-3); font-size: 12.5px; }
+.dw-inbox-conversation-recipient { margin: -12px 0 18px; color: var(--text-2); font-size: 12px; }
 .dw-inbox-message { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px; }
 .dw-inbox-message > div { flex: 1; min-width: 0; }
 .dw-inbox-message-meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; }

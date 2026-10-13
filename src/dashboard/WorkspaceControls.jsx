@@ -64,8 +64,8 @@ export function StyleSwitcher({ onCreate, onCreateVariant, onSelect, selected = 
       <span className="dw-workspace-chevron"><Icon name="chevron" size={14} /></span>
     </button>
     {selected && <div className="dw-variant-quick" aria-label="Varianti del capo">
+      <div className="dw-variant-heading"><span>VARIANTE</span><button type="button" className="dw-variant-add" onClick={onCreateVariant} aria-label={`Aggiungi variante a ${data.title}`}><Icon name="plus" size={13} />Aggiungi</button></div>
       <div className="dw-variant-chips">{activeProduct.variants.map(item => <button type="button" key={item.styleId} aria-pressed={item.styleId === data.styleId} title={`${item.variant} · ${item.styleId}`} onClick={() => selectStyle(item.styleId)}>{item.variant}</button>)}</div>
-      <button type="button" className="dw-variant-add" onClick={onCreateVariant} aria-label={`Aggiungi variante a ${data.title}`} title="Aggiungi variante"><Icon name="plus" size={13} />Variante</button>
     </div>}
     {renderPopover && popoverStyle && createPortal(<div id="style-switcher" className="dw-switcher dw-workspace-popover dw-switcher-portal" data-closing={closing || undefined} aria-hidden={closing} inert={closing} ref={popover} role="region" aria-label="Seleziona il capo" style={popoverStyle}>
       <div className="dw-switcher-heading"><div><strong>Seleziona un capo</strong><small>{products.length} {products.length === 1 ? 'capo disponibile' : 'capi disponibili'}</small></div></div>
@@ -102,7 +102,7 @@ export function WorkspaceSearch({ onNavigate, onOpenPage, onClose }) {
   const { data, products: allProducts, selectStyle } = useDemo(); const [query, setQuery] = useState('');
   const results = useRef(null);
   const matches = text => text.toLowerCase().includes(query.toLowerCase());
-  const pages = [['home', 'Home', 'home'], ['inbox', 'Inbox', 'inbox'], ['my-tasks', 'Le mie attività', 'list'], ['notifications', 'Notifiche', 'bell'], ['capi', 'Capi', 'shirt'], ['activity', 'Attività della filiera', 'activity'], ['settings', 'Impostazioni', 'settings'], ['profile', 'Il tuo profilo', 'user']].filter(([, title]) => matches(title));
+  const pages = [['home', 'Home', 'home'], ['inbox', 'Inbox', 'inbox'], ['my-tasks', 'Le mie attività', 'list'], ['capi', 'Capi', 'shirt'], ['collections', 'Collezioni', 'layers'], ['notifications', 'Notifiche', 'bell'], ['activity', 'Attività della filiera', 'activity'], ['settings', 'Impostazioni', 'settings'], ['profile', 'Il tuo profilo', 'user']].filter(([, title]) => matches(title));
   const rows = moduleGroups[0].items.map(item => item.id === 21 ? { ...item, title: 'Panoramica del capo' } : item).sort((a, b) => Number(b.id === 21) - Number(a.id === 21)).filter(item => matches(item.title) || item.id === 21 && matches('Context Engine Digital Twin'));
   const products = allProducts.filter(item => matches(productSearchText(item)));
   function moveResult(event) {

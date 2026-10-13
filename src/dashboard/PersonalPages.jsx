@@ -111,7 +111,7 @@ export function InboxPage({ onOpenModule, onSelectMessage, initialSelectedId = n
         {selected ? <>
           <header className="dw-inbox-preview-bar"><button type="button" className="dw-inbox-back" onClick={() => setSelectedId(null)} aria-label="Torna all’inbox"><Icon name="back" size={15} /></button><span className="dw-inbox-product-dot" /><span>{styleLabel(styleFor(selected.styleId)) || selected.styleId}</span><small>{selected.styleId}</small><Button icon="arrow" onClick={() => onOpenModule(selected.styleId, selected.moduleId)}>Apri modulo</Button></header>
           <div className="dw-inbox-conversation">
-            <h3>{selected.title}</h3><p className="dw-inbox-conversation-module">{moduleName(selected.moduleId)}</p>
+            <h3>{selected.title}</h3><p className="dw-inbox-conversation-module">{moduleName(selected.moduleId)}</p>{selected.recipient?.name && <p className="dw-inbox-conversation-recipient">Destinatario: {selected.recipient.name}</p>}
             <article className="dw-inbox-message"><Avatar actor={selected.actor} /><div><div className="dw-inbox-message-meta"><strong>{actorName(selected.actor)}</strong><time dateTime={selected.at}>{fullDate(selected.at)}</time></div><p>{selected.body}</p></div></article>
             {(selected.replies || []).map(item => <article key={item.id} className="dw-inbox-message"><Avatar actor={item.actor} /><div><div className="dw-inbox-message-meta"><strong>{actorName(item.actor)}</strong><time dateTime={item.at}>{fullDate(item.at)}</time></div><p>{item.body}</p></div></article>)}
             <form className="dw-inbox-composer" onSubmit={submitReply}>
@@ -126,10 +126,11 @@ export function InboxPage({ onOpenModule, onSelectMessage, initialSelectedId = n
   </section>;
 }
 
-export function CreateTaskDialog({ onClose, initialDue = '', initialStatus = 'Da fare' }) {
+export function CreateTaskDialog({ onClose, initialDue = '', initialStatus = 'Da fare', initialStyleId, availableItems }) {
   const { data, workspaceItems, createTask } = useDemo();
+  const candidates = availableItems || workspaceItems;
   const [title, setTitle] = useState('');
-  const [styleId, setStyleId] = useState(data.styleId);
+  const [styleId, setStyleId] = useState(initialStyleId || data.styleId);
   const [moduleId, setModuleId] = useState(1);
   const [due, setDue] = useState(initialDue);
   const [priority, setPriority] = useState('Media');
@@ -138,14 +139,14 @@ export function CreateTaskDialog({ onClose, initialDue = '', initialStatus = 'Da
   const create = event => {
     event.preventDefault();
     if (!title.trim()) { setError('Inserisci il nome dell’attività.'); return; }
-    if (!workspaceItems.some(item => item.styleId === styleId) || !taskModuleIds.includes(Number(moduleId))) { setError('Seleziona un capo e un modulo disponibili.'); return; }
+    if (!candidates.some(item => item.styleId === styleId) || !taskModuleIds.includes(Number(moduleId))) { setError('Seleziona un capo e un modulo disponibili.'); return; }
     if (createTask({ title: title.trim(), styleId, moduleId: Number(moduleId), due, priority, note: note.trim(), status: initialStatus }) === false) { setError('L’attività non è stata creata. Controlla i dati.'); return; }
     onClose();
   };
   return <Dialog title="Nuova attività" note="Assegnata a te, collegata a un capo e a un modulo." onClose={onClose}>
     <form className="dw-new-task-form" onSubmit={create}>
       <Field label="Attività"><input data-autofocus required maxLength={120} value={title} onChange={event => { setTitle(event.target.value); setError(''); }} placeholder="Es. Rivedere le misure del campione" /></Field>
-      <div className="dw-new-task-pair"><Field label="Capo"><select value={styleId} onChange={event => setStyleId(event.target.value)}>{workspaceItems.map(item => <option key={item.styleId} value={item.styleId}>{styleLabel(item)} · {item.styleId}</option>)}</select></Field><Field label="Modulo"><select value={moduleId} onChange={event => setModuleId(Number(event.target.value))}>{taskModuleIds.map(id => <option key={id} value={id}>{moduleName(id)}</option>)}</select></Field></div>
+      <div className="dw-new-task-pair"><Field label="Capo"><select value={styleId} onChange={event => setStyleId(event.target.value)}>{candidates.map(item => <option key={item.styleId} value={item.styleId}>{styleLabel(item)} · {item.styleId}</option>)}</select></Field><Field label="Modulo"><select value={moduleId} onChange={event => setModuleId(Number(event.target.value))}>{taskModuleIds.map(id => <option key={id} value={id}>{moduleName(id)}</option>)}</select></Field></div>
       <div className="dw-new-task-pair"><Field label="Scadenza" hint="Facoltativa"><input type="date" value={due} onChange={event => setDue(event.target.value)} /></Field><Field label="Priorità"><select value={priority} onChange={event => setPriority(event.target.value)}>{taskPriorities.map(item => <option key={item}>{item}</option>)}</select></Field></div>
       <Field label="Note" hint="Facoltative"><textarea rows={3} maxLength={2000} value={note} onChange={event => setNote(event.target.value)} placeholder="Indicazioni per svolgere l’attività" /></Field>
       {error && <p className="dw-error" role="alert">{error}</p>}

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import OnboardingFlow from './OnboardingFlow.jsx';
 
 export default function AuthPage({ onEnter }) {
   const [mode, setMode] = useState('login');
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const signup = mode === 'signup';
 
   function changeMode(next) {
@@ -13,6 +15,20 @@ export default function AuthPage({ onEnter }) {
   function submit(event) {
     event.preventDefault();
     onEnter();
+  }
+
+  function handleOnboardingComplete(profileData) {
+    setShowOnboarding(false);
+    onEnter({ profile: profileData, target: '/atelier' });
+  }
+
+  if (showOnboarding) {
+    return (
+      <OnboardingFlow
+        onComplete={handleOnboardingComplete}
+        onCancel={() => setShowOnboarding(false)}
+      />
+    );
   }
 
   return (
@@ -50,10 +66,24 @@ export default function AuthPage({ onEnter }) {
               <span className="auth-submit-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4.5 12h15m-6-6 6 6-6 6" /></svg></span>
             </button>
           </form>
-          <p className="auth-note">È una demo. Puoi usare i dati già compilati.</p>
+
+          <div className="auth-sim-container">
+            <button type="button" className="auth-sim-button" onClick={() => setShowOnboarding(true)}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <line x1="19" x2="19" y1="8" y2="14" />
+                <line x1="22" x2="16" y1="11" y2="11" />
+              </svg>
+              <span>Simula onboarding</span>
+              <span className="auth-sim-badge">Mockup</span>
+            </button>
+          </div>
+
+            <p className="auth-note">È una demo. Puoi usare i dati già compilati o simulare l’onboarding.</p>
+          </div>
+          </section>
         </div>
-        </section>
-      </div>
-    </main>
+      </main>
   );
 }

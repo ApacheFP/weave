@@ -1,0 +1,1509 @@
+/* ============================================================
+   WEAVE - ELEGANT ONBOARDING (MINIMALIST & EDITORIAL)
+   ============================================================ */
+
+@font-face {
+  font-family: 'Stay With Me';
+  src: url('/fonts/stay-with-me.otf') format('opentype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+.onboarding-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  background: #f2f2f2;
+  overflow-y: auto;
+  min-height: 100svh;
+}
+
+/* Minimal Top Bar */
+.onboarding-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.onb-top-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.onb-brand {
+  font: 400 34px/1 'Stay With Me', sans-serif !important;
+  color: #242424;
+  letter-spacing: 0;
+  display: inline-flex;
+  align-items: center;
+  transform: translateY(2px);
+}
+
+/* Mobile elements default hidden on desktop */
+.onb-mobile-mode-bar {
+  display: none;
+}
+
+.onb-mobile-wizard-header {
+  display: none;
+}
+
+.onb-desc-desktop {
+  display: inline;
+}
+
+.onb-desc-mobile {
+  display: none;
+}
+
+.onb-top-badge {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 600;
+  color: #777;
+  padding: 2px 8px;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+}
+
+/* Minimal Mode Switcher in top bar */
+.onb-mode-segmented {
+  display: inline-flex;
+  padding: 3px;
+  background: #eee;
+  border-radius: 8px;
+  gap: 2px;
+}
+
+.onb-mode-btn {
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #666;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.onb-mode-btn:hover {
+  color: #242424;
+}
+
+.onb-mode-btn.is-active {
+  background: #fff;
+  color: #242424;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+}
+
+.onb-exit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  background: #fff;
+  color: #555;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 140ms;
+}
+
+.onb-exit-btn:hover {
+  background: #f7f7f7;
+  color: #242424;
+  border-color: #bbb;
+}
+
+/* Page Container */
+.onboarding-container {
+  max-width: 980px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 20px 60px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ============================================================
+   SINGLE UNIFIED ELEGANT CARD (DIVISA IN DUE)
+   ============================================================ */
+.onb-unified-card {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, .04);
+  overflow: hidden;
+  min-height: 560px;
+}
+
+/* ============================================================
+   MOBILE STRIP: DEFAULT HIDDEN ON DESKTOP
+   ============================================================ */
+.onb-mobile-preview-strip {
+  display: none;
+}
+
+/* ============================================================
+   LEFT HALF: ANTEPRIMA PROFILO (SI BUILDA PIANO PIANO)
+   ============================================================ */
+.onb-preview-pane {
+  background: #fafafa;
+  border-right: 1px solid #eaeaea;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.onb-preview-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 20px;
+}
+
+.onb-preview-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #242424;
+}
+
+.onb-preview-tag {
+  font-size: 10.5px;
+  font-weight: 550;
+  color: #666;
+  padding: 2px 7px;
+  background: #eee;
+  border-radius: 4px;
+}
+
+/* Profile Identity Hero */
+.onb-preview-hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.onb-preview-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #fff;
+  border: 1px dashed #ccc;
+  transition: all 180ms ease;
+}
+
+.onb-preview-avatar.has-image {
+  border: 1px solid #242424;
+}
+
+.onb-preview-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.onb-preview-avatar-placeholder {
+  color: #aaa;
+}
+
+.onb-preview-names {
+  min-width: 0;
+  flex: 1;
+}
+
+.onb-preview-name-text {
+  font-size: 17px;
+  font-weight: 700;
+  color: #242424;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.onb-preview-name-text.empty {
+  color: #aaa;
+  font-weight: 400;
+  font-size: 13.5px;
+}
+
+.onb-preview-handle-text {
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+  display: block;
+}
+
+.onb-preview-handle-text.empty {
+  color: #bbb;
+}
+
+/* Fields Stack on the Left */
+.onb-preview-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.onb-preview-slot {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 10px 12px;
+  transition: border-color 160ms;
+}
+
+.onb-preview-slot.is-filled {
+  border-color: #242424;
+}
+
+.onb-slot-title {
+  font-size: 9.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #888;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.onb-slot-value {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #242424;
+}
+
+.onb-slot-value.empty {
+  font-size: 11.5px;
+  color: #aaa;
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* Skills list */
+.onb-preview-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.onb-preview-skill-tag {
+  font-size: 10.5px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #f0f0f0;
+  color: #444;
+  border: 1px solid #e0e0e0;
+}
+
+/* Credentials info line */
+.onb-preview-credentials {
+  font-size: 11px;
+  color: #777;
+  font-family: var(--mono, monospace);
+  border-top: 1px solid #eaeaea;
+  padding-top: 10px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Bottom tip with Filo */
+.onb-preview-footer {
+  margin-top: 18px;
+  border-top: 1px solid #eaeaea;
+  padding-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.onb-preview-filo-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.onb-preview-tip-text {
+  font-size: 11.5px;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   RIGHT HALF: CONFIGURATION FORM (PULITO ED ESSENZIALE)
+   ============================================================ */
+.onb-form-pane {
+  padding: 28px 32px 24px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Stepper Bar */
+.onb-stepper-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 14px;
+  margin-bottom: 22px;
+}
+
+.onb-stepper-steps {
+  display: flex;
+  gap: 8px;
+}
+
+.onb-step-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: #fafafa;
+  color: #777;
+  font-size: 11.5px;
+  font-weight: 550;
+  cursor: pointer;
+  transition: all 140ms;
+}
+
+.onb-step-btn.is-active {
+  background: #242424;
+  color: #fff;
+  border-color: #242424;
+}
+
+.onb-step-btn.is-done {
+  background: #fff;
+  color: #242424;
+  border-color: #242424;
+}
+
+.onb-stepper-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.onb-autofill-link {
+  background: transparent;
+  border: 0;
+  color: #666;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 11.5px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.onb-autofill-link:hover {
+  color: #242424;
+}
+
+.onb-step-counter-text {
+  font-size: 12px;
+  color: #888;
+  font-family: var(--mono, monospace);
+}
+
+/* Step Headings */
+.onb-step-header {
+  margin-bottom: 20px;
+}
+
+.onb-step-header h2 {
+  font-size: 21px;
+  font-weight: 700;
+  color: #242424;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+
+.onb-step-header p {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Inputs */
+.onb-input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.onb-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.onb-form-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+.onb-text-input {
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  background: #fff;
+  color: #242424;
+  font-size: 13.5px;
+  outline: none;
+  transition: border-color 140ms;
+}
+
+.onb-text-input:focus {
+  border-color: #242424;
+}
+
+.onb-prefix-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.onb-prefix-at {
+  position: absolute;
+  left: 12px;
+  color: #888;
+  font-weight: 500;
+  font-size: 13.5px;
+  pointer-events: none;
+}
+
+.onb-prefix-wrap .onb-text-input {
+  padding-left: 26px;
+  width: 100%;
+}
+
+/* Avatar Selector */
+.onb-avatar-box {
+  background: #fafafa;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+
+.onb-avatar-box-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.onb-avatar-thumbs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.onb-avatar-thumb {
+  padding: 2px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all 140ms;
+}
+
+.onb-avatar-thumb.is-active {
+  border-color: #242424;
+}
+
+.onb-avatar-thumb img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.onb-avatar-upload-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #d4d4d4;
+  background: #fff;
+  color: #444;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.onb-avatar-upload-label input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+}
+
+/* Credentials Note */
+.onb-creds-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f7f7f7;
+  border: 1px solid #e5e5e5;
+  font-size: 11.5px;
+  color: #555;
+  margin-top: 4px;
+}
+
+.onb-creds-note strong {
+  color: #242424;
+}
+
+/* STEP 2: ROLES */
+.onb-roles-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.onb-role-option {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 140ms;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.onb-role-option:hover {
+  border-color: #888;
+}
+
+.onb-role-option.is-active {
+  border-color: #242424;
+  background: #f8f8f8;
+  outline: 1.5px solid #242424;
+}
+
+.onb-role-option-title {
+  font-size: 13px;
+  font-weight: 650;
+  color: #242424;
+}
+
+.onb-role-option-desc {
+  font-size: 11px;
+  color: #666;
+  line-height: 1.35;
+  margin: 0;
+}
+
+/* Skills selection */
+.onb-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+  margin-bottom: 16px;
+}
+
+.onb-skill-chip-btn {
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  background: #fff;
+  color: #444;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 120ms;
+}
+
+.onb-skill-chip-btn.is-active {
+  background: #242424;
+  color: #fff;
+  border-color: #242424;
+}
+
+/* STEP 3: WORKSPACE & INVITE */
+.onb-team-sizes {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.onb-size-btn {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #d4d4d4;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+}
+
+.onb-size-btn.is-active {
+  background: #242424;
+  color: #fff;
+  border-color: #242424;
+}
+
+/* Invite details card */
+.onb-invite-info-card {
+  background: #fafafa;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.onb-invite-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.onb-invite-info-stamp {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 2px 6px;
+  border: 1px solid #242424;
+  border-radius: 4px;
+  color: #242424;
+}
+
+.onb-invite-info-body {
+  font-size: 12px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.onb-colleagues-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: #444;
+}
+
+.onb-step-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #f8f8f8;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 12px;
+  color: #555555;
+  line-height: 1.45;
+  margin-top: 14px;
+}
+
+.onb-step-note svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #242424;
+}
+
+.onb-step-note strong {
+  color: #242424;
+}
+
+/* STEP 4: COMPLETION */
+.onb-complete-container {
+  text-align: center;
+  padding: 18px 10px;
+}
+
+.onb-complete-mascot-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 12px;
+}
+
+.onb-complete-mascot {
+  width: 78px;
+  height: 78px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
+}
+
+.onb-complete-container h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #242424;
+  margin: 0 0 6px;
+}
+
+.onb-complete-container p {
+  color: #666;
+  font-size: 13.5px;
+  max-width: 440px;
+  margin: 0 auto 20px;
+  line-height: 1.5;
+}
+
+.onb-summary-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 12px 16px;
+  max-width: 420px;
+  margin: 0 auto 22px;
+  text-align: left;
+}
+
+.onb-summary-prop {
+  display: flex;
+  flex-direction: column;
+}
+
+.onb-summary-prop span {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #888;
+}
+
+.onb-summary-prop strong {
+  font-size: 12.5px;
+  color: #242424;
+}
+
+/* Actions Footer */
+.onb-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.onb-prev-btn {
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1px solid #d4d4d4;
+  background: #fff;
+  color: #555;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.onb-prev-btn:hover {
+  background: #f7f7f7;
+  color: #242424;
+}
+
+.onb-next-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 20px;
+  border-radius: 8px;
+  border: 1px solid #242424;
+  background: #242424;
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 140ms;
+}
+
+.onb-next-btn:hover {
+  background: #444;
+  border-color: #444;
+}
+
+.onb-next-btn.full-width {
+  width: 100%;
+}
+
+/* ============================================================
+   AUTH LOGIN BUTTON (MINIMAL & SIMPLE)
+   ============================================================ */
+.auth-sim-container {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #eee;
+}
+
+.auth-sim-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid #d4d4d4;
+  border-radius: 10px;
+  background: #fff;
+  color: #242424;
+  font-size: 13px;
+  font-weight: 550;
+  cursor: pointer;
+  transition: all 140ms;
+}
+
+.auth-sim-button:hover {
+  background: #f7f7f7;
+  border-color: #242424;
+}
+
+.auth-sim-badge {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #eee;
+  color: #555;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+/* ============================================================
+   DEDICATED NATIVE MOBILE WIZARD (STEP 1, 2, 3, 4)
+   Completely distinct design from web, NO preview card on mobile
+   ============================================================ */
+@media (max-width: 860px) {
+  .onboarding-backdrop {
+    background: #f7f7f7;
+    overflow-y: auto;
+    min-height: 100svh;
+  }
+
+  /* Top bar */
+  .onboarding-top-bar {
+    padding: 12px 16px;
+    background: #ffffff;
+    border-bottom: 1px solid #ebebeb;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .onb-top-center {
+    display: none !important;
+  }
+
+  .onb-top-left {
+    gap: 10px;
+  }
+
+  .onb-brand {
+    font: 400 30px/1 'Stay With Me', sans-serif !important;
+    transform: translateY(1px);
+  }
+
+  .onb-top-badge {
+    font-size: 10px;
+    padding: 2px 7px;
+  }
+
+  .onb-exit-btn {
+    padding: 6px 10px;
+    font-size: 11.5px;
+    border-radius: 6px;
+  }
+
+  /* Mobile sub-bar: Scenario switcher (Post-Login vs Invite-link) */
+  .onb-mobile-mode-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    background: #ffffff;
+    border-bottom: 1px solid #eaeaea;
+  }
+
+  .onb-mobile-mode-bar .onb-mode-segmented {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    padding: 3px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    gap: 2px;
+  }
+
+  .onb-mobile-mode-bar .onb-mode-btn {
+    flex: 1;
+    text-align: center;
+    padding: 7px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    color: #666;
+  }
+
+  .onb-mobile-mode-bar .onb-mode-btn.is-active {
+    background: #ffffff;
+    color: #242424;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Container: Clean mobile wizard layout */
+  .onboarding-container {
+    padding: 12px 14px 28px;
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  /* UNIFIED CARD: On mobile, no 2 columns, no preview pane */
+  .onb-unified-card {
+    display: block;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+    min-height: auto;
+    overflow: visible;
+  }
+
+  /* PREVIEW PANE: COMPLETELY REMOVED ON MOBILE */
+  .onb-preview-pane {
+    display: none !important;
+  }
+
+  .onb-mobile-preview-strip {
+    display: none !important;
+  }
+
+  /* FORM PANE: Becomes the Mobile Wizard */
+  .onb-form-pane {
+    padding: 20px 18px 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* DESKTOP STEPPER ROW: HIDE ON MOBILE */
+  .onb-stepper-row {
+    display: none !important;
+  }
+
+  /* MOBILE WIZARD PROGRESS HEADER */
+  .onb-mobile-wizard-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .onb-mobile-progress-track {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .onb-mobile-segment {
+    height: 4px;
+    border-radius: 2px;
+    background: #e6e6e6;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 180ms ease;
+  }
+
+  .onb-mobile-segment.is-active {
+    background: #242424;
+  }
+
+  .onb-mobile-segment.is-current {
+    background: #242424;
+    box-shadow: 0 0 0 1px #242424;
+  }
+
+  .onb-mobile-header-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .onb-mobile-step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .onb-mobile-step-num {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #888;
+  }
+
+  .onb-mobile-step-dot {
+    color: #ccc;
+    font-size: 12px;
+  }
+
+  .onb-mobile-step-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #242424;
+  }
+
+  .onb-mobile-autofill-btn {
+    font-size: 11px;
+    font-weight: 600;
+    color: #444;
+    background: #f2f2f2;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    padding: 3px 8px;
+    cursor: pointer;
+    transition: background 120ms;
+  }
+
+  .onb-mobile-autofill-btn:active {
+    background: #e5e5e5;
+  }
+
+  /* STEP HEADERS */
+  .onb-step-header {
+    margin-bottom: 18px;
+  }
+
+  .onb-step-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #242424;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .onb-step-header p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  .onb-desc-desktop {
+    display: none;
+  }
+
+  .onb-desc-mobile {
+    display: inline;
+  }
+
+  /* STEP 1 INPUTS */
+  .onb-input-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .onb-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .onb-form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .onb-text-input {
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 9px;
+    border: 1px solid #d4d4d4;
+    background: #ffffff;
+    color: #242424;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 140ms;
+  }
+
+  .onb-text-input:focus {
+    border-color: #242424;
+  }
+
+  .onb-prefix-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .onb-prefix-at {
+    position: absolute;
+    left: 14px;
+    color: #888;
+    font-weight: 500;
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  .onb-prefix-wrap .onb-text-input {
+    padding-left: 30px;
+    width: 100%;
+  }
+
+  /* Avatar Box */
+  .onb-avatar-box {
+    background: #fafafa;
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    padding: 14px 14px;
+    margin-bottom: 14px;
+  }
+
+  .onb-avatar-box-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .onb-avatar-thumbs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .onb-avatar-thumb {
+    padding: 2px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .onb-avatar-thumb.is-active {
+    border-color: #242424;
+  }
+
+  .onb-avatar-thumb img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .onb-avatar-upload-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 7px;
+    border: 1px solid #d4d4d4;
+    background: #ffffff;
+    color: #444;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  /* STEP 2: ROLES */
+  .onb-roles-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .onb-role-option {
+    padding: 13px 15px;
+    border-radius: 10px;
+    border: 1.5px solid #dcdcdc;
+    background: #ffffff;
+    cursor: pointer;
+    text-align: left;
+    transition: all 140ms ease;
+  }
+
+  .onb-role-option.is-active {
+    border-color: #242424;
+    background: #fcfcfc;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.04);
+  }
+
+  .onb-role-option-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #242424;
+    margin-bottom: 4px;
+  }
+
+  .onb-role-option-desc {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .onb-skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 16px;
+    margin-top: 8px;
+  }
+
+  .onb-skill-chip-btn {
+    padding: 7px 12px;
+    border-radius: 20px;
+    border: 1px solid #dcdcdc;
+    background: #ffffff;
+    color: #444;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 120ms;
+  }
+
+  .onb-skill-chip-btn.is-active {
+    border-color: #242424;
+    background: #242424;
+    color: #ffffff;
+  }
+
+  /* STEP 3: TEAM / ATELIER */
+  .onb-invite-info-card {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+
+  .onb-invite-info-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .onb-invite-info-header strong {
+    font-size: 13px;
+    color: #242424;
+  }
+
+  .onb-invite-info-stamp {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    padding: 2px 6px;
+    border: 1px solid #242424;
+    border-radius: 4px;
+    color: #242424;
+    white-space: nowrap;
+  }
+
+  .onb-invite-info-body {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.45;
+  }
+
+  .onb-colleagues-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #444;
+  }
+
+  .onb-step-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: #f8f8f8;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 12px;
+    color: #555;
+    line-height: 1.45;
+    margin-top: 12px;
+    margin-bottom: 14px;
+  }
+
+  /* STEP 4: COMPLETION */
+  .onb-complete-container {
+    text-align: center;
+    padding: 10px 4px;
+  }
+
+  .onb-complete-mascot-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 10px;
+  }
+
+  .onb-complete-mascot {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
+  }
+
+  .onb-complete-container h2 {
+    font-size: 21px;
+    font-weight: 700;
+    color: #242424;
+    margin: 0 0 6px;
+  }
+
+  .onb-complete-container p {
+    color: #666;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 16px;
+  }
+
+  .onb-summary-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 14px;
+    margin: 0 0 18px;
+    text-align: left;
+  }
+
+  /* BOTTOM ACTIONS (STICKY) */
+  .onb-form-actions {
+    position: sticky;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 14px 0 calc(12px + env(safe-area-inset-bottom, 0px));
+    margin-top: 20px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    z-index: 15;
+  }
+
+  .onb-step1-hint {
+    display: none;
+  }
+
+  .onb-step1-next {
+    width: 100%;
+  }
+
+  .onb-prev-btn {
+    min-height: 44px;
+    padding: 0 16px;
+    font-size: 13px;
+    border-radius: 8px;
+    border: 1px solid #d4d4d4;
+    background: #ffffff;
+    color: #444;
+    font-weight: 500;
+  }
+
+  .onb-next-btn {
+    min-height: 44px;
+    padding: 0 18px;
+    font-size: 13.5px;
+    border-radius: 8px;
+    background: #242424;
+    color: #ffffff;
+    border: 1px solid #242424;
+    font-weight: 600;
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+}

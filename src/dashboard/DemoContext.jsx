@@ -4,6 +4,7 @@ import { groupProducts } from './productData.js';
 import { fabrics, totals } from './domain.js';
 import { createDemoWorkspace } from './demoDefaults.js';
 import * as productActions from './productActions.js';
+import { collectionDefaults } from './creativeData.js';
 import { productSections, saveProductSection, saveCollectionDirection as saveDirection, collectionFor, updateProfile as saveProfile } from './workspaceCommands.js';
 import useWorkspacePersistence from './useWorkspacePersistence.js';
 import { download } from './exportFiles.js';
@@ -12,11 +13,47 @@ import { Button, Card } from './ui.jsx';
 
 const initial = createDemoWorkspace().items[0];
 const Context = createContext(null);
-export function DemoProvider({ children }) {
+export function DemoProvider({ children, initialProfile }) {
   const persistence = useWorkspacePersistence();
   const { workspace, mutate, storage, loadError } = persistence;
   const [notice, setNotice] = useState('');
   const timeout = useRef(null);
+  const profileApplied = useRef(false);
+
+  useEffect(() => {
+    if (initialProfile && workspace && !profileApplied.current) {
+      profileApplied.current = true;
+      const p = workspace.items[0]?.profile;
+      if (p) {
+        try {
+          mutate(current => {
+            let next = current;
+            if (initialProfile.firstName || initialProfile.lastName || initialProfile.avatar) {
+              next = saveProfile(next, {
+                firstName: initialProfile.firstName || p.firstName,
+                lastName: initialProfile.lastName || p.lastName,
+                email: initialProfile.email || p.email,
+                avatar: initialProfile.avatar || p.avatar,
+              });
+            }
+            if (initialProfile.workspaceName && typeof initialProfile.workspaceName === 'string' && initialProfile.workspaceName.trim().length <= 60) {
+              next = {
+                ...next,
+                preferences: {
+                  ...next.preferences,
+                  workspaceName: initialProfile.workspaceName.trim(),
+                },
+              };
+            }
+            return next;
+          });
+        } catch (error) {
+          console.warn('Errore applicando profilo onboarding:', error);
+        }
+      }
+    }
+  }, [initialProfile, workspace, mutate]);
+
   useEffect(() => () => clearTimeout(timeout.current), []);
   function notify(message) {
     setNotice(message);
@@ -49,6 +86,36 @@ export function DemoProvider({ children }) {
   const confirmShipment = identity => run(current => productActions.confirmShipment(current, targetId, identity), 'Consegna confermata');
   const updateProfile = input => run(current => saveProfile(current, input));
   const saveCollectionDirection = (patch, message) => run(current => saveDirection(current, targetId, patch, message), message);
+  function createCollection(input) {
+    const name = typeof input?.name === 'string' ? input.name.trim() : '';
+    const phases = ['Passata', 'Attuale', 'Futura', 'Programmata'];
+    if (!name || name.length > 80 || !phases.includes(input.phase)) return false;
+    return run(current => {
+      if ([...Object.keys(current.collections), ...current.items.map(item => item.collection)].some(value => value.toLocaleLowerCase('it-IT') === name.toLocaleLowerCase('it-IT'))) throw new Error('Esiste già una collezione con questo nome.');
+      return { ...current, collections: { ...current.collections, [name]: { ...collectionDefaults(), phase: input.phase } } };
+    }, `Collezione ${name} creata`);
+  }
+  function updateCollectionPhase(name, phase) {
+    if (!['Passata', 'Attuale', 'Futura', 'Programmata'].includes(phase)) return false;
+    return run(current => ({ ...current, collections: { ...current.collections, [name]: { ...collectionDefaults(), ...current.collections[name], phase } } }), 'Stato della collezione aggiornato');
+  }
+  function updateCollection(name, input) {
+    const nextName = typeof input?.name === 'string' ? input.name.trim() : '';
+    const phases = ['Passata', 'Attuale', 'Futura', 'Programmata'];
+    if (!nextName || nextName.length > 80 || !phases.includes(input.phase)) return false;
+    return run(current => {
+      if (nextName.toLocaleLowerCase('it-IT') !== name.toLocaleLowerCase('it-IT') && [...Object.keys(current.collections), ...current.items.map(item => item.collection)].some(value => value.toLocaleLowerCase('it-IT') === nextName.toLocaleLowerCase('it-IT'))) throw new Error('Esiste già una collezione con questo nome.');
+      const { [name]: previous, ...otherCollections } = current.collections;
+      return {
+        ...current,
+        collections: { ...otherCollections, [nextName]: { ...collectionDefaults(), ...previous, phase: input.phase } },
+        items: current.items.map(item => item.collection === name ? { ...item, collection: nextName } : item),
+      };
+    }, `Collezione ${nextName} aggiornata`);
+  }
+  function assignProductToCollection(styleId, name) {
+    return run(current => productActions.updateProductMetadata(current, styleId, { collection: name }), `Capo aggiunto a ${name}`);
+  }
   const exportWorkspace = () => download('weave-spazio-locale.json', JSON.stringify({ version: workspaceSchemaVersion, workspace }, null, 2), 'application/json');
   function updateTask(id, patch) {
     if (!patch || typeof patch !== 'object') return false;
@@ -78,6 +145,23 @@ export function DemoProvider({ children }) {
       return { ...current, tasks: [{ ...task, assignee: actor }, ...current.tasks], inbox: current.preferences.pushAssignments === false ? current.inbox : [assignment, ...current.inbox] };
     }, 'Attività creata');
   }
+  function sendTeamMessage({ recipient, styleId, moduleId, kind, body }) {
+    const text = typeof body === 'string' ? body.trim() : '';
+    if (!recipient?.name || !['message', 'reminder'].includes(kind) || !text || text.length > 2000) return false;
+    return run(current => {
+      const product = current.items.find(item => item.styleId === styleId);
+      if (!product) throw new Error('Il capo associato non è più disponibile.');
+      const sender = profileActor(product.profile);
+      const item = {
+        id: crypto.randomUUID(), type: kind === 'reminder' ? 'assign' : 'comment', styleId,
+        moduleId: Number.isInteger(Number(moduleId)) ? Number(moduleId) : 1,
+        title: `${kind === 'reminder' ? 'Promemoria' : 'Messaggio'} per ${recipient.name}`,
+        body: text, actor: sender, recipient: { id: recipient.id, name: recipient.name, email: recipient.email },
+        at: new Date().toISOString(), read: true, replies: [], demo: true,
+      };
+      return { ...current, inbox: [item, ...current.inbox] };
+    }, `${kind === 'reminder' ? 'Promemoria' : 'Messaggio'} inviato a ${recipient.name}`);
+  }
   function markInboxRead(id, read = true) {
     setWorkspace(current => current.inbox.some(item => item.id === id && item.read !== Boolean(read))
       ? { ...current, inbox: current.inbox.map(item => item.id === id ? { ...item, read: Boolean(read) } : item) }
@@ -104,6 +188,6 @@ export function DemoProvider({ children }) {
     if (!Object.keys(changes).length) return false;
     return run(current => ({ ...current, preferences: { ...current.preferences, ...changes } }), 'Preferenze aggiornate');
   }
-  return <Context.Provider value={{ data, notice, hasSelectedStyle: workspace.hasSelectedStyle, products, workspaceItems: workspace.items, tasks: workspace.tasks, inbox: workspace.inbox, preferences: workspace.preferences, updateTask, createTask, markInboxRead, markAllInboxRead, replyInbox, updatePreferences, styles: workspace.items.map(({ styleId, title, collection, variant, identityAssigned, category }) => ({ styleId, title, collection, variant, identityAssigned, category })), selectStyle, createStyle, updateProductMetadata, recordRetailSale, recordProduction, approveSample, createWholesaleOrder, createPurchaseOrder, recordLifecycleEvent, createShipment, confirmShipment, updateProfile, ...editorialActions, saveCollectionDirection, notify, collectionData, storage, retrySave: persistence.retrySave, reloadSavedWorkspace: persistence.reloadSavedWorkspace, flushWorkspace: persistence.flushWorkspace, exportWorkspace, ...totals(data) }}>{children}</Context.Provider>;
+  return <Context.Provider value={{ data, notice, hasSelectedStyle: workspace.hasSelectedStyle, products, workspaceItems: workspace.items, workspaceCollections: workspace.collections, tasks: workspace.tasks, inbox: workspace.inbox, preferences: workspace.preferences, updateTask, createTask, sendTeamMessage, markInboxRead, markAllInboxRead, replyInbox, updatePreferences, styles: workspace.items.map(({ styleId, title, collection, variant, identityAssigned, category }) => ({ styleId, title, collection, variant, identityAssigned, category })), selectStyle, createStyle, updateProductMetadata, createCollection, updateCollection, updateCollectionPhase, assignProductToCollection, recordRetailSale, recordProduction, approveSample, createWholesaleOrder, createPurchaseOrder, recordLifecycleEvent, createShipment, confirmShipment, updateProfile, ...editorialActions, saveCollectionDirection, notify, collectionData, storage, retrySave: persistence.retrySave, reloadSavedWorkspace: persistence.reloadSavedWorkspace, flushWorkspace: persistence.flushWorkspace, exportWorkspace, ...totals(data) }}>{children}</Context.Provider>;
 }
 export const useDemo = () => useContext(Context);
