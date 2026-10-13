@@ -8,7 +8,7 @@ import { ProductPhoto } from './Media.jsx';
 import { productSearchText, productVariantId } from './productData.js';
 import './workspace-switcher.css';
 
-export function StyleSwitcher({ onCreate, onSelect, selected = true }) {
+export function StyleSwitcher({ onCreate, onCreateVariant, onSelect, selected = true }) {
   const { data, products, selectStyle } = useDemo();
   const [open, setOpen] = useState(false);
   const [renderPopover, setRenderPopover] = useState(false);
@@ -63,6 +63,10 @@ export function StyleSwitcher({ onCreate, onSelect, selected = true }) {
       <span className="dw-workspace-name"><strong title={selected ? data.title : 'Seleziona il capo'}>{selected ? data.title : 'Seleziona il capo'}</strong><small title={selected ? data.collection : 'Scegli un capo per iniziare'}>{selected ? <>{data.identityAssigned ? data.styleId : 'Bozza'}{activeProduct.variants.length > 1 && ` · ${data.variant}`}<span aria-hidden="true"> · </span>{season(data.collection)}</> : 'Scegli un capo per iniziare'}</small></span>
       <span className="dw-workspace-chevron"><Icon name="chevron" size={14} /></span>
     </button>
+    {selected && <div className="dw-variant-quick" aria-label="Varianti del capo">
+      <div className="dw-variant-chips">{activeProduct.variants.map(item => <button type="button" key={item.styleId} aria-pressed={item.styleId === data.styleId} title={`${item.variant} · ${item.styleId}`} onClick={() => selectStyle(item.styleId)}>{item.variant}</button>)}</div>
+      <button type="button" className="dw-variant-add" onClick={onCreateVariant} aria-label={`Aggiungi variante a ${data.title}`} title="Aggiungi variante"><Icon name="plus" size={13} />Variante</button>
+    </div>}
     {renderPopover && popoverStyle && createPortal(<div id="style-switcher" className="dw-switcher dw-workspace-popover dw-switcher-portal" data-closing={closing || undefined} aria-hidden={closing} inert={closing} ref={popover} role="region" aria-label="Seleziona il capo" style={popoverStyle}>
       <div className="dw-switcher-heading"><div><strong>Seleziona un capo</strong><small>{products.length} {products.length === 1 ? 'capo disponibile' : 'capi disponibili'}</small></div></div>
       <div className="dw-popover-search"><Icon name="search" size={16} /><input autoFocus aria-label="Cerca capo" placeholder="Nome, codice o collezione…" value={query} onChange={e => setQuery(e.target.value)} /></div>
@@ -77,19 +81,20 @@ export function StyleSwitcher({ onCreate, onSelect, selected = true }) {
   </div>;
 }
 
-export function CreateStyleDialog({ onClose, onCreated }) {
+export function CreateStyleDialog({ onClose, onCreated, variant = false }) {
   const { data, styles, createStyle } = useDemo();
   const next = Math.max(420, ...styles.map(item => Number(item.styleId.match(/\d+$/)?.[0]) || 0)) + 1;
-  const [draft, setDraft] = useState({ title: '', styleId: `MG-${String(next).padStart(4, '0')}`, collection: data.collection, quantity: 300, copy: false });
+  const [draft, setDraft] = useState({ title: variant ? data.title : '', variant: 'Nuova variante', variantOf: variant, styleId: `MG-${String(next).padStart(4, '0')}`, collection: data.collection, quantity: 300, copy: false });
   const [error, setError] = useState('');
-  return <Dialog title="Nuovo capo" note="Atelier · crea uno spazio per il prossimo prodotto" onClose={onClose}><form className="dw-stack" onSubmit={event => { event.preventDefault(); if (!createStyle(draft)) { setError('Verifica nome, collezione, quantità e codice: il codice deve essere univoco.'); return; } onCreated(); }}>
+  return <Dialog title={variant ? 'Aggiungi variante' : 'Nuovo capo'} note={variant ? `Atelier · nuova variante di ${data.title}` : 'Atelier · crea uno spazio per il prossimo prodotto'} onClose={onClose}><form className="dw-stack" onSubmit={event => { event.preventDefault(); if (!createStyle(draft)) { setError('Verifica nome, collezione, quantità e codice: il codice deve essere univoco.'); return; } onCreated(); }}>
     <Field label="Nome del capo"><input data-autofocus required maxLength={80} pattern=".*\S.*" placeholder="Es. Maglia Essential" value={draft.title} onChange={e => setDraft({ ...draft, title: e.target.value })} /></Field>
+    {variant && <Field label="Nome variante"><input required maxLength={60} pattern=".*\S.*" placeholder="Es. Rubino" value={draft.variant} onChange={e => setDraft({ ...draft, variant: e.target.value })} /></Field>}
     <div className="dw-two"><Field label="Codice riservato" hint="Diventa lo Style ID al caricamento dello schizzo."><input required maxLength={24} pattern="[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*" value={draft.styleId} onChange={e => { setDraft({ ...draft, styleId: e.target.value.toUpperCase() }); setError(''); }} /></Field><Field label="Quantità prevista"><input required type="number" min={draft.copy ? minQuantity(data) : 1} max="10000" step="1" value={draft.quantity} onChange={e => setDraft({ ...draft, quantity: e.target.value })} /></Field></div>
     <Field label="Collezione"><input required maxLength={80} pattern=".*\S.*" value={draft.collection} onChange={e => setDraft({ ...draft, collection: e.target.value })} /></Field>
-    <label className="dw-check"><input type="checkbox" checked={draft.copy} onChange={e => setDraft({ ...draft, copy: e.target.checked, quantity: e.target.checked ? Math.max(Number(draft.quantity), minQuantity(data)) : draft.quantity })} />Duplica specifiche e ordini di {data.title}</label>
-    <p className="dw-muted">Il modello base è una maglia: misure, filato e lavorazioni sono precompilati e modificabili. I capi vengono salvati in questo browser, su questo dispositivo.</p>
+    {!variant && <label className="dw-check"><input type="checkbox" checked={draft.copy} onChange={e => setDraft({ ...draft, copy: e.target.checked, quantity: e.target.checked ? Math.max(Number(draft.quantity), minQuantity(data)) : draft.quantity })} />Duplica specifiche e ordini di {data.title}</label>}
+    <p className="dw-muted">{variant ? 'La variante condivide il modello del capo e parte con produzione e ordini indipendenti.' : 'Il modello base è una maglia: misure, filato e lavorazioni sono precompilati e modificabili. I capi vengono salvati in questo browser, su questo dispositivo.'}</p>
     {error && <p className="dw-error" role="alert">{error}</p>}
-    <div className="dw-dialog-actions"><Button onClick={onClose}>Annulla</Button><Button primary icon="plus" type="submit">Crea capo</Button></div>
+    <div className="dw-dialog-actions"><Button onClick={onClose}>Annulla</Button><Button primary icon="plus" type="submit">{variant ? 'Aggiungi variante' : 'Crea capo'}</Button></div>
   </form></Dialog>;
 }
 

@@ -58,6 +58,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
   const [service, setService] = useState(null);
   const [chat, setChat] = useState(false);
   const [create, setCreate] = useState(false);
+  const [createVariant, setCreateVariant] = useState(false);
   const [search, setSearch] = useState(false);
   const [newMenu, setNewMenu] = useState(false);
   const [createTask, setCreateTask] = useState(false);
@@ -195,7 +196,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
           </nav>
         </div>
         <div className="dw-side-scroll">
-          <div className="dw-sidebar-top"><span className="dw-sidebar-kicker">{hasSelectedStyle ? 'CAPO SELEZIONATO' : 'SELEZIONA CAPO'}</span><div className="dw-sidebar-product-card"><StyleSwitcher selected={hasSelectedStyle} onCreate={() => setCreate(true)} onSelect={() => navigate(21)} />
+          <div className="dw-sidebar-top"><span className="dw-sidebar-kicker">{hasSelectedStyle ? 'CAPO SELEZIONATO' : 'SELEZIONA CAPO'}</span><div className="dw-sidebar-product-card"><StyleSwitcher selected={hasSelectedStyle} onCreate={() => { setCreateVariant(false); setCreate(true); }} onCreateVariant={() => { setCreateVariant(true); setCreate(true); }} onSelect={() => navigate(21)} />
             {hasSelectedStyle && <nav className="dw-nav-group dw-cap-overview" aria-label="Panoramica del capo">{navItem('Panoramica del capo', 'grid', () => navigate(21), isModule && moduleId === 21, 0, 21, 'overview')}</nav>}
           </div></div>
           {hasSelectedStyle && <>
@@ -248,7 +249,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
         </div>
       </div>
     </div>
-    {create && <CreateStyleDialog onClose={() => setCreate(false)} onCreated={created} />}
+    {create && <CreateStyleDialog variant={createVariant} onClose={() => { setCreate(false); setCreateVariant(false); }} onCreated={() => { setCreateVariant(false); created(); }} />}
     {createTask && <CreateTaskDialog onClose={() => setCreateTask(false)} />}
     {search && <WorkspaceSearch onNavigate={navigate} onOpenPage={openPage} onClose={() => setSearch(false)} />}
     {service && <Dialog wide title={modules.find(item => item.id === service.id)?.title || 'Servizio WEAVE'} note={`${shortNames[service.contextModuleId]} · ${data.title} / ${data.styleId}`} onClose={() => setService(null)}><ServiceContent key={`${service.id}-${data.styleId}`} serviceId={service.id} moduleId={service.contextModuleId} /></Dialog>}

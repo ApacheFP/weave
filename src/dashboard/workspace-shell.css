@@ -66,6 +66,7 @@
 .dw-collapsed .dw-sidebar-top { margin:8px 0 4px; padding:0; }
 .dw-collapsed .dw-sidebar-top .dw-sidebar-kicker { display:none; }
 .dw-collapsed .dw-sidebar-product-card { padding:0; border:0; background:transparent; box-shadow:none; }
+.dw-collapsed .dw-variant-quick { display:none; }
 .dw-nav-count { margin-left:auto; padding:0 5px; min-width:20px; text-align:center; font-size:10px; font-weight:500; color:var(--text-3); background:var(--surface-3); border-radius:8px; }
 .dw-sidebar .dw-sidebar-bottom { display:flex; flex-direction:column; align-items:stretch; gap:4px; padding:8px; border-top:0; }
 .dw-sidebar-bottom-card { width:100%; padding:4px; border:1px solid var(--border); border-radius:12px; background:var(--surface); box-shadow:var(--shadow-sm); }

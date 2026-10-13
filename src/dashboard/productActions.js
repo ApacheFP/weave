@@ -70,8 +70,10 @@ function remapReferences(value, references) {
 export function createStyle(workspace, input, sourceId = workspace.activeProductId || workspace.activeId, options = {}) {
   const source = findProduct(workspace, sourceId);
   if (!validStyleInput(input, workspace.items, source)) invalid('INVALID_PRODUCT', 'Verifica nome, codice, collezione e quantità del capo.');
+  const isVariant = input.variantOf === true;
+  if (input.variantOf !== undefined && typeof input.variantOf !== 'boolean' || isVariant && (typeof input.variant !== 'string' || !input.variant.trim() || input.variant.trim().length > 60)) invalid('INVALID_PRODUCT', 'Indica un nome valido per la variante.');
   const code = input.styleId.trim().toUpperCase();
-  const base = structuredClone(input.copy ? source : options.template || workspace.items[0]);
+  const base = structuredClone(input.copy || isVariant ? source : options.template || workspace.items[0]);
   const used = businessIdentifiers(workspace.items);
   const businessId = proposed => availableIdentifier(proposed, used);
   const references = new Map(), identifiers = {};
@@ -91,12 +93,13 @@ export function createStyle(workspace, input, sourceId = workspace.activeProduct
       });
     }
   }
-  const item = { ...remapReferences(base, references), ...identifiers, id: nextId(options), modelId: nextId(options), title: input.title.trim(),
-    productId: undefined, aliasTitle: undefined, styleId: code, collection: input.collection.trim(), quantity: Number(input.quantity),
+  const item = { ...remapReferences(base, references), ...identifiers, id: nextId(options), modelId: isVariant ? source.modelId : nextId(options), title: input.title.trim(),
+    productId: isVariant ? source.productId || source.styleId : undefined, aliasTitle: undefined, styleId: code, collection: input.collection.trim(), quantity: Number(input.quantity),
+    ...(isVariant && { variant: input.variant.trim() }),
     references: [], creative: creativeDefaults(), conceptApproved: false, identityAssigned: false,
     technical: null, techGenerated: false, sketch: null, sketchFile: null, sketchName: null,
     chats: {}, aiRuns: {}, phaseReviews: {}, passportPublished: false, profile: structuredClone(source.profile),
-    ...(!input.copy && { brief: '', sampleApproved: false, sampleChecks: [false, false, false], produced: 0, reworks: 0,
+    ...(!input.copy && { brief: isVariant ? source.brief : '', sampleApproved: false, sampleChecks: [false, false, false], produced: 0, reworks: 0,
       qualityScore: 100, qualityResolved: true, qualityNote: 'Nessuna non conformità registrata sul nuovo capo.',
       productionDays: [], purchaseOrders: [], wholesaleOrders: [], retailSold: 0, shipments: [], lifecycle: [] }),
   };
