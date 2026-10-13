@@ -1,4 +1,4 @@
-import { productSpec, styleLabel } from './productData.js';
+import { productSpec } from './productData.js';
 import { moduleGroups } from '../modules.js';
 
 export const taskStatuses = ['Da fare', 'In corso', 'Completata'];
@@ -52,40 +52,41 @@ export function seedWorkspaceData(items, profile, now = new Date()) {
   };
   const at = minutes => new Date(now.getTime() - minutes * 60000).toISOString();
   const when = minutes => new Intl.DateTimeFormat('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(now.getTime() - minutes * 60000));
-  const peopleByModule = { 21: alex, 3: marta, 13: elena, 8: giulia, 14: luca, 20: sara };
+  const peopleByModule = { 21: alex, 1: marta, 2: giulia, 3: marta, 4: giulia, 5: giulia, 6: marta, 7: marta, 9: alex, 10: alex, 11: paolo, 12: luca, 13: elena };
   const seededItems = items.map((item, itemIndex) => ({
     ...item,
     events: item.events.map((event, eventIndex) => {
-      const age = 35 + itemIndex * 173 + eventIndex * 257;
+      const age = 35 + itemIndex * 173 + (item.events.length - eventIndex - 1) * 257;
       return { ...event, actor: peopleByModule[event.module] || alex, at: at(age), time: when(age) };
     }),
   }));
   const tasks = [], inbox = [];
   for (const [index, item] of items.entries()) {
-    const spec = productSpec(item), label = styleLabel(item);
-    tasks.push({ id: `task-quality-${item.styleId}`, title: `${spec.checks[2]} · ${item.variant}`, styleId: item.styleId, moduleId: 13, status: index === 0 ? 'In corso' : 'Da fare', priority: index === 0 ? 'Alta' : 'Media', due: date(index), assignee: alex, note: `${spec.quality.id} · ${item.qualityNote}`, demo: true });
-    tasks.push({ id: `task-sketch-${item.styleId}`, title: `Caricare lo schizzo finale · ${label}`, styleId: item.styleId, moduleId: 1, status: 'Da fare', priority: 'Media', due: date(index + 1), assignee: alex, note: 'Aggiungere il disegno dello stilista e confermare palette e moodboard.', demo: true });
-    const sampleActor = [giulia, sara, marta][index % 3];
-    const qualityActor = [elena, luca, francesca][index % 3];
-    inbox.push({ id: `inbox-sample-${item.styleId}`, type: 'comment', styleId: item.styleId, moduleId: 6, title: `Campione ${label} da verificare`, body: `${item.sampleId}: ${spec.checks.join('; ')}.`, actor: sampleActor, at: at(100 + index * 43), read: false, replies: [], demo: true });
-    inbox.push({ id: `inbox-quality-${item.styleId}`, type: 'mention', styleId: item.styleId, moduleId: 13, title: `${qualityActor.name.split(' ')[0]} ti ha menzionato nella ${spec.quality.id}`, body: `${item.reworks} articoli da ricontrollare sul lotto ${item.lotId}. ${item.qualityNote}`, actor: qualityActor, at: at(20 + index * 61), read: false, replies: [], demo: true });
+    const spec = productSpec(item), label = `${item.title} · ${item.variant}`;
+    if (item.category === 'bag') {
+      tasks.push({ id: `task-concept-${item.styleId}`, title: `Definire la direzione creativa · ${item.title}`, styleId: item.styleId, moduleId: 1, status: 'In corso', priority: 'Alta', due: date(1), assignee: alex, note: 'Allineare brief, riferimenti e schizzo prima di avviare il disegno tecnico.', demo: true });
+      inbox.push({ id: `inbox-concept-${item.styleId}`, type: 'comment', styleId: item.styleId, moduleId: 1, title: `Feedback sul concept · ${label}`, body: 'Il brief è pronto. Prima di passare al disegno tecnico, scegliamo insieme la direzione dei manici e della finitura ottone.', actor: marta, at: at(32 + index * 13), read: false, replies: [], demo: true });
+    } else if (item.category === 'trousers') {
+      tasks.push({ id: `task-fitting-${item.styleId}`, title: `Chiudere il fitting del campione · ${item.variant}`, styleId: item.styleId, moduleId: 6, status: 'In corso', priority: 'Alta', due: date(0), assignee: alex, note: `${item.sampleId}: ${spec.checks.join('; ')}. Una verifica su tre è completata.`, demo: true });
+      tasks.push({ id: `task-fitting-note-${item.styleId}`, title: `Verificare le misure campione · ${item.variant}`, styleId: item.styleId, moduleId: 6, status: 'Da fare', priority: 'Media', due: date(2), assignee: alex, note: 'Confrontare vita, bacino e lunghezza con la taglia base prima dell’approvazione.', demo: true });
+      inbox.push({ id: `inbox-fitting-${item.styleId}`, type: 'assign', styleId: item.styleId, moduleId: 6, title: `Campione ${label} pronto per il fitting`, body: `${item.sampleId}: il primo controllo è registrato. Restano da verificare vestibilità e finitura prima dell’approvazione.`, actor: giulia, at: at(48), read: false, replies: [{ id: `reply-fitting-${item.styleId}`, body: 'Controllo il campione oggi e aggiorno le verifiche nel modulo.', actor: alex, at: at(34) }], demo: true });
+    } else {
+      const qualityActor = [elena, luca, francesca][index % 3];
+      tasks.push({ id: `task-production-${item.styleId}`, title: `Proseguire il lotto · ${item.variant}`, styleId: item.styleId, moduleId: 12, status: 'In corso', priority: 'Media', due: date(index + 1), assignee: alex, note: `${item.produced} di ${item.quantity} capi registrati sul lotto ${item.lotId}.`, demo: true });
+      tasks.push({ id: `task-quality-${item.styleId}`, title: `${spec.checks[2]} · ${item.variant}`, styleId: item.styleId, moduleId: 13, status: 'Da fare', priority: 'Alta', due: date(index), assignee: alex, note: `${spec.quality.id} · ${item.reworks} capi da ricontrollare: ${item.qualityNote}`, demo: true });
+      inbox.push({ id: `inbox-quality-${item.styleId}`, type: 'mention', styleId: item.styleId, moduleId: 13, title: `${qualityActor.name.split(' ')[0]} ti ha menzionato nella ${spec.quality.id}`, body: `${item.reworks} capi da ricontrollare sul lotto ${item.lotId}. ${item.qualityNote}`, actor: qualityActor, at: at(20 + index * 19), read: index === 1, replies: [], demo: true });
+    }
   }
   const primary = items[0];
   const trousers = items.find(item => item.category === 'trousers') || primary;
   const bag = items.find(item => item.category === 'bag') || primary;
   const knit = items.find(item => item.category === 'knit') || primary;
-  const alexFirst = alex.name.split(' ')[0];
   inbox.push(
-    { id: 'inbox-pattern-review', type: 'assign', styleId: trousers.styleId, moduleId: 5, title: 'Nuovo incarico: confermare la curva taglie', body: `Ho caricato la revisione della vestibilità del ${trousers.title}. ${alexFirst}, puoi verificare la taglia campione prima del passaggio al prototipo?`, actor: giulia, at: at(48), read: false, replies: [{ id: 'reply-pattern-review', body: 'Controllo la scheda oggi pomeriggio e ti lascio una nota sulle misure.', actor: alex, at: at(39) }], demo: true },
-    { id: 'inbox-material-alternative', type: 'comment', styleId: bag.styleId, moduleId: 3, title: 'Alternativa materiale per il prossimo riordino', body: `Pelletteria Toscana ha confermato disponibilità della pelle per ${bag.variant}. Il campione ha una grana più regolare; allego il codice PEL-052 per il confronto con la distinta.`, actor: sara, at: at(133), read: false, replies: [{ id: 'reply-material-alternative', body: 'La mano è coerente con il prototipo. Chiedo il campione colore prima di aggiornare la distinta.', actor: marta, at: at(119) }, { id: 'reply-material-alternative-2', body: 'Campione colore in partenza domani con il corriere.', actor: sara, at: at(107) }], demo: true },
-    { id: 'inbox-production-shift', type: 'update', styleId: knit.styleId, moduleId: 12, title: `Turno di produzione aggiornato · ${knit.variant}`, body: `Luca ha registrato 42 pezzi sul lotto ${knit.lotId}. Il controllo di fine turno è previsto alle 16:30.`, actor: luca, at: at(205), read: true, replies: [], demo: true },
-    { id: 'inbox-passport-copy', type: 'mention', styleId: bag.styleId, moduleId: 19, title: 'Francesca ti ha menzionato nella scheda di tracciabilità', body: `La provenienza dei manici è verificata. ${alexFirst}, manca solo la conferma della finitura ottone prima di pubblicare la scheda del lotto.`, actor: francesca, at: at(322), read: false, replies: [], demo: true },
-    { id: 'inbox-quality-followup', type: 'comment', styleId: trousers.styleId, moduleId: 13, title: 'Verifica finale sui capi ricondizionati', body: `Ho ricontrollato i 6 pantaloni del lotto ${trousers.lotId}: tensione e orlo sono rientrati in tolleranza. Lascio il campione in qualità per l’ultima firma.`, actor: elena, at: at(610), read: true, replies: [], demo: true },
-    { id: 'inbox-supplier-delivery', type: 'update', styleId: bag.styleId, moduleId: 11, title: 'Consegna accessori confermata', body: 'Accessori Firenze conferma la zip ottone e i rinforzi angolo entro mercoledì. Il fornitore ha aggiornato la data nell’ordine ACQ-0424-3.', actor: paolo, at: at(870), read: true, replies: [], demo: true },
-    { id: 'inbox-fit-comment', type: 'comment', styleId: trousers.styleId, moduleId: 4, title: 'Nota sul prototipo · Pantalone Riva', body: 'La piega cade bene sul davanti. Sul prossimo fitting controlliamo la vestibilità in vita con la camicia inserita, così chiudiamo la revisione del cartamodello.', actor: marta, at: at(1510), read: true, replies: [], demo: true },
-    { id: 'inbox-collection-approval', type: 'assign', styleId: knit.styleId, moduleId: 1, title: 'Rivedere la palette della capsule', body: `Ho aggiornato moodboard e riferimenti per ${knit.title}. Dai un’occhiata ai toni Avorio, Salvia e Grafite prima della revisione di collezione.`, actor: francesca, at: at(2460), read: true, replies: [], demo: true },
+    { id: 'inbox-production-shift', type: 'update', styleId: knit.styleId, moduleId: 12, title: `Aggiornamento produzione · ${knit.variant}`, body: `Luca ha aggiornato il turno del lotto ${knit.lotId}: ${knit.produced} capi registrati su ${knit.quantity}.`, actor: luca, at: at(205), read: true, replies: [], demo: true },
+    { id: 'inbox-supplier-delivery', type: 'update', styleId: knit.styleId, moduleId: 11, title: `Materiali consegnati · ${knit.variant}`, body: `La filatura e i fornitori accessori hanno completato le consegne per il lotto ${knit.lotId}.`, actor: paolo, at: at(870), read: true, replies: [], demo: true },
+    { id: 'inbox-fit-comment', type: 'comment', styleId: trousers.styleId, moduleId: 6, title: `Nota sul fitting · ${trousers.title}`, body: 'La piega cade bene sul davanti. Al prossimo controllo verifichiamo la vita e la vestibilità con la maglia della capsule.', actor: marta, at: at(1510), read: true, replies: [], demo: true },
+    { id: 'inbox-bag-reference', type: 'comment', styleId: bag.styleId, moduleId: 1, title: 'Riferimento per i manici della Borsa Trama', body: 'Ho aggiunto un riferimento in pelle testa moro al brief. La finitura si può confermare insieme alla direzione del concept.', actor: sara, at: at(2460), read: true, replies: [], demo: true },
   );
-  tasks.push({ id: 'task-planning', title: `Allineare le date con ${primary.factory}`, styleId: primary.styleId, moduleId: 10, status: 'Da fare', priority: 'Media', due: date(6), assignee: alex, note: `Verificare il piano dell’ordine ${primary.orderId}.`, demo: true });
   inbox.push({ id: 'inbox-production', type: 'update', styleId: primary.styleId, moduleId: 12, title: `Lotto ${primary.lotId} aggiornato`, body: `${primary.factory}: ${primary.produced} articoli completati su ${primary.quantity}.`, actor: luca, at: at(1440), read: true, replies: [], demo: true });
   return { items: seededItems, tasks, inbox, preferences: { theme: 'light', accent: 'indigo', sideDensity: 'comfortable', taskDensity: 'comfortable', motion: 'system', language: 'it', timezone: 'Europe/Rome', dateFormat: 'local', timeFormat: '24h', weekStartsOn: 'monday', workspaceName: 'Atelier', moduleAlerts: true, productNews: false, emailDigest: true, emailMentions: true, pushAssignments: true, pushDeadlines: true, mentionComments: true, assignmentReminders: true, defaultLanding: 'home', twoFactorEnabled: false } };
 }

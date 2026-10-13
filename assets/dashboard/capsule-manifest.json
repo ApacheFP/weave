@@ -316,6 +316,126 @@
       "thumbnail": "public/images/dashboard/knit-grafite-quality-thumb.webp",
       "created": "2026-10-11",
       "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-luce-avorio",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-3aa0e777-c493-4ba7-b12e-edd35b85eb49.png",
+      "prompt": "One abstract editorial still life for Maglia Luce in ivory: curved translucent ivory forms and warm pale plaster, gentle window shadows, diffused morning light, tactile fine-art fashion mood, landscape 4:3. Atmosphere only; no clothing, swatches, mannequin, people, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-luce-avorio.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-luce-salvia",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-3f0fa597-8a06-468f-b68f-091ec8b19bab.png",
+      "prompt": "One abstract editorial still life for Maglia Luce in muted sage: sculptural sage and pale stone forms, translucent surfaces, delicate botanical-like shadows, cool diffused daylight, restrained tactile fashion mood, landscape 4:3. Atmosphere only; no clothing, swatches, mannequin, people, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-luce-salvia.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-luce-grafite",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-8e30b63f-3568-4bff-820c-9c56bdc4f63f.png",
+      "prompt": "One abstract editorial still life for Maglia Luce in warm graphite: charcoal and soft grey sculptural planes, a curved dark form against pale mineral surfaces, long winter-light shadows, introspective and sophisticated, landscape 4:3. Atmosphere only; no clothing, swatches, mannequin, people, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-luce-grafite.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-riva-pietra",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-64aa1389-4ed4-4fb0-bda8-0ea3b9ce4984.png",
+      "prompt": "One abstract architectural editorial photograph for Pantalone Riva in stone: minimal limestone architecture, curved wall, column-like plane, precise diagonal shadow, measured elegance, softened late-afternoon light, landscape 4:3. Atmosphere only; no clothing, people, fabric samples, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-riva-pietra.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-trama-argilla",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-5ecae039-3097-42e4-9128-a3fd809cecc6.png",
+      "prompt": "One abstract editorial still life for Borsa Trama in clay: terracotta and clay planes, rounded arch-like form, tactile matte surfaces, soft sunlit shadows, warm and grounded artisan mood, landscape 4:3. Atmosphere only; no bag, clothing, leather goods, people, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-trama-argilla.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-luce-avorio-riflessi",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-3cdfe209-f85d-4b3b-b77c-232107678e82.png",
+      "prompt": "Abstract ivory translucent planes, thin sunlit edges and soft shadows; quiet, intimate fashion atmosphere. Landscape 4:3. No clothing, swatches, people, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-luce-avorio-riflessi.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-luce-avorio-luce",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-9a941bbf-106d-44b7-9599-bdacad596438.png",
+      "prompt": "Abstract pool of warm reflected light over pale mineral surfaces and gentle curves; ivory, pearl and pale oat. Calm autumn-winter atmosphere. Landscape 4:3. No products, clothing, swatches, people, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-luce-avorio-luce.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-luce-salvia-piani",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-7fde4eca-3289-4fa2-9782-2f2a5ea5e0f7.png",
+      "prompt": "Abstract layered muted sage and grey-green planes crossing pale stone with filtered light and delicate botanical-like shadows. No identifiable plants. Landscape 4:3. No clothing, swatches, people, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-luce-salvia-piani.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-luce-salvia-ombra",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-ab12a758-c40f-4460-a6a5-240978fe3217.png",
+      "prompt": "Quiet editorial photograph of a curved grey-green wall and pale floor divided by a moving dappled shadow; dusty sage and stone. Architecture and light only. Landscape 4:3. No clothing, plants, people, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-luce-salvia-ombra.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-luce-grafite-riflessi",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-ea89cefd-9fad-4909-a75c-d3829eaf3cf2.png",
+      "prompt": "Abstract dark reflective charcoal plane beside a softly lit warm-grey surface, narrow silver reflection and crisp winter shadow. Landscape 4:3. No clothing, swatches, people, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-luce-grafite-riflessi.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-luce-grafite-nebbia",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-ab36358d-922a-4d82-8de7-1fde39f7d4c8.png",
+      "prompt": "Abstract charcoal mineral forms fading into soft grey light, curved edge emerging from shadow; restrained, enveloping autumn-winter mood. Landscape 4:3. No clothing, swatches, people, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-luce-grafite-nebbia.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-riva-pietra-geometrie",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-2b14a39b-b85a-4596-92fa-06856f025612.png",
+      "prompt": "Minimal architectural editorial photograph of broad limestone steps and curved parapet with precise diagonal shadows; warm-grey stone and taupe. Landscape 4:3. No clothing, people, fabric samples, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-riva-pietra-geometrie.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-riva-pietra-ombre",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-840ee167-0660-4845-837b-c8460b6e41b8.png",
+      "prompt": "Abstract mineral slabs, parallel shadow lines and a soft strip of daylight; controlled geometric balance in stone-grey, limestone and taupe. Landscape 4:3. No garment, people, fabric swatches, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-riva-pietra-ombre.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-trama-argilla-ombre",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-27da03b2-c0e3-4348-be4d-1c6018b8439e.png",
+      "prompt": "Close editorial photograph of a matte terracotta wall meeting a rounded clay form, warm shadow and subtle earthy grain. Abstract surfaces only. Landscape 4:3. No bag, leather goods, clothing, people, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-trama-argilla-ombre.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
+    },
+    {
+      "key": "moodboard-trama-argilla-luce",
+      "source": "/Users/chico/.codex/generated_images/01a135ee-9c68-7e71-9bc5-a116a85a59dc/exec-33169c94-a601-425d-b6fc-535884653b3b.png",
+      "prompt": "Abstract sunlit arch and terracotta-colored planes, warm light fading into shadow; clay, sienna and pale sand. Landscape 4:3. No bag, leather goods, clothing, people, collage, text, logo or watermark.",
+      "output": "public/images/dashboard/moodboard-trama-argilla-luce.webp",
+      "created": "2026-10-13",
+      "generator": "image_gen built-in"
     }
   ]
 }

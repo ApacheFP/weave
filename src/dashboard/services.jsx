@@ -68,12 +68,12 @@ export function Lifecycle() {
   return <Card title="La vita continua" note="Eventi effettivi e scenari futuri restano distinti"><div className="dw-event-list">{data.lifecycle.map(row => <div key={row.id}><span className="dw-event-dot" /><div><strong>{row.type}</strong><p>{row.note}</p><small>{new Date(row.date + 'T12:00:00').toLocaleDateString('it-IT')}{row.future && ' · Scenario futuro'}</small></div></div>)}</div><form className="dw-stack" onSubmit={e => { e.preventDefault(); if (recordLifecycleEvent({ type, note, date })) setNote(''); }}><div className="dw-two"><Field label="Tipo evento"><select value={type} onChange={e => setType(e.target.value)}>{['Riparazione', 'Reso', 'Seconda vita', 'Riciclo'].map(t => <option key={t}>{t}</option>)}</select></Field><Field label="Data"><input type="date" required value={date} onChange={e => setDate(e.target.value)} /></Field></div><Field label="Descrizione"><textarea value={note} onChange={e => setNote(e.target.value)} required maxLength={500} rows={2} placeholder="Intervento, condizioni del capo, operatore…" /></Field><Button primary type="submit" disabled={!note.trim()} icon="plus">Registra evento</Button></form></Card>;
 }
 function Intelligence({ moduleId }) {
-  const { data, fabric, materials, cost, suggestedWholesale, generateDemoOutput, notify, collectionData } = useDemo();
+  const { data, fabric, materials, cost, suggestedWholesale, generateDemoOutput, notify, productDirection } = useDemo();
   const spec = productSpec(data), unit = materialUnit(data), sizes = productSizes(data), pieces = piecesFor(data);
   const snapshot = data.technical?.versions.find(version => version.id === data.technical.approvedId)?.snapshot || data.technical?.versions.at(-1)?.snapshot || versionSnapshot(data, data.technical || technicalDefaults(data));
   const output = moduleId === 5 && data.category === 'bag' ? 'Scheda dimensionale' : moduleId === 7 && data.category === 'knit' ? 'Piano pannelli e filato' : aiOutputs[moduleId] || 'Dati della filiera';
   const results = {
-    1: [['Capo', data.title], ['Direzione', collectionData.moodboard.some(item => item.atmosphere) ? 'Moodboard e palette disponibili' : 'Facoltativa · non generata'], ['Stato', data.sketchFile ? 'Schizzo caricato' : 'Spunti facoltativi']],
+    1: [['Capo', data.title], ['Direzione', productDirection.moodboard.some(item => item.atmosphere) ? 'Moodboard e palette disponibili' : 'Facoltativa · non generata'], ['Stato', data.sketchFile ? 'Schizzo caricato' : 'Spunti facoltativi']],
     2: data.measurements.map(row => [row.point, number(row.value, 1) + ' cm']),
     3: [[spec.materialLabel, fabric.name], ['Consumo', number(data.consumption, 2) + ' ' + unit], ['Distinta completa', euro(materials)]],
     4: [['Modello', 'v' + data.modelVersion], ['Pezzi', pieces.map(piece => `${piece.name} ×${piece.qty}`).join(', ')], ['Margine', data.seam + ' cm']],

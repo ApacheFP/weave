@@ -1,3 +1,5 @@
+import { prepareDirection } from './creativeData.js';
+
 // Category specifications feed the existing workspace, editor and exports.
 export const additionalFabrics = [
   { id: 'riva-wool', name: 'Lana stretch · Pietra', code: 'TES-041', price: 24, wool: 98, composition: '98% lana vergine · 2% elastan', supplier: 'Lanificio Biellese', origin: 'Italia', weight: 240, unit: 'm', category: 'trousers', tone: '#a59b8d', certificate: 'Scheda tessuto demo IT-9041', asset: 'trousers-fabric' },
@@ -74,33 +76,130 @@ export function markerConfiguration(data, width = data.markerWidth, optimized = 
   return { markerWidth: width, optimized, consumption: Number((spec.baselineConsumption * ratio * (optimized ? .86 / .89 : 1)).toFixed(4)), waste: Math.max(4, Math.min(25, Math.round((optimized ? baseWaste - 3 : baseWaste) + (spec.prefix === 'knit' ? 0 : (spec.markerBaseWidth - width) * .12)))) };
 }
 
-export function newDemoProducts(initial) {
+export function newDemoProducts(initial, now = new Date()) {
+  const shiftedDate = days => {
+    const value = new Date(now);
+    value.setDate(value.getDate() + days);
+    return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}`;
+  };
+  const shiftedTimestamp = days => {
+    const value = new Date(now);
+    value.setDate(value.getDate() + days);
+    return value.toISOString();
+  };
   const definitions = [
-    { category: 'trousers', styleId: 'PT-0423', title: 'Pantalone Riva', variant: 'Pietra', fabricId: 'riva-wool', fabricPrice: 24, quantity: 360, produced: 240, reworks: 6, retailSold: 42, wholesale: 110, retail: 220, retailAverage: 210, gradingChest: 4, measurements: [{ point: 'Lunghezza fianco', value: 104 }, { point: 'Circonferenza vita', value: 74 }, { point: 'Circonferenza bacino', value: 100 }, { point: 'Lunghezza interno gamba', value: 76 }], trims: [
-      { id: 'pocketing', name: 'Tela tasche cotone', code: 'FOD-041', qty: .28, unit: 'm', price: 5, supplier: 'Tessitura Pratese' }, { id: 'waistband', name: 'Rinforzo cintura', code: 'TEL-042', qty: .12, unit: 'm', price: 3, supplier: 'Accessori Firenze' }, { id: 'zip', name: 'Zip coperta 18 cm', code: 'ZIP-041', qty: 1, unit: 'pz', price: 1.8, supplier: 'Accessori Firenze' }, { id: 'button', name: 'Bottone corozo', code: 'BOT-041', qty: 1, unit: 'pz', price: .5, supplier: 'Accessori Firenze' }, { id: 'pack', name: 'Etichetta e imballo', code: 'PKG-041', qty: 1, unit: 'set', price: .8, supplier: 'Pack G' }], qualityNote: 'Ridurre la tensione del punto invisibile e ricontrollare gli orli del lotto L-0423-A.', lifecycleNote: 'Ripresa orlo e ripristino piega · laboratorio sartoriale' },
-    { category: 'bag', styleId: 'BG-0424', title: 'Borsa Trama', variant: 'Argilla', fabricId: 'trama-canvas', fabricPrice: 18, quantity: 180, produced: 120, reworks: 4, retailSold: 26, wholesale: 95, retail: 190, retailAverage: 185, gradingChest: 0, measurements: [{ point: 'Larghezza corpo', value: 34 }, { point: 'Altezza corpo', value: 29 }, { point: 'Profondità fondo', value: 12 }, { point: 'Lunghezza manico', value: 62 }], trims: [
-      { id: 'lining', name: 'Fodera cotone Argilla', code: 'FOD-052', qty: .5, unit: 'm', price: 6, supplier: 'Tessitura Pratese' }, { id: 'handles', name: 'Coppia manici pelle testa moro', code: 'PEL-052', qty: 1, unit: 'set', price: 12, supplier: 'Pelletteria Toscana' }, { id: 'zip', name: 'Zip ottone spazzolato 32 cm', code: 'ZIP-052', qty: 1, unit: 'pz', price: 3.5, supplier: 'Accessori Firenze' }, { id: 'corners', name: 'Rinforzi angoli in pelle', code: 'PEL-053', qty: 2, unit: 'pz', price: 1.2, supplier: 'Pelletteria Toscana' }, { id: 'pack', name: 'Etichetta e sacca cotone', code: 'PKG-052', qty: 1, unit: 'set', price: 1.5, supplier: 'Pack G' }], qualityNote: 'Rifare la travetta sul manico sinistro e verificare con carico di 5 kg sul lotto L-0424-A.', lifecycleNote: 'Sostituzione manico in pelle · laboratorio di pelletteria' },
+    { category: 'trousers', styleId: 'PT-0423', title: 'Pantalone Riva', variant: 'Pietra', fabricId: 'riva-wool', fabricPrice: 24, quantity: 360, produced: 0, reworks: 0, retailSold: 0, wholesale: 110, retail: 220, retailAverage: 210, gradingChest: 4, measurements: [{ point: 'Lunghezza fianco', value: 104 }, { point: 'Circonferenza vita', value: 74 }, { point: 'Circonferenza bacino', value: 100 }, { point: 'Lunghezza interno gamba', value: 76 }], trims: [
+      { id: 'pocketing', name: 'Tela tasche cotone', code: 'FOD-041', qty: .28, unit: 'm', price: 5, supplier: 'Tessitura Pratese' }, { id: 'waistband', name: 'Rinforzo cintura', code: 'TEL-042', qty: .12, unit: 'm', price: 3, supplier: 'Accessori Firenze' }, { id: 'zip', name: 'Zip coperta 18 cm', code: 'ZIP-041', qty: 1, unit: 'pz', price: 1.8, supplier: 'Accessori Firenze' }, { id: 'button', name: 'Bottone corozo', code: 'BOT-041', qty: 1, unit: 'pz', price: .5, supplier: 'Accessori Firenze' }, { id: 'pack', name: 'Etichetta e imballo', code: 'PKG-041', qty: 1, unit: 'set', price: .8, supplier: 'Pack G' }], qualityNote: 'Nessuna non conformità: i controlli qualità partono con il primo lotto.', lifecycleNote: 'Ripresa orlo e ripristino piega · laboratorio sartoriale' },
+    { category: 'bag', styleId: 'BG-0424', title: 'Borsa Trama', variant: 'Argilla', fabricId: 'trama-canvas', fabricPrice: 18, quantity: 180, produced: 0, reworks: 0, retailSold: 0, wholesale: 95, retail: 190, retailAverage: 185, gradingChest: 0, measurements: [{ point: 'Larghezza corpo', value: 34 }, { point: 'Altezza corpo', value: 29 }, { point: 'Profondità fondo', value: 12 }, { point: 'Lunghezza manico', value: 62 }], trims: [
+      { id: 'lining', name: 'Fodera cotone Argilla', code: 'FOD-052', qty: .5, unit: 'm', price: 6, supplier: 'Tessitura Pratese' }, { id: 'handles', name: 'Coppia manici pelle testa moro', code: 'PEL-052', qty: 1, unit: 'set', price: 12, supplier: 'Pelletteria Toscana' }, { id: 'zip', name: 'Zip ottone spazzolato 32 cm', code: 'ZIP-052', qty: 1, unit: 'pz', price: 3.5, supplier: 'Accessori Firenze' }, { id: 'corners', name: 'Rinforzi angoli in pelle', code: 'PEL-053', qty: 2, unit: 'pz', price: 1.2, supplier: 'Pelletteria Toscana' }, { id: 'pack', name: 'Etichetta e sacca cotone', code: 'PKG-052', qty: 1, unit: 'set', price: 1.5, supplier: 'Pack G' }], qualityNote: 'Nessuna non conformità: il controllo del primo lotto è ancora da avviare.', lifecycleNote: 'Sostituzione manico in pelle · laboratorio di pelletteria' },
     { category: 'knit', styleId: 'MG-0425', title: 'Maglia Luce', variant: 'Avorio', fabricId: 'luce-yarn', fabricPrice: 78, quantity: 300, produced: 210, reworks: 5, retailSold: 48, wholesale: 100, retail: 200, retailAverage: 194, gradingChest: 4, measurements: [{ point: 'Lunghezza centro dietro', value: 62 }, { point: 'Larghezza spalle', value: 42 }, { point: 'Circonferenza torace', value: 104 }, { point: 'Lunghezza manica', value: 58 }], trims: [
       { id: 'tape', name: 'Nastro rinforzo spalla', code: 'NAS-063', qty: .3, unit: 'm', price: .6, supplier: 'Accessori Firenze' }, { id: 'pack', name: 'Etichetta e imballo', code: 'PKG-063', qty: 1, unit: 'set', price: .8, supplier: 'Pack G' }], qualityNote: 'Riprendere il punto al polso destro con FIL-063 e ricontrollare elasticità e rimaglio sul lotto L-0425-A.', lifecycleNote: 'Rammendo punto e vaporizzo · maglificio autorizzato' },
   ];
   const knit = definitions.pop();
   definitions.unshift({ ...knit, productId: 'MG-0425' },
-    { ...structuredClone(knit), productId: 'MG-0425', styleId: 'MG-0426', variant: 'Salvia', fabricId: 'luce-salvia-yarn', quantity: 240, produced: 168, reworks: 4, retailSold: 38, qualityId: 'NC-024', qualityNote: 'Riprendere il punto al polso destro con FIL-064 e ricontrollare elasticità e rimaglio sul lotto L-0426-A.' },
-    { ...structuredClone(knit), productId: 'MG-0425', styleId: 'MG-0427', variant: 'Grafite', fabricId: 'luce-grafite-yarn', quantity: 260, produced: 182, reworks: 4, retailSold: 40, qualityId: 'NC-025', qualityNote: 'Riprendere il punto al polso destro con FIL-065 e ricontrollare elasticità e rimaglio sul lotto L-0427-A.' });
+    { ...structuredClone(knit), productId: 'MG-0425', styleId: 'MG-0426', variant: 'Salvia', fabricId: 'luce-salvia-yarn', quantity: 240, produced: 144, reworks: 3, retailSold: 20, qualityId: 'NC-024', qualityNote: 'Riprendere il punto al polso destro con FIL-064 e ricontrollare elasticità e rimaglio sul lotto L-0426-A.' },
+    { ...structuredClone(knit), productId: 'MG-0425', styleId: 'MG-0427', variant: 'Grafite', fabricId: 'luce-grafite-yarn', quantity: 260, produced: 78, reworks: 1, retailSold: 8, qualityId: 'NC-025', qualityNote: 'Riprendere il punto al polso destro con FIL-065 e ricontrollare elasticità e rimaglio sul lotto L-0427-A.' });
   return definitions.map((definition, index) => {
     const spec = productSpec(definition), fabric = additionalFabrics.find(f => f.id === definition.fabricId), suffix = definition.styleId.split('-')[1];
-    const primary = { id: `ACQ-${suffix}-1`, materialId: 'main', material: fabric.name, supplier: fabric.supplier, status: 'Consegnato', date: '2027-03-26' };
-    const secondary = definition.trims.slice(0, 3).map((row, i) => ({ id: `ACQ-${suffix}-${i + 2}`, materialId: row.id, material: row.name, supplier: row.supplier, status: i === 2 ? 'Confermato' : 'Consegnato', date: '2027-04-05' }));
+    const inProduction = definition.category === 'knit', hasDesign = definition.category !== 'bag';
+    const modelVersion = inProduction ? '1.1' : initial.modelVersion || '1.0';
+    const timeline = definition.category === 'bag'
+      ? { start: shiftedDate(30), end: shiftedDate(70), delivery: shiftedDate(90) }
+      : definition.category === 'trousers'
+        ? { start: shiftedDate(14), end: shiftedDate(44), delivery: shiftedDate(60) }
+        : { start: shiftedDate(-3), end: shiftedDate(30), delivery: shiftedDate(45) };
+    const primary = { id: `ACQ-${suffix}-1`, materialId: 'main', material: fabric.name, supplier: fabric.supplier, status: 'Consegnato', date: shiftedDate(-5) };
+    const secondary = definition.trims.slice(0, 3).map((row, i) => ({ id: `ACQ-${suffix}-${i + 2}`, materialId: row.id, material: row.name, supplier: row.supplier, status: 'Consegnato', date: shiftedDate(-4) }));
     const colors = [{ name: definition.variant, color: fabric.tone, code: `C-${suffix}`, material: fabric.code }];
     const creative = { ...structuredClone(initial.creative), inputs: { request: spec.requirements, brand: 'Atelier · essenzialità, materia e sartorialità contemporanea', history: `Nuovo sviluppo ${spec.label.toLowerCase()} nella capsule Maglia Luce, Pantalone Riva e Borsa Trama. Dati demo.`, target: 'Contemporary · 30–45 anni' } };
-    return { ...structuredClone(initial), ...definition, retailTarget: definition.quantity, factory: definition.category === 'bag' ? 'Pelletteria Toscana' : definition.category === 'knit' ? 'Maglificio Valdarno' : 'Confezioni Centro', brief: spec.requirements, creative, orderId: `OP-${suffix}`, lotId: `L-${suffix}-A`, sampleId: `CAMP-${suffix}-01`, fabricLot: `MAT-${suffix}`, consumption: spec.baselineConsumption, markerWidth: spec.markerBaseWidth, seam: spec.parts.seam, waste: definition.category === 'knit' ? 6 : 11, actualWaste: definition.category === 'knit' ? 7 : 12, laborMinutes: spec.operations.reduce((sum, row) => sum + row[2], 0), sampleChecks: [false, true, false], qualityScore: 89 + index, purchaseOrders: [primary, ...secondary],
-      wholesaleOrders: [{ id: `W-${suffix}-1`, client: 'Boutique Y', qty: Math.floor(definition.quantity * .25), shipped: Math.floor(definition.quantity * .2), status: 'Parziale' }, { id: `W-${suffix}-2`, client: 'Studio Z', qty: Math.floor(definition.quantity * .2), shipped: 0, status: 'Da preparare' }],
-      shipments: [{ id: `TRK-${suffix}01`, client: 'Boutique Y', qty: Math.floor(definition.quantity * .2), status: 'Consegnata' }], productionDays: [0, 1, 2, 3, 4, 5, 6].map(n => Math.floor(definition.produced / 7) + (n < definition.produced % 7 ? 1 : 0)),
+    const direction = hasDesign ? prepareDirection(creative.inputs, '', null, definition) : null;
+    const sketchAsset = definition.category === 'knit' && definition.variant !== 'Avorio' ? `knit-${definition.variant.toLowerCase()}` : spec.prefix;
+    const sketchFile = hasDesign ? { id: `sketch-${definition.styleId}`, src: `/images/dashboard/${sketchAsset}-sketch.webp`, name: `${definition.styleId}-schizzo-demo.webp`, type: 'image/webp', size: 1 } : null;
+    const versionId = `${definition.styleId}-v1`;
+    const snapshot = { category: definition.category, baseSize: spec.baseSize, measurements: structuredClone(definition.measurements), parts: { ...spec.parts, seam: spec.parts.seam }, fit: spec.fit, tolerance: spec.tolerance, colors, requirements: spec.requirements, constraints: definition.category === 'knit' ? 'Finezza 7; misure dopo stabilizzazione; bordi inclusi nel filato principale e nel ciclo di smacchinatura.' : `Rispetta verso e mano del materiale; tolleranza ±${spec.tolerance} cm.`, notes: [] };
+    const technical = { requirements: spec.requirements, constraints: snapshot.constraints, fit: spec.fit, tolerance: spec.tolerance, colors, notes: [], versions: hasDesign ? [{ id: versionId, number: 1, note: 'Disegno tecnico approvato', date: shiftedTimestamp(inProduction ? -3 : -1), snapshot }] : [], currentId: hasDesign ? versionId : null, approvedId: hasDesign ? versionId : null };
+    creative.direction = direction;
+    creative.round = direction ? 1 : 0;
+    creative.concept = sketchFile ? { sketch: sketchFile, palette: structuredClone(direction.palette), moodboard: structuredClone(direction.moodboard), references: [], paletteOrigin: 'Spunti', moodboardOrigin: 'Spunti', paletteChosen: true, moodboardChosen: true, sketchKind: 'Matita' } : null;
+    const reviews = hasDesign ? { 3: true, 4: true, 5: true, ...(inProduction && { 9: true, 10: true }) } : {};
+    const wholesaleOrders = inProduction ? [{ id: `W-${suffix}-1`, client: 'Boutique Y', qty: Math.floor(definition.quantity * .25), shipped: Math.floor(definition.quantity * .2), status: 'Parziale' }, { id: `W-${suffix}-2`, client: 'Studio Z', qty: Math.floor(definition.quantity * .2), shipped: 0, status: 'Da preparare' }] : [];
+    return { ...structuredClone(initial), ...definition, ...timeline, modelVersion, identityAssigned: true, conceptApproved: hasDesign, techGenerated: hasDesign, sketch: sketchFile?.src || null, sketchFile, sketchName: sketchFile?.name || null, technical, phaseReviews: reviews, sampleApproved: inProduction, optimized: inProduction, qualityResolved: !inProduction, retailTarget: definition.quantity, factory: definition.category === 'bag' ? 'Pelletteria Toscana' : definition.category === 'knit' ? 'Maglificio Valdarno' : 'Confezioni Centro', brief: spec.requirements, creative, orderId: `OP-${suffix}`, lotId: `L-${suffix}-A`, sampleId: `CAMP-${suffix}-01`, fabricLot: `MAT-${suffix}`, consumption: spec.baselineConsumption, markerWidth: spec.markerBaseWidth, seam: spec.parts.seam, waste: definition.category === 'knit' ? 6 : 11, actualWaste: definition.category === 'knit' ? 7 : 12, laborMinutes: spec.operations.reduce((sum, row) => sum + row[2], 0), sampleChecks: inProduction ? [true, true, true] : definition.category === 'trousers' ? [true, false, false] : [false, false, false], qualityScore: 89 + index, purchaseOrders: inProduction ? [primary, ...secondary] : [],
+      wholesaleOrders,
+      shipments: inProduction ? [{ id: `TRK-${suffix}01`, client: 'Boutique Y', qty: Math.floor(definition.quantity * .2), status: 'Consegnata' }] : [], productionDays: definition.produced ? [0, 1, 2, 3, 4, 5, 6].map(n => Math.floor(definition.produced / 7) + (n < definition.produced % 7 ? 1 : 0)) : [],
       lifecycle: [{ id: `life-${suffix}`, date: '2028-10-12', type: 'Riparazione', note: definition.lifecycleNote, future: true }],
-      technical: { requirements: spec.requirements, constraints: definition.category === 'knit' ? 'Finezza 7; misure dopo stabilizzazione; bordi inclusi nel filato principale e nel ciclo di smacchinatura.' : `Rispetta verso e mano del materiale; tolleranza ±${spec.tolerance} cm.`, fit: spec.fit, tolerance: spec.tolerance, colors, notes: [], versions: [], currentId: null, approvedId: null },
-      events: [[21, `Aperto ${definition.title} · ${definition.variant} nella capsule Autunno/Inverno 2027.`], [3, `Selezionato ${fabric.name} · ${fabric.code}; distinta specifica ${spec.label.toLowerCase()}.`], [13, `${spec.quality.id}: ${spec.quality.title.toLowerCase()}, ${definition.reworks} articoli da ricontrollare.`], [8, `Definito il ciclo ${spec.label.toLowerCase()}: ${spec.operations.length} gruppi di lavorazione.`], [14, `Registrato lo stock del lotto L-${suffix}-A e le scorte di ${fabric.code}.`], [20, `Preparata la scheda ${spec.gradeIndex === null ? 'dimensionale a formato unico' : 'di sviluppo taglie'} di ${definition.title}.`]].map(([module, text], n) => ({ id: `${suffix}-event-${n}`, module, text, time: '09 ott · 14:00', actor: { name: 'Marta Bianchi', email: 'marta@atelier.demo' }, demo: true })),
+      events: [
+        [21, `Aperto ${definition.title} · ${definition.variant} nella capsule Autunno/Inverno 2027.`],
+        ...(!hasDesign ? [[1, `Avviato il concept di ${definition.title}: brief e riferimenti in revisione.`]] : [
+          [1, `Caricato lo schizzo e confermata l’identità di ${definition.title} · ${definition.variant}.`],
+          [2, `Approvato il disegno tecnico v1 di ${definition.title} · ${definition.variant}.`],
+          [3, `Confermata la distinta di ${definition.title}: ${fabric.name} · ${fabric.code}.`],
+          [4, `Revisionato il modello v${modelVersion} di ${definition.title}.`],
+          [5, `Confermate le misure di ${definition.title} per ${spec.sizes.length} ${spec.sizes.length === 1 ? 'formato' : 'taglie'}.`],
+          ...(inProduction ? [
+            [6, `Approvato il campione ${definition.variant} dopo tre verifiche.`],
+            [7, `Ottimizzato il piano ${spec.materialLabel.toLowerCase()} di ${definition.title}.`],
+            [9, `Confermata la costificazione di ${definition.title} · ${definition.variant}.`],
+            [10, `Pianificata la consegna del lotto ${definition.styleId}.`],
+            [11, `Consegnati i materiali per il lotto ${definition.styleId}.`],
+            [12, `Registrati ${definition.produced} capi sul lotto L-${suffix}-A.`],
+            [13, `${spec.quality.id}: ${spec.quality.title.toLowerCase()}, ${definition.reworks} articoli da ricontrollare.`],
+          ] : [[6, `Fitting del campione ${definition.variant}: completata una verifica su tre.`]]),
+        ]),
+      ].map(([module, text], n) => ({ id: `${suffix}-event-${n}`, module, text, time: '09 ott · 14:00', actor: { name: 'Marta Bianchi', email: 'marta@atelier.demo' }, demo: true })),
     };
   });
+}
+
+export const workflowPhases = [
+  { name: 'Concept', label: 'In progettazione', ids: [1] },
+  { name: 'Sviluppo tecnico', label: 'Sviluppo tecnico', ids: [2, 3, 4, 5] },
+  { name: 'Validazione', label: 'In validazione', ids: [6, 7, 9] },
+  { name: 'Produzione', label: 'In produzione', ids: [10, 11, 12, 13] },
+  { name: 'Passaporto', label: 'Passaporto digitale', ids: [19] },
+];
+
+export function productWorkflow(data) {
+  const outputs = {
+    1: Boolean(data.conceptApproved || data.sketchFile),
+    2: Boolean(data.technical?.approvedId && data.technical.approvedId === data.technical.currentId),
+    6: data.sampleApproved,
+    7: data.optimized,
+    11: data.purchaseOrders.length > 0 && data.purchaseOrders.every(order => order.status === 'Consegnato'),
+    12: data.produced >= data.quantity,
+    13: data.produced >= data.quantity && data.qualityResolved && !data.reworks,
+    19: data.passportPublished,
+  };
+  const started = {
+    1: Boolean(data.brief.trim()) || data.references.length > 0,
+    2: Boolean(data.techGenerated),
+    6: data.sampleChecks.some(Boolean),
+    10: data.purchaseOrders.length > 0 || data.produced > 0,
+    11: data.purchaseOrders.length > 0,
+    12: data.produced > 0,
+    13: data.produced > 0 && (!data.qualityResolved || data.reworks > 0),
+    19: data.phaseReviews?.[19] === false,
+  };
+  const rawState = id => (outputs[id] || data.phaseReviews?.[id] === true) ? 'done' : (started[id] || data.phaseReviews?.[id] === false) ? 'active' : 'pending';
+  const states = {};
+  let previousComplete = true;
+  for (const id of workflowPhases.flatMap(phase => phase.ids)) {
+    const state = rawState(id);
+    const qualityRunsWithProduction = id === 13 && states[10] === 'done' && states[11] === 'done' && state !== 'pending';
+    states[id] = previousComplete || qualityRunsWithProduction ? state : 'pending';
+    previousComplete = previousComplete && state === 'done';
+  }
+  const phases = workflowPhases.map(phase => {
+    const done = phase.ids.filter(id => states[id] === 'done').length;
+    const active = phase.ids.filter(id => states[id] === 'active').length;
+    return { ...phase, done, active, state: done === phase.ids.length ? 'done' : active || done ? 'active' : 'pending' };
+  });
+  const current = phases.find(phase => phase.state !== 'done');
+  const complete = Object.values(states).filter(state => state === 'done').length;
+  const total = Object.keys(states).length;
+  return {
+    states, phases, complete, total, percent: Math.round(complete / total * 100), current,
+    stageLabel: !current ? 'Percorso completato' : current.state === 'active' ? current.label : current.name === 'Concept' ? 'Da sviluppare' : `Da avviare · ${current.name.toLowerCase()}`,
+  };
 }
 
 export function purchaseMaterial(data, order, fabric) {

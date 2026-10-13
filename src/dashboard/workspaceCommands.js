@@ -1,4 +1,4 @@
-import { collectionDefaults } from './creativeData.js';
+import { collectionDefaults, prepareDirection } from './creativeData.js';
 import { applyProductPatch } from './domain.js';
 import { findProduct, ProductActionError } from './productActions.js';
 import { profileActor } from './workspaceData.js';
@@ -58,4 +58,10 @@ export function saveCollectionDirection(workspace, identity, patch, message) {
   const event = message && eventFor(product.profile, message, 1);
   const update = event && workspace.preferences.moduleAlerts && { id: crypto.randomUUID(), type: 'update', styleId: product.styleId, moduleId: 1, title: `${product.collection} · direzione creativa`, body: message, actor: event.actor, at: event.at, read: false, replies: [], demo: true };
   return { ...workspace, collections: { ...workspace.collections, [product.collection]: { ...previous, ...changes } }, inbox: update ? [update, ...workspace.inbox] : workspace.inbox, items: event ? workspace.items.map(item => item.id === product.id ? { ...item, events: [event, ...item.events].slice(0, 40) } : item) : workspace.items };
+}
+export function saveProductDirection(workspace, identity, patch, message) {
+  const product = findProduct(workspace, identity), previous = product.creative.direction?.styleId === product.styleId ? product.creative.direction : prepareDirection(product.creative.inputs, '', null, product);
+  const changes = typeof patch === 'function' ? patch(previous) : patch;
+  if (!changes || Object.keys(changes).some(key => !['styleId', 'palette', 'moodboard', 'directionRevision', 'directionCaption', 'directionHistory'].includes(key))) throw new ProductActionError('INVALID_PRODUCT_DIRECTION', 'Verifica la direzione creativa del capo.');
+  return saveProductSection(workspace, identity, 'saveCreative', { creative: { ...product.creative, direction: { ...previous, ...changes } } }, message, 1);
 }

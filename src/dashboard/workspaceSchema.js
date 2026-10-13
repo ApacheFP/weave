@@ -52,6 +52,8 @@ function product(item) {
   if (!array(item.events, row => strings(row, ['id', 'text', 'time', 'at']) && integer(row.module) && actor(row.actor)) || !uniqueIds(item.events)) return false;
   if (!object(item.phaseReviews) || !Object.values(item.phaseReviews).every(value => typeof value === 'boolean') || !object(item.chats) || !Object.values(item.chats).every(rows => array(rows, row => strings(row, ['id', 'role', 'text'])))) return false;
   if (!object(item.aiRuns) || !Object.values(item.aiRuns).every(integer) || !object(item.creative) || !inputs(item.creative.inputs) || !references(item.creative.referenceFiles)) return false;
+  const direction = item.creative.direction;
+  if (direction != null && (!object(direction) || !strings(direction, ['styleId', 'directionCaption']) || !integer(direction.directionRevision) || !array(direction.palette, row => strings(row, ['name', 'color'])) || !references(direction.moodboard))) return false;
   const concept = item.creative.concept;
   if (concept != null && (!object(concept) || !array(concept.palette, row => strings(row, ['name', 'color'])) || !references(concept.moodboard) || !references(concept.references))) return false;
   return technical(item.technical, item.category);

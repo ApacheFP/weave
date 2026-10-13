@@ -35,20 +35,22 @@ class PageBoundary extends React.Component {
 }
 
 function StylesPage({ onCreate, onOpen }) {
-  const { workspaceItems, selectStyle } = useDemo();
+  const { workspaceItems, workspaceCollections, selectStyle } = useDemo();
   const [query, setQuery] = useState('');
   const [layout, setLayout] = useState('Griglia');
+  const [collectionFilter, setCollectionFilter] = useState('all');
   const search = query.toLowerCase().trim();
-  const rows = workspaceItems.filter(item => [item.title, item.collection, item.productId, item.styleId, item.variant].join(' ').toLowerCase().includes(search));
+  const collections = [...new Set([...Object.keys(workspaceCollections), ...workspaceItems.map(item => item.collection)])].sort((a, b) => a.localeCompare(b, 'it-IT'));
+  const rows = workspaceItems.filter(item => (collectionFilter === 'all' || item.collection === collectionFilter) && [item.title, item.collection, item.productId, item.styleId, item.variant].join(' ').toLowerCase().includes(search));
   const openStyle = id => { selectStyle(id); onOpen(); };
   return <div className="dw-styles-page">
     <div className="dw-page-head"><div><h2>Capi</h2><p>{workspaceItems.length} capi e varianti in Atelier · {workspaceItems.filter(item => !item.identityAssigned).length} in bozza</p></div><Button primary icon="plus" onClick={onCreate}>Nuovo capo</Button></div>
-    <div className="dw-styles-toolbar"><div className="dw-search"><span><Icon name="search" size={14} /><input aria-label="Cerca nella lista capi" placeholder="Cerca un capo…" value={query} onChange={e => setQuery(e.target.value)} /></span></div><Tabs items={['Griglia', 'Lista']} selected={layout} onChange={setLayout} label="Vista dei capi" /></div>
-    {layout === 'Griglia' ? <div className="dw-style-grid">{rows.map(item => <button type="button" className="dw-style-card" key={item.styleId} onClick={() => openStyle(item.styleId)} aria-label={`Apri ${item.title} · ${item.variant}`}>
-      <div className="dw-style-card-heading"><span className="dw-style-card-photo"><ProductPhoto product={item} sizes="48px" alt="" /></span><div><strong>{item.title}</strong><span className="dw-code">{item.styleId}</span></div></div>
-      <p>{item.collection}</p><div className="dw-style-card-footer"><span><Icon name="layers" size={13} />{item.variant}</span><Icon name="arrow" size={14} /></div>
+    <div className="dw-styles-toolbar"><div className="dw-styles-filters"><div className="dw-search"><span><Icon name="search" size={14} /><input aria-label="Cerca nella lista capi" placeholder="Cerca un capo…" value={query} onChange={e => setQuery(e.target.value)} /></span></div><select className="dw-styles-collection-filter" aria-label="Filtra per collezione" value={collectionFilter} onChange={event => setCollectionFilter(event.target.value)}><option value="all">Tutte le collezioni</option>{collections.map(name => <option key={name} value={name}>{name}</option>)}</select></div><Tabs items={['Griglia', 'Lista']} selected={layout} onChange={setLayout} label="Vista dei capi" /></div>
+    {layout === 'Griglia' ? <div className="dw-style-grid dw-collection-products">{rows.map(item => <button type="button" className="dw-collection-product" key={item.styleId} onClick={() => openStyle(item.styleId)} aria-label={`Apri ${item.title} · ${item.variant}`}>
+      <span className="dw-collection-product-image"><ProductPhoto product={item} sizes="(max-width: 760px) 100vw, 25vw" alt="" /></span>
+      <span className="dw-collection-product-info"><span className="dw-collection-product-heading"><strong>{item.title}</strong></span><span className="dw-collection-product-footer"><small className="dw-collection-product-variant">{item.variant}</small><span className="dw-collection-product-action"><small className="dw-collection-product-model">{item.styleId}</small><span className="dw-collection-product-cta">Apri capo<Icon name="arrow" size={15} /></span></span></span></span>
     </button>)}</div> : <Card flush><div className="dw-table-wrap"><table className="dw-table"><thead><tr><th>Capo</th><th>Codice</th><th>Collezione</th><th>Variante</th><th /></tr></thead><tbody>{rows.map(item => <tr key={item.styleId}><td><span className="dw-product-cell"><span className="dw-style-card-photo"><ProductPhoto product={item} sizes="40px" alt="" /></span><strong>{item.title}</strong></span></td><td className="dw-code">{item.styleId}</td><td>{item.collection}</td><td>{item.variant}</td><td><Button onClick={() => openStyle(item.styleId)}>Apri capo<Icon name="arrow" size={14} /></Button></td></tr>)}</tbody></table></div></Card>}
-    {!rows.length && <Empty>Nessun capo corrisponde alla ricerca.</Empty>}
+    {!rows.length && <Empty>Nessun capo corrisponde ai filtri selezionati.</Empty>}
   </div>;
 }
 

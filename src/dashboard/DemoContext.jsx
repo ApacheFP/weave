@@ -1,11 +1,11 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { profileActor, validTask } from './workspaceData.js';
 import { groupProducts } from './productData.js';
 import { fabrics, totals } from './domain.js';
 import { createDemoWorkspace } from './demoDefaults.js';
 import * as productActions from './productActions.js';
-import { collectionDefaults } from './creativeData.js';
-import { productSections, saveProductSection, saveCollectionDirection as saveDirection, collectionFor, updateProfile as saveProfile } from './workspaceCommands.js';
+import { collectionDefaults, prepareDirection } from './creativeData.js';
+import { productSections, saveProductSection, saveProductDirection as saveDirection, collectionFor, updateProfile as saveProfile } from './workspaceCommands.js';
 import useWorkspacePersistence from './useWorkspacePersistence.js';
 import { download } from './exportFiles.js';
 import { preferenceBooleans, preferenceChoices, workspaceSchemaVersion } from './workspaceSchema.js';
@@ -64,10 +64,14 @@ export function DemoProvider({ children, initialProfile }) {
     try { const success = mutate(action); if (success && message) notify(message); return success; }
     catch (error) { notify(error.message || 'La modifica non è stata applicata.'); return false; }
   }
+  const data = workspace && (workspace.items.find(item => item.id === workspace.activeProductId) || workspace.items.find(item => item.styleId === workspace.activeId));
+  const productDirection = useMemo(() => {
+    if (!data) return null;
+    return data.creative.direction?.styleId === data.styleId ? data.creative.direction : prepareDirection(data.creative.inputs, '', null, data);
+  }, [data]);
   if (!workspace || storage.status === 'loading') return <div className="dw-app"><main className="dw-page"><Card title={loadError ? 'Non è stato possibile aprire i dati salvati' : 'Apertura dello spazio di lavoro'}>
     {loadError ? <><p role="alert">{loadError.code ? loadError.message : 'Il browser non ha reso disponibili i dati salvati.'} I dati originali sono conservati.</p><p>Puoi riprovare oppure aprire una sessione temporanea. Le modifiche temporanee non sostituiscono il salvataggio esistente.</p><div className="dw-actions"><Button onClick={persistence.retryLoad}>Riprova</Button><Button onClick={persistence.openTemporary}>Apri sessione temporanea</Button>{loadError.record && <Button onClick={() => download('weave-dati-da-recuperare.json', JSON.stringify(loadError.record, null, 2), 'application/json')}>Scarica dati originali</Button>}</div></> : <p role="status">Caricamento dei capi e delle modifiche salvate su questo dispositivo…</p>}
   </Card></main></div>;
-  const data = workspace.items.find(item => item.id === workspace.activeProductId) || workspace.items.find(item => item.styleId === workspace.activeId);
   const targetId = data.id;
   const products = groupProducts(workspace.items, workspace.activeId, workspace.selectedVariants, fabrics);
   const collectionData = collectionFor(workspace, data.collection);
@@ -85,7 +89,7 @@ export function DemoProvider({ children, initialProfile }) {
   const createShipment = input => run(current => productActions.createShipment(current, targetId, input), 'Spedizione creata');
   const confirmShipment = identity => run(current => productActions.confirmShipment(current, targetId, identity), 'Consegna confermata');
   const updateProfile = input => run(current => saveProfile(current, input));
-  const saveCollectionDirection = (patch, message) => run(current => saveDirection(current, targetId, patch, message), message);
+  const saveProductDirection = (patch, message) => run(current => saveDirection(current, targetId, patch, message), message);
   function createCollection(input) {
     const name = typeof input?.name === 'string' ? input.name.trim() : '';
     const phases = ['Passata', 'Attuale', 'Futura', 'Programmata'];
@@ -188,6 +192,6 @@ export function DemoProvider({ children, initialProfile }) {
     if (!Object.keys(changes).length) return false;
     return run(current => ({ ...current, preferences: { ...current.preferences, ...changes } }), 'Preferenze aggiornate');
   }
-  return <Context.Provider value={{ data, notice, hasSelectedStyle: workspace.hasSelectedStyle, products, workspaceItems: workspace.items, workspaceCollections: workspace.collections, tasks: workspace.tasks, inbox: workspace.inbox, preferences: workspace.preferences, updateTask, createTask, sendTeamMessage, markInboxRead, markAllInboxRead, replyInbox, updatePreferences, styles: workspace.items.map(({ styleId, title, collection, variant, identityAssigned, category }) => ({ styleId, title, collection, variant, identityAssigned, category })), selectStyle, createStyle, updateProductMetadata, createCollection, updateCollection, updateCollectionPhase, assignProductToCollection, recordRetailSale, recordProduction, approveSample, createWholesaleOrder, createPurchaseOrder, recordLifecycleEvent, createShipment, confirmShipment, updateProfile, ...editorialActions, saveCollectionDirection, notify, collectionData, storage, retrySave: persistence.retrySave, reloadSavedWorkspace: persistence.reloadSavedWorkspace, flushWorkspace: persistence.flushWorkspace, exportWorkspace, ...totals(data) }}>{children}</Context.Provider>;
+  return <Context.Provider value={{ data, notice, hasSelectedStyle: workspace.hasSelectedStyle, products, workspaceItems: workspace.items, workspaceCollections: workspace.collections, tasks: workspace.tasks, inbox: workspace.inbox, preferences: workspace.preferences, updateTask, createTask, sendTeamMessage, markInboxRead, markAllInboxRead, replyInbox, updatePreferences, styles: workspace.items.map(({ styleId, title, collection, variant, identityAssigned, category }) => ({ styleId, title, collection, variant, identityAssigned, category })), selectStyle, createStyle, updateProductMetadata, createCollection, updateCollection, updateCollectionPhase, assignProductToCollection, recordRetailSale, recordProduction, approveSample, createWholesaleOrder, createPurchaseOrder, recordLifecycleEvent, createShipment, confirmShipment, updateProfile, ...editorialActions, saveProductDirection, notify, collectionData, productDirection, storage, retrySave: persistence.retrySave, reloadSavedWorkspace: persistence.reloadSavedWorkspace, flushWorkspace: persistence.flushWorkspace, exportWorkspace, ...totals(data) }}>{children}</Context.Provider>;
 }
 export const useDemo = () => useContext(Context);

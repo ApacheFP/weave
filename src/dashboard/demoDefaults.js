@@ -12,6 +12,7 @@ export const demoDefaults = {
 };
 
 export function createDemoWorkspace() {
-  const items = newDemoProducts(demoDefaults);
-  return normalizeWorkspaceIdentity({ activeId: items[0].styleId, hasSelectedStyle: false, selectedVariants: {}, collections: { [items[0].collection]: collectionDefaults() }, items, ...seedWorkspaceData(items, demoDefaults.profile) });
+  const now = new Date();
+  const items = newDemoProducts(demoDefaults, now);
+  return normalizeWorkspaceIdentity({ activeId: items[0].styleId, hasSelectedStyle: false, selectedVariants: {}, collections: { [items[0].collection]: collectionDefaults() }, items, ...seedWorkspaceData(items, demoDefaults.profile, now) });
 }

@@ -10,14 +10,15 @@ import './creative.css';
 import './technical.css';
 
 export default function CreativePage({ onNavigate }) {
-  const { data, saveCreative, notify, collectionData: c, saveCollectionDirection } = useDemo();
+  const { data, saveCreative, notify, productDirection, saveProductDirection } = useDemo();
   const creative = data.creative || creativeDefaults();
+  const c = productDirection;
   const inputs = creative.inputs;
   const route = creative.route || 'upload';
   const refs = creative.referenceFiles || [];
   const hasDirection = c.directionRevision > 0;
   const [replacing, setReplacing] = useState(null);
-  const concept = creative.concept;
+  const concept = creative.concept?.moodboardOrigin === 'Spunti' ? { ...creative.concept, moodboard: c.moodboard } : creative.concept;
   const paletteChosen = Boolean(concept?.paletteChosen || concept?.palette.length);
   const moodboardChosen = Boolean(concept?.moodboardChosen || concept?.moodboard.length);
   const canContinue = Boolean(concept?.sketch?.src && data.identityAssigned && paletteChosen && moodboardChosen);
@@ -35,8 +36,8 @@ export default function CreativePage({ onNavigate }) {
   function update(patch, message) { saveCreative(previous => ({ creative: { ...(previous.creative || creativeDefaults()), ...patch } }), message, 1); }
   function generate() {
     const revisionPrompt = hasDirection ? prompt.trim() : '';
-    const next = prepareDirection(inputs, revisionPrompt, c);
-    saveCollectionDirection({ ...next, directionHistory: [] }, hasDirection ? 'Spunti sostituiti con una nuova generazione · demo' : 'Moodboard e palette preparati · demo');
+    const next = prepareDirection(inputs, revisionPrompt, c, data);
+    saveProductDirection({ ...next, directionHistory: [] }, hasDirection ? 'Spunti sostituiti con una nuova generazione · demo' : 'Moodboard e palette preparati · demo');
     update({ round: creative.round + 1, inputSnapshot: { ...inputs }, lastPrompt: revisionPrompt });
     setPrompt('');
     setResultView('Moodboard'); setStudioView('Spunti'); setMoodPage(0);
@@ -68,13 +69,13 @@ export default function CreativePage({ onNavigate }) {
     if (ref.type === 'application/pdf') { notify('Per il moodboard scegli un’immagine.'); return; }
     updateConcept({ moodboard: [...concept.moodboard, { ...ref, caption: '' }], moodboardOrigin: 'Manuale' }, 'Riferimento collegato allo schizzo');
   }, notify); }
-  function setColor(index, patch) { saveCollectionDirection({ palette: c.palette.map((color, i) => i === index ? { ...color, ...patch } : color) }); }
+  function setColor(index, patch) { saveProductDirection({ palette: c.palette.map((color, i) => i === index ? { ...color, ...patch } : color) }); }
   function replaceMood(file) { readFile(file, ref => {
     if (ref.type === 'application/pdf') { notify('Per il moodboard scegli un’immagine JPG, PNG o WebP.'); return; }
-    saveCollectionDirection(previous => ({ moodboard: replacing ? previous.moodboard.map(item => item.id === replacing ? { ...item, src: ref.src, type: ref.type } : item) : [...previous.moodboard, { ...ref, atmosphere: true, caption: '' }] }), replacing ? 'Riferimento del moodboard sostituito' : 'Riferimento aggiunto al moodboard');
+    saveProductDirection(previous => ({ moodboard: replacing ? previous.moodboard.map(item => item.id === replacing ? { ...item, src: ref.src, type: ref.type } : item) : [...previous.moodboard, { ...ref, atmosphere: true, caption: '' }] }), replacing ? 'Riferimento del moodboard sostituito' : 'Riferimento aggiunto al moodboard');
     setReplacing(null);
   }, notify); }
-  function editReference(id, patch) { saveCollectionDirection(previous => ({ moodboard: previous.moodboard.map(ref => ref.id === id ? { ...ref, ...patch } : ref) })); }
+  function editReference(id, patch) { saveProductDirection(previous => ({ moodboard: previous.moodboard.map(ref => ref.id === id ? { ...ref, ...patch } : ref) })); }
   function chooseReference(id = null) { setReplacing(id); moodInput.current.click(); }
   return <div className="dw-creative">
     <div className="dw-tabs dw-tabs-underline dw-creative-routes" role="group" aria-label="Come vuoi iniziare?">
@@ -98,10 +99,10 @@ export default function CreativePage({ onNavigate }) {
         {!hasDirection ? <Card title="Moodboard e palette" note="Il tuo spazio di ricerca"><div className="dw-creative-empty"><strong>Inizia dal brief creativo</strong><p>Descrivi la richiesta e premi “Genera moodboard e palette”. Qui potrai scegliere e modificare i riferimenti.</p></div></Card> : <>
           <div className="dw-creative-result-toolbar"><Tabs items={['Moodboard', 'Palette', 'Rivedi']} selected={resultView} onChange={setResultView} label="Risultati creativi" variant="underline" /><Button icon="file" onClick={() => update({ route: 'upload' })}>Disegno finale</Button></div>
           <section className="dw-creative-result-panel" aria-label="Moodboard" hidden={resultView !== 'Moodboard'}>
-          <Card title="Moodboard" note={`Riferimenti visivi · ${data.collection}`} actions={<Button icon="plus" onClick={() => chooseReference()}>Aggiungi immagine</Button>}>
+          <Card title="Moodboard" note={`Atmosfera astratta · ${data.title} · ${data.variant}`} actions={<Button icon="plus" onClick={() => chooseReference()}>Aggiungi immagine</Button>}>
             <input ref={moodInput} hidden type="file" accept="image/jpeg,image/png,image/webp" onChange={e => { replaceMood(e.target.files[0]); e.target.value = ''; }} />
             <div className="dw-mood-grid">{c.moodboard.map((ref, index) => <article className={`dw-mood-reference ${Math.floor(index / 2) === activeMoodPage ? '' : 'dw-mood-mobile-hidden'}`} key={ref.id}>
-              <Button icon="close" className="dw-mood-remove" aria-label={`Rimuovi dal moodboard ${ref.name}`} onClick={() => saveCollectionDirection(previous => ({ moodboard: previous.moodboard.filter(item => item.id !== ref.id) }), 'Riferimento rimosso dal moodboard')} />
+              <Button icon="close" className="dw-mood-remove" aria-label={`Rimuovi dal moodboard ${ref.name}`} onClick={() => saveProductDirection(previous => ({ moodboard: previous.moodboard.filter(item => item.id !== ref.id) }), 'Riferimento rimosso dal moodboard')} />
               <button className="dw-creative-atmosphere" type="button" onClick={() => setOpened(ref)} aria-label={`Ingrandisci ${ref.name}`}><img src={ref.src} alt={ref.caption || ref.name} loading="lazy" decoding="async" /></button>
               <div className="dw-mood-info">
                 <strong className="dw-mood-title">{ref.name}</strong>

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDemo } from './DemoContext.jsx';
-import { styleLabel } from './productData.js';
+import { productWorkflow, styleLabel } from './productData.js';
 import { modules } from '../modules.js';
-import { Button, Card, Empty, Icon, Tabs } from './ui.jsx';
+import { Button, Card, Empty, Icon, Progress, Tabs } from './ui.jsx';
 import { actorStyle, localDate } from './workspaceData.js';
 import { sameActor } from './workspaceIdentity.js';
 import './workspace-overview.css';
@@ -37,7 +37,9 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
   const done = mine.filter(task => task.status === 'Completata');
   const lists = { Prossime: open.filter(task => !task.due || task.due >= today), 'In ritardo': overdue, Completate: done };
   const ordered = list => [...list].sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999'));
-  const unread = inbox.filter(item => !item.read).length;
+  const unreadMessages = [...inbox].filter(item => !item.read).sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
+  const unread = unreadMessages.length;
+  const recentNotices = unreadMessages.slice(0, 4);
   const recent = eventsOf(workspaceItems).slice(0, 4);
   const collectionNames = [...new Set([...Object.keys(workspaceCollections), ...workspaceItems.map(item => item.collection)])].sort((a, b) => a.localeCompare(b, 'it-IT'));
   const hour = new Date().getHours();
@@ -48,7 +50,7 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
     <header className="dw-workspace-page-head"><div><h2>{greeting}, {data.profile.firstName}</h2><p>{date} · Il lavoro di oggi in Atelier.</p></div><Button primary icon="plus" onClick={onCreate}>Nuovo capo</Button></header>
     <div className="dw-home-metrics" aria-label="Riepilogo Atelier">
       {[
-        ['Capi', products.length, 'Nella collezione e in sviluppo', 'shirt', 'capi', 'violet'],
+        ['Varianti', workspaceItems.length, `${products.length} modelli in sviluppo`, 'shirt', 'capi', 'violet'],
         ['Le mie attività', open.length, `${mine.length} incarichi assegnati a te`, 'list', 'my-tasks', 'blue'],
         ['Inbox', unread, 'Aggiornamenti da leggere', 'inbox', 'inbox', 'teal'],
         ['In ritardo', overdue.length, overdue.length ? 'Incarichi da riprendere' : 'Scadenze sotto controllo', 'clock', 'my-tasks', 'red'],
@@ -65,6 +67,17 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
           </div>)}
           {!lists[taskView].length && <Empty>{taskView === 'In ritardo' ? 'Nessun incarico in ritardo.' : 'Nessun incarico in questa vista.'}</Empty>}
         </Card>
+        <Card flush title="Avanzamento dei capi" actions={<Button onClick={() => onOpenPage('capi')}>Tutti i capi</Button>}>
+          <div className="dw-workspace-products">{workspaceItems.map(item => {
+            const workflow = productWorkflow(item);
+            return <button type="button" className="dw-workspace-product" key={item.styleId} onClick={() => onOpenModule(item.styleId, 21)}>
+              <span className="dw-workspace-product-name"><strong>{item.title}</strong><small>{item.variant} · {item.styleId}</small></span>
+              <span className="dw-workspace-product-stage" data-phase={workflow.phases.find(phase => phase.state === 'active')?.state || 'pending'}>{workflow.stageLabel}</span>
+              <Progress value={workflow.percent} label={`${item.title} ${item.variant}: ${workflow.complete} di ${workflow.total} fasi completate`} />
+              <Icon name="arrow" size={13} />
+            </button>;
+          })}</div>
+        </Card>
         <Card flush title="Collezioni in Atelier" actions={<Button onClick={() => onOpenPage('collections')}>Tutte le collezioni</Button>}>
           <div className="dw-table-wrap"><table className="dw-table"><thead><tr><th>Collezione</th><th>Capi associati</th></tr></thead><tbody>{collectionNames.map(name => <tr key={name}>
             <td><strong>{name}</strong></td><td>{workspaceItems.filter(item => item.collection === name).length}</td>
@@ -75,6 +88,11 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
         <Card flush title="Scadenze" actions={<Button onClick={() => onOpenPage('my-tasks')}>Vedi tutte</Button>}>
           {ordered(open.filter(task => task.due)).slice(0, 5).map(task => <button type="button" className="dw-workspace-deadline" key={task.id} onClick={() => onOpenModule(task.styleId, task.moduleId)}><span><strong>{task.title}</strong><small>{styleName(task.styleId)}</small></span><time className={task.due < today ? 'dw-workspace-late' : ''}>{task.due === today ? 'Oggi' : dateLabel(task.due)}</time></button>)}
           {!open.some(task => task.due) && <Empty>Nessuna scadenza aperta.</Empty>}
+        </Card>
+        <Card flush title="Notifiche da leggere" actions={<Button onClick={() => onOpenPage('notifications')}>Tutte</Button>}>
+          <div className="dw-workspace-notices">{recentNotices.map(item => <button type="button" key={item.id} onClick={() => onOpenPage(`inbox?message=${encodeURIComponent(item.id)}`)}>
+            <i aria-hidden="true" /><span><strong>{item.title}</strong><small>{styleName(item.styleId)} · {item.actor?.name || 'Team Atelier'} · {new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(item.at))}</small></span><Icon name="arrow" size={13} />
+          </button>)}{!recentNotices.length && <Empty>Non ci sono notifiche da leggere.</Empty>}</div>
         </Card>
         <Card flush title="Attività recente" actions={<Button onClick={() => onOpenPage('activity')}>Vedi tutte</Button>}><EventRows events={recent} onOpenModule={onOpenModule} /></Card>
       </div>
