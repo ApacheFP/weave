@@ -10,7 +10,8 @@ function setup(now = 1_000) {
       getItem: key => values.get(key) ?? null,
       setItem: (key, value) => values.set(key, value),
     },
-    location: { reloads: 0, reload() { this.reloads += 1; } },
+    location: { href: 'https://weave.test/atelier/disegno-tecnico', reloads: 0, reload() { this.reloads += 1; } },
+    history: { state: null, replaceState(state) { this.state = state; } },
     addEventListener: (type, listener) => listeners.set(type, listener),
     removeEventListener: type => listeners.delete(type),
   };
@@ -40,10 +41,13 @@ test('reloads once after a dynamic chunk failure, then allows one retry after co
   recovery.uninstall();
 });
 
-test('leaves the error visible when session storage is unavailable', () => {
+test('recovers once through history state when session storage is unavailable', () => {
   const recovery = setup();
   recovery.browserWindow.sessionStorage.getItem = () => { throw new Error('storage disabled'); };
+  assert.equal(recovery.emit(), true);
+  assert.equal(recovery.browserWindow.location.reloads, 1);
+  assert.equal(recovery.browserWindow.history.state.weaveChunkRetryAt, 1_000);
   assert.equal(recovery.emit(), false);
-  assert.equal(recovery.browserWindow.location.reloads, 0);
+  assert.equal(recovery.browserWindow.location.reloads, 1);
   recovery.uninstall();
 });
