@@ -42,8 +42,8 @@ function drawCardCopy(ctx, module) {
   const left = 72;
   const copyWidth = 528;
   const centerY = 1153.5;
-  const fontSize = 36;
-  const lineHeight = 52;
+  const fontSize = 42;
+  const lineHeight = 58;
   const lines = [];
 
   ctx.save();
@@ -100,7 +100,7 @@ export async function createModuleCards(items = modules) {
           const metrics = ctx.measureText(line);
           return 104 * (row ? 880 : 704) / Math.max(metrics.width, metrics.actualBoundingBoxRight);
         }));
-        module.lines.forEach((line, row) => text(ctx, line, 72, 150 + row * 104, titleSize, .93, '"Matcha Style"'));
+        module.lines.forEach((line, row) => text(ctx, line, 72, 254 + row * 104, titleSize, .93, '"Matcha Style"'));
         ctx.save();
         ctx.fillStyle = 'rgba(255,255,255,.65)';
         ctx.beginPath();

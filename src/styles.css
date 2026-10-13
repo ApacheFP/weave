@@ -280,9 +280,9 @@ input { font: inherit; }
   .carousel-footer { margin-top: 24px; }
   .card-entry-footer { grid-template-columns: minmax(0, 1fr) auto; column-gap: 8%; align-items: end; }
   .card-entry-footer p { max-width: 100%; font-size: clamp(12px, 3.5vw, 14px); }
-  .card-enter-button:not(.card-details-button) { width: 44px; min-height: 44px; padding: 0; aspect-ratio: 1; }
+  .card-enter-button:not(.card-details-button) { width: 40px; min-height: 40px; padding: 0; aspect-ratio: 1; }
   .card-enter-button:not(.card-details-button) span { display: none; }
-  .card-enter-button:not(.card-details-button) svg { width: 18px; height: 18px; }
+  .card-enter-button:not(.card-details-button) svg { width: 16px; height: 16px; }
   .card-details-button { width: auto; min-height: 44px; padding: 9px 12px; }
 }
 
