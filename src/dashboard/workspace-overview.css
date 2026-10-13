@@ -31,6 +31,7 @@
 .dw-workspace-events { min-width:0; }
 .dw-workspace-event { display:flex; align-items:start; gap:9px; padding:10px 14px; border-top:1px solid var(--divider); }
 .dw-workspace-avatar { display:grid; place-items:center; flex:0 0 26px; width:26px; height:26px; border-radius:50%; background:color-mix(in srgb,var(--actor-color) 16%,var(--surface)); color:var(--actor-color); font-size:10px; font-weight:600; }
+.dw-workspace-avatar img { width:100%; height:100%; border-radius:inherit; object-fit:cover; }
 .dw-workspace-event > div { flex:1; min-width:0; }
 .dw-workspace-event-head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
 .dw-workspace-event-head strong { font-size:12px; font-weight:500; }

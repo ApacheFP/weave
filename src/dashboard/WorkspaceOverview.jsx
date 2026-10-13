@@ -20,9 +20,9 @@ function eventTime(event) {
 function eventsOf(items) {
   return items.flatMap(item => item.events.map(event => ({ ...event, styleId: item.styleId, productId: item.productId || item.styleId, styleTitle: styleLabel(item) }))).sort((a, b) => eventTime(b) - eventTime(a));
 }
-function EventRows({ events, onOpenModule }) {
+function EventRows({ events, profile, onOpenModule }) {
   return <div className="dw-workspace-events">{events.map(event => <div className="dw-workspace-event" key={`${event.styleId}-${event.id}`}>
-    <span className="dw-workspace-avatar" style={actorStyle(event.actor)} aria-label={event.actor?.name || 'WEAVE'}>{initials(event.actor?.name || 'WEAVE')}</span>
+    <span className="dw-workspace-avatar" style={actorStyle(event.actor)} aria-label={event.actor?.name || 'WEAVE'}>{sameActor(event.actor, profile) ? <img src={profile.avatar || '/illustrations/profile-avatar.webp'} alt="" /> : initials(event.actor?.name || 'WEAVE')}</span>
     <div><div className="dw-workspace-event-head"><strong>{event.actor?.name || 'WEAVE'}</strong><time>{event.time}</time></div><p>{event.text}</p><button type="button" onClick={() => onOpenModule(event.styleId, event.module)}>{event.styleTitle}<span>·</span>{moduleLabel(event.module)}</button></div>
   </div>)}</div>;
 }
@@ -94,7 +94,7 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
             <i aria-hidden="true" /><span><strong>{item.title}</strong><small>{styleName(item.styleId)} · {item.actor?.name || 'Team Atelier'} · {new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(item.at))}</small></span><Icon name="arrow" size={13} />
           </button>)}{!recentNotices.length && <Empty>Non ci sono notifiche da leggere.</Empty>}</div>
         </Card>
-        <Card flush title="Attività recente" actions={<Button onClick={() => onOpenPage('activity')}>Vedi tutte</Button>}><EventRows events={recent} onOpenModule={onOpenModule} /></Card>
+        <Card flush title="Attività recente" actions={<Button onClick={() => onOpenPage('activity')}>Vedi tutte</Button>}><EventRows events={recent} profile={data.profile} onOpenModule={onOpenModule} /></Card>
       </div>
     </div>
     <p className="dw-workspace-session">Incarichi e conversazioni dimostrativi · i dati vengono salvati su questo dispositivo.</p>
@@ -102,13 +102,13 @@ export default function WorkspaceHome({ onOpenPage, onOpenModule, onCreate }) {
 }
 
 export function WorkspaceActivityPage({ onOpenModule }) {
-  const { products, workspaceItems } = useDemo();
+  const { data, products, workspaceItems } = useDemo();
   const [styleId, setStyleId] = useState('all');
   const [limit, setLimit] = useState(12);
   const events = eventsOf(workspaceItems).filter(event => styleId === 'all' || event.productId === styleId);
   return <div className="dw-workspace-activity">
     <header className="dw-workspace-page-head"><div><h2>Attività della filiera</h2><p>Modifiche e decisioni sui capi di Atelier.</p></div><select aria-label="Filtra attività per capo" value={styleId} onChange={event => { setStyleId(event.target.value); setLimit(12); }}><option value="all">Tutti i capi</option>{products.map(item => <option value={item.productId} key={item.productId}>{item.title}</option>)}</select></header>
-    <EventRows events={events.slice(0, limit)} onOpenModule={onOpenModule} />
+    <EventRows events={events.slice(0, limit)} profile={data.profile} onOpenModule={onOpenModule} />
     {!events.length && <Empty>Nessuna attività registrata per questo capo.</Empty>}
     {events.length > limit && <Button onClick={() => setLimit(count => count + 12)}>Mostra altre attività</Button>}
     <p className="dw-workspace-session">Gli eventi iniziali sono esempi demo; le azioni nei moduli aggiornano questo registro.</p>

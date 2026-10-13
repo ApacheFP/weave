@@ -11,8 +11,49 @@ export const demoDefaults = {
   productionPaused: false, qualityResolved: false, retailFeedback: 4.3, aiRuns: {}, chats: {},
 };
 
+export const demoSeedVersion = 2;
+
 export function createDemoWorkspace() {
   const now = new Date();
   const items = newDemoProducts(demoDefaults, now);
-  return normalizeWorkspaceIdentity({ activeId: items[0].styleId, hasSelectedStyle: false, selectedVariants: {}, collections: { [items[0].collection]: collectionDefaults() }, items, ...seedWorkspaceData(items, demoDefaults.profile, now) });
+  return normalizeWorkspaceIdentity({ demoSeedVersion, activeId: items[0].styleId, hasSelectedStyle: false, selectedVariants: {}, collections: { [items[0].collection]: collectionDefaults() }, items, ...seedWorkspaceData(items, demoDefaults.profile, now) });
+}
+
+export function migrateDemoWorkspace(workspace) {
+  const styleIds = ['MG-0425', 'MG-0426', 'MG-0427', 'PT-0423', 'BG-0424'];
+  const currentByStyle = new Map((workspace?.items || []).map(item => [item.styleId, item]));
+  const owner = currentByStyle.get(workspace?.activeId)?.profile || workspace?.items?.[0]?.profile;
+  if (workspace?.demoSeedVersion >= demoSeedVersion || owner?.email?.trim().toLowerCase() !== demoDefaults.profile.email || !styleIds.every(id => currentByStyle.has(id))) return workspace;
+
+  const fresh = createDemoWorkspace();
+  const profile = owner;
+  const items = fresh.items.map(seed => {
+    const current = currentByStyle.get(seed.styleId);
+    return {
+      ...seed,
+      id: current.id,
+      modelId: current.modelId,
+      profile,
+      events: [...current.events.filter(event => !event.demo), ...seed.events],
+    };
+  });
+  const seededInbox = workspace.inbox.filter(item => item.demo && item.id.startsWith('inbox-'));
+  const seededInboxById = new Map(seededInbox.map(item => [item.id, item]));
+  const freshInboxIds = new Set(fresh.inbox.map(item => item.id));
+  const inbox = fresh.inbox.map(item => {
+    const previous = seededInboxById.get(item.id);
+    return previous ? { ...item, read: previous.read, replies: previous.replies } : item;
+  });
+  const repliedConversations = seededInbox.filter(item => !freshInboxIds.has(item.id) && item.replies.some(reply => !reply.id.startsWith('reply-')));
+  const userItems = workspace.items.filter(item => !styleIds.includes(item.styleId));
+
+  return normalizeWorkspaceIdentity({
+    ...fresh,
+    ...workspace,
+    demoSeedVersion,
+    items: [...items, ...userItems],
+    tasks: [...workspace.tasks.filter(task => !task.demo || !task.id.startsWith('task-')), ...fresh.tasks],
+    inbox: [...workspace.inbox.filter(item => !item.demo || !item.id.startsWith('inbox-')), ...repliedConversations, ...inbox],
+    collections: { ...fresh.collections, ...workspace.collections },
+  });
 }

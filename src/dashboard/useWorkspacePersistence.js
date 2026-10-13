@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { createDemoWorkspace } from './demoDefaults.js';
+import { createDemoWorkspace, migrateDemoWorkspace } from './demoDefaults.js';
 import { loadWorkspace, saveWorkspace } from './workspaceStore.js';
 import { assertWorkspace } from './workspaceSchema.js';
 
@@ -31,13 +31,15 @@ export default function useWorkspacePersistence() {
     setStorage({ status: 'loading' });
     loadWorkspace().then(record => {
       if (!active) return;
-      const next = record?.workspace || createDemoWorkspace();
+      const stored = record?.workspace;
+      const next = stored ? migrateDemoWorkspace(stored) : createDemoWorkspace();
+      if (stored && next !== stored) assertWorkspace(next);
       current.current = next;
-      saved.current = record?.workspace || null;
+      saved.current = stored && next === stored ? stored : null;
       revision.current = record?.revision || 0;
       enabled.current = true;
       setWorkspace(next);
-      setStorage(record ? { status: 'saved', savedAt: record.savedAt } : { status: 'saving' });
+      setStorage(record && next === stored ? { status: 'saved', savedAt: record.savedAt } : { status: 'saving' });
     }).catch(error => {
       if (!active) return;
       enabled.current = false;
@@ -109,11 +111,14 @@ export default function useWorkspacePersistence() {
     try {
       const record = await loadWorkspace();
       if (!record) throw new Error('No saved workspace');
+      const next = migrateDemoWorkspace(record.workspace);
+      if (next !== record.workspace) assertWorkspace(next);
       revision.current = record.revision;
-      current.current = saved.current = record.workspace;
+      current.current = next;
+      saved.current = next === record.workspace ? record.workspace : null;
       enabled.current = true;
-      setWorkspace(record.workspace);
-      setStorage({ status: 'saved', savedAt: record.savedAt });
+      setWorkspace(next);
+      setStorage(next === record.workspace ? { status: 'saved', savedAt: record.savedAt } : { status: 'saving' });
       return true;
     } catch (error) { setStorage(previous => ({ ...previous, status: 'error', error: storageError(error) })); return false; }
     finally { reloading.current = false; }
