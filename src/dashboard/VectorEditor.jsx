@@ -7,8 +7,10 @@ import './vector-editor.css';
 const tools = [['select', 'Seleziona'], ['nodes', 'Nodi'], ['hand', 'Sposta tavola'], ['pen', 'Penna'], ['pencil', 'Matita'], ['line', 'Linea'], ['rect', 'Rettangolo'], ['ellipse', 'Ellisse'], ['text', 'Testo']];
 const paint = { fill: '#eee4d3', stroke: '#34332f', strokeWidth: 2, originX: 'left', originY: 'top' };
 const hex = value => { try { return '#' + new Color(typeof value === 'string' && value !== 'none' ? value : '#ffffff').toHex(); } catch { return '#ffffff'; } };
+const svgExporters = new WeakMap();
+const escapeXmlAttribute = value => String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 
-export default function VectorEditor({ initialScene, sourceSvg, onSave, onDirty }) {
+export default function VectorEditor({ initialScene, sourceSvg, quoteOptions = [], onSave, onDirty }) {
   const element = useRef(null), stage = useRef(null), canvas = useRef(null);
   const history = useRef([]), position = useRef(-1), baseline = useRef(''), suspended = useRef(true);
   const toolRef = useRef('select'), drag = useRef(null), pen = useRef([]), penPreview = useRef(null);
@@ -28,13 +30,13 @@ export default function VectorEditor({ initialScene, sourceSvg, onSave, onDirty 
     const left = bounds.length ? Math.floor(Math.min(...bounds.map(rect => rect.left)) - 24) : 0, top = bounds.length ? Math.floor(Math.min(...bounds.map(rect => rect.top)) - 24) : 0;
     const right = bounds.length ? Math.ceil(Math.max(...bounds.map(rect => rect.left + rect.width)) + 24) : artboardSize.width, bottom = bounds.length ? Math.ceil(Math.max(...bounds.map(rect => rect.top + rect.height)) + 24) : artboardSize.height;
     const width = Math.max(1, right - left), height = Math.max(1, bottom - top);
-    return { schemaVersion: 1, ...artboardSize, json: c.toObject(['id', 'name']), svg: c.toSVG({ suppressPreamble: true, width: String(width), height: String(height), viewBox: { x: left, y: top, width, height } }) };
+    return { schemaVersion: 1, ...artboardSize, json: c.toObject(['id', 'name', 'measurementBinding']), svg: c.toSVG({ suppressPreamble: true, width: String(width), height: String(height), viewBox: { x: left, y: top, width, height } }) };
   }
   function refresh() {
     const c = canvas.current;
     setLayers(c.getObjects().filter(object => !object.excludeFromExport).map(object => ({ id: object.id, name: object.name || object.type, visible: object.visible, locked: !object.selectable })).reverse());
     const object = c.getActiveObject();
-    setSelection(object ? { id: object.id, name: object.name || 'Selezione', type: object.type, left: object.left, top: object.top, width: object.getScaledWidth(), height: object.getScaledHeight(), angle: object.angle, fill: hex(object.fill), stroke: hex(object.stroke), strokeWidth: object.strokeWidth, text: object.text, opacity: object.opacity } : null);
+    setSelection(object ? { id: object.id, name: object.name || 'Selezione', type: object.type, left: object.left, top: object.top, width: object.getScaledWidth(), height: object.getScaledHeight(), angle: object.angle, fill: hex(object.fill), stroke: hex(object.stroke), strokeWidth: object.strokeWidth, text: object.text, opacity: object.opacity, measurementBinding: object.measurementBinding ? { ...object.measurementBinding } : null } : null);
   }
   function commit() {
     if (suspended.current) return;
@@ -54,6 +56,12 @@ export default function VectorEditor({ initialScene, sourceSvg, onSave, onDirty 
   }
   function decorate(object) {
     object.id ||= crypto.randomUUID();
+    if (!svgExporters.has(object)) {
+      const toSVG = object.toSVG.bind(object);
+      svgExporters.set(object, toSVG);
+      // The same stable layer ID lets quote revisions keep SVG and Fabric JSON aligned.
+      object.toSVG = reviver => toSVG(reviver).replace(/<g\b/, `<g data-weave-id="${escapeXmlAttribute(object.id)}"`);
+    }
     // Fabric's default textarea is outside the modal and cannot receive focus.
     if (object instanceof IText) object.hiddenTextareaContainer = stage.current;
     object.set({ cornerColor: '#4b5bd6', borderColor: '#4b5bd6', cornerStrokeColor: '#fff', transparentCorners: false, cornerSize: 10, touchCornerSize: 28 });
@@ -130,6 +138,13 @@ export default function VectorEditor({ initialScene, sourceSvg, onSave, onDirty 
       object.set(key === 'width' ? 'scaleX' : 'scaleY', value / size);
     } else object.set(key, value);
     object.setCoords(); canvas.current.requestRenderAll(); commit();
+  }
+  function bindQuote(quoteKey, axis = selection?.measurementBinding?.axis || 'x') {
+    const object = canvas.current.getActiveObject();
+    if (!object) return;
+    if (quoteKey) object.measurementBinding = { quoteKey, axis };
+    else delete object.measurementBinding;
+    commit();
   }
   function removeSelection() { const c = canvas.current; const objects = c.getActiveObjects(); c.discardActiveObject(); c.remove(...objects); commit(); }
   async function duplicate() {
@@ -260,9 +275,10 @@ export default function VectorEditor({ initialScene, sourceSvg, onSave, onDirty 
     <div className="dw-vector-main"><div className="dw-vector-stage" ref={stage}><canvas ref={element} />{!ready && <p role="status">{error || 'Apertura della tavola…'}</p>}</div><aside className="dw-vector-inspector" aria-label="Proprietà e livelli"><h3>Proprietà</h3>{selection ? <>
       <strong>{selection.name}</strong><p>Dimensioni grafiche in pixel</p><div className="dw-vector-properties">{[['left','X'],['top','Y'],['width','Larghezza'],['height','Altezza'],['angle','Rotazione °']].map(([key, label]) => <Field key={key} label={label}><input key={`${selection.id}-${selection[key]}`} type="number" step=".1" defaultValue={Number(selection[key].toFixed(1))} onBlur={e => modify(key, e.target.value)} /></Field>)}</div>
       <Field label="Riempimento"><input type="color" value={selection.fill} onChange={e => modify('fill', e.target.value)} /></Field><Button onClick={() => modify('fill', 'transparent')}>Senza riempimento</Button><Field label="Tratto"><input type="color" value={selection.stroke} onChange={e => modify('stroke', e.target.value)} /></Field><Field label="Spessore tratto · px"><input key={`${selection.id}-${selection.strokeWidth}`} type="number" min="0" max="50" step=".5" defaultValue={selection.strokeWidth} onBlur={e => modify('strokeWidth', e.target.value)} /></Field>{selection.text !== undefined && <Field label="Contenuto testo"><textarea key={`${selection.id}-${selection.text}`} maxLength={2000} defaultValue={selection.text} onBlur={e => modify('text', e.target.value)} /></Field>}
+      <section className="dw-vector-binding" aria-label="Collegamento alle quote"><h4>Quota associata</h4><p>La quota aggiorna questo livello. Il disegno libero non modifica i centimetri.</p><Field label="Misura"><select value={selection.measurementBinding?.quoteKey || ''} onChange={e => bindQuote(e.target.value)}><option value="">Nessun collegamento</option>{quoteOptions.map(option => <option key={option.key} value={option.key}>{option.label} · {option.value} cm</option>)}</select></Field><Field label="Asse di ridimensionamento"><select value={selection.measurementBinding?.axis || 'x'} disabled={!selection.measurementBinding} onChange={e => bindQuote(selection.measurementBinding.quoteKey, e.target.value)}><option value="x">Orizzontale · X</option><option value="y">Verticale · Y</option></select></Field></section>
       <div className="dw-vector-object-actions"><Button onClick={duplicate}>Duplica</Button><Button onClick={removeSelection}>Elimina</Button><Button onClick={() => { canvas.current.bringObjectForward(canvas.current.getActiveObject()); commit(); }}>Avanti</Button><Button onClick={() => { canvas.current.sendObjectBackwards(canvas.current.getActiveObject()); commit(); }}>Indietro</Button><Button onClick={groupSelection}>Raggruppa</Button><Button onClick={ungroup}>Separa gruppo</Button></div>{tool === 'nodes' && selection.type !== 'path' && <p>Seleziona un tracciato per modificare i nodi; separa prima gli eventuali gruppi.</p>}
     </> : <p>Seleziona un elemento sulla tavola o nella lista dei livelli. Trascina gli angoli per ridimensionare; usa il controllo superiore per ruotare.</p>}<h3>Livelli · {layers.length}</h3><ol className="dw-vector-layers">{layers.map(layer => <li key={layer.id}><button aria-pressed={selection?.id === layer.id} onClick={() => { selectTool('select'); const object = canvas.current.getObjects().find(row => row.id === layer.id); canvas.current.setActiveObject(object); canvas.current.requestRenderAll(); refresh(); }}>{layer.name}</button><button aria-label={`${layer.visible ? 'Nascondi' : 'Mostra'} ${layer.name}`} onClick={() => { const object = canvas.current.getObjects().find(row => row.id === layer.id); object.set('visible', !object.visible); canvas.current.requestRenderAll(); commit(); }}>{layer.visible ? '◉' : '○'}</button></li>)}</ol></aside></div>
-    <footer className="dw-vector-footer"><div className="dw-actions"><Button disabled={!ready} onClick={() => { const c=canvas.current; const scale=Math.max(.1,c.getZoom()/1.25); c.zoomToPoint(new Point(c.width/2,c.height/2),scale); setZoom(Math.round(scale*100)); }}>−</Button><span>{zoom}%</span><Button disabled={!ready} onClick={() => { const c=canvas.current; const scale=Math.min(8,c.getZoom()*1.25); c.zoomToPoint(new Point(c.width/2,c.height/2),scale); setZoom(Math.round(scale*100)); }}>+</Button><Button disabled={!ready} onClick={() => fit(true)}>Adatta disegno</Button><Button disabled={!ready} onClick={() => fit()}>Adatta tavola</Button></div><span>1600×1200 · zoom con rotella · quote da aggiornare nella vista Misure</span><Button primary disabled={!ready || busy || penCount > 0 || initialScene && !historyState.dirty} onClick={save}>Salva nuova revisione</Button></footer>
+    <footer className="dw-vector-footer"><div className="dw-actions"><Button disabled={!ready} onClick={() => { const c=canvas.current; const scale=Math.max(.1,c.getZoom()/1.25); c.zoomToPoint(new Point(c.width/2,c.height/2),scale); setZoom(Math.round(scale*100)); }}>−</Button><span>{zoom}%</span><Button disabled={!ready} onClick={() => { const c=canvas.current; const scale=Math.min(8,c.getZoom()*1.25); c.zoomToPoint(new Point(c.width/2,c.height/2),scale); setZoom(Math.round(scale*100)); }}>+</Button><Button disabled={!ready} onClick={() => fit(true)}>Adatta disegno</Button><Button disabled={!ready} onClick={() => fit()}>Adatta tavola</Button></div><span>1600×1200 · quote modificabili nella vista Misure</span><Button primary disabled={!ready || busy || penCount > 0 || initialScene && !historyState.dirty} onClick={save}>Salva nuova revisione</Button></footer>
     {error && <p className="dw-vector-error" role="alert">{error}</p>}
   </div>;
 }
