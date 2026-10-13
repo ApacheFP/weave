@@ -272,3 +272,23 @@ input { font: inherit; }
   .auth-submit:hover, .auth-submit:hover .auth-submit-arrow, .auth-submit:focus-visible .auth-submit-arrow { transform: none; }
   .card-entry, .card-enter-button { transition: none; }
 }
+
+@media (max-width: 600px) {
+  .auth-page { --auth-logo-scale: 1; }
+  .demo-page > .demo-header > .carousel-context { font-size: clamp(16px, 5vw, 20px); }
+  .carousel-stage { flex: 0 1 min(67svh, 130vw, max(0px, calc(100svh - 270px))); min-height: min(67svh, 130vw, max(0px, calc(100svh - 270px))); }
+  .carousel-footer { margin-top: 24px; }
+  .card-entry-footer { grid-template-columns: minmax(0, 1fr) auto; column-gap: 8%; align-items: end; }
+  .card-entry-footer p { max-width: 100%; font-size: clamp(12px, 3.5vw, 14px); }
+  .card-enter-button:not(.card-details-button) { width: 44px; min-height: 44px; padding: 0; aspect-ratio: 1; }
+  .card-enter-button:not(.card-details-button) span { display: none; }
+  .card-enter-button:not(.card-details-button) svg { width: 18px; height: 18px; }
+  .card-details-button { width: auto; min-height: 44px; padding: 9px 12px; }
+}
+
+@media (max-width: 600px) and (max-height: 700px) {
+  .auth-page { height: auto; min-height: 100svh; justify-content: flex-start; overflow: visible; padding-top: max(12px, env(safe-area-inset-top)); padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  .auth-page > .demo-header h1 { --auth-logo-size: clamp(58px, 14svh, 86px); }
+  .auth-panel { padding: 16px 20px; }
+  .auth-content h2 { font-size: clamp(23px, 7.5vw, 28px); }
+}
