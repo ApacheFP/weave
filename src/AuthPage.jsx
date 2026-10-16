@@ -33,7 +33,7 @@ export default function AuthPage({ onEnter }) {
 
   return (
     <main className="auth-page">
-      <header className="demo-header"><h1>weave</h1></header>
+      <header className="demo-header"><h1>WEAVE</h1></header>
       <div className="auth-card-wrap">
         <section className="auth-panel" aria-label="Accesso a WEAVE">
         <picture className="auth-mascot" aria-hidden="true">

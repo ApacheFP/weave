@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { carouselGroup } from './modules.js';
-import { createModuleCards } from './cards.js';
+import { createModuleCards, getModulePalette } from './cards.js';
 import AuthPage from './AuthPage.jsx';
 import ProfileMenu from './ProfileMenu.jsx';
 import { DemoProvider, useDemo } from './dashboard/DemoContext.jsx';
@@ -13,12 +13,41 @@ function Arrow({ direction }) {
   return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d={direction === 'left' ? 'm14 6-6 6 6 6' : 'm10 6 6 6-6 6'} /></svg>;
 }
 
+function interpolateHexColor(from, to, progress) {
+  const start = from.slice(1).match(/.{2}/g).map(channel => parseInt(channel, 16));
+  const end = to.slice(1).match(/.{2}/g).map(channel => parseInt(channel, 16));
+  return `#${start.map((channel, index) => Math.round(channel + (end[index] - channel) * progress).toString(16).padStart(2, '0')).join('')}`;
+}
+
+function animateCarouselBackground(engine, animation, target) {
+  const state = animation.current;
+  if (state.frame) cancelAnimationFrame(state.frame);
+  const from = state.color || target;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || from === target) {
+    state.color = target;
+    engine?.set({ bg: target });
+    return;
+  }
+
+  const started = performance.now();
+  const tick = now => {
+    const progress = Math.min(1, (now - started) / 1600);
+    const eased = progress * progress * (3 - 2 * progress);
+    state.color = interpolateHexColor(from, target, eased);
+    engine?.set({ bg: state.color });
+    if (progress < 1) state.frame = requestAnimationFrame(tick);
+    else state.frame = null;
+  };
+  state.frame = requestAnimationFrame(tick);
+}
+
 function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }) {
   const { items, label } = group;
   const host = useRef(null);
   const carousel = useRef(null);
   const entry = useRef(null);
   const infoButton = useRef(null);
+  const backgroundAnimation = useRef({ frame: null, color: null });
   const [index, setIndex] = useState(startIndex);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState('');
@@ -35,12 +64,15 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const cards = await createModuleCards(items);
         if (!active) return;
+        const initialBackground = getModulePalette(items[startIndex]?.id).base;
+        backgroundAnimation.current.color = initialBackground;
         engine = window.MFCarousel.createCarousel(host.current, {
           startCard: startIndex,
+          bg: initialBackground,
           ...(reducedMotion ? { thAmount: 0, motionBlur: 0, stiffness: 30 } : {}),
         }, cards, {
           start: startIndex,
-          onIndex: next => { if (active) { setIndex(next); setInfoCard(null); onIndexChange(group.id, next); } },
+          onIndex: next => { if (active) { animateCarouselBackground(engine, backgroundAnimation, getModulePalette(items[next]?.id).base); setIndex(next); setInfoCard(null); onIndexChange(group.id, next); } },
           onFrame: bounds => {
             if (!active || !entry.current) return;
             const element = entry.current;
@@ -50,6 +82,7 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
             element.style.height = `${bounds.height}px`;
             element.style.setProperty('--card-copy-size', `${bounds.width * .043}px`);
             element.dataset.positioned = 'true';
+            element.dataset.settled = String(bounds.settled);
           },
         });
         const mobile = window.matchMedia('(max-width: 600px)');
@@ -83,6 +116,7 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
     boot();
     return () => {
       active = false;
+      if (backgroundAnimation.current.frame) cancelAnimationFrame(backgroundAnimation.current.frame);
       removeLayoutListener?.();
       engine?.dispose();
       carousel.current = null;
@@ -153,6 +187,7 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
 function ProductPage({ onSignOut, onEnter, index, onIndexChange }) {
   const page = useRef(null);
   const onReady = useCallback(() => {}, []);
+  const palette = getModulePalette(carouselGroup.items[index]?.id);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -160,10 +195,11 @@ function ProductPage({ onSignOut, onEnter, index, onIndexChange }) {
   }, []);
 
   return (
-    <main className="demo-page" ref={page} tabIndex={-1}>
+    <main className="demo-page" ref={page} tabIndex={-1} style={{ '--carousel-base': palette.base, '--carousel-halo-one': palette.haloOne, '--carousel-halo-two': palette.haloTwo }}>
+      <div className="carousel-atmosphere" aria-hidden="true" />
       <header className="demo-header">
         <ProfileMenu onSignOut={onSignOut} />
-        <h1>weave</h1>
+        <h1>WEAVE</h1>
         <p className="carousel-context" id="carousel-context">Dall’idea al passaporto digitale, tutti i moduli della filiera tessile in un unico percorso.</p>
       </header>
       <CardCarousel group={carouselGroup} onReady={onReady} onEnter={onEnter} startIndex={index} onIndexChange={onIndexChange} />
