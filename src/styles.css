@@ -189,6 +189,7 @@ input { font: inherit; }
 
 @media (min-width: 601px) {
   .demo-page > .carousel { margin-top: -16px; }
+  .carousel-stage { transform: translateY(-5svh); }
   .demo-page > .demo-header > .carousel-context { margin-bottom: 6px; }
 }
 
