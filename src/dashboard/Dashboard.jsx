@@ -233,7 +233,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
             <button className="dw-header-search" onClick={() => setSearch(true)} aria-label="Cerca pagine, moduli e capi"><Icon name="search" size={15} /><span>Cerca in Atelier…</span><kbd>⌘ K</kbd></button>
             <button className="dw-icon-btn dw-header-inbox" aria-label={`Notifiche${unread ? `, ${unread} da leggere` : ''}`} onClick={() => openPage('notifications')}><Icon name="bell" size={17} />{unread > 0 && <i aria-hidden="true" />}</button>
             <div className="dw-header-new" ref={newRoot}>
-              <button ref={newTrigger} type="button" className="dw-btn dw-header-create" aria-label="Crea nuovo" aria-expanded={newMenu} aria-controls={newMenu ? 'header-create-menu' : undefined} onClick={() => setNewMenu(open => !open)}><Icon name="plus" size={14} /><span>Nuovo</span><span className="dw-header-new-chevron"><Icon name="back" size={12} /></span></button>
+              <button ref={newTrigger} type="button" className="dw-btn dw-header-create" aria-label="Crea nuovo" aria-expanded={newMenu} aria-controls={newMenu ? 'header-create-menu' : undefined} onClick={() => setNewMenu(open => !open)}><Icon name="plus" size={14} /><span>Nuovo</span></button>
               {newMenu && <div className="dw-header-new-menu" id="header-create-menu" role="group" aria-label="Azioni rapide">
                 <button type="button" onClick={() => { setNewMenu(false); setCreate(true); }}><Icon name="shirt" size={15} />Nuovo capo</button>
                 <button type="button" onClick={() => { setNewMenu(false); setCreateTask(true); }}><Icon name="list" size={15} />Nuova attività</button>
@@ -265,10 +265,10 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
     {service && <Dialog wide title={modules.find(item => item.id === service.id)?.title || 'Servizio WEAVE'} note={`${shortNames[service.contextModuleId]} · ${data.title} / ${data.styleId}`} onClose={() => setService(null)}><ServiceContent key={`${service.id}-${data.styleId}`} serviceId={service.id} moduleId={service.contextModuleId} /></Dialog>}
     {isModule && hasSelectedStyle && moduleId !== 22 && <div className="dw-assistant-dock">
       {chat && <section ref={chatPanel} id="weave-assistant-panel" className="dw-assistant-panel" role="dialog" aria-label="Assistente weave" aria-modal="false"><Assistant key={`${moduleId}-${data.styleId}`} moduleId={moduleId} embedded onClose={closeAssistant} /></section>}
-      <div className="dw-assistant-launcher-row">
-        <button className={`dw-assistant-launcher ${chat ? 'is-open' : ''}`} type="button" aria-expanded={chat} aria-controls={chat ? 'weave-assistant-panel' : undefined} onClick={toggleAssistant}><span className="dw-assistant-launcher-copy"><small>Hai un dubbio?</small><strong>{chat ? 'Chiudi Filo' : 'Chiedi a Filo'}</strong></span></button>
-        <button className="dw-assistant-filo" type="button" aria-label={chat ? 'Chiudi Filo' : 'Apri l’assistente Filo'} aria-expanded={chat} aria-controls={chat ? 'weave-assistant-panel' : undefined} onClick={toggleAssistant}><picture>{preferences?.motion !== 'reduce' && <source srcSet="/filo-saluta.gif" type="image/gif" media="(prefers-reduced-motion: no-preference)" />}<img src="/mascot-filo.png" alt="" /></picture></button>
-      </div>
+      <button className={`dw-assistant-launcher ${chat ? 'is-open' : ''}`} type="button" aria-expanded={chat} aria-controls={chat ? 'weave-assistant-panel' : undefined} onClick={toggleAssistant}>
+        <picture className="dw-assistant-filo" aria-hidden="true">{preferences?.motion !== 'reduce' && <source srcSet="/filo-saluta.gif" type="image/gif" media="(prefers-reduced-motion: no-preference)" />}<img src="/mascot-filo.png" alt="" /></picture>
+        <span className="dw-assistant-launcher-copy"><small>Hai un dubbio?</small><strong>{chat ? 'Chiudi Filo' : 'Chiedi a Filo'}</strong></span>
+      </button>
     </div>}
     <div className="dw-toast" role="status" aria-live="polite">{notice && <span key={notice}>{notice}</span>}</div>
   </div>;

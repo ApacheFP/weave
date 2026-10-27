@@ -1,6 +1,7 @@
 /* Prova1 shell: personal navigation, capo context and a fixed account footer. */
-.dw-sidebar-brand .dw-brand { display:flex; align-items:center; padding:0; font:400 36px/1 'Stay With Me',sans-serif !important; text-align:left; transform:translateY(2px); }
+.dw-sidebar-brand .dw-brand { display:flex; align-items:center; padding:0; font:400 36px/1 'Belgiano Serif', Georgia, serif !important; text-align:left; transform:translateY(2px); }
 .dw-sidebar-brand .dw-brand strong { font-weight:400; }
+.dw-app:not(.dw-collapsed) .dw-sidebar-brand .dw-collapse { position:relative; top:4px; }
 .dw-sidebar-workspace-nav { flex:0 0 auto; margin:8px 8px 0; padding:4px; border:1px solid var(--border); border-radius:12px; background:var(--surface); box-shadow:var(--shadow-sm); }
 .dw-sidebar-workspace { padding:0 4px 4px; border-bottom:1px solid var(--divider); }
 .dw-company-switcher { position:relative; margin-bottom:0; padding:0; border:0; border-radius:8px; background:transparent; box-shadow:none; }
@@ -44,8 +45,8 @@
 .dw-cap-nav button[data-module="22"] { --module-color:var(--blue); }
 .dw-sidebar-top { margin:8px 0 7px; padding:0; }
 .dw-sidebar-top .dw-sidebar-kicker { padding:0 8px 5px; font-size:11px; font-weight:650; letter-spacing:.06em; }
-.dw-sidebar-product-card { padding:4px; border:1px solid var(--border); border-radius:12px; background:var(--surface); box-shadow:var(--shadow-sm); }
-.dw-sidebar-top .dw-workspace-trigger { min-height:52px; padding:2px; border:0; background:transparent; box-shadow:none; }
+.dw-sidebar-product-card { padding:8px; border:1px solid var(--border); border-radius:12px; background:var(--surface); box-shadow:var(--shadow-sm); }
+.dw-sidebar-top .dw-workspace-trigger { min-height:52px; padding:4px; border:0; background:transparent; box-shadow:none; }
 .dw-sidebar-top .dw-workspace-trigger[aria-expanded=true] { background:var(--surface-2); }
 .dw-sidebar-product-card > .dw-cap-overview { margin:4px 0 0; padding-top:4px; border-top:1px solid var(--divider); }
 .dw-sidebar button[aria-current="page"] { border-color:transparent; background:color-mix(in srgb,var(--nav-color,var(--module-color,var(--accent))) 12%,var(--surface)); box-shadow:none; color:var(--text); }
@@ -79,7 +80,6 @@
 .dw-header-inbox i { position:absolute; top:5px; right:5px; width:5px; height:5px; border-radius:50%; background:var(--accent); outline:2px solid var(--surface); }
 .dw-header .dw-header-create { min-height:28px; padding:4px 9px; border-radius:9px; font-size:12px; }
 .dw-header-new { position:relative; }
-.dw-header-new-chevron { display:flex; transform:rotate(-90deg); }
 .dw-header-new-menu { position:absolute; right:0; top:calc(100% + 8px); width:200px; padding:5px; border:1px solid var(--border-strong); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow-popover); z-index:45; }
 .dw-header-new-menu button { display:flex; align-items:center; gap:9px; width:100%; padding:7px 8px; border:0; border-radius:8px; font:12.5px var(--font); color:var(--text-2); background:none; text-align:left; }
 .dw-header-new-menu button:hover { background:var(--surface-2); color:var(--text); }

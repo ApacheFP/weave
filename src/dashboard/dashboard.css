@@ -3,7 +3,6 @@
 
 /* Prova1 foundation: shell, panels, components and tables.
    WEAVE keeps its product workflows and the shared twelve-pixel corners. */
-@font-face { font-family: 'Geist'; src: url('/fonts/geist.woff2') format('woff2'); font-style: normal; font-weight: 100 900; font-display: swap; }
 @font-face { font-family: 'Geist Mono'; src: url('/fonts/geist-mono.woff2') format('woff2'); font-style: normal; font-weight: 400; font-display: swap; }
 html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-app {
@@ -17,7 +16,7 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-app :is(button,a):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .dw-icon { flex: 0 0 auto; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
 .dw-header { position: relative; z-index: 35; display: flex; align-items: center; flex: 0 0 var(--header-h); gap: var(--space-3); height: var(--header-h); padding: 0 var(--space-5); border-bottom: 1px solid var(--border); background: var(--surface); }
-.dw-brand { border: 0; background: transparent; color: var(--text); font: 400 36px/1 'Stay With Me', sans-serif !important; padding: 0 3px 0 0; }
+.dw-brand { border: 0; background: transparent; color: var(--text); font: 400 36px/1 'Belgiano Serif', Georgia, serif !important; padding: 0 3px 0 0; }
 .dw-breadcrumb { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; margin-left: 0; font-size: 12.5px; color: var(--text-4); }
 .dw-breadcrumb button { border: 0; background: none; padding: 0; color: var(--text-2); font-size: inherit; }
 .dw-breadcrumb strong { color: var(--text); font-weight: 500; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
@@ -154,7 +153,7 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-point { display: inline-grid; place-items: center; width: 20px; height: 20px; border: 1px solid var(--border); background: var(--surface-2); border-radius: var(--radius); margin-right: 8px; font-size: 11px; }
 .dw-search { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
 .dw-search > span:first-child { display: flex; align-items: center; gap: 8px; flex: 1; max-width: 400px; color: var(--text-4); }
-.dw-app .dw-search input { width: 100%; padding: 6px 0; border: 0; background: transparent; box-shadow: none; }
+.dw-search > span:first-child input { flex: 1; width: 100%; }
 .dw-kv { display: grid; grid-template-columns: minmax(95px,1fr) minmax(0,1.2fr); gap: 12px 10px; margin: 0 0 16px; font-size: 12.5px; align-items: baseline; }
 .dw-kv dt { color: var(--text-3); }
 .dw-kv dd { margin: 0; color: var(--text); overflow-wrap: anywhere; }
@@ -228,9 +227,7 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-metric > small { font-size: 12px; color: var(--text-3); line-height: 1.45; }
 .dw-metric .dw-progress { height: 4px; margin-top: auto; }
 .dw-app :is(.dw-creative-colors,.dw-tech-color-row) input[type=color] { padding: 0; }
-.dw-search > span:first-child { min-height: 30px; padding: 0 8px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
-.dw-app .dw-search input:not([type=range]):not([type=checkbox]):not([type=file]),.dw-app .dw-popover-search input:not([type=range]):not([type=checkbox]):not([type=file]) { min-height: 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
-.dw-search > span:first-child:focus-within { border-color: var(--text-3); }
+.dw-app .dw-popover-search input:not([type=range]):not([type=checkbox]):not([type=file]) { min-height: 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
 .dw-card-flush > .dw-table-wrap { border: 0; border-radius: 0; }
 .dw-table tbody tr:last-child td { border-bottom: 0; }
 .dw-kv { column-gap: 16px; row-gap: 12px; }
@@ -410,14 +407,12 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-chat-compose > button { width: 37px; height: 37px; align-self: end; background: var(--accent); color: var(--on-accent); border: 0; border-radius: var(--radius); display: grid; place-items: center; }
 .dw-chat-note { margin: 10px 20px 15px; text-align: center; font-size: 11px; color: var(--text-3); }
 .dw-assistant-dock { position: fixed; z-index: 55; right: 24px; bottom: 22px; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
-.dw-assistant-launcher-row { display: flex; align-items: center; gap: 10px; }
-.dw-assistant-launcher { display: flex; align-items: center; justify-content: flex-start; width: auto; min-width: 122px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); text-align: left; cursor: pointer; transition: background var(--dur),border-color var(--dur); }
-.dw-assistant-launcher-copy { display: grid; gap: 4px; }
-.dw-assistant-launcher-copy small { color: var(--text-3); font-size: 10px; line-height: 1.2; }
-.dw-assistant-launcher-copy strong { color: var(--text); font-size: 12px; line-height: 1.2; font-weight: 600; }
-.dw-assistant-filo { display: grid; place-items: center; flex: 0 0 auto; width: 56px; height: 60px; padding: 0; border: 0; background: transparent; cursor: pointer; }
-.dw-assistant-filo picture { display: block; width: 100%; height: 100%; }
-.dw-assistant-filo img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 7px 8px rgba(0,0,0,.1)); }
+.dw-assistant-launcher { display: flex; align-items: center; gap: 10px; min-height: 60px; padding: 7px 16px 7px 8px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); color: var(--text); box-shadow: 0 4px 16px rgba(28,25,20,.08); text-align: left; cursor: pointer; transition: background var(--dur), border-color var(--dur), box-shadow var(--dur); }
+.dw-assistant-launcher-copy { display: grid; gap: 3px; }
+.dw-assistant-launcher-copy small { color: var(--text-3); font-size: 11px; line-height: 1.3; }
+.dw-assistant-launcher-copy strong { color: var(--text); font-size: 13px; line-height: 1.3; font-weight: 600; }
+.dw-assistant-filo { display: grid; place-items: center; flex: 0 0 44px; width: 44px; height: 44px; overflow: hidden; border-radius: 11px; background: var(--surface-2); }
+.dw-assistant-filo img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .dw-assistant-panel { width: min(410px, calc(100vw - 36px)); height: min(590px, calc(100svh - 110px)); min-height: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow-popover); transform-origin: bottom right; animation: dw-assistant-enter 220ms cubic-bezier(.2,.8,.2,1) both; }
 .dw-assistant-panel .dw-chat,.dw-assistant-panel .dw-chat.embedded { width: 100%; height: 100%; min-height: 0; border: 0; border-radius: inherit; }
 .dw-assistant-panel .dw-chat-top { gap: 10px; padding: 14px; }
@@ -780,3 +775,5 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
   .dw-pattern-photo > img,.dw-grading-photo > img { height: 320px; }
   .dw-grading-measurements { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
+
+.dw-app kbd, .dw-dialog kbd { font-family: 'Geist Mono', monospace; }

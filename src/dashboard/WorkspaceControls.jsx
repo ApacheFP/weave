@@ -69,7 +69,7 @@ export function StyleSwitcher({ onCreate, onCreateVariant, onSelect, selected = 
     </div>}
     {renderPopover && popoverStyle && createPortal(<div id="style-switcher" className="dw-switcher dw-workspace-popover dw-switcher-portal" data-closing={closing || undefined} aria-hidden={closing} inert={closing} ref={popover} role="region" aria-label="Seleziona il capo" style={popoverStyle}>
       <div className="dw-switcher-heading"><div><strong>Seleziona un capo</strong><small>{products.length} {products.length === 1 ? 'capo disponibile' : 'capi disponibili'}</small></div></div>
-      <div className="dw-popover-search"><Icon name="search" size={16} /><input autoFocus aria-label="Cerca capo" placeholder="Nome, codice o collezione…" value={query} onChange={e => setQuery(e.target.value)} /></div>
+      <div className="dw-command-search dw-switcher-search"><Icon name="search" size={18} /><input autoFocus aria-label="Cerca per nome, codice o collezione" placeholder="Nome, codice o collezione…" value={query} onChange={e => setQuery(e.target.value)} /></div>
       <div className="dw-style-list">{matchingStyles.map(item => <button type="button" key={item.styleId} aria-pressed={selected && item.styleId === data.styleId} onClick={() => { selectStyle(productVariantId(item, query)); setOpen(false); trigger.current?.focus(); onSelect?.(); }}>
         <span className="dw-style-thumb"><ProductPhoto product={item} sizes="48px" alt="" /></span>
         <span className="dw-style-description"><strong title={item.title}>{item.title}</strong><small>{item.identityAssigned ? item.productId : 'Bozza'} · {item.variants.length > 1 ? `${item.variants.length} varianti` : item.variant}</small><span>{season(item.collection)}</span></span>

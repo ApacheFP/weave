@@ -15,9 +15,9 @@ Su Vercel la root del repository è `.`. `vercel.json` seleziona Vite, esegue `n
 
 ## Accesso e carosello
 
-Login/signup in una card bianca centrata, font Stay With Me, password mostra/nascondi e hover ocra. Il menu profilo usa un ritratto fittizio Imagegen, consente di modificare nome, cognome ed email, gestire preferenze simulate e uscire.
+Login/signup in una card bianca centrata, font di sistema, password mostra/nascondi e hover ocra. Il menu profilo usa un ritratto fittizio Imagegen, consente di modificare nome, cognome ed email, gestire preferenze simulate e uscire.
 
-Il carosello conserva il motore WebGL del riferimento `carousel.html`, particelle, trascinamento e scorrimento circolare. Il passaggio Moduli/Servizi Integrati usa zoom in/out. Le card sono in bianco caldo e beige, con illustrazioni WebP statiche e titoli Matcha Style.
+Il carosello conserva il motore WebGL del riferimento `carousel.html`, particelle, trascinamento e scorrimento circolare. Il passaggio Moduli/Servizi Integrati usa zoom in/out. Le card sono in bianco caldo e beige, con illustrazioni WebP statiche e titoli in font di sistema.
 
 La fascia inferiore della card attiva contiene **60% testo, 10% spazio e 30% pulsante**: Entra nei moduli, Scopri di più nei servizi. Il pulsante è una pillola scura con hover ocra, resta dentro la card e non applica blur o spostamenti. Il testo della fascia è HTML per mantenerlo nitido su entrambi i caroselli. L’overlay segue la geometria della card tramite `onFrame` nel motore; durante lo scorrimento si nasconde per evitare che resti sopra una card diversa.
 
@@ -27,7 +27,7 @@ Il motore limita il DPR a 1,5 desktop e 2 mobile; a DPR 2 le texture sono 1280×
 
 ## Dashboard
 
-Navigazione con percorsi leggibili come `/atelier/modellistica`, cronologia del browser e ritorno al carosello con gruppo e posizione conservati. La shell comune ha header WEAVE, profilo, breadcrumb e footer. La console riprende i token, la sidebar compatta e riducibile, i pannelli, i pulsanti e le tabelle di **Prova1**. File, miniature, metadati e finestre di modifica seguono i pattern di **Prova2**. Il contenuto della console segue ora il riferimento **OpsLoop** allegato: font **Mulish** locale, statistiche in card separate, titoli più leggibili, ricerca nell’header e grafici sulla griglia di lettura; i titoli scritti a mano restano nel carosello e nel logo. Su mobile la navigazione si apre dal menu e le aree operative si dispongono in una colonna.
+Navigazione con percorsi leggibili come `/atelier/modellistica`, cronologia del browser e ritorno al carosello con gruppo e posizione conservati. La shell comune ha header WEAVE, profilo, breadcrumb e footer. La console riprende i token, la sidebar compatta e riducibile, i pannelli, i pulsanti e le tabelle di **Prova1**. File, miniature, metadati e finestre di modifica seguono i pattern di **Prova2**. Il contenuto della console segue ora il riferimento **OpsLoop** allegato: font **Roboto** locale, statistiche in card separate, titoli più leggibili, ricerca nell’header e grafici sulla griglia di lettura; i titoli del carosello e del logo usano font di sistema. Su mobile la navigazione si apre dal menu e le aree operative si dispongono in una colonna.
 
 In cima alla sidebar il selettore mostra il capo corrente: permette di cercare e cambiare capo oppure crearne uno nuovo. **Capi** apre la lista con ricerca e azioni. **Nuovo capo** raccoglie nome, codice univoco, collezione e quantità; può duplicare specifiche e ordini del capo corrente. Ogni capo ha dati, servizi, cronologia e conversazioni separati, conservati nel salvataggio locale. La copia assegna nuove identità e rimappa i codici e i collegamenti degli ordini; il capo originale resta invariato. I codici di prodotto, ordine, campione e lotto nelle viste e negli export seguono il capo selezionato. Il profilo rimane comune.
 
@@ -99,10 +99,7 @@ Il QR in `public/illustrations/dpp-qr.svg` è reale e punta al passaporto **loca
 
 Le 22 illustrazioni Imagegen condividono lo stile bianco/grigio clay/paper: `public/illustrations/module-01.webp` … `module-22.webp`. Nessuna GIF nel runtime. Originali e prompt in `assets/animation-frames/`; avatar e prompt in `assets/profile/`.
 
-- **Mulish** per la console, come in OpsLoop: licenza SIL OFL in `public/fonts/mulish-LICENSE.txt`.
-- **Geist / Geist Mono** (Mono per i codici): licenza SIL OFL in `public/fonts/geist-LICENSE.txt`.
-- **Matcha Style** per titoli delle card del carosello: [DaFont](https://www.dafont.com/it/matcha-style.font), condizioni in `public/fonts/matcha-LICENSE.txt`.
-- **Stay With Me** per logo e accesso: condizioni in `public/fonts/FONT-LICENSE.txt`. La versione scaricata è per uso personale; l’autore richiede una [licenza commerciale](https://originfonts.com/product/stay-with-me/) per uso commerciale/promozionale.
+- **Geist Mono** (scorciatoie da tastiera): licenza SIL OFL in `public/fonts/geist-LICENSE.txt`.
 
 La build Vite è stata compilata. Il CLI Playwright ha controllato tutte le 22 card a 320×568, 375×667 e 430×932, senza sovrapposizioni fra descrizioni e pulsanti né overflow orizzontale; verificati anche screenshot a 390×844 e swipe touch. Questi controlli usano Chrome in emulazione mobile. La suite eseguibile con `npm test` copre dati della capsule, raggruppamento delle varianti, regole di dominio, comandi, identità, schema, export e primitive UI; gli esiti delle revisioni sono nei report di consolidamento.
 
@@ -117,7 +114,7 @@ Il redesign OpsLoop mantiene la sidebar laterale e il raggio comune di 12 px. I 
 
 ## Consolidamento del 12 ottobre 2026
 
-L'audit iniziale è in [docs/hardening-2026-10-12.md](docs/hardening-2026-10-12.md); descrive lo stato e i rischi della prima fase. I successivi contratti, le identità e la persistenza locale sono descritti in [docs/architecture-local.md](docs/architecture-local.md), con i limiti e la roadmap aggiornata. Le descrizioni delle revisioni UI precedenti sopra documentano anche versioni storiche: i token effettivi della console attuale usano Geist; Mulish rimane disponibile come asset locale.
+L'audit iniziale è in [docs/hardening-2026-10-12.md](docs/hardening-2026-10-12.md); descrive lo stato e i rischi della prima fase. I successivi contratti, le identità e la persistenza locale sono descritti in [docs/architecture-local.md](docs/architecture-local.md), con i limiti e la roadmap aggiornata. Le descrizioni delle revisioni UI precedenti sopra documentano anche versioni storiche: i token effettivi della console attuale usano Roboto; i font rimossi non sono più inclusi negli asset.
 
 `DemoContext.jsx` espone azioni esplicite alle pagine; i calcoli e i vincoli sono in `domain.js`, i comandi operativi in `productActions.js`, gli editor con campi consentiti in `workspaceCommands.js`. `workspaceIdentity.js` separa ID immutabili e codici visibili; `workspaceSchema.js` valida il workspace prima di mostrarlo o salvarlo. Le basi demo restano in `demoDefaults.js` e `accountData.js`, gli export browser in `exportFiles.js`. La UI condivisa resta in `ui.jsx`; palette, altezze e spazi comuni sono in `ui-tokens.css`, le varianti dei selettori in `selectors.css`. Nessuna nuova dipendenza.
 

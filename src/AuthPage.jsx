@@ -36,10 +36,6 @@ export default function AuthPage({ onEnter }) {
       <header className="demo-header"><h1>WEAVE</h1></header>
       <div className="auth-card-wrap">
         <section className="auth-panel" aria-label="Accesso a WEAVE">
-        <picture className="auth-mascot" aria-hidden="true">
-          <source srcSet="/filo-saluta.gif" type="image/gif" media="(prefers-reduced-motion: no-preference)" />
-          <img src="/mascot-filo.png" alt="" />
-        </picture>
         <div className="module-selector auth-selector" role="group" aria-label="Accedi o registrati" style={{ '--selected': signup ? 1 : 0 }}>
           <span className="selector-pill" aria-hidden="true" />
           <button type="button" aria-pressed={!signup} onClick={() => changeMode('login')}><span className="auth-button-label">Accedi</span></button>

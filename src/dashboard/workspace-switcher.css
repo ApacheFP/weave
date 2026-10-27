@@ -16,8 +16,7 @@
 .dw-switcher-heading strong { font-size: 13px; font-weight: 600; }
 .dw-switcher-heading small { display: block; margin-top: 2px; color: var(--text-3); font-size: 11px; }
 .dw-switcher-heading > span { color: var(--text-3); font-size: 11px; white-space: nowrap; }
-.dw-switcher .dw-popover-search { flex-shrink: 0; margin: 0 12px 10px; min-height: 38px; padding-inline: 10px; border-color: var(--border); background: var(--surface-2); }
-.dw-switcher .dw-popover-search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.dw-switcher-search { flex-shrink:0; margin:0 12px 10px; }
 .dw-switcher .dw-style-list { flex: 1; min-height: 0; max-height: 320px; padding: 0 8px 8px; }
 .dw-switcher .dw-style-list button { gap: 12px; padding: 10px; margin-bottom: 4px; border: 1px solid transparent; background: transparent; }
 .dw-switcher .dw-style-list button[aria-pressed=true] { border-color: var(--accent-line); background: var(--accent-soft); }

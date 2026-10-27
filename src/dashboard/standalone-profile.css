@@ -3,14 +3,6 @@
    Profilo singolo autonomo in attesa di atelier/team
    ======================================================== */
 
-@font-face {
-  font-family: 'Stay With Me';
-  src: url('/fonts/stay-with-me.otf') format('opentype');
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-
 .dw-standalone-shell {
   min-height: 100vh;
   background: #fbfbfb;
@@ -37,7 +29,7 @@
 }
 
 .dw-standalone-brand {
-  font: 400 34px/1 'Stay With Me', sans-serif !important;
+  font: 400 34px/1 system-ui, sans-serif !important;
   color: #242424;
   letter-spacing: 0;
   display: inline-flex;

@@ -77,9 +77,9 @@
 .dw-task-view { display: inline-flex; }
 .dw-personal-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
 .dw-task-page-toolbar { padding: 0 24px 12px; border-bottom: 1px solid var(--border); }
-.dw-personal-search { display: flex; position: relative; align-items: center; width: 200px; max-width: 100%; }
-.dw-personal-search > .dw-icon { position: absolute; left: 9px; color: var(--text-3); pointer-events: none; }
-.dw-app .dw-personal-search > input:not([type=range]):not([type=checkbox]):not([type=file]) { width: 100%; padding: 4px 9px 4px 29px; min-height: 28px; height: 28px; border-radius: 6px; font-size: 12px; background: transparent; }
+.dw-personal-search { display: flex; align-items: center; gap: 10px; width: 200px; max-width: 100%; }
+.dw-personal-search > .dw-icon { color: var(--text-3); }
+.dw-personal-search > input { flex: 1; width: 100%; }
 .dw-task-popover-anchor { position: relative; }
 .dw-task-toolbar-button { display: flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 5px; background: none; border: 0; border-radius: 5px; font: 400 12px var(--font); color: var(--text-2); }
 .dw-task-toolbar-button > span { font-size: 10px; background: var(--surface-3); padding: 1px 4px; border-radius: 3px; }

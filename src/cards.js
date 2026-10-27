@@ -58,21 +58,21 @@ async function loadArtwork(id) {
 export async function createModuleCards(items = modules) {
   const [artwork] = await Promise.all([
     Promise.all(items.map(module => loadArtwork(module.id))),
-    document.fonts.load('400 104px "Taste Bread HD"'),
+    document.fonts.load('400 104px "Belgiano Serif"'),
   ]);
   return items.map((module, index) => {
     return {
       id: module.id,
       ...getModulePalette(module.id),
       draw(ctx) {
-        ctx.font = '400 104px "Taste Bread HD"';
+        ctx.font = '400 104px "Belgiano Serif"';
         const titleSize = Math.min(104, ...module.lines.map((line, row) => {
           const metrics = ctx.measureText(line);
           return 104 * (row ? 880 : 704) / Math.max(metrics.width, metrics.actualBoundingBoxRight);
         }));
         ctx.save();
         ctx.textAlign = 'center';
-        module.lines.forEach((line, row) => text(ctx, line, 512, 300 + row * 104, titleSize, .93, '"Taste Bread HD"'));
+        module.lines.forEach((line, row) => text(ctx, line, 512, 300 + row * 104, titleSize, .93, '"Belgiano Serif", Georgia, serif'));
         ctx.restore();
         drawArtwork(ctx, artwork[index]);
       },
