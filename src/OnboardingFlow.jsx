@@ -165,7 +165,7 @@ export default function OnboardingFlow({ onComplete, onCancel }) {
       {/* Barra superiore */}
       <header className="onboarding-top-bar">
         <div className="onb-top-left">
-          <span className="onb-brand">weave</span>
+          <span className="onb-brand">WEAVE</span>
           <span className="onb-top-badge">Onboarding</span>
         </div>
 

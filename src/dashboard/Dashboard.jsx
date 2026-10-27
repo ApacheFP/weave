@@ -95,6 +95,8 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
     return () => media.removeEventListener('change', change);
   }, []);
   useEffect(() => () => { clearTimeout(navChordTimer.current); clearTimeout(sidebarResizeTimer.current); }, []);
+  // Entering a module (e.g. from the carousel) without a chosen garment opens the current default one instead of an empty page.
+  useEffect(() => { if (isModule && !hasSelectedStyle) selectStyle(data.styleId); }, [isModule, hasSelectedStyle, data.styleId, selectStyle]);
   useEffect(() => { if (chat) chatPanel.current?.querySelector('textarea')?.focus({ preventScroll: true }); }, [chat]);
   useEffect(() => { content.current?.scrollTo(0, 0); }, [moduleId, workspacePage, data.styleId, tab]);
   useLayoutEffect(() => {
@@ -201,7 +203,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
       {menu && <button className="dw-nav-scrim" onClick={() => { setMenu(false); mobileTrigger.current?.focus(); }} aria-label="Chiudi navigazione" />}
       <aside className={`dw-sidebar ${menu ? 'open' : ''}`} id="workspace-nav">
         <div className="dw-sidebar-brand">
-          <button className="dw-brand" onClick={() => openPage('home')} aria-label="Home di WEAVE"><strong>weave</strong></button>
+          <button className="dw-brand" onClick={() => openPage('home')} aria-label="Home di WEAVE"><strong>WEAVE</strong></button>
           <button className="dw-icon-btn dw-collapse" aria-label={collapsed ? 'Espandi sidebar' : 'Riduci sidebar'} onClick={toggleSidebar}><Icon name="panel" size={16} /></button>
         </div>
         <div className="dw-sidebar-workspace-nav">
@@ -270,7 +272,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
               setTab(all[next][0]); document.getElementById(`view-${all[next][0]}`)?.focus();
             }}><Icon name={icon} size={15} />{label}</button>)}</div></div>}
             <div ref={pageContent} className="dw-page-content" id="dashboard-view" role={isModule ? 'tabpanel' : undefined} aria-labelledby={isModule ? `view-${tab}` : undefined} key={`${workspacePage || moduleId}-${isModule ? data.styleId : ''}-${tab}-${workspacePage === 'settings' ? settingsSection || 'appearance' : ''}`}>
-              <PageBoundary>{!isModule ? globalContent[workspacePage] : !hasSelectedStyle ? <Empty>Seleziona un capo dalla sidebar per aprire la dashboard del prodotto.</Empty> : tab === 'activity' ? <ActivityPage moduleId={moduleId} onNavigate={navigate} onService={openService} /> : <Content onNavigate={navigate} onService={openService} onActivity={() => setTab('activity')} />}</PageBoundary>
+              <PageBoundary>{!isModule ? globalContent[workspacePage] : !hasSelectedStyle ? null : tab === 'activity' ? <ActivityPage moduleId={moduleId} onNavigate={navigate} onService={openService} /> : <Content onNavigate={navigate} onService={openService} onActivity={() => setTab('activity')} />}</PageBoundary>
             </div>
           </main>
         </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { modules } from '../modules.js';
 import { useDemo } from './DemoContext.jsx';
 import { csv, techPack } from './exportFiles.js';
-import { euro, number, retailAvailable, wholesaleAvailable } from './domain.js';
+import { euro, number, qualityLabel, retailAvailable, wholesaleAvailable } from './domain.js';
 import { localDate } from './workspaceData.js';
 import { Badge, Button, Card, Empty, Field, Icon, Metrics, Progress } from './ui.jsx';
 import { markerConfiguration, materialUnit, piecesFor, productMedia, productSizes, productSpec } from './productData.js';
@@ -84,7 +84,7 @@ function Intelligence({ moduleId }) {
     10: [['Ordine', data.quantity + ' capi'], ['Laboratorio', data.factory], ['Periodo', data.start + ' → ' + data.end]],
     11: [['Fabbisogno materiale', number(data.quantity * data.consumption, 1) + ' ' + unit], ['Fornitore', fabric.supplier], ['Ordini', String(data.purchaseOrders.length)]],
     12: [['Completati', data.produced + ' / ' + data.quantity], ['Rilavorazioni', String(data.reworks)], ['Scarto reale', data.actualWaste + '%']],
-    13: [['Esito', data.qualityResolved ? 'Conforme' : 'Non conforme'], ['Punteggio', data.qualityScore + ' / 100'], ['Evidenza', spec.quality.id + ' · ' + spec.quality.title]],
+    13: [['Esito', data.qualityResolved ? 'Conforme' : 'Non conforme'], ['Punteggio', qualityLabel(data)], ['Evidenza', spec.quality.id + ' · ' + spec.quality.title]],
     19: [['Identità', `${data.styleId}`], ['Composizione', fabric.composition], ['Origine / Lotto', fabric.origin + ` / ${data.lotId}`]],
   }[moduleId] || [['Identità', `${data.styleId}`]];
   // Prepared outputs are regenerated locally; decisions belong to the assistant.

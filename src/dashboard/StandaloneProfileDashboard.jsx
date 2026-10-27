@@ -54,7 +54,7 @@ export default function StandaloneProfileDashboard({ profile, onJoinDemoTeam, on
       {/* Intestazione minimale */}
       <header className="dw-standalone-topbar">
         <div className="dw-standalone-brand-wrap">
-          <span className="dw-standalone-brand">weave</span>
+          <span className="dw-standalone-brand">WEAVE</span>
           <span className="dw-standalone-brand-badge">Profilo Professionale</span>
         </div>
 

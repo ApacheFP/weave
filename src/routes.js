@@ -19,6 +19,9 @@ export const settingsSlugs = {
   plan: 'piano', payment: 'pagamento', invoices: 'fatture',
 };
 export const explorePath = '/esplora';
+export function publicPassportPath(styleId) {
+  return styleId ? `/passaporto/${encodeURIComponent(styleId)}` : '/passaporto';
+}
 export function modulePath(id) {
   if (!Object.hasOwn(moduleSlugs, id)) throw new Error('Modulo non disponibile.');
   return `/atelier/${moduleSlugs[id]}`;
@@ -48,6 +51,11 @@ export function resolveRoute({ pathname = '/', search = '', hash = '' }) {
   const params = new URLSearchParams(legacyHash ? hashQuery : search);
   const lower = path.toLowerCase();
   if (['/', '/moduli', explorePath].includes(lower)) return { kind: 'explore', path: explorePath };
+  const passportMatch = lower.match(/^\/passaporto(?:\/([^/]+))?$/);
+  if (passportMatch) {
+    const rawId = passportMatch[1] ? decodeURIComponent(passportMatch[1]).toUpperCase() : null;
+    return { kind: 'public-passport', styleId: rawId, path: rawId ? `/passaporto/${rawId}` : '/passaporto' };
+  }
   const legacyModule = lower.match(/^\/moduli\/(\d+)$/);
   if (legacyModule) return Object.hasOwn(moduleSlugs, Number(legacyModule[1])) ? moduleRoute(Number(legacyModule[1])) : notFound(path);
   const module = Object.entries(moduleSlugs).find(([, slug]) => lower === `/atelier/${slug}`);

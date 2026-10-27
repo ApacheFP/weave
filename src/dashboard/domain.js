@@ -5,6 +5,9 @@ export const number = (value, digits = 0) => new Intl.NumberFormat('it-IT', { ma
 export const fabrics = additionalFabrics;
 export const minQuantity = data => Math.max(data.produced, data.retailSold + data.wholesaleOrders.reduce((sum, order) => sum + order.qty, 0));
 export const wholesaleAvailable = data => Math.max(0, data.quantity - data.retailSold - data.wholesaleOrders.reduce((sum, order) => sum + order.qty, 0));
+// A quality score only exists once garments have been produced and inspected.
+export const hasQualityScore = data => data.produced > 0;
+export const qualityLabel = data => hasQualityScore(data) ? `${data.qualityScore}/100` : 'Da rilevare';
 
 export function totals(data) {
   const materials = data.consumption * data.fabricPrice + data.trims.reduce((sum, row) => sum + row.qty * row.price, 0);

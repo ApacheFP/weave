@@ -7,6 +7,7 @@ import { DemoProvider, useDemo } from './dashboard/DemoContext.jsx';
 import { Button, Card, Dialog } from './dashboard/ui.jsx';
 import Dashboard from './dashboard/Dashboard.jsx';
 import StandaloneProfileDashboard from './dashboard/StandaloneProfileDashboard.jsx';
+import PublicPassportPage from './PublicPassportPage.jsx';
 import { explorePath, modulePath, pagePath, readCurrentRoute, resolveRoute, navigateTo } from './routes.js';
 
 function Arrow({ direction }) {
@@ -258,7 +259,17 @@ function Workspace({ onSignOut, onboardedProfile }) {
 export default function App() {
   const [entered, setEntered] = useState(false);
   const [onboardedProfile, setOnboardedProfile] = useState(null);
-  useEffect(() => { readCurrentRoute(); }, []);
+  const [route, setRoute] = useState(() => resolveRoute(window.location));
+
+  useEffect(() => {
+    const change = () => setRoute(readCurrentRoute());
+    window.addEventListener('popstate', change);
+    window.addEventListener('hashchange', change);
+    return () => {
+      window.removeEventListener('popstate', change);
+      window.removeEventListener('hashchange', change);
+    };
+  }, []);
 
   function handleEnter(options) {
     if (options?.profile) {
@@ -268,6 +279,21 @@ export default function App() {
       navigateTo(options.target);
     }
     setEntered(true);
+  }
+
+  if (route.kind === 'public-passport') {
+    return (
+      <DemoProvider initialProfile={onboardedProfile}>
+        <PublicPassportPage
+          styleId={route.styleId}
+          entered={entered}
+          onBack={() => {
+            if (entered) navigateTo(modulePath(19));
+            else { setEntered(true); navigateTo('/atelier'); }
+          }}
+        />
+      </DemoProvider>
+    );
   }
 
   return entered
