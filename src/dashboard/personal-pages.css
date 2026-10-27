@@ -196,3 +196,5 @@
   .dw-calendar-scroll { overflow-x: auto; }
   .dw-calendar-week,.dw-calendar-grid { min-width: 620px; }
 }
+
+.dw-mention { color:var(--accent); background:var(--accent-soft); border-radius:4px; padding:0 3px; font-weight:500; }

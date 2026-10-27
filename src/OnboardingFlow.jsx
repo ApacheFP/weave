@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
+import { observePageReveals } from './dashboard/reveal.js';
 import './onboarding.css';
 
 const AVATAR_PRESETS = [
@@ -54,6 +55,11 @@ export default function OnboardingFlow({ onComplete, onCancel }) {
   const [mode, setMode] = useState('post-login');
   // Passi: 1 (Profilo), 2 (Ruolo), 3 (Atelier/Team), 4 (Completato)
   const [step, setStep] = useState(1);
+  const stepContent = useRef(null);
+  useLayoutEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    return observePageReveals(stepContent.current);
+  }, [step, mode]);
 
   // Campi del profilo: iniziano vuoti così a sinistra si vede il profilo che si costruisce man mano
   const [firstName, setFirstName] = useState('');
@@ -378,7 +384,7 @@ export default function OnboardingFlow({ onComplete, onCancel }) {
 
             {/* PASSO 1: PROFILO */}
             {step === 1 && (
-              <div key="step-1">
+              <div ref={stepContent} className="onb-step-content" key="step-1">
                 <div className="onb-step-header">
                   <h2>Crea il tuo profilo</h2>
                   <p>
@@ -495,7 +501,7 @@ export default function OnboardingFlow({ onComplete, onCancel }) {
 
             {/* PASSO 2: RUOLO E COMPETENZE */}
             {step === 2 && (
-              <div key="step-2">
+              <div ref={stepContent} className="onb-step-content" key="step-2">
                 <div className="onb-step-header">
                   <h2>Specializzazione nella filiera</h2>
                   <p>Indica la tua area di competenza per definire il tuo ruolo.</p>
@@ -553,7 +559,7 @@ export default function OnboardingFlow({ onComplete, onCancel }) {
 
             {/* PASSO 3: TEAM / INVITO */}
             {step === 3 && (
-              <div key="step-3">
+              <div ref={stepContent} className="onb-step-content" key="step-3">
                 {mode === 'post-login' ? (
                   <>
                     <div className="onb-step-header">
@@ -633,7 +639,7 @@ export default function OnboardingFlow({ onComplete, onCancel }) {
 
             {/* PASSO 4: COMPLETATO */}
             {step === 4 && (
-              <div className="onb-complete-container" key="step-4">
+              <div ref={stepContent} className="onb-complete-container onb-step-content" key="step-4">
                 <div className="onb-complete-mascot-wrap" aria-hidden="true">
                   <picture>
                     <source srcSet="/filo-saluta.gif" type="image/gif" media="(prefers-reduced-motion: no-preference)" />

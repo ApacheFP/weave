@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { modules } from '../modules.js';
 import ProfileMenu from '../ProfileMenu.jsx';
 import { useDemo } from './DemoContext.jsx';
 import { sameActor } from './workspaceIdentity.js';
+import { observePageReveals } from './reveal.js';
 import WorkspaceStorageStatus from './WorkspaceStorageStatus.jsx';
 import { Badge, Button, Card, Dialog, Empty, Icon, Tabs } from './ui.jsx';
 import { DesignPage, TechnicalPage, MaterialsPage, PatternPage, GradingPage, PrototypePage, MarkerPage } from './DesignPages.jsx';
@@ -77,6 +78,9 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
   const pendingService = useRef(null);
   const navChord = useRef(false);
   const navChordTimer = useRef(null);
+  const pageContent = useRef(null);
+  const sidebarResizing = useRef(null);
+  const sidebarResizeTimer = useRef(null);
   const isModule = !workspacePage;
   const Content = components[moduleId];
   const title = isModule ? shortNames[moduleId] : pageNames[workspacePage];
@@ -90,9 +94,14 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
     media.addEventListener('change', change);
     return () => media.removeEventListener('change', change);
   }, []);
-  useEffect(() => () => clearTimeout(navChordTimer.current), []);
+  useEffect(() => () => { clearTimeout(navChordTimer.current); clearTimeout(sidebarResizeTimer.current); }, []);
   useEffect(() => { if (chat) chatPanel.current?.querySelector('textarea')?.focus({ preventScroll: true }); }, [chat]);
   useEffect(() => { content.current?.scrollTo(0, 0); }, [moduleId, workspacePage, data.styleId, tab]);
+  useLayoutEffect(() => {
+    if (preferences?.motion === 'reduce' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const root = pageContent.current;
+    return observePageReveals(root, () => sidebarResizing.current !== root);
+  }, [moduleId, workspacePage, data.styleId, tab, settingsSection, preferences?.motion]);
   useEffect(() => {
     setService(pendingService.current); pendingService.current = null;
     setChat(false); setMenu(false); setNewMenu(false); setTab('work');
@@ -138,7 +147,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
       if (pressed === 'g') { navChord.current = true; event.preventDefault(); navChordTimer.current = setTimeout(() => { navChord.current = false; }, 900); return; }
       if (pressed === 'n') { event.preventDefault(); setCreateTask(true); }
       if (pressed === 'p') { event.preventDefault(); setCreate(true); }
-      if (event.key === '[') { event.preventDefault(); setCollapsed(value => !value); }
+      if (event.key === '[') { event.preventDefault(); toggleSidebar(); }
     };
     document.addEventListener('keydown', key);
     return () => document.removeEventListener('keydown', key);
@@ -150,6 +159,14 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
     document.addEventListener('pointerdown', outside);
     return () => document.removeEventListener('pointerdown', outside);
   }, [newMenu]);
+  function toggleSidebar() {
+    const root = pageContent.current;
+    sidebarResizing.current = root;
+    root?.querySelectorAll('.dw-reveal-active').forEach(element => element.classList.remove('dw-reveal-active'));
+    clearTimeout(sidebarResizeTimer.current);
+    sidebarResizeTimer.current = setTimeout(() => { sidebarResizing.current = null; }, 500);
+    setCollapsed(value => !value);
+  }
   function navigate(id) { setMenu(false); setTab('work'); onNavigate(id); }
   function openPage(target) { setMenu(false); onOpenPage(target); }
   function closeAssistant() { setChat(false); if (chatTrigger.current?.isConnected) chatTrigger.current.focus({ preventScroll: true }); }
@@ -185,7 +202,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
       <aside className={`dw-sidebar ${menu ? 'open' : ''}`} id="workspace-nav">
         <div className="dw-sidebar-brand">
           <button className="dw-brand" onClick={() => openPage('home')} aria-label="Home di WEAVE"><strong>weave</strong></button>
-          <button className="dw-icon-btn dw-collapse" aria-label={collapsed ? 'Espandi sidebar' : 'Riduci sidebar'} onClick={() => setCollapsed(!collapsed)}><Icon name="panel" size={16} /></button>
+          <button className="dw-icon-btn dw-collapse" aria-label={collapsed ? 'Espandi sidebar' : 'Riduci sidebar'} onClick={toggleSidebar}><Icon name="panel" size={16} /></button>
         </div>
         <div className="dw-sidebar-workspace-nav">
           <div className="dw-sidebar-workspace">
@@ -252,7 +269,7 @@ export default function Dashboard({ moduleId, workspacePage, inboxId, settingsSe
               const next = event.key === 'Home' ? 0 : event.key === 'End' ? all.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + all.length) % all.length;
               setTab(all[next][0]); document.getElementById(`view-${all[next][0]}`)?.focus();
             }}><Icon name={icon} size={15} />{label}</button>)}</div></div>}
-            <div className="dw-page-content" id="dashboard-view" role={isModule ? 'tabpanel' : undefined} aria-labelledby={isModule ? `view-${tab}` : undefined} key={`${workspacePage || moduleId}-${isModule ? data.styleId : ''}-${tab}`}>
+            <div ref={pageContent} className="dw-page-content" id="dashboard-view" role={isModule ? 'tabpanel' : undefined} aria-labelledby={isModule ? `view-${tab}` : undefined} key={`${workspacePage || moduleId}-${isModule ? data.styleId : ''}-${tab}-${workspacePage === 'settings' ? settingsSection || 'appearance' : ''}`}>
               <PageBoundary>{!isModule ? globalContent[workspacePage] : !hasSelectedStyle ? <Empty>Seleziona un capo dalla sidebar per aprire la dashboard del prodotto.</Empty> : tab === 'activity' ? <ActivityPage moduleId={moduleId} onNavigate={navigate} onService={openService} /> : <Content onNavigate={navigate} onService={openService} onActivity={() => setTab('activity')} />}</PageBoundary>
             </div>
           </main>

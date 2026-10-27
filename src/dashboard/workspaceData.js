@@ -74,7 +74,7 @@ export function seedWorkspaceData(items, profile, now = new Date()) {
       const qualityActor = [elena, luca, francesca][index % 3];
       tasks.push({ id: `task-production-${item.styleId}`, title: `Proseguire il lotto · ${item.variant}`, styleId: item.styleId, moduleId: 12, status: 'In corso', priority: 'Media', due: date(index + 1), assignee: alex, note: `${item.produced} di ${item.quantity} capi registrati sul lotto ${item.lotId}.`, demo: true });
       tasks.push({ id: `task-quality-${item.styleId}`, title: `${spec.checks[2]} · ${item.variant}`, styleId: item.styleId, moduleId: 13, status: 'Da fare', priority: 'Alta', due: date(index), assignee: alex, note: `${spec.quality.id} · ${item.reworks} capi da ricontrollare: ${item.qualityNote}`, demo: true });
-      inbox.push({ id: `inbox-quality-${item.styleId}`, type: 'mention', styleId: item.styleId, moduleId: 13, title: `${qualityActor.name.split(' ')[0]} ti ha menzionato nella ${spec.quality.id}`, body: `${item.reworks} capi da ricontrollare sul lotto ${item.lotId}. ${item.qualityNote}`, actor: qualityActor, at: at(20 + index * 19), read: index === 1, replies: [], demo: true });
+      inbox.push({ id: `inbox-quality-${item.styleId}`, type: 'mention', styleId: item.styleId, moduleId: 13, title: `${qualityActor.name.split(' ')[0]} ti ha menzionato nella ${spec.quality.id}`, body: `@${alex.name} ${item.reworks} capi da ricontrollare sul lotto ${item.lotId}. ${item.qualityNote}`, actor: qualityActor, at: at(20 + index * 19), read: index === 1, replies: [], demo: true });
     }
   }
   const primary = items[0];

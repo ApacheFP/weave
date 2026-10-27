@@ -5,6 +5,8 @@ import { useDemo } from './DemoContext.jsx';
 import { Button, Dialog, Field, Icon } from './ui.jsx';
 import { actorStyle, localDate, taskStatuses, taskPriorities } from './workspaceData.js';
 import { sameActor } from './workspaceIdentity.js';
+import { demoMembers } from './accountData.js';
+import { demoMentionBody, splitMentions } from './mentions.js';
 import './personal-pages.css';
 
 const categories = [
@@ -44,7 +46,10 @@ function Avatar({ actor }) {
 }
 
 export function InboxPage({ onOpenModule, onSelectMessage, initialSelectedId = null }) {
-  const { workspaceItems, inbox, markInboxRead, markAllInboxRead, replyInbox } = useDemo();
+  const { data, workspaceItems, inbox, markInboxRead, markAllInboxRead, replyInbox } = useDemo();
+  const profileName = [data.profile.firstName, data.profile.lastName].filter(Boolean).join(' ');
+  const mentionNames = [...demoMembers.map(member => member.name), profileName, ...inbox.flatMap(item => [item.actor?.name, item.recipient?.name, ...(item.replies || []).map(reply => reply.actor?.name)])];
+  const renderMentions = text => splitMentions(text, mentionNames).map((part, index) => index % 2 ? <span className="dw-mention" key={index}>{part}</span> : part);
   const [category, setCategory] = useState('Tutte');
   const [unread, setUnread] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
@@ -99,7 +104,7 @@ export function InboxPage({ onOpenModule, onSelectMessage, initialSelectedId = n
             return <div key={item.id} className={`dw-inbox-row ${selectedId === item.id ? 'selected' : ''}`}>
               {!item.read && <span className="dw-inbox-unread-dot" aria-label="Da leggere" />}
               <button type="button" className="dw-inbox-item" onClick={() => select(item)} aria-current={selectedId === item.id ? 'true' : undefined}>
-                <Avatar actor={item.actor} /><span className="dw-inbox-item-copy"><span className="dw-inbox-item-title">{authored ? <><strong>{actorName(item.actor)}</strong> <span>{summaryTitle(item)}</span></> : <strong>{item.title}</strong>}</span><span className="dw-inbox-item-snippet">{item.body}</span><span className="dw-inbox-item-meta"><Icon name={item.type === 'comment' || item.type === 'mention' ? 'chat' : item.type === 'assign' ? 'user' : 'activity'} size={11} /><i /><span>{styleLabel(style) || item.styleId}</span><span>·</span><time dateTime={item.at} title={fullDate(item.at)}>{ago(item.at)}</time></span></span>
+                <Avatar actor={item.actor} /><span className="dw-inbox-item-copy"><span className="dw-inbox-item-title">{authored ? <><strong>{actorName(item.actor)}</strong> <span>{item.type === 'mention' && summaryTitle(item).includes('ti ha menzionato') ? <>{summaryTitle(item).split('ti ha menzionato')[0]}<span className="dw-mention">ti ha menzionato</span>{summaryTitle(item).split('ti ha menzionato').slice(1).join('ti ha menzionato')}</> : summaryTitle(item)}</span></> : <strong>{item.title}</strong>}</span><span className="dw-inbox-item-snippet">{renderMentions(demoMentionBody(item, profileName))}</span><span className="dw-inbox-item-meta"><Icon name={item.type === 'mention' ? 'at-sign' : item.type === 'comment' ? 'chat' : item.type === 'assign' ? 'user' : 'activity'} size={11} /><i /><span>{styleLabel(style) || item.styleId}</span><span>·</span><time dateTime={item.at} title={fullDate(item.at)}>{ago(item.at)}</time></span></span>
               </button>
               <button type="button" className="dw-inbox-read" aria-label={`${item.read ? 'Segna come da leggere' : 'Segna come letto'}: ${item.title}`} title={item.read ? 'Segna come da leggere' : 'Segna come letto'} onClick={() => markInboxRead(item.id, !item.read)}><Icon name={item.read ? 'inbox' : 'check'} size={13} /></button>
             </div>;
@@ -112,8 +117,8 @@ export function InboxPage({ onOpenModule, onSelectMessage, initialSelectedId = n
           <header className="dw-inbox-preview-bar"><button type="button" className="dw-inbox-back" onClick={() => setSelectedId(null)} aria-label="Torna all’inbox"><Icon name="back" size={15} /></button><span className="dw-inbox-product-dot" /><span>{styleLabel(styleFor(selected.styleId)) || selected.styleId}</span><small>{selected.styleId}</small><Button icon="arrow" onClick={() => onOpenModule(selected.styleId, selected.moduleId)}>Apri modulo</Button></header>
           <div className="dw-inbox-conversation">
             <h3>{selected.title}</h3><p className="dw-inbox-conversation-module">{moduleName(selected.moduleId)}</p>{selected.recipient?.name && <p className="dw-inbox-conversation-recipient">Destinatario: {selected.recipient.name}</p>}
-            <article className="dw-inbox-message"><Avatar actor={selected.actor} /><div><div className="dw-inbox-message-meta"><strong>{actorName(selected.actor)}</strong><time dateTime={selected.at}>{fullDate(selected.at)}</time></div><p>{selected.body}</p></div></article>
-            {(selected.replies || []).map(item => <article key={item.id} className="dw-inbox-message"><Avatar actor={item.actor} /><div><div className="dw-inbox-message-meta"><strong>{actorName(item.actor)}</strong><time dateTime={item.at}>{fullDate(item.at)}</time></div><p>{item.body}</p></div></article>)}
+            <article className="dw-inbox-message"><Avatar actor={selected.actor} /><div><div className="dw-inbox-message-meta"><strong>{actorName(selected.actor)}</strong><time dateTime={selected.at}>{fullDate(selected.at)}</time></div><p>{renderMentions(demoMentionBody(selected, profileName))}</p></div></article>
+            {(selected.replies || []).map(item => <article key={item.id} className="dw-inbox-message"><Avatar actor={item.actor} /><div><div className="dw-inbox-message-meta"><strong>{actorName(item.actor)}</strong><time dateTime={item.at}>{fullDate(item.at)}</time></div><p>{renderMentions(item.body)}</p></div></article>)}
             <form className="dw-inbox-composer" onSubmit={submitReply}>
               <Field label="Rispondi alla conversazione"><textarea value={reply} maxLength={2000} rows={3} placeholder="Rispondi…" onChange={event => { setReply(event.target.value); setFeedback(''); }} onKeyDown={event => { if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') { event.preventDefault(); submitReply(event); } }} /></Field>
               <div><span>Risposta demo · conservata su questo dispositivo</span><Button type="submit" primary disabled={!reply.trim()}>Rispondi</Button></div>
