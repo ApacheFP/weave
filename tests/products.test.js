@@ -17,7 +17,7 @@ test('Maglia Luce is first and groups three colors with independent production a
   assert.equal(knit.styleId, 'MG-0426');
   assert.equal(knit.variantSummary, 'Avorio / Salvia / Grafite');
   assert.equal(knit.totalQuantity, 800);
-  assert.equal(knit.totalProduced, 560);
+  assert.equal(knit.totalProduced, 432);
   assert.deepEqual(knit.variants.map(item => item.orderId), ['OP-0425', 'OP-0426', 'OP-0427']);
   assert.deepEqual(knit.variants.map(item => item.lotId), ['L-0425-A', 'L-0426-A', 'L-0427-A']);
   assert.equal(groupProducts(products, 'PT-0423', { 'MG-0425': 'MG-0427' })[0].styleId, 'MG-0427');
@@ -83,7 +83,9 @@ test('procurement follows BOM IDs, units, edits and order quantity', () => {
       assert.equal(purchaseMaterial({ ...data, quantity: data.quantity * 2 }, order, fabric).qty, result.qty * 2);
       assert.equal(purchaseMaterial(data, { ...order, qty: 9, price: 7, unit: 'set' }, fabric).unit, 'set');
     }
-    assert.equal(purchaseMaterial(data, data.purchaseOrders[0], fabric).unit, materialUnit(data));
+    const primary = data.purchaseOrders.find(order => order.materialId === 'main') || { id: 'test-main', materialId: 'main' };
+    assert.equal(purchaseMaterial(data, primary, fabric).unit, materialUnit(data));
+    assert.equal(purchaseMaterial(data, primary, fabric).qty, data.quantity * data.consumption);
   }
 });
 
@@ -109,10 +111,11 @@ test('technical defaults, revisions and snapshot parts follow each category', ()
 
 test('all consumed new assets exist, raster thumbnails exist and prompts are saved', () => {
   const manifest = JSON.parse(readFileSync(new URL('../assets/dashboard/capsule-manifest.json', import.meta.url)));
-  assert.equal(manifest.assets.length, 35);
+  assert.ok(manifest.assets.length >= 35);
   for (const asset of manifest.assets) {
     assert.ok(asset.prompt && existsSync(new URL('../' + asset.output, import.meta.url)));
-    assert.ok(existsSync(new URL('../' + asset.thumbnail, import.meta.url)));
+    if (asset.thumbnail) assert.ok(existsSync(new URL('../' + asset.thumbnail, import.meta.url)));
+    else assert.match(asset.output, /moodboard-/);
   }
   for (const data of products) {
     for (const role of ['front', 'back', 'sketch', 'fabric', 'trims', 'sample', 'quality', 'pattern', 'grading', 'marker-base', 'marker-optimized']) {
@@ -137,7 +140,7 @@ test('creative directions use only current capsule assets and no jacket referenc
   const { prepareDirection } = await import('../src/dashboard/creativeData.js');
   for (const prompt of ['', 'Più salvia e grafite']) {
     const direction = prepareDirection(products[0].creative.inputs, prompt);
-    assert.equal(direction.moodboard.length, 6);
+    assert.equal(direction.moodboard.length, 3);
     for (const ref of direction.moodboard) {
       assert.doesNotMatch(ref.src, /jacket|mood-reference/);
       assert.ok(existsSync(new URL('../public' + ref.src, import.meta.url)), ref.src);

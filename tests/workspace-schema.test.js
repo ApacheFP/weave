@@ -94,7 +94,7 @@ test('profile updates keep the persisted owner and foreign actor identities sepa
   const colleagueAfter = next.inbox.find(item => item.id === colleague.id).actor;
   assert.equal(colleagueAfter.id, colleague.actor.id);
   assert.equal(sameActor(colleagueAfter, profile), false);
-  const reply = next.inbox.find(item => item.id === 'inbox-pattern-review').replies[0];
+  const reply = next.inbox.find(item => item.id.startsWith('inbox-fitting-')).replies[0];
   assert.ok(sameActor(reply.actor, profile));
   assert.equal(reply.actor.name, 'Arianna Verdi');
   assert.deepEqual(workspace, before);

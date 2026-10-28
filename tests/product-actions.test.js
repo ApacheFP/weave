@@ -125,6 +125,7 @@ test('retail and production commands enforce latest stock and remaining quantiti
 
 test('sample approval requires every required check and repeated approval adds no activity', () => {
   const before = workspace(), product = before.items[0];
+  product.sampleApproved = false; product.sampleChecks = [false, false, false]; product.modelVersion = '1.0';
   assert.throws(() => approveSample(before, product.id), { code: 'INCOMPLETE_SAMPLE_CHECKS' });
   const checked = { ...before, items: before.items.map(item => item === product ? { ...item, sampleChecks: [true, true, true] } : item) };
   const next = approveSample(checked, product.id, options());

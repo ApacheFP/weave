@@ -81,7 +81,7 @@ test('task dates reject nonexistent dates and retain calendar days across daylig
   const workspace = seedWorkspaceData(products, demoDefaults.profile, now);
   const task = workspace.tasks[0];
   assert.equal(localDate(now), '2026-10-24');
-  assert.equal(workspace.tasks[2].due, '2026-10-25');
+  assert.equal(workspace.tasks.find(task => task.id === `task-production-${products[0].styleId}`).due, '2026-10-25');
   for (const due of ['2026-02-29', '2026-04-31', '2026-13-01', '2026-2-01']) assert.equal(validTask({ ...task, due }, products), false);
   for (const due of ['2028-02-29', '2026-10-25', '']) assert.equal(validTask({ ...task, due }, products), true);
   assert.equal(validTask(null, products), false);

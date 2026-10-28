@@ -6,7 +6,7 @@ import { profileActor, seedWorkspaceData } from '../src/dashboard/workspaceData.
 import { normalizeWorkspaceIdentity, sameActor } from '../src/dashboard/workspaceIdentity.js';
 
 function legacyWorkspace() {
-  const items = newDemoProducts(demoDefaults);
+  const items = newDemoProducts(demoDefaults, new Date('2026-10-12T10:00:00Z'));
   return { activeId: items[0].styleId, ...seedWorkspaceData(items, demoDefaults.profile, new Date('2026-10-12T10:00:00Z')) };
 }
 
@@ -49,7 +49,7 @@ test('account, variant and model IDs survive owner name, email and catalog code 
   assert.equal(next.id, original.id);
   assert.deepEqual(next.items.map(item => [item.id, item.modelId, item.profile.id]), original.items.map(item => [item.id, item.modelId, item.profile.id]));
   assert.ok(next.tasks.every(task => sameActor(task.assignee, next.items[0].profile)));
-  const ownReply = next.inbox.find(item => item.id === 'inbox-pattern-review').replies[0];
+  const ownReply = next.inbox.find(item => item.id.startsWith('inbox-fitting-')).replies[0];
   assert.ok(sameActor(ownReply.actor, next.items[0].profile));
   for (const item of edited.items) item.profile.email = 'marta@atelier.demo';
   const duplicateEmail = normalizeWorkspaceIdentity(edited);
