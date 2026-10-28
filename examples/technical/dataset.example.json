@@ -1,0 +1,12 @@
+[
+  {
+    "id": "camicia-sintetica-01",
+    "garmentId": "camicia-sintetica-01",
+    "authorId": "weave-sintetico",
+    "source": "synthetic",
+    "split": "development",
+    "input": "camicia-riferimento.png",
+    "program": "camicia-programma.json",
+    "rights": true
+  }
+]

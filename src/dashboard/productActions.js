@@ -99,7 +99,7 @@ export function createStyle(workspace, input, sourceId = workspace.activeProduct
     references: [], creative: creativeDefaults(), conceptApproved: false, identityAssigned: false,
     technical: null, techGenerated: false, sketch: null, sketchFile: null, sketchName: null,
     chats: {}, aiRuns: {}, phaseReviews: {}, passportPublished: false, profile: structuredClone(source.profile),
-    ...(!input.copy && { brief: isVariant ? source.brief : '', sampleApproved: false, sampleChecks: [false, false, false], produced: 0, reworks: 0,
+    ...(!input.copy && { brief: isVariant ? source.brief : '', sampleApproved: false, sampleChecks: [false, false, false], sampleRevisions: [], produced: 0, reworks: 0,
       qualityScore: 100, qualityResolved: true, qualityNote: 'Nessuna non conformità registrata sul nuovo capo.',
       productionDays: [], purchaseOrders: [], wholesaleOrders: [], retailSold: 0, shipments: [], lifecycle: [] }),
   };

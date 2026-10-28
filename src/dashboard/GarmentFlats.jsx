@@ -21,8 +21,8 @@ const details = {
   ],
 };
 const markers = {
-  knit: [[340, 550], [340, 145], [340, 306], [468, 438]],
-  trousers: [[463, 573], [340, 138], [340, 296], [340, 500]],
+  knit: [[340, 510], [340, 145], [340, 306], [468, 438]],
+  trousers: [[463, 510], [340, 138], [340, 296], [340, 500]],
   bag: [[480, 453], [340, 525], [477, 535], [340, 145]],
 };
 const title = { knit: 'Maglia · girocollo', trousers: 'Pantalone · gamba dritta', bag: 'Borsa · tote strutturata' };

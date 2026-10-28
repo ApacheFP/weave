@@ -109,6 +109,11 @@ export default function HomePage({ onNavigate, onService, onActivity }) {
 
     <div className="dw-home-columns">
       <div className="dw-home-main">
+        <Card className="dw-home-priorities" data-module={next?.id || 19} style={moduleStyle(next?.id || 19)} flush title="Prossime attività" actions={<span className="dw-home-panel-count">{actions.length} da seguire</span>}>
+          {actions.length ? <ol className="dw-home-tasks">{actions.slice(0, 5).map(action => <li key={action.key}><button type="button" onClick={() => onNavigate(action.id)}><span className={`dw-home-task-icon ${action.urgent ? 'urgent' : ''}`} style={moduleStyle(action.id)}><Icon name={icons[action.id]} size={14} /></span><span className="dw-home-task-copy"><strong>{action.title}</strong><small>{action.note}</small></span><span className="dw-home-task-module">{moduleName(action.id)}</span><Icon name="arrow" size={13} /></button></li>)}</ol> : <div className="dw-home-clear"><Icon name="check" size={16} /><span>Le attività principali sono completate.</span><Button onClick={() => onNavigate(19)}>Apri passaporto</Button></div>}
+          {actions.length > 5 && <p className="dw-home-more">Altre {actions.length - 5} attività nei rispettivi moduli.</p>}
+        </Card>
+
         <Card className="dw-home-portfolio" data-module={groups.find(item => item.name === group).ids[0]} style={moduleStyle(groups.find(item => item.name === group).ids[0])} flush title="Avanzamento della filiera" actions={<Tabs items={groups.map(item => item.name)} selected={group} onChange={setGroup} label="Fasi del percorso del capo" />}>
           <div className="dw-home-phase-overview"><div><span>{complete} di {phaseIds.length} fasi completate</span><span>{inProgress} in corso</span></div><Progress value={workflow.percent} label="Fasi del capo completate" /></div>
           <ol className="dw-home-phases">{path.map(step => {
@@ -127,10 +132,7 @@ export default function HomePage({ onNavigate, onService, onActivity }) {
           <details className="dw-home-brief"><summary>Brief e materiali del capo</summary><p>{data.brief.trim() || 'Definisci il brief per iniziare lo sviluppo del capo.'}</p><dl><div><dt>Variante</dt><dd>{data.variant}</dd></div><div><dt>Composizione</dt><dd>{fabric.composition}</dd></div></dl></details>
         </Card>
 
-        <Card className="dw-home-priorities" data-module={next?.id || 19} style={moduleStyle(next?.id || 19)} flush title="Prossime attività" actions={<span className="dw-home-panel-count">{actions.length} da seguire</span>}>
-          {actions.length ? <ol className="dw-home-tasks">{actions.slice(0, 5).map(action => <li key={action.key}><button type="button" onClick={() => onNavigate(action.id)}><span className={`dw-home-task-icon ${action.urgent ? 'urgent' : ''}`} style={moduleStyle(action.id)}><Icon name={icons[action.id]} size={14} /></span><span className="dw-home-task-copy"><strong>{action.title}</strong><small>{action.note}</small></span><span className="dw-home-task-module">{moduleName(action.id)}</span><Icon name="arrow" size={13} /></button></li>)}</ol> : <div className="dw-home-clear"><Icon name="check" size={16} /><span>Le attività principali sono completate.</span><Button onClick={() => onNavigate(19)}>Apri passaporto</Button></div>}
-          {actions.length > 5 && <p className="dw-home-more">Altre {actions.length - 5} attività nei rispettivi moduli.</p>}
-        </Card>
+
       </div>
 
       <aside className="dw-home-aside" aria-label="Ordine, attività e costi">

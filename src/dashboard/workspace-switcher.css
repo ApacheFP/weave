@@ -34,8 +34,8 @@
 .dw-variant-chips { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; }
 .dw-variant-chips button { min-width:0; min-height:29px; padding:4px 5px; overflow:hidden; text-overflow:ellipsis; border:1px solid var(--border); border-radius:8px; background:var(--surface-2); color:var(--text-2); font-size:10px; line-height:1.2; white-space:nowrap; }
 .dw-variant-chips button[aria-pressed=true] { border-color:var(--accent-line); background:var(--accent-soft); color:var(--text); font-weight:600; }
-.dw-variant-add { display:inline-flex; align-items:center; gap:3px; padding:3px 5px; border:0; border-radius:6px; background:transparent; color:var(--accent); font-size:10px; font-weight:550; cursor:pointer; }
-.dw-variant-heading .dw-variant-add:hover { background:var(--accent-soft); }
+.dw-variant-add { display:flex; align-items:center; justify-content:center; gap:7px; width:100%; min-height:36px; padding:8px 10px; border:1px solid var(--accent-line); border-radius:8px; background:var(--accent-soft); color:var(--accent); font:inherit; font-size:11px; font-weight:600; cursor:pointer; }
+.dw-variant-add:hover { border-color:var(--accent); }
 .dw-variant-chips button:focus-visible,.dw-variant-add:focus-visible { outline:2px solid var(--accent); outline-offset:1px; }
 .dw-switcher button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 @media (hover:hover) {

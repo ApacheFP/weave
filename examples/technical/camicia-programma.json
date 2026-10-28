@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "garment": "Camicia a manica corta",
+  "parts": [
+    {
+      "name": "Corpo",
+      "description": "Corpo anteriore con orlo leggermente curvo",
+      "operations": [
+        {"type":"path","style":"contour","fill":"white","commands":[["M",-210,130],["L",-360,190],["L",-455,420],["L",-320,465],["L",-265,365],["L",-250,830],["Q",0,885,250,830],["L",265,365],["L",320,465],["L",455,420],["L",360,190],["L",210,130],["Q",0,178,-210,130],["Z"]]},
+        {"type":"path","style":"seam","commands":[["M",-360,190],["Q",-290,235,-265,365]]},
+        {"type":"mirror","axis":0,"operations":[{"type":"path","style":"seam","commands":[["M",-360,190],["Q",-290,235,-265,365]]}]},
+        {"type":"path","style":"stitch","commands":[["M",-245,810],["Q",0,862,245,810]]}
+      ]
+    },
+    {
+      "name": "Colletto",
+      "description": "Colletto classico con piedino",
+      "operations": [
+        {"type":"path","style":"seam","commands":[["M",-210,130],["L",-125,78],["Q",0,113,125,78],["L",210,130],["L",125,244],["L",0,164],["L",-125,244],["Z"]]},
+        {"type":"path","style":"stitch","commands":[["M",-195,135],["L",-125,94],["Q",0,130,125,94],["L",195,135]]}
+      ]
+    },
+    {
+      "name": "Pattina e bottoni",
+      "description": "Apertura centrale con sei bottoni",
+      "operations": [
+        {"type":"polyline","style":"seam","points":[[-22,165],[-22,828]]},
+        {"type":"polyline","style":"seam","points":[[22,165],[22,828]]},
+        {"type":"offset","style":"stitch","points":[[-22,165],[-22,828]],"distance":8},
+        {"type":"offset","style":"stitch","points":[[22,165],[22,828]],"distance":-8},
+        {"type":"repeat","count":6,"dx":0,"dy":105,"operations":[{"type":"ellipse","style":"detail","fill":"white","cx":0,"cy":205,"rx":9,"ry":9}]}
+      ]
+    },
+    {
+      "name": "Finiture maniche",
+      "description": "Orli delle maniche corte",
+      "operations": [
+        {"type":"polyline","style":"stitch","points":[[-441,404],[-325,443]]},
+        {"type":"mirror","axis":0,"operations":[{"type":"polyline","style":"stitch","points":[[-441,404],[-325,443]]}]}
+      ]
+    }
+  ]
+}

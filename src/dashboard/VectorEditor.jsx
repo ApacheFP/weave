@@ -1,10 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Canvas, Rect, Ellipse, Line, Path, IText, Group, PencilBrush, Point, Color, controlsUtils, loadSVGFromString } from 'fabric';
-import { Button, Field } from './ui.jsx';
+import { MousePointer2, Spline, Hand, PenTool, Pencil, Minus, Square, Circle, Type, Undo2, Redo2, Eye, EyeOff, Copy, Trash2 } from 'lucide';
+import { Button, Field, Icon } from './ui.jsx';
 import { artboardSize, validVectorScene } from './vectorDocument.js';
 import './vector-editor.css';
 
-const tools = [['select', 'Seleziona'], ['nodes', 'Nodi'], ['hand', 'Sposta tavola'], ['pen', 'Penna'], ['pencil', 'Matita'], ['line', 'Linea'], ['rect', 'Rettangolo'], ['ellipse', 'Ellisse'], ['text', 'Testo']];
+const tools = [
+  ['select', 'Seleziona', MousePointer2, 'V'], ['nodes', 'Nodi', Spline, 'A'], ['hand', 'Sposta', Hand, 'H'],
+  ['pen', 'Penna', PenTool, 'P'], ['pencil', 'Matita', Pencil, 'B'], ['line', 'Linea', Minus, 'L'],
+  ['rect', 'Rettangolo', Square, 'R'], ['ellipse', 'Ellisse', Circle, 'O'], ['text', 'Testo', Type, 'T'],
+];
+const toolHints = { select: 'Seleziona e trascina un elemento. Usa Maiusc per selezionarne più di uno.', nodes: 'Seleziona un tracciato e trascina i suoi nodi. Se è un gruppo, separalo prima.', hand: 'Trascina per spostarti sulla tavola.', pen: 'Clicca per aggiungere punti; poi concludi o chiudi il tracciato.', pencil: 'Trascina per disegnare a mano libera.', line: 'Trascina per disegnare una linea.', rect: 'Trascina per disegnare un rettangolo.', ellipse: 'Trascina per disegnare un’ellisse.', text: 'Clicca sulla tavola per inserire il testo.' };
+function ToolIcon({ icon, size = 16 }) { return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icon[2].map(([tag, attrs], index) => React.createElement(tag, { ...attrs, key: index }))}</svg>; }
 const paint = { fill: '#eee4d3', stroke: '#34332f', strokeWidth: 2, originX: 'left', originY: 'top' };
 const hex = value => { try { return '#' + new Color(typeof value === 'string' && value !== 'none' ? value : '#ffffff').toHex(); } catch { return '#ffffff'; } };
 const svgExporters = new WeakMap();
@@ -34,7 +41,7 @@ export default function VectorEditor({ initialScene, sourceSvg, quoteOptions = [
   }
   function refresh() {
     const c = canvas.current;
-    setLayers(c.getObjects().filter(object => !object.excludeFromExport).map(object => ({ id: object.id, name: object.name || object.type, visible: object.visible, locked: !object.selectable })).reverse());
+    setLayers(c.getObjects().filter(object => !object.excludeFromExport).map(object => ({ id: object.id, name: object.name || object.type, visible: object.visible, locked: !object.selectable })).reverse().sort((a, b) => Number(/^(Scheda:|Marcatore:|Quota:)/.test(a.name)) - Number(/^(Scheda:|Marcatore:|Quota:)/.test(b.name))));
     const object = c.getActiveObject();
     setSelection(object ? { id: object.id, name: object.name || 'Selezione', type: object.type, left: object.left, top: object.top, width: object.getScaledWidth(), height: object.getScaledHeight(), angle: object.angle, fill: hex(object.fill), stroke: hex(object.stroke), strokeWidth: object.strokeWidth, text: object.text, opacity: object.opacity, measurementBinding: object.measurementBinding ? { ...object.measurementBinding } : null } : null);
   }
@@ -77,7 +84,7 @@ export default function VectorEditor({ initialScene, sourceSvg, quoteOptions = [
   function fit(content = false) {
     const c = canvas.current;
     if (!c) return;
-    const bounds = content ? c.getObjects().filter(object => !object.excludeFromExport).map(object => object.getBoundingRect()) : [];
+    const bounds = content ? c.getObjects().filter(object => !object.excludeFromExport && object.visible).map(object => object.getBoundingRect()) : [];
     const left = bounds.length ? Math.min(...bounds.map(r => r.left)) - 60 : 0;
     const top = bounds.length ? Math.min(...bounds.map(r => r.top)) - 60 : 0;
     const width = bounds.length ? Math.max(...bounds.map(r => r.left + r.width)) - left + 60 : artboardSize.width;
@@ -128,6 +135,7 @@ export default function VectorEditor({ initialScene, sourceSvg, quoteOptions = [
   function modify(key, value) {
     const object = canvas.current.getActiveObject();
     if (!object || busy) return;
+    if (key === 'name') { value = String(value).trim(); if (!value || value.length > 100) return; }
     if (['left', 'top', 'angle', 'strokeWidth', 'width', 'height', 'opacity'].includes(key)) {
       value = Number(value);
       if (!Number.isFinite(value) || Math.abs(value) > 10000 || ['width', 'height'].includes(key) && value < 1 || key === 'strokeWidth' && (value < 0 || value > 50)) return;
@@ -165,7 +173,7 @@ export default function VectorEditor({ initialScene, sourceSvg, quoteOptions = [
   function ungroup() {
     const c = canvas.current, object = c.getActiveObject();
     if (!(object instanceof Group)) return;
-    c.discardActiveObject(); const children = object.removeAll(); c.remove(object); c.add(...children); children.forEach(decorate); commit();
+    c.discardActiveObject(); const children = object.removeAll(); c.remove(object); c.add(...children); children.forEach((child, index) => { if (!child.name || child.name === object.name) child.name = `${object.name || 'Gruppo'} · tracciato ${index + 1}`; decorate(child); }); commit();
   }
 
   useEffect(() => {
@@ -176,7 +184,17 @@ export default function VectorEditor({ initialScene, sourceSvg, quoteOptions = [
     c.upperCanvasEl.setAttribute('aria-label', 'Tavola vettoriale: seleziona, ridimensiona e disegna gli elementi');
     c.upperCanvasEl.tabIndex = 0;
     c.freeDrawingBrush = new PencilBrush(c); c.freeDrawingBrush.color = paint.stroke; c.freeDrawingBrush.width = 2;
-    const resize = new ResizeObserver(() => { c.setDimensions({ width: stage.current.clientWidth, height: stage.current.clientHeight }); if (!suspended.current) fit(true); else c.requestRenderAll(); });
+    const resize = new ResizeObserver(() => {
+      const width = stage.current.clientWidth, height = stage.current.clientHeight;
+      const previousWidth = c.width, previousHeight = c.height;
+      c.setDimensions({ width, height });
+      if (!suspended.current) {
+        const transform = [...c.viewportTransform];
+        transform[4] += (width - previousWidth) / 2; transform[5] += (height - previousHeight) / 2;
+        c.setViewportTransform(transform);
+      }
+      c.requestRenderAll();
+    });
     resize.observe(stage.current);
     const onSelection = () => refresh();
     c.on('selection:created', onSelection); c.on('selection:updated', onSelection); c.on('selection:cleared', onSelection);
@@ -255,7 +273,16 @@ export default function VectorEditor({ initialScene, sourceSvg, quoteOptions = [
 
   useEffect(() => {
     const key = event => {
-      if (!ready || busy || pen.current.length || /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName) || canvas.current.getActiveObject()?.isEditing) return;
+      if (!ready || busy || /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName) || canvas.current.getActiveObject()?.isEditing) return;
+      if (pen.current.length) {
+        if (event.key === 'Enter' && pen.current.length >= 2) { event.preventDefault(); finishPen(); }
+        else if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); selectTool('select'); }
+        return;
+      }
+      if (!event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey) {
+        const shortcut = tools.find(([, , , key]) => key.toLowerCase() === event.key.toLowerCase());
+        if (shortcut) { event.preventDefault(); selectTool(shortcut[0]); return; }
+      }
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); restore(position.current + (event.shiftKey ? 1 : -1)); return; }
       if (event.key === 'Delete' || event.key === 'Backspace') { event.preventDefault(); removeSelection(); return; }
       if (event.key.startsWith('Arrow') && selection) { event.preventDefault(); const step = event.shiftKey ? 10 : 1; modify(['ArrowLeft','ArrowRight'].includes(event.key) ? 'left' : 'top', (['ArrowLeft','ArrowRight'].includes(event.key) ? selection.left : selection.top) + (['ArrowLeft','ArrowUp'].includes(event.key) ? -step : step)); }
@@ -269,16 +296,30 @@ export default function VectorEditor({ initialScene, sourceSvg, quoteOptions = [
     try { const value = scene(); if (!validVectorScene(value)) throw new Error('La tavola non può essere salvata: controlla i limiti degli elementi.'); if (onSave(value) === false) throw new Error('Salvataggio non riuscito. La tavola resta aperta: riprova dopo aver corretto i dati.'); }
     catch (cause) { setError(cause.message); }
   }
+  const isGroup = selection?.type?.toLowerCase() === 'group';
+  const multiple = selection?.type?.toLowerCase() === 'activeselection';
   return <div className="dw-vector-editor">
-    <div className="dw-vector-toolbar" role="toolbar" aria-label="Strumenti vettoriali">{tools.map(([id, label]) => <Button key={id} disabled={!ready || busy} aria-pressed={tool === id} onClick={() => selectTool(id)}>{label}</Button>)}<span className="dw-vector-toolbar-divider" /><Button disabled={!historyState.undo || busy || penCount > 0} onClick={() => restore(position.current - 1)}>Annulla</Button><Button disabled={!historyState.redo || busy || penCount > 0} onClick={() => restore(position.current + 1)}>Ripeti</Button></div>
-    {tool === 'pen' && <div className="dw-vector-pen-bar"><span>{penCount} punti · clicca sulla tavola per aggiungere vertici</span><Button disabled={penCount < 2} onClick={() => finishPen()}>Concludi tracciato</Button><Button disabled={penCount < 3} onClick={() => finishPen(true)}>Chiudi forma</Button></div>}
-    <div className="dw-vector-main"><div className="dw-vector-stage" ref={stage}><canvas ref={element} />{!ready && <p role="status">{error || 'Apertura della tavola…'}</p>}</div><aside className="dw-vector-inspector" aria-label="Proprietà e livelli"><h3>Proprietà</h3>{selection ? <>
-      <strong>{selection.name}</strong><p>Dimensioni grafiche in pixel</p><div className="dw-vector-properties">{[['left','X'],['top','Y'],['width','Larghezza'],['height','Altezza'],['angle','Rotazione °']].map(([key, label]) => <Field key={key} label={label}><input key={`${selection.id}-${selection[key]}`} type="number" step=".1" defaultValue={Number(selection[key].toFixed(1))} onBlur={e => modify(key, e.target.value)} /></Field>)}</div>
-      <Field label="Riempimento"><input type="color" value={selection.fill} onChange={e => modify('fill', e.target.value)} /></Field><Button onClick={() => modify('fill', 'transparent')}>Senza riempimento</Button><Field label="Tratto"><input type="color" value={selection.stroke} onChange={e => modify('stroke', e.target.value)} /></Field><Field label="Spessore tratto · px"><input key={`${selection.id}-${selection.strokeWidth}`} type="number" min="0" max="50" step=".5" defaultValue={selection.strokeWidth} onBlur={e => modify('strokeWidth', e.target.value)} /></Field>{selection.text !== undefined && <Field label="Contenuto testo"><textarea key={`${selection.id}-${selection.text}`} maxLength={2000} defaultValue={selection.text} onBlur={e => modify('text', e.target.value)} /></Field>}
-      <section className="dw-vector-binding" aria-label="Collegamento alle quote"><h4>Quota associata</h4><p>La quota aggiorna questo livello. Il disegno libero non modifica i centimetri.</p><Field label="Misura"><select value={selection.measurementBinding?.quoteKey || ''} onChange={e => bindQuote(e.target.value)}><option value="">Nessun collegamento</option>{quoteOptions.map(option => <option key={option.key} value={option.key}>{option.label} · {option.value} cm</option>)}</select></Field><Field label="Asse di ridimensionamento"><select value={selection.measurementBinding?.axis || 'x'} disabled={!selection.measurementBinding} onChange={e => bindQuote(selection.measurementBinding.quoteKey, e.target.value)}><option value="x">Orizzontale · X</option><option value="y">Verticale · Y</option></select></Field></section>
-      <div className="dw-vector-object-actions"><Button onClick={duplicate}>Duplica</Button><Button onClick={removeSelection}>Elimina</Button><Button onClick={() => { canvas.current.bringObjectForward(canvas.current.getActiveObject()); commit(); }}>Avanti</Button><Button onClick={() => { canvas.current.sendObjectBackwards(canvas.current.getActiveObject()); commit(); }}>Indietro</Button><Button onClick={groupSelection}>Raggruppa</Button><Button onClick={ungroup}>Separa gruppo</Button></div>{tool === 'nodes' && selection.type !== 'path' && <p>Seleziona un tracciato per modificare i nodi; separa prima gli eventuali gruppi.</p>}
-    </> : <p>Seleziona un elemento sulla tavola o nella lista dei livelli. Trascina gli angoli per ridimensionare; usa il controllo superiore per ruotare.</p>}<h3>Livelli · {layers.length}</h3><ol className="dw-vector-layers">{layers.map(layer => <li key={layer.id}><button aria-pressed={selection?.id === layer.id} onClick={() => { selectTool('select'); const object = canvas.current.getObjects().find(row => row.id === layer.id); canvas.current.setActiveObject(object); canvas.current.requestRenderAll(); refresh(); }}>{layer.name}</button><button aria-label={`${layer.visible ? 'Nascondi' : 'Mostra'} ${layer.name}`} onClick={() => { const object = canvas.current.getObjects().find(row => row.id === layer.id); object.set('visible', !object.visible); canvas.current.requestRenderAll(); commit(); }}>{layer.visible ? '◉' : '○'}</button></li>)}</ol></aside></div>
-    <footer className="dw-vector-footer"><div className="dw-actions"><Button disabled={!ready} onClick={() => { const c=canvas.current; const scale=Math.max(.1,c.getZoom()/1.25); c.zoomToPoint(new Point(c.width/2,c.height/2),scale); setZoom(Math.round(scale*100)); }}>−</Button><span>{zoom}%</span><Button disabled={!ready} onClick={() => { const c=canvas.current; const scale=Math.min(8,c.getZoom()*1.25); c.zoomToPoint(new Point(c.width/2,c.height/2),scale); setZoom(Math.round(scale*100)); }}>+</Button><Button disabled={!ready} onClick={() => fit(true)}>Adatta disegno</Button><Button disabled={!ready} onClick={() => fit()}>Adatta tavola</Button></div><span>1600×1200 · quote modificabili nella vista Misure</span><Button primary disabled={!ready || busy || penCount > 0 || initialScene && !historyState.dirty} onClick={save}>Salva nuova revisione</Button></footer>
+    <div className="dw-vector-toolbar" role="toolbar" aria-label="Strumenti vettoriali">
+      <div className="dw-vector-tool-group">{tools.map(([id, label, icon, key], index) => <React.Fragment key={id}>{index === 3 && <span className="dw-vector-toolbar-divider" aria-hidden="true" />}<Button disabled={!ready || busy} aria-label={label} aria-pressed={tool === id} title={`${label} (${key})`} onClick={() => selectTool(id)}><ToolIcon icon={icon} /><span>{label}</span></Button></React.Fragment>)}</div>
+      <div className="dw-vector-history"><Button aria-label="Annulla" disabled={!historyState.undo || busy || penCount > 0} title="Annulla (⌘/Ctrl Z)" onClick={() => restore(position.current - 1)}><ToolIcon icon={Undo2} /><span>Annulla</span></Button><Button aria-label="Ripeti" disabled={!historyState.redo || busy || penCount > 0} title="Ripeti (⌘/Ctrl Maiusc Z)" onClick={() => restore(position.current + 1)}><ToolIcon icon={Redo2} /><span>Ripeti</span></Button></div>
+    </div>
+    <div className="dw-vector-tool-hint"><Icon name="info" size={14} /><span>{toolHints[tool]}</span><span className="dw-vector-dirty">{historyState.dirty || penCount ? 'Modifiche non salvate' : 'Nessuna modifica'}</span></div>
+    {tool === 'pen' && <div className="dw-vector-pen-bar"><span>{penCount} punti · Invio per concludere · Esc per annullare</span><Button disabled={penCount < 2} onClick={() => finishPen()}>Concludi tracciato</Button><Button disabled={penCount < 3} onClick={() => finishPen(true)}>Chiudi forma</Button></div>}
+    <div className="dw-vector-main">
+      <div className="dw-vector-stage" ref={stage}><canvas ref={element} />{!ready && <p role="status">{error || 'Apertura della tavola…'}</p>}</div>
+      <aside className="dw-vector-inspector" aria-label="Proprietà e livelli">
+        <section className="dw-vector-layers-panel"><div className="dw-vector-panel-heading"><div><h3>Livelli</h3><p>Seleziona una parte del disegno</p></div><span>{layers.length}</span></div><ol className="dw-vector-layers">{layers.map(layer => <li key={layer.id} data-active={selection?.id === layer.id || undefined}><button type="button" aria-pressed={selection?.id === layer.id} onClick={() => { if (!['select', 'nodes'].includes(toolRef.current)) selectTool('select'); const object = canvas.current.getObjects().find(row => row.id === layer.id); if (!object || !object.visible) return; canvas.current.setActiveObject(object); canvas.current.requestRenderAll(); refresh(); }}><Icon name="layers" size={15} /><span>{layer.name}</span></button><button type="button" className="dw-vector-layer-visibility" aria-label={`${layer.visible ? 'Nascondi' : 'Mostra'} ${layer.name}`} title={layer.visible ? 'Nascondi' : 'Mostra'} onClick={() => { const object = canvas.current.getObjects().find(row => row.id === layer.id); if (!object) return; if (object.visible && canvas.current.getActiveObject() === object) canvas.current.discardActiveObject(); object.set('visible', !object.visible); canvas.current.requestRenderAll(); commit(); }}><ToolIcon icon={layer.visible ? Eye : EyeOff} size={15} /></button></li>)}</ol></section>
+        <section className="dw-vector-properties-panel"><div className="dw-vector-panel-heading"><div><h3>Proprietà</h3><p>{selection ? 'Elemento selezionato' : 'Nessuna selezione'}</p></div></div>{selection ? <>
+          {(isGroup || multiple) && <div className="dw-vector-group-note"><strong>{multiple ? 'Più elementi selezionati' : 'Gruppo di tracciati'}</strong><p>{multiple ? 'Raggruppa gli elementi per spostarli insieme.' : 'Separa il gruppo per cambiare i singoli tracciati o modificarne i nodi.'}</p>{isGroup && <Button onClick={ungroup}>Separa gruppo</Button>}</div>}
+          <Field label="Nome livello"><input key={`${selection.id}-${selection.name}`} maxLength={100} defaultValue={selection.name} onBlur={e => modify('name', e.target.value)} /></Field>
+          <div className="dw-vector-properties">{[['left','X'],['top','Y'],['width','Larghezza'],['height','Altezza'],['angle','Rotazione °']].map(([key, label]) => <Field key={key} label={label}><input key={`${selection.id}-${selection[key]}`} type="number" step=".1" defaultValue={Number(selection[key].toFixed(1))} onBlur={e => modify(key, e.target.value)} /></Field>)}</div>
+          {!isGroup && !multiple && <><div className="dw-vector-paint"><Field label="Riempimento"><input type="color" value={selection.fill} onChange={e => modify('fill', e.target.value)} /></Field><Field label="Tratto"><input type="color" value={selection.stroke} onChange={e => modify('stroke', e.target.value)} /></Field><Field label="Spessore · px"><input key={`${selection.id}-${selection.strokeWidth}`} type="number" min="0" max="50" step=".5" defaultValue={selection.strokeWidth} onBlur={e => modify('strokeWidth', e.target.value)} /></Field></div><Button onClick={() => modify('fill', 'transparent')}>Senza riempimento</Button>{selection.text !== undefined && <Field label="Contenuto testo"><textarea key={`${selection.id}-${selection.text}`} maxLength={2000} defaultValue={selection.text} onBlur={e => modify('text', e.target.value)} /></Field>}</>}
+          <details className="dw-vector-binding"><summary>Collegamento alle quote</summary><p>La quota aggiorna questo livello; il disegno libero non modifica i centimetri.</p><Field label="Misura"><select value={selection.measurementBinding?.quoteKey || ''} onChange={e => bindQuote(e.target.value)}><option value="">Nessun collegamento</option>{quoteOptions.map(option => <option key={option.key} value={option.key}>{option.label} · {option.value} cm</option>)}</select></Field><Field label="Asse di ridimensionamento"><select value={selection.measurementBinding?.axis || 'x'} disabled={!selection.measurementBinding} onChange={e => bindQuote(selection.measurementBinding.quoteKey, e.target.value)}><option value="x">Orizzontale · X</option><option value="y">Verticale · Y</option></select></Field></details>
+          <div className="dw-vector-object-actions"><Button onClick={duplicate}><ToolIcon icon={Copy} />Duplica</Button><Button onClick={removeSelection}><ToolIcon icon={Trash2} />Elimina</Button><Button onClick={() => { canvas.current.bringObjectForward(canvas.current.getActiveObject()); commit(); }}>Porta avanti</Button><Button onClick={() => { canvas.current.sendObjectBackwards(canvas.current.getActiveObject()); commit(); }}>Porta indietro</Button>{multiple && <Button onClick={groupSelection}>Raggruppa</Button>}</div>
+        </> : <div className="dw-vector-empty"><ToolIcon icon={MousePointer2} size={20} /><p>Scegli un livello o un elemento sulla tavola per modificarlo.</p></div>}</section>
+      </aside>
+    </div>
+    <footer className="dw-vector-footer"><div className="dw-actions"><Button aria-label="Riduci zoom" disabled={!ready} onClick={() => { const c=canvas.current; const scale=Math.max(.1,c.getZoom()/1.25); c.zoomToPoint(new Point(c.width/2,c.height/2),scale); setZoom(Math.round(scale*100)); }}>−</Button><span>{zoom}%</span><Button aria-label="Aumenta zoom" disabled={!ready} onClick={() => { const c=canvas.current; const scale=Math.min(8,c.getZoom()*1.25); c.zoomToPoint(new Point(c.width/2,c.height/2),scale); setZoom(Math.round(scale*100)); }}>+</Button><Button disabled={!ready} onClick={() => fit(true)}>Adatta disegno</Button><Button disabled={!ready} onClick={() => fit()}>Adatta tavola</Button></div><span>Le dimensioni grafiche sono in pixel.</span><Button primary disabled={!ready || busy || penCount > 0 || !historyState.dirty} onClick={save}>Salva nuova revisione</Button></footer>
     {error && <p className="dw-vector-error" role="alert">{error}</p>}
   </div>;
 }

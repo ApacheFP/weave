@@ -89,7 +89,7 @@ export default function PublicPassportPage({ styleId: initialStyleId, entered = 
             <span>Passaporto Digitale di Prodotto (ESPR)</span>
             <span>/</span>
             <strong className="dw-breadcrumb-product">{targetItem.title}</strong>
-            <Badge tone="good">DPP UE Conforme</Badge>
+            <Badge tone="good">Anteprima demo</Badge>
           </div>
           <div className="dw-actions">
             <Button
@@ -108,7 +108,7 @@ export default function PublicPassportPage({ styleId: initialStyleId, entered = 
           <div className="dw-page-head">
             <div>
               <div className="dw-page-kicker">
-                <span className="dw-eyebrow">Digital Product Passport UE 2024/1781</span>
+                <span className="dw-eyebrow">Digital Product Passport · demo</span>
                 <span>·</span>
                 <span>Lotto {targetItem.lotId}</span>
               </div>
@@ -158,9 +158,9 @@ export default function PublicPassportPage({ styleId: initialStyleId, entered = 
               />
             </div>
             <p className="dw-muted" style={{ margin: '10px 0 0', fontSize: 12, lineHeight: 1.5 }}>
-              {role === 'Consumatore' && 'Vista pubblica del consumatore finale: trasparenza delle fibre nobili certificate, sostenibilità ambientale, tracciabilità e cura. I costi industriali e i margini del brand sono protetti.'}
-              {role === 'Brand & Atelier' && 'Vista riservata atelier: distinta analitica del costo primo di produzione, margini commerciali wholesale/retail e bilancio quantitativo del lotto.'}
-              {role === 'Autorità & Dogana' && 'Dossier ufficiale di vigilanza del mercato: conformità al Regolamento UE ESPR 2024/1781, test chimico REACH (assenza PFAS), certificato doganale EUR.1 Made in Italy e marcatura eIDAS.'}
+              {role === 'Consumatore' && 'Vista consumatore dimostrativa: dati ed evidenze sono esempi. Le viste non applicano permessi reali.'}
+              {role === 'Brand & Atelier' && 'Vista brand dimostrativa con costi e margini di esempio; non sono applicati permessi reali.'}
+              {role === 'Autorità & Dogana' && 'Vista autorità dimostrativa, priva di analisi e certificazioni verificate.'}
             </p>
           </Card>
 
@@ -191,26 +191,7 @@ export default function PublicPassportPage({ styleId: initialStyleId, entered = 
                 </dl>
               </Card>
 
-              <Card title="Certificazioni del capo">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Badge tone="good">OEKO-TEX Standard 100</Badge>
-                    <small className="dw-muted">Assenza sostanze nocive</small>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Badge tone="good">Mulesing-Free</Badge>
-                    <small className="dw-muted">Benessere animale tracciato</small>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Badge tone="good">100% Made in Italy</Badge>
-                    <small className="dw-muted">EUR.1 Dogane Prato/Biella</small>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Badge tone="good">ESPR Conforme</Badge>
-                    <small className="dw-muted">Reg. UE 2024/1781</small>
-                  </div>
-                </div>
-              </Card>
+              <Card title="Documenti e certificazioni" note="Esempio demo"><p className="dw-muted">I riferimenti mostrati sono dimostrativi e non costituiscono certificazioni verificate.</p></Card>
 
               <Card title="QR Identificativo">
                 <div className="dw-qr-label" style={{ display: 'flex', gap: 12, alignItems: 'center', margin: 0 }}>
@@ -246,11 +227,11 @@ export default function PublicPassportPage({ styleId: initialStyleId, entered = 
                       <dt>Origine materia prima</dt><dd><strong>{fabric.origin}</strong></dd>
                       <dt>Filatura / Tessitura</dt><dd><strong>{fabric.supplier}</strong></dd>
                       <dt>Confezione sartoriale</dt><dd><strong>{targetItem.factory} · Italia</strong></dd>
-                      <dt>Certificazione etica</dt><dd>Assenza sostanze nocive · Pascolo certificato</dd>
+                      <dt>Certificazione etica</dt><dd>Dati dimostrativi da verificare</dd>
                     </dl>
                   </Card>
 
-                  <Card title="Impronta Ambientale & Circolarità" note="Indicatori certificati secondo standard ESPR">
+                  <Card title="Impronta Ambientale & Circolarità" note="Indicatori di esempio, non certificati">
                     <Metrics items={[
                       ['CO₂ Stimata / Capo', spec.co2, '–28% rispetto a media settore'],
                       ['Indice Riparabilità', '9.4 / 10', spec.repair],
@@ -258,14 +239,14 @@ export default function PublicPassportPage({ styleId: initialStyleId, entered = 
                     ]} />
                   </Card>
 
-                  <Card title="Tracciabilità della Filiera" note="5 passaggi verificati lungo la filiera">
+                  <Card title="Tracciabilità della Filiera" note="5 passaggi dimostrativi della filiera">
                     <div className="dw-trace-path">
                       {[
-                        ['1. Materia prima & fibre', fabric.origin, `${fabric.name} tracciato. Pascolo certificato e controllo qualità della fibra.`],
+                        ['1. Materia prima & fibre', fabric.origin, `${fabric.name} tracciato. Origine e controlli di esempio.`],
                         ['2. Filatura e tintura ecologica', fabric.supplier, `Lotto ${targetItem.fabricLot}. Tintura a circuito chiuso con recupero del 92% delle acque.`],
                         ['3. Taglio e confezione sartoriale', targetItem.factory, `Commessa ${targetItem.orderId}. Manifattura artigianale con maestranze specializzate.`],
-                        ['4. Controllo qualità capo per capo', 'Laboratorio accreditato', `Ispezione superata con score ${qualityLabel(targetItem)}. Tolleranze conformi al mm.`],
-                        ['5. Passaporto Digitale attivato', 'Piattaforma WEAVE', 'Identità digitale registrata in conformità con la normativa europea ESPR.']
+                        ['4. Controllo qualità capo per capo', 'Laboratorio demo', `Punteggio demo ${qualityLabel(targetItem)}.`],
+                        ['5. Passaporto Digitale attivato', 'Piattaforma WEAVE', 'Anteprima di identità digitale.']
                       ].map(([name, location, meta]) => (
                         <div key={name}>
                           <span className="dw-trace-node"><Icon name="layers" /></span>
@@ -286,13 +267,13 @@ export default function PublicPassportPage({ styleId: initialStyleId, entered = 
                         <h3 style={{ margin: '0 0 6px', fontSize: 14 }}>Fallo durare nel tempo</h3>
                         <p style={{ margin: 0, fontSize: 13, color: 'var(--text-2)', lineHeight: 1.6 }}>{spec.care}</p>
                         <p className="dw-muted" style={{ marginTop: 10 }}>
-                          💡 <strong>Consiglio dell'artigiano:</strong> riponi sempre il capo piegato su un ripiano asciutto (evita la gruccia se in maglia). Una corretta manutenzione garantisce decenni di vestibilità.
+                          💡 <strong>Consiglio dell'artigiano:</strong> riponi sempre il capo piegato su un ripiano asciutto (evita la gruccia se in maglia). Una corretta manutenzione può prolungare la vita del capo.
                         </p>
                       </div>
                     </div>
                   </Card>
 
-                  <Card title="Servizio Seconda Vita & Garanzia Circolare" note="Riparazione artigianale garantita da WEAVE">
+                  <Card title="Servizio Seconda Vita & Garanzia Circolare" note="Scenario di riparazione dimostrativo">
                     <p style={{ fontSize: 13, color: 'var(--text-2)', margin: '0 0 12px', lineHeight: 1.5 }}>
                       Se nel tempo questo capo necessita di un rammendo, sostituzione bottoni o rigenerazione delle fibre, puoi attivare il servizio circolare WEAVE con ritiro a domicilio.
                     </p>
@@ -344,7 +325,7 @@ export default function PublicPassportPage({ styleId: initialStyleId, entered = 
                           </tr>
                           <tr>
                             <td><strong>Logistica protetta & packaging</strong></td>
-                            <td>Corriere espresso e imballaggio certificato</td>
+                            <td>Corriere e imballaggio di esempio</td>
                             <td style={{ textAlign: 'right' }}><strong>{euro(targetItem.logisticsCost)}</strong></td>
                           </tr>
                         </tbody>
@@ -370,7 +351,7 @@ export default function PublicPassportPage({ styleId: initialStyleId, entered = 
                     <dl className="dw-kv">
                       <dt>Ordine di produzione</dt><dd><strong>{targetItem.orderId}</strong></dd>
                       <dt>Lotto di confezione</dt><dd><strong>{targetItem.lotId}</strong></dd>
-                      <dt>Capi approvati a stock</dt><dd><strong style={{ color: 'var(--green, #16a34a)' }}>{targetItem.produced} / {targetItem.quantity} capi</strong> ({Math.round((targetItem.produced / targetItem.quantity) * 100)}%)</dd>
+                      <dt>Capi approvati complessivi</dt><dd><strong style={{ color: 'var(--green, #16a34a)' }}>{targetItem.produced - targetItem.reworks} / {targetItem.quantity} capi</strong> ({Math.round((targetItem.produced / targetItem.quantity) * 100)}%)</dd>
                       <dt>Scarto reale vs teorico</dt><dd><strong>{targetItem.actualWaste}%</strong> (scarto teorico da piazzamento: {targetItem.waste}%)</dd>
                       <dt>Fornitore di tessuto riservato</dt><dd>{fabric.supplier} · Lotto pezza {targetItem.fabricLot}</dd>
                       <dt>Collaudo finale qualità</dt><dd>Score {qualityLabel(targetItem)}</dd>
@@ -379,98 +360,13 @@ export default function PublicPassportPage({ styleId: initialStyleId, entered = 
                 </>
               )}
 
-              {/* ROLE: AUTORITÀ & DOGANA */}
-              {role === 'Autorità & Dogana' && (
-                <>
-                  <Card
-                    title="Fascicolo di Conformità ESPR (Reg. UE 2024/1781)"
-                    note="Accesso autorizzato per autorità di vigilanza del mercato e dogane"
-                    actions={<Badge tone="good">Depositato e Conforme</Badge>}
-                  >
-                    <dl className="dw-kv">
-                      <dt>Regolamento applicabile</dt>
-                      <dd><strong>ESPR 2024/1781</strong> (Ecodesign for Sustainable Products - Digital Product Passport Textiles)</dd>
-                      <dt>ID Univoco URN europeo</dt>
-                      <dd><code style={{ fontFamily: 'var(--mono)', fontSize: 11, background: 'var(--surface-2)', padding: '2px 6px', borderRadius: 4 }}>urn:dpp:eu:it:weave:{targetItem.styleId}:{targetItem.lotId}</code></dd>
-                      <dt>Operatore responsabile</dt>
-                      <dd>Atelier WEAVE Prato / Biella (P.IVA IT-08912340489 · Codice EORI IT08912340489)</dd>
-                      <dt>Ente di notifica / Registro</dt>
-                      <dd>Camera di Commercio & Registro Nazionale Imprese Tessili IT</dd>
-                    </dl>
-                  </Card>
+              {role === 'Autorità & Dogana' && <Card title="Dossier di esempio" note="Anteprima demo, senza documenti verificati"><p>Le certificazioni, le analisi di laboratorio e i documenti doganali richiedono verifiche reali. Questa pagina non attesta conformità.</p><dl className="dw-kv"><dt>Capo</dt><dd>{targetItem.styleId}</dd><dt>Lotto</dt><dd>{targetItem.lotId}</dd></dl></Card>}
 
-                  <Card title="Conformità Sostanze Chimiche REACH (Reg. CE 1907/2006)" note="Report analitico di laboratorio accreditato">
-                    <div className="dw-table-wrap">
-                      <table className="dw-table">
-                        <thead>
-                          <tr>
-                            <th>Parametro analizzato</th>
-                            <th>Metodo di prova</th>
-                            <th>Limite normativo</th>
-                            <th>Esito</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td><strong>PFAS (Sostanze perfluoroalchiliche)</strong></td>
-                            <td>CEN/TS 15968</td>
-                            <td>&lt; 0.025 mg/kg</td>
-                            <td><Badge tone="good">Assenti (&lt;0.01)</Badge></td>
-                          </tr>
-                          <tr>
-                            <td><strong>Coloranti azoici e ammine</strong></td>
-                            <td>EN ISO 14362-1</td>
-                            <td>&lt; 20 mg/kg</td>
-                            <td><Badge tone="good">Conforme (&lt;5)</Badge></td>
-                          </tr>
-                          <tr>
-                            <td><strong>Metalli pesanti estraibili</strong></td>
-                            <td>EN ISO 105-E04</td>
-                            <td>OEKO-TEX Classe II</td>
-                            <td><Badge tone="good">Conforme</Badge></td>
-                          </tr>
-                          <tr>
-                            <td><strong>Formaldeide libera</strong></td>
-                            <td>EN ISO 14184-1</td>
-                            <td>&lt; 75 mg/kg</td>
-                            <td><Badge tone="good">Non rilevata</Badge></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <p className="dw-muted" style={{ margin: '12px 0 0' }}>
-                      Rapporto di prova ufficiale: <strong>LAB-CHEM-IT-2026-9041</strong> rilasciato da Laboratorio Chimico Certificato Accredia.
-                    </p>
-                  </Card>
-
-                  <Card title="Origine Doganale Preferenziale (Made in Italy Integrale)" note="Certificazione EUR.1">
-                    <dl className="dw-kv">
-                      <dt>Codice TARIC</dt>
-                      <dd><strong>{taricCode}</strong></dd>
-                      <dt>Certificato di Origine</dt>
-                      <dd><strong>EUR.1 n. IT-DOG-2026-0428</strong> (Ufficio delle Dogane di Prato)</dd>
-                      <dt>Lavorazione qualificata</dt>
-                      <dd>100% Made in Italy (Tessitura, Taglio e Confezione completi in territorio nazionale)</dd>
-                      <dt>Collaudo e tolleranze</dt>
-                      <dd>Scheda collaudo {spec.quality.id} · Score {qualityLabel(targetItem)}</dd>
-                    </dl>
-                  </Card>
-
-                  <Card title="Integrità Crittografica & Marcatura Temporale eIDAS" note="Immutabilità del record registrata su registro elettronico">
-                    <div style={{ background: 'var(--surface-3)', border: '1px solid var(--border)', padding: 12, borderRadius: 8, fontFamily: 'var(--mono)', fontSize: 11, lineHeight: 1.6, color: 'var(--text)' }}>
-                      <div><strong>HASH_SHA256:</strong> d8a7f4e9102b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9012345678abcdef0123</div>
-                      <div><strong>TIMESTAMP_EIDAS:</strong> 2026-10-27T10:00:00.000Z</div>
-                      <div><strong>ISSUER:</strong> CN=WEAVE Trust Authority, O=WEAVE Platform, C=IT</div>
-                      <div><strong>STATUS:</strong> VALID_AUTHENTIC_RECORD</div>
-                    </div>
-                  </Card>
-                </>
-              )}
             </div>
           </div>
 
           <footer style={{ marginTop: 40, textAlign: 'center', fontSize: 12, color: 'var(--text-3)' }}>
-            Passaporto Digitale di Prodotto conforme al Regolamento Europeo ESPR 2024/1781.<br />
+            Anteprima dimostrativa: non attesta conformità normativa.<br />
             Piattaforma di tracciabilità della filiera tessile WEAVE © {new Date().getFullYear()}.
           </footer>
         </main>

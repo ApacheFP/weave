@@ -10,7 +10,7 @@ export const productSections = {
   saveMaterials: [3, ['fabricId', 'fabricPrice', 'consumption', 'trims']],
   savePattern: [4, ['seam', 'modelVersion', 'grain', 'notches', 'modelHistory']],
   saveGrading: [5, ['gradingChest', 'measurements']],
-  saveSampleChecks: [6, ['sampleChecks']],
+  saveSampleChecks: [6, ['sampleChecks', 'sampleApproved', 'sampleRevisions']],
   saveMarker: [7, ['markerWidth', 'optimized', 'consumption', 'waste']],
   savePricing: [9, ['fabricId', 'fabricPrice', 'margin', 'hourlyRate', 'wholesale', 'retail']],
   savePlan: [10, ['factory', 'priority', 'start', 'end', 'delivery']],

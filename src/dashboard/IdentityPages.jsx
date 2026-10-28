@@ -5,7 +5,7 @@ import { euro, qualityLabel } from './domain.js';
 import { download } from './exportFiles.js';
 import { Lifecycle } from './services.jsx';
 import { Badge, Button, Card, Icon, Metrics, Tabs } from './ui.jsx';
-import { productMedia, productSizes, productSpec } from './productData.js';
+import { materialUnit, productMedia, productSizes, productSpec } from './productData.js';
 import { MediaImage, ProductPhoto, ReferenceFile, fabricAsset } from './Media.jsx';
 import Assistant from './Assistant.jsx';
 import { modulePath, navigateTo, publicPassportPath } from '../routes.js';
@@ -58,7 +58,7 @@ export function PassportPage() {
           ? {
               lot: `${data.lotId}`,
               qualityScore: qualityLabel(data),
-              ...(role === 'Brand' ? { unitCost: cost, wholesale: data.wholesale, retail: data.retail } : { evidence: fabric.certificate, eur1: 'IT-DOG-2026-0428' })
+              ...(role === 'Brand' ? { unitCost: cost, wholesale: data.wholesale, retail: data.retail } : { evidence: 'Dati dimostrativi non verificati' })
             }
           : {})
       }, null, 2),
@@ -84,9 +84,9 @@ export function PassportPage() {
     </div>
 
     <p className="dw-muted" style={{ margin: '8px 0 16px', fontSize: 12 }}>
-      {role === 'Consumatore' && 'Vista pubblica del consumatore: tracciabilità delle fibre naturali, certificazioni etiche, impatto ambientale e cura. I costi industriali e i margini del brand sono protetti.'}
-      {role === 'Brand' && 'Vista riservata atelier: scomposizione analitica del costo primo di produzione, margini commerciali wholesale/retail e bilancio quantitativo del lotto.'}
-      {role === 'Autorità' && 'Dossier ufficiale di vigilanza del mercato: conformità al Regolamento UE ESPR 2024/1781, test chimico REACH (assenza PFAS), certificato doganale EUR.1 e marcatura eIDAS.'}
+      {role === 'Consumatore' && 'Vista consumatore dimostrativa. I dati e i certificati sono esempi; il selettore non applica permessi di accesso.'}
+      {role === 'Brand' && 'Vista brand dimostrativa: costi e margini di esempio. Non sono applicati permessi di accesso.'}
+      {role === 'Autorità' && 'Vista autorità dimostrativa: non contiene certificazioni, risultati di laboratorio o autorizzazioni reali.'}
     </p>
 
     <div className="dw-passport-layout">
@@ -96,7 +96,7 @@ export function PassportPage() {
           className="dw-passport-profile"
           title={data.title}
           note={`${data.styleId} · ${data.collection}`}
-          actions={<Badge tone="good">{data.passportPublished ? 'Pubblicato · ESPR' : 'Bozza'}</Badge>}
+          actions={<Badge tone="good">{data.passportPublished ? 'Pubblicato · demo' : 'Bozza'}</Badge>}
         >
           <div className="dw-passport-photo"><ProductPhoto sizes="240px" /></div>
           <dl className="dw-kv">
@@ -109,8 +109,8 @@ export function PassportPage() {
 
         <Card
           title="Etichetta del capo & QR Passaporto"
-          note="Collegamento univoco al passaporto pubblico"
-          actions={<Badge tone="good">DPP UE Attivo</Badge>}
+          note="Collegamento alla pagina dimostrativa su questo dispositivo"
+          actions={<Badge tone="good">Anteprima demo</Badge>}
         >
           <div className="dw-qr-label" style={{ display: 'flex', alignItems: 'center', gap: 14, margin: 0 }}>
             <div
@@ -124,7 +124,7 @@ export function PassportPage() {
                 display: 'grid',
                 placeItems: 'center'
               }}
-              title="Clicca per aprire la vera pagina del passaporto pubblico"
+              title="Apri l’anteprima del passaporto"
               onClick={() => navigateTo(publicPassportPath(data.styleId))}
               dangerouslySetInnerHTML={{ __html: qrSvg || '<svg width="80" height="80"></svg>' }}
             />
@@ -132,7 +132,7 @@ export function PassportPage() {
               <strong style={{ fontSize: 13.5 }}>{data.styleId} · {data.title}</strong>
               <p style={{ margin: '3px 0 2px', fontSize: 12, color: 'var(--text-2)' }}>Passaporto Digitale di Prodotto (ESPR)</p>
               <small style={{ color: 'var(--text-3)', fontSize: 11, display: 'block', lineHeight: 1.4 }}>
-                Inquadra il QR con la fotocamera dello smartphone per consultare il passaporto pubblico.
+                Il QR punta a questa origine: su localhost è accessibile solo da questo dispositivo.
               </small>
             </div>
           </div>
@@ -168,7 +168,7 @@ export function PassportPage() {
         {tab === 'Identità' && <>
           {role === 'Consumatore' && (
             <>
-              <Card title="Composizione e materiali" note="OEKO-TEX Standard 100 · Mulesing-Free">
+              <Card title="Composizione e materiali" note="Dati di esempio, da verificare">
                 <ReferenceFile asset={fabricAsset(data.fabricId)} note={`${fabric.code} · ${fabric.supplier}`} />
                 <div className="dw-composition"><span style={{ flex: fabric.wool }} /><span style={{ flex: 100 - fabric.wool }} /></div>
                 <p className="dw-composition-text">{fabric.composition}</p>
@@ -181,7 +181,7 @@ export function PassportPage() {
                 </dl>
               </Card>
 
-              <Card title="Indicatori ambientali & circolarità" note="Valori certificati a norma ESPR">
+              <Card title="Indicatori ambientali & circolarità" note="Valori dimostrativi, non certificati">
                 <Metrics items={[
                   ["CO₂ stimata", spec.co2, 'Scenario demo / capo'],
                   ['Scarto materiale', `${data.waste}%`, data.category === 'knit' ? 'Piano filato teorico' : 'Piazzamento teorico'],
@@ -210,7 +210,7 @@ export function PassportPage() {
                     <tbody>
                       <tr>
                         <td><strong>Materia prima principale</strong></td>
-                        <td>{data.consumption} m × {euro(data.fabricPrice)}/m</td>
+                        <td>{data.consumption} {materialUnit(data)} × {euro(data.fabricPrice)}/{materialUnit(data)}</td>
                         <td style={{ textAlign: 'right' }}><strong>{euro(fabricCost)}</strong></td>
                       </tr>
                       <tr>
@@ -250,7 +250,7 @@ export function PassportPage() {
               <Card title="Avanzamento Produzione & Resa Lotto" note={`Fabbrica ${data.factory}`}>
                 <dl className="dw-kv">
                   <dt>Ordine / Lotto</dt><dd><strong>{data.orderId}</strong> · Lotto {data.lotId}</dd>
-                  <dt>Capi approvati a stock</dt><dd><strong style={{ color: 'var(--green, #16a34a)' }}>{data.produced} / {data.quantity}</strong> ({Math.round((data.produced / data.quantity) * 100)}%)</dd>
+                  <dt>Capi approvati complessivi</dt><dd><strong style={{ color: 'var(--green, #16a34a)' }}>{data.produced - data.reworks} / {data.quantity}</strong> ({Math.round((data.produced / data.quantity) * 100)}%)</dd>
                   <dt>Scarto reale vs teorico</dt><dd><strong>{data.actualWaste}%</strong> (teorico piazzamento: {data.waste}%)</dd>
                   <dt>Fornitore riservato</dt><dd>{fabric.supplier} ({data.fabricLot})</dd>
                   <dt>Collaudo qualità</dt><dd>Score {qualityLabel(data)}</dd>
@@ -259,57 +259,17 @@ export function PassportPage() {
             </>
           )}
 
-          {role === 'Autorità' && (
-            <>
-              <Card
-                title="Dossier normativo UE (Autorità & Dogana)"
-                note="Regolamento ESPR 2024/1781"
-                actions={<Badge tone="good">Audit Conforme</Badge>}
-              >
-                <dl className="dw-kv">
-                  <dt>Regolamento UE</dt><dd><strong>ESPR 2024/1781</strong> (Digital Product Passport Textiles)</dd>
-                  <dt>ID Univoco URN</dt><dd><code style={{ fontFamily: 'var(--mono)', fontSize: 11, background: 'var(--surface-2)', padding: '2px 6px', borderRadius: 4 }}>urn:dpp:eu:it:weave:{data.styleId}:{data.lotId}</code></dd>
-                  <dt>Operatore responsabile</dt><dd>Atelier WEAVE Prato (EORI IT08912340489)</dd>
-                  <dt>Registro Doganale</dt><dd>EUR.1 / Made in Italy certificato</dd>
-                  <dt>Ente Validatore</dt><dd>Camera di Commercio & Registro Imprese Tessili IT</dd>
-                </dl>
-              </Card>
+          {role === 'Autorità' && <Card title="Dossier di esempio" note="Anteprima dimostrativa, priva di documenti verificati"><p>I dati di conformità, analisi chimiche e documenti doganali richiedono fonti e verifiche reali. Questa demo non ne certifica la validità.</p><dl className="dw-kv"><dt>Capo</dt><dd>{data.styleId}</dd><dt>Lotto</dt><dd>{data.lotId}</dd><dt>Qualità demo</dt><dd>{qualityLabel(data)}</dd></dl></Card>}
 
-              <Card title="Conformità Chimica REACH (Reg. CE 1907/2006)" note="Rapporto analitico LAB-CHEM-IT-2026-9041">
-                <div className="dw-table-wrap">
-                  <table className="dw-table">
-                    <thead>
-                      <tr><th>Sostanza / Parametro</th><th>Limite normativo</th><th>Esito test</th></tr>
-                    </thead>
-                    <tbody>
-                      <tr><td><strong>PFAS (Sostanze perfluoroalchiliche)</strong></td><td>&lt; 0.025 mg/kg</td><td><Badge tone="good">Assenti (&lt; 0.01)</Badge></td></tr>
-                      <tr><td><strong>Coloranti azoici (EN ISO 14362-1)</strong></td><td>&lt; 20 mg/kg</td><td><Badge tone="good">Conforme (&lt; 5)</Badge></td></tr>
-                      <tr><td><strong>Metalli pesanti estraibili</strong></td><td>OEKO-TEX Classe II</td><td><Badge tone="good">Conforme</Badge></td></tr>
-                      <tr><td><strong>Formaldeide libera</strong></td><td>&lt; 75 mg/kg</td><td><Badge tone="good">Non rilevata</Badge></td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              </Card>
-
-              <Card title="Origine Doganale Preferenziale (Made in Italy)" note="Certificato EUR.1">
-                <dl className="dw-kv">
-                  <dt>Classificazione TARIC</dt><dd><strong>{taricCode}</strong></dd>
-                  <dt>Certificato Doganale</dt><dd><strong>EUR.1 n. IT-DOG-2026-0428</strong></dd>
-                  <dt>Lavorazione qualificata</dt><dd>100% Made in Italy (Tessitura, Taglio e Confezione completi)</dd>
-                  <dt>Collaudo finale</dt><dd>Scheda {spec.quality.id} · Score {qualityLabel(data)}</dd>
-                </dl>
-              </Card>
-            </>
-          )}
         </>}
 
         {tab === 'Tracciabilità' && <Card title="Da dove arriva (Filiera Tracciata)">
           <div className="dw-trace-path">
             {[
               ['Materia prima', fabric.origin, `${spec.materialLabel} ${data.fabricLot}`],
-              ['Filatura / Fornitore', fabric.supplier, `Certificato ${fabric.certificate}`],
+              ['Filatura / Fornitore', fabric.supplier, `Riferimento demo: ${fabric.certificate}`],
               ['Confezione', data.factory, `Lotto ${data.lotId}`],
-              ['Controllo qualità', 'Laboratorio accreditato', data.qualityResolved ? `${spec.quality.id} chiusa` : `${spec.quality.id} in verifica`],
+              ['Controllo qualità', 'Laboratorio demo', data.qualityResolved ? `${spec.quality.id} chiusa` : `${spec.quality.id} in verifica`],
               ['Distribuzione', 'Hub Firenze', `Tracking ${data.shipments[0]?.id || 'Da creare'}`]
             ].map(([name, location, meta]) => (
               <div key={name}>
@@ -324,7 +284,7 @@ export function PassportPage() {
           </div>
           {role !== 'Consumatore' && (
             <div className="dw-evidence" style={{ marginTop: 14 }}>
-              <Badge>{role === 'Brand' ? 'Dati di fornitura riservati' : 'Attestati di conformità doganale'}</Badge>
+              <Badge>{role === 'Brand' ? 'Dati di fornitura demo' : 'Evidenze di esempio'}</Badge>
               <p>{fabric.certificate}</p>
               <p>Registro di confezione {data.orderId} · Modello v{data.modelVersion}</p>
               <p>Rapporto qualità {spec.quality.id} · Score {qualityLabel(data)}</p>
@@ -340,7 +300,7 @@ export function PassportPage() {
               <div>
                 <h3>Una buona cura fa la differenza.</h3>
                 <p>{spec.care}</p>
-                <p className="dw-muted">Per riparazioni o rigenerazione del capo, conservare il codice {data.styleId} e rivolgersi al circuito certificato WEAVE.</p>
+                <p className="dw-muted">Per riparazioni o rigenerazione del capo, conservare il codice {data.styleId} e rivolgersi al un laboratorio di fiducia.</p>
               </div>
             </div>
           </Card>

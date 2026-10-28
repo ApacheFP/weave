@@ -316,3 +316,7 @@ input { font: inherit; }
   .auth-panel { padding: 16px 20px; }
   .auth-content h2 { font-size: clamp(23px, 7.5vw, 28px); }
 }
+
+.carousel-atelier-link { display:inline-flex;align-items:center;gap:10px;margin-top:12px;padding:9px 16px;border:1px solid #a5a5a5;border-radius:999px;background:#fff;color:#242424;font:inherit;font-size:13px;font-weight:600;cursor:pointer; }
+.carousel-atelier-link:hover { background:#242424;color:#fff; }
+.carousel-atelier-link:focus-visible { outline:3px solid #4b5bd6;outline-offset:3px; }

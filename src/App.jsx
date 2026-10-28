@@ -185,7 +185,7 @@ function CardCarousel({ group, onReady, onEnter, startIndex = 0, onIndexChange }
   );
 }
 
-function ProductPage({ onSignOut, onEnter, index, onIndexChange }) {
+function ProductPage({ onSignOut, onEnter, onOpenAtelier, index, onIndexChange }) {
   const page = useRef(null);
   const onReady = useCallback(() => {}, []);
   const palette = getModulePalette(carouselGroup.items[index]?.id);
@@ -202,6 +202,7 @@ function ProductPage({ onSignOut, onEnter, index, onIndexChange }) {
         <ProfileMenu onSignOut={onSignOut} />
         <h1>WEAVE</h1>
         <p className="carousel-context" id="carousel-context">Dall’idea al passaporto digitale, tutti i moduli della filiera tessile in un unico percorso.</p>
+        <button className="carousel-atelier-link" type="button" onClick={onOpenAtelier}>Apri Atelier <span aria-hidden="true">→</span></button>
       </header>
       <CardCarousel group={carouselGroup} onReady={onReady} onEnter={onEnter} startIndex={index} onIndexChange={onIndexChange} />
     </main>
@@ -252,7 +253,7 @@ function Workspace({ onSignOut, onboardedProfile }) {
     ? <div className="dw-app"><main className="dw-page"><Card title="Pagina non trovata"><p>Questo indirizzo non corrisponde a una pagina di WEAVE.</p><Button primary onClick={() => openPage('home')}>Torna ad Atelier</Button></Card></main></div>
     : route.kind !== 'explore'
     ? <Dashboard moduleId={route.moduleId} workspacePage={route.page} inboxId={route.inboxId} settingsSection={route.settingsSection} initialServiceId={entryServiceId} onInitialServiceOpened={clearEntryService} onOpenPage={openPage} onNavigate={navigate} onHome={home} onSignOut={signOut} />
-    : <ProductPage onSignOut={signOut} onEnter={enterModule} index={index} onIndexChange={rememberIndex} />;
+    : <ProductPage onSignOut={signOut} onEnter={enterModule} onOpenAtelier={() => openPage('home')} index={index} onIndexChange={rememberIndex} />;
   return <>{content}{confirmExit && <Dialog title="Uscire con modifiche non salvate?" onClose={() => setConfirmExit(false)}><p>Il browser non ha completato il salvataggio. Scarica una copia per conservare le modifiche prima di uscire.</p><div className="dw-dialog-actions"><Button onClick={() => setConfirmExit(false)}>Resta nello spazio</Button><Button onClick={exportWorkspace}>Scarica una copia</Button><Button primary onClick={onSignOut}>Esci e scarta modifiche</Button></div></Dialog>}</>;
 }
 

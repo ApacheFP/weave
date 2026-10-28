@@ -147,6 +147,8 @@ html:has(.dw-app),body:has(.dw-app),#root:has(.dw-app) { min-width: 0; }
 .dw-table tr.selected td { background: var(--accent-soft); }
 .dw-table tfoot th { background: var(--surface-2); border-top: 1px solid var(--border); font-size: 13px; font-weight: 600; padding: 12px 10px; }
 .dw-app .dw-number-cell { width: 72px; padding: 4px 7px !important; }
+.dw-app .dw-bom-table td:first-child input { display:block; width:100%; min-width:130px; margin:3px 0; }
+.dw-app .dw-bom-table td:nth-child(2) input { width:100%; min-width:130px; }
 .dw-table-total { display: flex; align-items: center; justify-content: end; flex-wrap: wrap; gap: 14px; margin-top: 14px; font-size: 12.5px; }
 .dw-table-total strong { font-size: 18px; }
 .dw-product-cell { display: flex; align-items: center; gap: 10px; }

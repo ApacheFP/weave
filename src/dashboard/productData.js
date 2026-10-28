@@ -205,7 +205,7 @@ export function productWorkflow(data) {
 export function purchaseMaterial(data, order, fabric) {
   const main = order.materialId === 'main' || order.id === 'ACQ-0271';
   const trim = data.trims.find(row => row.id === order.materialId) || (order.id === 'ACQ-0272' ? data.trims[0] : order.id === 'ACQ-0273' ? data.trims[2] : null);
-  return { qty: order.qty ?? data.quantity * (main ? data.consumption : trim?.qty || 0), price: order.price ?? (main ? data.fabricPrice : trim?.price || 0), unit: order.unit || (main ? materialUnit(data) : trim?.unit || 'unità'), supplier: main ? fabric.supplier : order.supplier };
+  return { material: main ? fabric.name : trim?.name || order.material, qty: order.qty ?? data.quantity * (main ? data.consumption : trim?.qty || 0), price: order.price ?? (main ? data.fabricPrice : trim?.price || 0), unit: order.unit || (main ? materialUnit(data) : trim?.unit || 'unità'), supplier: main ? fabric.supplier : trim?.supplier || order.supplier };
 }
 
 // Only explicit model identities group variants; similar names are separate products.

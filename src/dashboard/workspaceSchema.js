@@ -2,7 +2,8 @@ export const preferenceBooleans = ['moduleAlerts', 'productNews', 'emailDigest',
 export const preferenceChoices = { theme: ['light', 'dark', 'system'], accent: ['indigo', 'blue', 'violet', 'teal', 'rose', 'graphite'], sideDensity: ['comfortable', 'compact'], taskDensity: ['comfortable', 'compact'], motion: ['system', 'reduce'], language: ['it', 'en'], contentLanguage: ['it', 'en'], timezone: ['Europe/Rome', 'Europe/Paris', 'Europe/London', 'America/New_York'], dateFormat: ['local', 'iso'], timeFormat: ['24h', '12h'], weekStartsOn: ['monday', 'sunday'], defaultLanding: ['home', 'my-tasks', 'inbox'] };
 import { categorySpecs, additionalFabrics } from './productData.js';
 import { validTask } from './workspaceData.js';
-import { validArtwork } from './vectorDocument.js';
+import { validArtwork, vectorViews } from './vectorDocument.js';
+import { validProgram } from '../technical/drawingProgram.js';
 
 export const workspaceSchemaVersion = 1;
 export class WorkspaceDataError extends Error {
@@ -29,7 +30,7 @@ function technical(value, category) {
   if (!array(value.versions, version => {
     if (!object(version)) return false;
     const snapshot = version.snapshot;
-    return strings(version, ['id', 'note']) && finite(version.number) && strings(snapshot, ['fit', 'requirements', 'constraints']) && snapshot.category === category && measurements(snapshot.measurements) && object(snapshot.parts) && Object.keys(categorySpecs[category].parts).every(key => nonnegative(snapshot.parts[key])) && colors(snapshot.colors) && notes(snapshot.notes) && nonnegative(snapshot.tolerance) && validArtwork(snapshot.artwork);
+    return strings(version, ['id', 'note']) && finite(version.number) && strings(snapshot, ['fit', 'requirements', 'constraints']) && snapshot.category === category && measurements(snapshot.measurements) && object(snapshot.parts) && Object.keys(categorySpecs[category].parts).every(key => nonnegative(snapshot.parts[key])) && colors(snapshot.colors) && notes(snapshot.notes) && nonnegative(snapshot.tolerance) && validArtwork(snapshot.artwork) && (snapshot.programs == null || object(snapshot.programs) && Object.entries(snapshot.programs).every(([view, program]) => vectorViews.includes(view) && validProgram(program)));
   }) || !uniqueIds(value.versions)) return false;
   return ['approvedId', 'currentId'].every(key => value[key] == null || value.versions.some(version => version.id === value[key]));
 }
@@ -49,6 +50,7 @@ function product(item) {
   if (!array(item.shipments, row => strings(row, ['id', 'client', 'status']) && integer(row.qty)) || !uniqueIds(item.shipments)) return false;
   if (!array(item.lifecycle, row => strings(row, ['id', 'type', 'note', 'date']) && date(row.date)) || !uniqueIds(item.lifecycle)) return false;
   if (!array(item.productionDays, integer) || !array(item.sampleChecks, value => typeof value === 'boolean') || item.sampleChecks.length !== 3 || !references(item.references)) return false;
+  if (item.sampleRevisions != null && (!array(item.sampleRevisions, row => strings(row, ['id', 'note', 'at', 'modelVersion']) && array(row.values, nonnegative) && row.values.length === 3) || !uniqueIds(item.sampleRevisions))) return false;
   if (!array(item.events, row => strings(row, ['id', 'text', 'time', 'at']) && integer(row.module) && actor(row.actor)) || !uniqueIds(item.events)) return false;
   if (!object(item.phaseReviews) || !Object.values(item.phaseReviews).every(value => typeof value === 'boolean') || !object(item.chats) || !Object.values(item.chats).every(rows => array(rows, row => strings(row, ['id', 'role', 'text'])))) return false;
   if (!object(item.aiRuns) || !Object.values(item.aiRuns).every(integer) || !object(item.creative) || !inputs(item.creative.inputs) || !references(item.creative.referenceFiles)) return false;
