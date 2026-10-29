@@ -18,6 +18,9 @@ function SvgIcon({ children, className = '' }: { children: React.ReactNode; clas
   return <svg aria-hidden="true" className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{children}</svg>;
 }
 export const DotsHorizontalIcon = () => <SvgIcon><circle cx="5" cy="12" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /></SvgIcon>;
+export const CalendarSolidIcon = () => <SvgIcon><rect x="3.5" y="5" width="17" height="15" rx="2" /><path d="M7.5 3.5v3M16.5 3.5v3M3.5 9h17" /><path d="M8 12.5h2v2H8zM12 12.5h2v2h-2zM16 12.5h.5v2H16z" fill="currentColor" stroke="none" /></SvgIcon>;
+export const ChevronDownIcon = ({ className = '' }: { className?: string }) => <SvgIcon className={className}><path d="m7 10 5 5 5-5" /></SvgIcon>;
+export const InsightIcon = ({ className = '' }: { className?: string }) => <SvgIcon className={className}><path d="m12 2 1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2Z" /><path d="m19 14 .9 3.1L23 18l-3.1.9L19 22l-.9-3.1L15 18l3.1-.9L19 14Z" /></SvgIcon>;
 export const ShoppingBagIcon = () => <SvgIcon><path d="M5 8h14l1 13H4L5 8Z" /><path d="M9 9V6a3 3 0 0 1 6 0v3" /></SvgIcon>;
 export const PackageIcon = () => <Icon name="package" size={14} />;
 export const FoodIcon = () => <Icon name="utensils" size={14} />;
@@ -26,6 +29,8 @@ export const HomeIcon = () => <Icon name="house" size={14} />;
 export const ArrowCircleDownIcon = () => <Icon name="circle-arrow-down" size={16} />;
 export const ArrowCircleUpIcon = () => <Icon name="circle-arrow-up" size={16} />;
 export const BarLineChartIcon = () => <Icon name="chart-no-axes-combined" size={20} />;
+export function ChartLegendDot({ size = 12, className = '' }: { size?: number; className?: string }) { return <span aria-hidden className={`mebius-chart-legend-dot ${className}`} style={{ width: size, height: size }} />; }
+export function ChartLegendLine({ className = '' }: { className?: string }) { return <span aria-hidden className={`mebius-chart-legend-line ${className}`} />; }
 
 type MenuState = { open: boolean; setOpen: (open: boolean) => void; value?: string; setValue?: (value: string) => void; contentId: string; trigger: React.MutableRefObject<HTMLButtonElement | null>; close: () => void };
 const MenuContext = createContext<MenuState | null>(null);
