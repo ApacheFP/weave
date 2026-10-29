@@ -1,9 +1,11 @@
 import React from 'react';
 import { number, totals } from './domain.js';
+import { productSpec } from './productData.js';
 import { localDate } from './workspaceData.js';
 import { BudgetOverviewChart } from './charts/BudgetOverviewChart.tsx';
 import { BarLineChartIcon, PackageIcon, ShoppingBagIcon } from './charts/chart-primitives.tsx';
 import { CashFlowAreaChart } from './charts/CashFlowAreaChart.tsx';
+import { Icon } from './ui.jsx';
 
 const DAY_MS = 86_400_000;
 
@@ -21,6 +23,29 @@ function portfolioCosts(items) {
   }, { materials: 0, fabric: 0, accessories: 0, labor: 0, logistics: 0, garments: 0 });
 }
 
+function portfolioCostDetails(items) {
+  const result = { fabric: 0, accessories: 0, preparation: 0, assembly: 0, finishing: 0, logistics: 0 };
+  for (const item of items) {
+    const quantity = item.quantity;
+    const labor = item.laborMinutes * item.hourlyRate / 60 * quantity;
+    result.fabric += item.consumption * item.fabricPrice * quantity;
+    result.accessories += item.trims.reduce((sum, trim) => sum + trim.qty * trim.price, 0) * quantity;
+    result.logistics += item.logisticsCost * quantity;
+    const operations = productSpec(item).operations;
+    const minutes = operations.reduce((sum, [, , duration]) => sum + duration, 0);
+    if (!minutes) result.assembly += labor;
+    else for (const [name, , duration] of operations) {
+      const group = /taglio|programmazione|smacchinatura/i.test(name)
+        ? 'preparation'
+        : /finitura|prova|stiro|lavaggio|stabilizzazione|vaporizzo|misure|etichetta|qualità|controllo/i.test(name)
+          ? 'finishing'
+          : 'assembly';
+      result[group] += labor * duration / minutes;
+    }
+  }
+  return result;
+}
+
 function projectedShare({ start, end }, day) {
   return end > start ? Math.max(0, Math.min(1, (day - start) / (end - start))) : day >= end ? 1 : 0;
 }
@@ -35,7 +60,22 @@ export default function AtelierFinancialCharts({ items }) {
   ];
   const periods = subsets.map(view => {
     const cost = portfolioCosts(view.items);
-    return { value: view.value, label: view.label, spent: { fabric: cost.fabric, accessories: cost.accessories }, remaining: cost.labor, saved: cost.logistics };
+    const details = portfolioCostDetails(view.items);
+    return {
+      value: view.value,
+      label: view.label,
+      spent: { fabric: cost.fabric, accessories: cost.accessories },
+      remaining: cost.labor,
+      saved: cost.logistics,
+      details: [
+        { id: 'fabric', name: 'Tessuto e filato', icon: <ShoppingBagIcon />, color: 'orange', amount: details.fabric },
+        { id: 'accessories', name: 'Accessori e componenti', icon: <PackageIcon />, color: 'purple', amount: details.accessories },
+        { id: 'preparation', name: 'Preparazione e taglio', icon: <Icon name="scissors" size={14} />, color: 'blue', amount: details.preparation },
+        { id: 'assembly', name: 'Assemblaggio e confezione', icon: <Icon name="settings" size={14} />, color: 'green', amount: details.assembly },
+        { id: 'finishing', name: 'Finiture e controllo qualità', icon: <Icon name="check" size={14} />, color: 'yellow', amount: details.finishing },
+        { id: 'logistics', name: 'Logistica', icon: <Icon name="truck" size={14} />, color: 'blue', amount: details.logistics },
+      ],
+    };
   });
   const planned = items.map(item => {
     const cost = totals(item);
@@ -79,10 +119,9 @@ export default function AtelierFinancialCharts({ items }) {
     <BudgetOverviewChart
       title="Composizione dei costi"
       account={`${number(items.length)} varianti · ${number(cost.garments)} capi pianificati`}
-      showCategoryRows={false}
       categories={[
-        { id: 'fabric', name: 'Tessuto', icon: <ShoppingBagIcon />, color: 'orange' },
-        { id: 'accessories', name: 'Accessori', icon: <PackageIcon />, color: 'purple' },
+        { id: 'fabric', name: 'Tessuto e filato', icon: <ShoppingBagIcon />, color: 'orange' },
+        { id: 'accessories', name: 'Accessori e componenti', icon: <PackageIcon />, color: 'purple' },
       ]}
       periods={periods}
       defaultPeriod="all"

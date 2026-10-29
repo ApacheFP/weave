@@ -24,6 +24,14 @@ type BudgetOverviewCategory = {
   color?: BudgetOverviewColor
 }
 
+type BudgetOverviewDetail = {
+  id: string
+  name: string
+  icon: React.ReactNode
+  amount: number
+  color?: BudgetOverviewColor
+}
+
 /** A period of the menu ("From last 7 days") and where the money of the accounts stands in it. */
 type BudgetOverviewPeriod = {
   value: string
@@ -35,6 +43,8 @@ type BudgetOverviewPeriod = {
   remaining: number
   /** What has been put aside. */
   saved: number
+  /** Optional Atelier cost rows, separate from the hexes' spending categories. */
+  details?: BudgetOverviewDetail[]
 }
 
 type BudgetOverviewChartProps = Omit<React.ComponentProps<"div">, "children"> & {
@@ -43,8 +53,6 @@ type BudgetOverviewChartProps = Omit<React.ComponentProps<"div">, "children"> & 
   account?: string
   /** The rows under the chart, in this order; the first one fills the middle of the spent hexes. */
   categories?: BudgetOverviewCategory[]
-  /** Show the category detail rows under the chart. */
-  showCategoryRows?: boolean
   /** The period menu, each with its spending by category and what is left and saved. */
   periods?: BudgetOverviewPeriod[]
   /** The period shown (a `value` of `periods`); the first one by default. */
@@ -353,6 +361,25 @@ function CategoryRow({
   )
 }
 
+function DetailRow({ detail, format }: { detail: BudgetOverviewDetail; format: (value: number) => string }) {
+  const amountRef = React.useRef<HTMLSpanElement>(null)
+  useCountUp(amountRef, detail.amount, format, { duration: 900 })
+  const palette = palettes[detail.color ?? "blue"]
+  return (
+    <div data-slot="budget-overview-chart-category" className="flex w-full items-center justify-between gap-2.5 rounded-xl border border-border-soft bg-surface-disable px-3 py-[15px]">
+      <span className="flex min-w-0 items-center gap-2">
+        <span data-slot="budget-overview-chart-tile" className={cn("flex size-7 shrink-0 items-center justify-center rounded-full [&_svg]:size-3.5", palette.tile, palette.glyph)}>
+          {detail.icon}
+        </span>
+        <span className="typo-label-02-medium -my-0.5 min-w-0 truncate py-0.5 text-fg-normal">{detail.name}</span>
+      </span>
+      <span ref={amountRef} data-slot="budget-overview-chart-amount" data-value={detail.amount} className="typo-label-02-medium hug-w shrink-0 whitespace-nowrap text-fg-loud">
+        {format(detail.amount)}
+      </span>
+    </div>
+  )
+}
+
 /**
  * "Budget Overview Chart" from the Keitoto library: where the money of the accounts stands over a period, as a honeycomb
  * of 137 hexes, each an equal share: what was spent fills the core in orange, what is left to spend rings it in purple
@@ -366,7 +393,6 @@ function BudgetOverviewChart({
   title = "Budget overview",
   account = "Tutti i conti",
   categories = sampleBudgetOverviewCategories,
-  showCategoryRows = true,
   periods = sampleBudgetOverviewPeriods,
   period: periodProp,
   defaultPeriod,
@@ -626,9 +652,13 @@ function BudgetOverviewChart({
               ["Periodo", current?.label ?? ""],
               [],
               ["Voce", "Importo", "Incidenza"],
-              ...categories.map((category, i) => [category.name, categoryAmounts[i], totalCost ? percent(categoryAmounts[i] / totalCost) : "0%"]),
-              [remainingLabel, amounts[1], totalCost ? percent(amounts[1] / totalCost) : "0%"],
-              [savedLabel, amounts[2], totalCost ? percent(amounts[2] / totalCost) : "0%"],
+              ...(current?.details
+                ? current.details.map(detail => [detail.name, detail.amount, totalCost ? percent(detail.amount / totalCost) : "0%"])
+                : [
+                    ...categories.map((category, i) => [category.name, categoryAmounts[i], totalCost ? percent(categoryAmounts[i] / totalCost) : "0%"]),
+                    [remainingLabel, amounts[1], totalCost ? percent(amounts[1] / totalCost) : "0%"],
+                    [savedLabel, amounts[2], totalCost ? percent(amounts[2] / totalCost) : "0%"],
+                  ]),
               ["Totale costo industriale", totalCost, "100%"],
             ])}>Esporta dati CSV</ChartMenuItem>
           </ChartMenuContent>
@@ -719,7 +749,11 @@ function BudgetOverviewChart({
         ))}
       </div>
 
-      {showCategoryRows && categories.length > 0 && (
+      {current?.details ? (
+        <div role="group" aria-label="Dettaglio dei costi" className="flex flex-col gap-2">
+          {current.details.map(detail => <DetailRow key={detail.id} detail={detail} format={amountFormat(detail.amount)} />)}
+        </div>
+      ) : categories.length > 0 && (
         <div role="group" aria-label={`${spentLabel} per categoria`} className="flex flex-col gap-2">
           {categories.map((category, k) => (
             <CategoryRow
@@ -746,5 +780,6 @@ export {
   type BudgetOverviewCategory,
   type BudgetOverviewChartProps,
   type BudgetOverviewColor,
+  type BudgetOverviewDetail,
   type BudgetOverviewPeriod,
 }
