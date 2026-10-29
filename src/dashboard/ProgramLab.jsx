@@ -5,11 +5,13 @@ import { quantizeProgram, reviewProgram } from '../technical/programReview.js';
 import { extractSvg } from '../technical/extractSvg.js';
 import { download } from './exportFiles.js';
 import { Button, Card, Field, Tabs } from './ui.jsx';
+import DemoDrawingPipeline from './DemoDrawingPipeline.jsx';
 
 export default function ProgramLab({ initialProgram, hasArtwork, view, onViewChange, onApply }) {
   const [source, setSource] = useState(() => initialProgram ? JSON.stringify(initialProgram, null, 2) : example);
   const [error, setError] = useState('');
   const [preview, setPreview] = useState(null);
+  const [mode, setMode] = useState('Percorso demo');
   useEffect(() => { setSource(initialProgram ? JSON.stringify(initialProgram, null, 2) : example); setPreview(null); setError(''); }, [initialProgram, view]);
   function parse() {
     try {
@@ -39,8 +41,9 @@ export default function ProgramLab({ initialProgram, hasArtwork, view, onViewCha
   }
   function apply() { const result = parse(); if (result) onApply(result.program); }
   const inspection = preview && reviewProgram(preview.program);
-  return <div className="dw-program-layout">
-    <Card title="Programma di disegno" note="Parti e operazioni vettoriali · formato JSON" actions={<Tabs items={['Fronte', 'Retro', 'Dettagli']} selected={view} onChange={onViewChange} label="Vista da modificare" />}>
+  return <div className="dw-stack"><div className="dw-demo-pipeline-navigation"><Tabs items={['Percorso demo', 'Laboratorio JSON']} selected={mode} onChange={setMode} label="Modalità programma" /><Tabs items={['Fronte', 'Retro', 'Dettagli']} selected={view} onChange={onViewChange} label="Vista da modificare" /></div>
+    {mode === 'Percorso demo' ? <DemoDrawingPipeline key={view} view={view} hasArtwork={hasArtwork} onApply={onApply} onOpenProgram={program => { setSource(JSON.stringify(program, null, 2)); setPreview({ program, svg: renderProgram(program) }); setError(''); setMode('Laboratorio JSON'); }} /> : <div className="dw-program-layout">
+    <Card title="Programma di disegno" note="Parti e operazioni vettoriali · formato JSON">
       <p className="dw-program-help">Scrivi o incolla un programma, controlla il risultato e salvalo come nuova revisione della vista selezionata. L’esempio iniziale è una camicia sintetica. L’importazione SVG supporta i file normalizzati esportati da WEAVE.</p>
       {hasArtwork && <p className="dw-program-help">La tavola è stata modificata nell’editor: il programma mostra la versione precedente. Salvarlo crea una nuova revisione e sostituisce la tavola manuale per questa vista.</p>}
       <Field label="Programma"><textarea className="dw-program-source" spellCheck={false} value={source} onChange={event => { setSource(event.target.value); setPreview(null); setError(''); }} /></Field>
@@ -50,5 +53,5 @@ export default function ProgramLab({ initialProgram, hasArtwork, view, onViewCha
     <Card title="Anteprima vettoriale" note={preview ? `${preview.program.garment} · ${preview.program.parts.length} parti` : 'Verifica il programma per vedere il risultato'}>
       {preview ? <><div className="dw-program-drawing" dangerouslySetInnerHTML={{ __html: preview.svg }} /><p className="dw-muted">{inspection.operations} operazioni · {inspection.svgElements} forme disegnate · {inspection.characters} caratteri JSON. I controlli sulle autointersezioni coprono solo segmenti rettilinei.</p>{inspection.warnings.map(warning => <p className="dw-program-error" key={warning}>{warning}</p>)}</> : <div className="dw-program-placeholder">L’anteprima apparirà qui.</div>}
     </Card>
-  </div>;
+  </div>}</div>;
 }
