@@ -106,7 +106,7 @@ const ROWS: [number, number, string][] = [
   [334, 16, "0"],
 ]
 const HOVER_REACH = 18 // the pointer picks the nearest hex within 18px of its centre
-const DIM = 0.3 // hexes outside what is lit
+const DIM = 0.52 // keep unselected categories visible when one category is highlighted
 const TIP_GAP = 6 // the tooltip ends 6px above the hex (below it near the top)
 const TIP_PADDING_X = 24 // its 12px side padding, twice
 const TIP_PADDING_Y = 16 // and its 8px top and bottom padding
@@ -146,7 +146,7 @@ const palettes: Record<BudgetOverviewColor, { shades: string[]; swatch: string; 
     ring: "focus-visible:ring-primary-green-500/40",
   },
   yellow: {
-    shades: ["fill-primary-yellow-50", "fill-primary-yellow-100", "fill-primary-yellow-300", "fill-primary-yellow-500"],
+    shades: ["fill-primary-yellow-50", "fill-primary-yellow-100", "fill-primary-yellow-200", "fill-primary-yellow-500"],
     swatch: "bg-primary-yellow-500",
     tile: "bg-primary-yellow-50 shadow-[0_0_0_1px_var(--primary-yellow-100)]",
     glyph: "text-primary-yellow-500",
@@ -353,7 +353,8 @@ function CategoryRow({
         !compact && "flex w-full cursor-pointer items-center justify-between gap-2.5 rounded-xl border border-border-soft bg-surface-disable px-3 py-[15px] text-left outline-none",
         compact ? "transition-[color,opacity] duration-200 focus-visible:ring-2" : "transition-[background-color,box-shadow,opacity] duration-200 hover:bg-surface-base focus-visible:ring-2",
         !compact && pressed && "bg-surface-white shadow-[0_1px_2px_rgb(40_40_40/0.08)] hover:bg-surface-white",
-        dimmed && "opacity-50",
+        dimmed && compact && "atelier-cost-category-dimmed",
+        dimmed && !compact && "opacity-50",
         palette.ring,
       )}
     >
@@ -432,7 +433,8 @@ function BudgetOverviewChart({
       ? categories.find((category) => category.id === owner.category)?.color
       : undefined
     const color = categoryColor ?? PARTS.find((part) => part.key === owner.part)?.color ?? "blue"
-    return palettes[color].shades[Math.max(2, CELLS[i].level)] ?? palettes[color].shades[0]
+    const shade = categoryColor ? CELLS[i].level : Math.max(2, CELLS[i].level)
+    return palettes[color].shades[shade] ?? palettes[color].shades[0]
   }
 
   // Keep every currency amount at two decimals so this breakdown matches the Atelier cash flow chart.
