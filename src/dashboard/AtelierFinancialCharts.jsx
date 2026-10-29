@@ -79,6 +79,7 @@ export default function AtelierFinancialCharts({ items }) {
     <BudgetOverviewChart
       title="Composizione dei costi"
       account={`${number(items.length)} varianti · ${number(cost.garments)} capi pianificati`}
+      showCategoryRows={false}
       categories={[
         { id: 'fabric', name: 'Tessuto', icon: <ShoppingBagIcon />, color: 'orange' },
         { id: 'accessories', name: 'Accessori', icon: <PackageIcon />, color: 'purple' },

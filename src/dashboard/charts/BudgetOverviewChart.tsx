@@ -43,6 +43,8 @@ type BudgetOverviewChartProps = Omit<React.ComponentProps<"div">, "children"> & 
   account?: string
   /** The rows under the chart, in this order; the first one fills the middle of the spent hexes. */
   categories?: BudgetOverviewCategory[]
+  /** Show the category detail rows under the chart. */
+  showCategoryRows?: boolean
   /** The period menu, each with its spending by category and what is left and saved. */
   periods?: BudgetOverviewPeriod[]
   /** The period shown (a `value` of `periods`); the first one by default. */
@@ -364,6 +366,7 @@ function BudgetOverviewChart({
   title = "Budget overview",
   account = "Tutti i conti",
   categories = sampleBudgetOverviewCategories,
+  showCategoryRows = true,
   periods = sampleBudgetOverviewPeriods,
   period: periodProp,
   defaultPeriod,
@@ -400,7 +403,7 @@ function BudgetOverviewChart({
     const owner = owners[i]
     if (!owner) return "fill-surface-soft"
     const color = PARTS.find((part) => part.key === owner.part)?.color ?? "blue"
-    return palettes[color].shades[CELLS[i].level] ?? palettes[color].shades[0]
+    return palettes[color].shades[Math.max(2, CELLS[i].level)] ?? palettes[color].shades[0]
   }
 
   // Keep every currency amount at two decimals so this breakdown matches the Atelier cash flow chart.
@@ -716,7 +719,7 @@ function BudgetOverviewChart({
         ))}
       </div>
 
-      {categories.length > 0 && (
+      {showCategoryRows && categories.length > 0 && (
         <div role="group" aria-label={`${spentLabel} per categoria`} className="flex flex-col gap-2">
           {categories.map((category, k) => (
             <CategoryRow
