@@ -2,9 +2,10 @@ import React from 'react';
 import { number, totals } from './domain.js';
 import { productSpec } from './productData.js';
 import { localDate } from './workspaceData.js';
-import { AtelierCostBreakdownChart } from './charts/AtelierCostBreakdownChart.tsx';
-import { BarLineChartIcon } from './charts/chart-primitives.tsx';
+import { BudgetOverviewChart } from './charts/BudgetOverviewChart.tsx';
+import { BarLineChartIcon, PackageIcon, ShoppingBagIcon } from './charts/chart-primitives.tsx';
 import { CashFlowAreaChart } from './charts/CashFlowAreaChart.tsx';
+import { Icon } from './ui.jsx';
 
 const DAY_MS = 86_400_000;
 
@@ -38,6 +39,14 @@ function projectedShare({ start, end }, day) {
 export default function AtelierFinancialCharts({ items }) {
   if (!items.length) return null;
 
+  const categories = [
+    { id: 'fabric', name: 'Tessuto e filato', icon: <ShoppingBagIcon />, color: 'orange' },
+    { id: 'accessories', name: 'Accessori e componenti', icon: <PackageIcon />, color: 'purple' },
+    { id: 'preparation', name: 'Preparazione e taglio', icon: <Icon name="scissors" size={14} />, color: 'blue' },
+    { id: 'assembly', name: 'Assemblaggio e confezione', icon: <Icon name="settings" size={14} />, color: 'green' },
+    { id: 'finishing', name: 'Finiture e controllo qualità', icon: <Icon name="check" size={14} />, color: 'yellow' },
+    { id: 'logistics', name: 'Logistica', icon: <Icon name="truck" size={14} />, color: 'teal' },
+  ];
   const subsets = [
     { value: 'all', label: 'Tutti i capi', items },
     { value: 'started', label: 'Capi avviati', items: items.filter(item => item.produced > 0) },
@@ -48,14 +57,9 @@ export default function AtelierFinancialCharts({ items }) {
     return {
       value: view.value,
       label: view.label,
-      details: [
-        { id: 'fabric', name: 'Tessuto e filato', color: 'orange', amount: details.fabric },
-        { id: 'accessories', name: 'Accessori e componenti', color: 'purple', amount: details.accessories },
-        { id: 'preparation', name: 'Preparazione e taglio', color: 'blue', amount: details.preparation },
-        { id: 'assembly', name: 'Assemblaggio e confezione', color: 'green', amount: details.assembly },
-        { id: 'finishing', name: 'Finiture e controllo qualità', color: 'yellow', amount: details.finishing },
-        { id: 'logistics', name: 'Logistica', color: 'teal', amount: details.logistics },
-      ],
+      spent: details,
+      remaining: 0,
+      saved: 0,
     };
   });
   const planned = items.map(item => {
@@ -97,11 +101,19 @@ export default function AtelierFinancialCharts({ items }) {
       locale="it-IT"
       currency="EUR"
     />
-    <AtelierCostBreakdownChart
+    <BudgetOverviewChart
       title="Composizione dei costi"
       account={`${number(items.length)} varianti · ${number(garments)} capi pianificati`}
+      categories={categories}
       periods={periods}
       defaultPeriod="all"
+      spentLabel="Costo industriale"
+      remainingLabel="Da assegnare"
+      savedLabel="Risparmiato"
+      colorByCategory
+      compactCategories
+      showPartStats={false}
+      className="atelier-cost-hive"
       locale="it-IT"
       currency="EUR"
     />

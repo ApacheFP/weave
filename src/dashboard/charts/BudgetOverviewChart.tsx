@@ -9,8 +9,9 @@ import { useChartSize } from "./chart-size"
 import { useControllableState } from "./chart-state"
 import { formatCurrency, formatPercent, wholePercents } from "./chart-format"
 import './chart-theme.css'
+import './atelier-cost-hive.css'
 
-type BudgetOverviewColor = "orange" | "purple" | "blue" | "green" | "yellow"
+type BudgetOverviewColor = "orange" | "purple" | "blue" | "green" | "yellow" | "teal"
 
 /** A spending category: a row under the chart, and its share of the spent hexes. */
 type BudgetOverviewCategory = {
@@ -21,14 +22,6 @@ type BudgetOverviewCategory = {
   /** The 14px glyph in its round tile. */
   icon: React.ReactNode
   /** The tile: its 50 step with a ring in the 100 step and the glyph in the 500 step. Blue by default. */
-  color?: BudgetOverviewColor
-}
-
-type BudgetOverviewDetail = {
-  id: string
-  name: string
-  icon: React.ReactNode
-  amount: number
   color?: BudgetOverviewColor
 }
 
@@ -43,8 +36,6 @@ type BudgetOverviewPeriod = {
   remaining: number
   /** What has been put aside. */
   saved: number
-  /** Optional Atelier cost rows, separate from the hexes' spending categories. */
-  details?: BudgetOverviewDetail[]
 }
 
 type BudgetOverviewChartProps = Omit<React.ComponentProps<"div">, "children"> & {
@@ -64,6 +55,12 @@ type BudgetOverviewChartProps = Omit<React.ComponentProps<"div">, "children"> & 
   savedLabel?: string
   /** Called by the ⋯ button. */
   onMoreClick?: () => void
+  /** Color the spent hexes by the selected category instead of by the overall part. */
+  colorByCategory?: boolean
+  /** Show the category key as a compact, flat list rather than the default category cards. */
+  compactCategories?: boolean
+  /** Hide the spent/remaining/saved summary when the chart represents one complete cost breakdown. */
+  showPartStats?: boolean
   locale?: string
   currency?: string
 }
@@ -154,6 +151,13 @@ const palettes: Record<BudgetOverviewColor, { shades: string[]; swatch: string; 
     tile: "bg-primary-yellow-50 shadow-[0_0_0_1px_var(--primary-yellow-100)]",
     glyph: "text-primary-yellow-500",
     ring: "focus-visible:ring-primary-yellow-500/40",
+  },
+  teal: {
+    shades: ["fill-primary-teal-50", "fill-primary-teal-100", "fill-primary-teal-200", "fill-primary-teal-400"],
+    swatch: "bg-primary-teal-500",
+    tile: "bg-primary-teal-50 shadow-[0_0_0_1px_var(--primary-teal-100)]",
+    glyph: "text-primary-teal-500",
+    ring: "focus-visible:ring-primary-teal-500/40",
   },
 }
 
@@ -309,22 +313,30 @@ function PartStat({
 function CategoryRow({
   category,
   amount,
+  share,
   pressed,
   dimmed,
   onToggle,
   onPreview,
   format,
+  percent,
+  compact = false,
 }: {
   category: BudgetOverviewCategory
   amount: number
+  share: number
   pressed: boolean
   dimmed: boolean
   onToggle: () => void
   onPreview: (on: boolean) => void
   format: (value: number) => string
+  percent: (value: number) => string
+  compact?: boolean
 }) {
   const amountRef = React.useRef<HTMLSpanElement>(null)
+  const shareRef = React.useRef<HTMLSpanElement>(null)
   useCountUp(amountRef, amount, format, { duration: 900 })
+  useCountUp(shareRef, share, percent, { duration: 900 })
   const palette = palettes[category.color ?? "blue"]
   return (
     <button
@@ -336,47 +348,32 @@ function CategoryRow({
       onPointerEnter={(event) => event.pointerType === "mouse" && onPreview(true)}
       onPointerLeave={(event) => event.pointerType === "mouse" && onPreview(false)}
       className={cn(
+        compact && "atelier-cost-category-row",
         // Figma "Header Cell": Background/Disable inside a 1px Border/Soft ring, 16 × 13px from the outer edge
-        "flex w-full cursor-pointer items-center justify-between gap-2.5 rounded-xl border border-border-soft bg-surface-disable px-3 py-[15px] text-left outline-none",
-        "transition-[background-color,box-shadow,opacity] duration-200 hover:bg-surface-base focus-visible:ring-2",
-        pressed && "bg-surface-white shadow-[0_1px_2px_rgb(40_40_40/0.08)] hover:bg-surface-white",
+        !compact && "flex w-full cursor-pointer items-center justify-between gap-2.5 rounded-xl border border-border-soft bg-surface-disable px-3 py-[15px] text-left outline-none",
+        compact ? "transition-[color,opacity] duration-200 focus-visible:ring-2" : "transition-[background-color,box-shadow,opacity] duration-200 hover:bg-surface-base focus-visible:ring-2",
+        !compact && pressed && "bg-surface-white shadow-[0_1px_2px_rgb(40_40_40/0.08)] hover:bg-surface-white",
         dimmed && "opacity-50",
         palette.ring,
       )}
     >
-      <span className="flex min-w-0 items-center gap-2">
-        {/* Figma "Icon Container": a 28px round tile in the 50 step with a 1px ring in the 100 step */}
-        <span
-          data-slot="budget-overview-chart-tile"
-          className={cn("flex size-7 shrink-0 items-center justify-center rounded-full [&_svg]:size-3.5", palette.tile, palette.glyph)}
-        >
-          {category.icon}
-        </span>
-        <span className="typo-label-02-medium -my-0.5 min-w-0 truncate py-0.5 text-fg-normal">{category.name}</span>
+      <span className={cn("flex min-w-0 items-center gap-2", compact && "atelier-cost-category-name")}>
+        {compact ? <i aria-hidden className={cn("atelier-cost-category-dot", palette.swatch)} /> : (
+          <span
+            data-slot="budget-overview-chart-tile"
+            className={cn("flex size-7 shrink-0 items-center justify-center rounded-full [&_svg]:size-3.5", palette.tile, palette.glyph)}
+          >
+            {category.icon}
+          </span>
+        )}
+        <span className={cn("typo-label-02-medium -my-0.5 min-w-0 truncate py-0.5 text-fg-normal", compact && "atelier-cost-category-label")}>{category.name}</span>
       </span>
-      <span ref={amountRef} data-slot="budget-overview-chart-amount" data-value={amount} className="typo-label-02-medium hug-w shrink-0 whitespace-nowrap text-fg-loud">
+      {compact && <span ref={shareRef} data-slot="budget-overview-chart-category-share" className="atelier-cost-category-share">{percent(share)}</span>}
+      <span ref={amountRef} data-slot="budget-overview-chart-amount" data-value={amount} className={cn("typo-label-02-medium hug-w shrink-0 whitespace-nowrap text-fg-loud", compact && "atelier-cost-category-amount")}>
         {format(amount)}
       </span>
+      {compact && <span aria-hidden className="atelier-cost-category-track"><i className={palette.swatch} style={{ width: `${Math.max(0, Math.min(1, share)) * 100}%` }} /></span>}
     </button>
-  )
-}
-
-function DetailRow({ detail, format }: { detail: BudgetOverviewDetail; format: (value: number) => string }) {
-  const amountRef = React.useRef<HTMLSpanElement>(null)
-  useCountUp(amountRef, detail.amount, format, { duration: 900 })
-  const palette = palettes[detail.color ?? "blue"]
-  return (
-    <div data-slot="budget-overview-chart-category" className="flex w-full items-center justify-between gap-2.5 rounded-xl border border-border-soft bg-surface-disable px-3 py-[15px]">
-      <span className="flex min-w-0 items-center gap-2">
-        <span data-slot="budget-overview-chart-tile" className={cn("flex size-7 shrink-0 items-center justify-center rounded-full [&_svg]:size-3.5", palette.tile, palette.glyph)}>
-          {detail.icon}
-        </span>
-        <span className="typo-label-02-medium -my-0.5 min-w-0 truncate py-0.5 text-fg-normal">{detail.name}</span>
-      </span>
-      <span ref={amountRef} data-slot="budget-overview-chart-amount" data-value={detail.amount} className="typo-label-02-medium hug-w shrink-0 whitespace-nowrap text-fg-loud">
-        {format(detail.amount)}
-      </span>
-    </div>
   )
 }
 
@@ -401,6 +398,9 @@ function BudgetOverviewChart({
   remainingLabel = "Rimanente",
   savedLabel = "Accantonato",
   onMoreClick,
+  colorByCategory = false,
+  compactCategories = false,
+  showPartStats = true,
   locale = "en-US",
   currency = "USD",
   className,
@@ -428,7 +428,10 @@ function BudgetOverviewChart({
   const tone = (i: number) => {
     const owner = owners[i]
     if (!owner) return "fill-surface-soft"
-    const color = PARTS.find((part) => part.key === owner.part)?.color ?? "blue"
+    const categoryColor = colorByCategory && owner.part === "spent"
+      ? categories.find((category) => category.id === owner.category)?.color
+      : undefined
+    const color = categoryColor ?? PARTS.find((part) => part.key === owner.part)?.color ?? "blue"
     return palettes[color].shades[Math.max(2, CELLS[i].level)] ?? palettes[color].shades[0]
   }
 
@@ -590,7 +593,9 @@ function BudgetOverviewChart({
     setPeriod(next)
   }
 
-  const summary = PARTS.map((part, p) => `${labels[part.key]} ${percent(shares[p])}`).join(", ")
+  const summary = compactCategories
+    ? categories.map((category, index) => `${category.name} ${percent(totalCost ? categoryAmounts[index] / totalCost : 0)}`).join(", ")
+    : PARTS.map((part, p) => `${labels[part.key]} ${percent(shares[p])}`).join(", ")
 
   return (
     <ChartCard
@@ -652,13 +657,11 @@ function BudgetOverviewChart({
               ["Periodo", current?.label ?? ""],
               [],
               ["Voce", "Importo", "Incidenza"],
-              ...(current?.details
-                ? current.details.map(detail => [detail.name, detail.amount, totalCost ? percent(detail.amount / totalCost) : "0%"])
-                : [
-                    ...categories.map((category, i) => [category.name, categoryAmounts[i], totalCost ? percent(categoryAmounts[i] / totalCost) : "0%"]),
-                    [remainingLabel, amounts[1], totalCost ? percent(amounts[1] / totalCost) : "0%"],
-                    [savedLabel, amounts[2], totalCost ? percent(amounts[2] / totalCost) : "0%"],
-                  ]),
+              ...categories.map((category, i) => [category.name, categoryAmounts[i], totalCost ? percent(categoryAmounts[i] / totalCost) : "0%"]),
+              ...(showPartStats ? [
+                [remainingLabel, amounts[1], totalCost ? percent(amounts[1] / totalCost) : "0%"],
+                [savedLabel, amounts[2], totalCost ? percent(amounts[2] / totalCost) : "0%"],
+              ] : []),
               ["Totale costo industriale", totalCost, "100%"],
             ])}>Esporta dati CSV</ChartMenuItem>
           </ChartMenuContent>
@@ -730,41 +733,42 @@ function BudgetOverviewChart({
       </div>
 
       {/* Figma "Spent Row": three equal columns, 16px either side of the 36px dividers */}
-      <div role="group" aria-label="Categorie di costo" className="flex items-center gap-4">
-        {PARTS.map((part, p) => (
-          <React.Fragment key={part.key}>
-            {p > 0 && <span aria-hidden className="h-9 w-px shrink-0 rounded-[2px] bg-border-soft" />}
-            <PartStat
-              label={labels[part.key]}
-              color={part.color}
-              share={shares[p]}
-              amount={money(amounts[p])}
-              pressed={sameHighlight(pinned, { part: part.key })}
-              dimmed={!!highlight && highlight.part !== part.key}
-              onToggle={() => toggle({ part: part.key })}
-              onPreview={(on) => setPreview(on ? { part: part.key } : null)}
-              format={percent}
-            />
-          </React.Fragment>
-        ))}
-      </div>
-
-      {current?.details ? (
-        <div role="group" aria-label="Dettaglio dei costi" className="flex flex-col gap-2">
-          {current.details.map(detail => <DetailRow key={detail.id} detail={detail} format={amountFormat(detail.amount)} />)}
+      {showPartStats && (
+        <div role="group" aria-label="Categorie di costo" className="flex items-center gap-4">
+          {PARTS.map((part, p) => (
+            <React.Fragment key={part.key}>
+              {p > 0 && <span aria-hidden className="h-9 w-px shrink-0 rounded-[2px] bg-border-soft" />}
+              <PartStat
+                label={labels[part.key]}
+                color={part.color}
+                share={shares[p]}
+                amount={money(amounts[p])}
+                pressed={sameHighlight(pinned, { part: part.key })}
+                dimmed={!!highlight && highlight.part !== part.key}
+                onToggle={() => toggle({ part: part.key })}
+                onPreview={(on) => setPreview(on ? { part: part.key } : null)}
+                format={percent}
+              />
+            </React.Fragment>
+          ))}
         </div>
-      ) : categories.length > 0 && (
-        <div role="group" aria-label={`${spentLabel} per categoria`} className="flex flex-col gap-2">
+      )}
+
+      {categories.length > 0 && (
+        <div role="group" aria-label={`${spentLabel} per categoria`} className={compactCategories ? "atelier-cost-category-grid" : "flex flex-col gap-2"}>
           {categories.map((category, k) => (
             <CategoryRow
               key={category.id}
               category={category}
               amount={categoryAmounts[k]}
+              share={totalCost ? categoryAmounts[k] / totalCost : 0}
               pressed={sameHighlight(pinned, { part: "spent", category: category.id })}
               dimmed={!!highlight && (highlight.part !== "spent" || (!!highlight.category && highlight.category !== category.id))}
               onToggle={() => toggle({ part: "spent", category: category.id })}
               onPreview={(on) => setPreview(on ? { part: "spent", category: category.id } : null)}
               format={amountFormat(categoryAmounts[k])}
+              percent={percent}
+              compact={compactCategories}
             />
           ))}
         </div>
@@ -780,6 +784,5 @@ export {
   type BudgetOverviewCategory,
   type BudgetOverviewChartProps,
   type BudgetOverviewColor,
-  type BudgetOverviewDetail,
   type BudgetOverviewPeriod,
 }

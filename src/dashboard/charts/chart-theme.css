@@ -27,6 +27,11 @@
   --color-primary-yellow-100: var(--primary-yellow-100);
   --color-primary-yellow-300: var(--amber);
   --color-primary-yellow-500: var(--amber);
+  --color-primary-teal-50: var(--primary-teal-50);
+  --color-primary-teal-100: var(--primary-teal-100);
+  --color-primary-teal-200: var(--primary-teal-200);
+  --color-primary-teal-400: var(--teal);
+  --color-primary-teal-500: var(--teal);
   --color-surface-white: var(--surface);
   --color-surface-base: var(--surface);
   --color-surface-loud: var(--surface);
@@ -58,6 +63,9 @@
   --primary-green-200: color-mix(in srgb,var(--green) 26%,var(--surface));
   --primary-yellow-50: color-mix(in srgb,var(--amber) 7%,var(--surface));
   --primary-yellow-100: color-mix(in srgb,var(--amber) 14%,var(--surface));
+  --primary-teal-50: color-mix(in srgb,var(--teal) 7%,var(--surface));
+  --primary-teal-100: color-mix(in srgb,var(--teal) 14%,var(--surface));
+  --primary-teal-200: color-mix(in srgb,var(--teal) 26%,var(--surface));
   --surface-muted: var(--border);
 }
 
