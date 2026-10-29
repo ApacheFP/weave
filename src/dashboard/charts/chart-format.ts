@@ -10,14 +10,6 @@ export function formatPercent(value: number, { locale = 'it-IT', maximumFraction
   return new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits }).format(value);
 }
 
-export function formatPercentValue(value: number, { locale = 'it-IT', minimumFractionDigits, maximumFractionDigits }: { locale?: string; minimumFractionDigits?: number; maximumFractionDigits?: number } = {}) {
-  return `${new Intl.NumberFormat(locale, { ...(minimumFractionDigits === undefined ? {} : { minimumFractionDigits }), ...(maximumFractionDigits === undefined ? {} : { maximumFractionDigits }) }).format(value)}%`;
-}
-
-export function formatTime(value: number, options: Intl.DateTimeFormatOptions, locale = 'it-IT') {
-  return new Intl.DateTimeFormat(locale, options).format(value);
-}
-
 export function formatDay(value: string, options: Intl.DateTimeFormatOptions = {}, locale = 'it-IT') {
   return new Intl.DateTimeFormat(locale, options).format(new Date(`${value}T12:00:00`));
 }

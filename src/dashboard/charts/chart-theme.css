@@ -74,14 +74,11 @@
 .mebius-chart-menu-item:hover,.mebius-chart-menu-item[aria-checked=true] { background:var(--surface-2); }
 .mebius-chart-menu-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
 .mebius-chart-swatch { display:inline-block; height:6px; width:16px; flex:0 0 auto; border-radius:2px; }
-.mebius-chart-legend-dot { display:inline-block; flex:0 0 auto; border-radius:50%; box-shadow:inset 0 0 0 2px var(--surface),0 0 0 1px var(--dot-ring,var(--violet)); }
-.mebius-chart-legend-line { display:inline-block; flex:0 0 auto; width:16px; height:4px; border-radius:2px; background:currentColor; }
 .mebius-tooltip-label { color:var(--text-2); font-size:11px; }
 .mebius-tooltip-value { color:var(--text); font-size:12px; font-weight:600; font-variant-numeric:tabular-nums; }
 .typo-heading-01-semibold { font-size:16px; line-height:1.3; font-weight:600; }
 .typo-heading-03-semibold { font-size:18px; line-height:1.25; font-weight:600; }
 .typo-label-04-medium { font-size:13px; line-height:1.4; font-weight:600; }
-.typo-label-04-semibold { font-size:13px; line-height:1.4; font-weight:600; }
 .typo-label-03-medium { font-size:12px; line-height:1.4; font-weight:500; }
 .typo-label-02-medium,.typo-label-02-semibold,.typo-label-02-regular { font-size:11px; line-height:1.4; }
 .typo-label-02-medium { font-weight:500; }
