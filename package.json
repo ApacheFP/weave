@@ -11,11 +11,14 @@
     "technical:dataset": "node scripts/technical-dataset.mjs"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "animejs": "^4.5.0",
     "fabric": "^7.4.0",
     "lucide": "^0.460.0",
     "qrcode": "^1.5.4",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "jsdom": "^26.1.0",
