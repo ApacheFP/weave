@@ -52,8 +52,6 @@ type BudgetOverviewChartProps = Omit<React.ComponentProps<"div">, "children"> & 
   spentLabel?: string
   remainingLabel?: string
   savedLabel?: string
-  /** Hide category detail rows when the three parts already represent expense categories. */
-  showCategories?: boolean
   /** Called by the ⋯ button. */
   onMoreClick?: () => void
   locale?: string
@@ -373,7 +371,6 @@ function BudgetOverviewChart({
   spentLabel = "Speso",
   remainingLabel = "Rimanente",
   savedLabel = "Accantonato",
-  showCategories = true,
   onMoreClick,
   locale = "en-US",
   currency = "USD",
@@ -474,21 +471,17 @@ function BudgetOverviewChart({
     count()
     // every element is handed back to its classes when its tween ends (they dim by class)
     const back = releaseStyles("opacity", "transform")
-    const hexes = all('[data-slot="budget-overview-chart-hex"]')
-    const stats = all('[data-slot="budget-overview-chart-stat"]')
-    const categories = all('[data-slot="budget-overview-chart-category"]')
-    const tiles = all('[data-slot="budget-overview-chart-tile"]')
-    if (hexes.length)
-      timeline.add(
-        hexes,
+    timeline
+      .add(
+        all('[data-slot="budget-overview-chart-hex"]'),
         { opacity: { from: 0 }, scale: { from: 0.45 }, duration: 560, ease: "outBack(1.8)", delay: (el: unknown) => rank(el) * BLOOM_STAGGER, onComplete: back },
         BLOOM_AT,
       )
-    if (stats.length) timeline.add(stats, { opacity: { from: 0 }, translateY: { from: 6 }, duration: 600, ease: "outQuad", delay: stagger(90), onComplete: back }, 250)
-    timeline.add(counter, { stats: [0, 1], duration: 1300, ease: "outExpo", onUpdate: count }, 350)
-    if (categories.length) timeline.add(categories, { opacity: { from: 0 }, translateY: { from: 12 }, duration: 800, ease: "outExpo", delay: stagger(80), onComplete: back }, 450)
-    if (tiles.length) timeline.add(tiles, { scale: { from: 0.4 }, duration: 600, ease: "outBack(2.2)", delay: stagger(80), onComplete: back }, 550)
-    if (rowAmounts.length) timeline.add(counter, { rows: [0, 1], duration: 1200, ease: "outExpo", onUpdate: count }, 550)
+      .add(all('[data-slot="budget-overview-chart-stat"]'), { opacity: { from: 0 }, translateY: { from: 6 }, duration: 600, ease: "outQuad", delay: stagger(90), onComplete: back }, 250)
+      .add(counter, { stats: [0, 1], duration: 1300, ease: "outExpo", onUpdate: count }, 350)
+      .add(all('[data-slot="budget-overview-chart-category"]'), { opacity: { from: 0 }, translateY: { from: 12 }, duration: 800, ease: "outExpo", delay: stagger(80), onComplete: back }, 450)
+      .add(all('[data-slot="budget-overview-chart-tile"]'), { scale: { from: 0.4 }, duration: 600, ease: "outBack(2.2)", delay: stagger(80), onComplete: back }, 550)
+      .add(counter, { rows: [0, 1], duration: 1200, ease: "outExpo", onUpdate: count }, 550)
     return () => {
       counter.stats = 1
       counter.rows = 1
@@ -708,8 +701,8 @@ function BudgetOverviewChart({
         ))}
       </div>
 
-      {showCategories && categories.length > 0 && (
-        <div role="group" aria-label={`${spentLabel} by category`} className="flex flex-col gap-2">
+      {categories.length > 0 && (
+        <div role="group" aria-label={`${spentLabel} per categoria`} className="flex flex-col gap-2">
           {categories.map((category, k) => (
             <CategoryRow
               key={category.id}

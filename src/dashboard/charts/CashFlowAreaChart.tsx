@@ -28,8 +28,6 @@ type CashFlowAreaChartProps = Omit<React.ComponentProps<"div">, "children"> & {
   total?: number
   /** The label over the change. */
   changeLabel?: string
-  /** Keep a forecast amount neutral instead of colouring it as a positive cash change. */
-  changeTone?: "positive" | "neutral"
   /** An amount, shown signed and coloured by its sign ("+$2,456.00" in green, "-$310.00" in red). */
   change?: number
   /** The blue line and its area, oldest first; the points are spaced evenly across the plot. */
@@ -217,7 +215,6 @@ function CashFlowAreaChart({
   totalLabel = "Total cash flow",
   total = 14345.09,
   changeLabel = "Last month",
-  changeTone = "positive",
   change = 2456,
   data = sampleCashFlowData,
   compare = sampleCashFlowCompare,
@@ -587,7 +584,7 @@ function CashFlowAreaChart({
         <span aria-hidden data-slot="cash-flow-area-chart-divider" className="h-[52px] w-px shrink-0 bg-border-soft" />
         <div className="flex min-w-0 flex-1 flex-col items-center gap-3">
           <p className="typo-label-02-medium hug-w text-fg-soft">{changeLabel}</p>
-          <p ref={changeRef} className={cn("typo-heading-03-semibold hug-w whitespace-nowrap", change < 0 ? "text-error-500" : changeTone === "neutral" ? "text-fg-loud" : "text-primary-green-500")}>
+          <p ref={changeRef} className={cn("typo-heading-03-semibold hug-w whitespace-nowrap", change < 0 ? "text-error-500" : "text-primary-green-500")}>
             {changeText}
           </p>
         </div>

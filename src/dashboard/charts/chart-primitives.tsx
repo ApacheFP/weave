@@ -9,7 +9,7 @@ export const ChartCard = React.forwardRef<HTMLElement, React.ComponentProps<'sec
 ChartCard.displayName = 'ChartCard';
 
 export function ChartButton({ children, size = 'default', corner, className = '', ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & { size?: string; corner?: string }) {
-  return <button type="button" className={`mebius-chart-button ${size === 'icon' ? 'is-icon' : ''} ${corner === 'rounded' ? 'is-rounded' : ''} ${className}`} {...props}>{children}</button>;
+  return <button type="button" className={`${size === 'icon' ? 'dw-icon-btn' : 'dw-btn'} mebius-chart-button ${size === 'icon' ? 'is-icon' : ''} ${className}`} {...props}>{children}</button>;
 }
 
 export function ChartSwatch({ className = '' }: { className?: string }) { return <span aria-hidden className={`mebius-chart-swatch ${className}`} />; }
@@ -19,6 +19,7 @@ function SvgIcon({ children, className = '' }: { children: React.ReactNode; clas
 }
 export const DotsHorizontalIcon = () => <SvgIcon><circle cx="5" cy="12" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /></SvgIcon>;
 export const ShoppingBagIcon = () => <SvgIcon><path d="M5 8h14l1 13H4L5 8Z" /><path d="M9 9V6a3 3 0 0 1 6 0v3" /></SvgIcon>;
+export const PackageIcon = () => <Icon name="package" size={14} />;
 export const FoodIcon = () => <Icon name="utensils" size={14} />;
 export const CarIcon = () => <Icon name="car-front" size={14} />;
 export const HomeIcon = () => <Icon name="house" size={14} />;
