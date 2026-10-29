@@ -2,26 +2,11 @@ import React from 'react';
 import { number, totals } from './domain.js';
 import { productSpec } from './productData.js';
 import { localDate } from './workspaceData.js';
-import { BudgetOverviewChart } from './charts/BudgetOverviewChart.tsx';
-import { BarLineChartIcon, PackageIcon, ShoppingBagIcon } from './charts/chart-primitives.tsx';
+import { AtelierCostBreakdownChart } from './charts/AtelierCostBreakdownChart.tsx';
+import { BarLineChartIcon } from './charts/chart-primitives.tsx';
 import { CashFlowAreaChart } from './charts/CashFlowAreaChart.tsx';
-import { Icon } from './ui.jsx';
 
 const DAY_MS = 86_400_000;
-
-function portfolioCosts(items) {
-  return items.reduce((sum, item) => {
-    const cost = totals(item);
-    return {
-      materials: sum.materials + cost.materials * item.quantity,
-      fabric: sum.fabric + item.consumption * item.fabricPrice * item.quantity,
-      accessories: sum.accessories + item.trims.reduce((trimTotal, trim) => trimTotal + trim.qty * trim.price, 0) * item.quantity,
-      labor: sum.labor + cost.labor * item.quantity,
-      logistics: sum.logistics + item.logisticsCost * item.quantity,
-      garments: sum.garments + item.quantity,
-    };
-  }, { materials: 0, fabric: 0, accessories: 0, labor: 0, logistics: 0, garments: 0 });
-}
 
 function portfolioCostDetails(items) {
   const result = { fabric: 0, accessories: 0, preparation: 0, assembly: 0, finishing: 0, logistics: 0 };
@@ -59,21 +44,17 @@ export default function AtelierFinancialCharts({ items }) {
     { value: 'pending', label: 'Da avviare', items: items.filter(item => item.produced === 0) },
   ];
   const periods = subsets.map(view => {
-    const cost = portfolioCosts(view.items);
     const details = portfolioCostDetails(view.items);
     return {
       value: view.value,
       label: view.label,
-      spent: { fabric: cost.fabric, accessories: cost.accessories },
-      remaining: cost.labor,
-      saved: cost.logistics,
       details: [
-        { id: 'fabric', name: 'Tessuto e filato', icon: <ShoppingBagIcon />, color: 'orange', amount: details.fabric },
-        { id: 'accessories', name: 'Accessori e componenti', icon: <PackageIcon />, color: 'purple', amount: details.accessories },
-        { id: 'preparation', name: 'Preparazione e taglio', icon: <Icon name="scissors" size={14} />, color: 'blue', amount: details.preparation },
-        { id: 'assembly', name: 'Assemblaggio e confezione', icon: <Icon name="settings" size={14} />, color: 'green', amount: details.assembly },
-        { id: 'finishing', name: 'Finiture e controllo qualità', icon: <Icon name="check" size={14} />, color: 'yellow', amount: details.finishing },
-        { id: 'logistics', name: 'Logistica', icon: <Icon name="truck" size={14} />, color: 'blue', amount: details.logistics },
+        { id: 'fabric', name: 'Tessuto e filato', color: 'orange', amount: details.fabric },
+        { id: 'accessories', name: 'Accessori e componenti', color: 'purple', amount: details.accessories },
+        { id: 'preparation', name: 'Preparazione e taglio', color: 'blue', amount: details.preparation },
+        { id: 'assembly', name: 'Assemblaggio e confezione', color: 'green', amount: details.assembly },
+        { id: 'finishing', name: 'Finiture e controllo qualità', color: 'yellow', amount: details.finishing },
+        { id: 'logistics', name: 'Logistica', color: 'teal', amount: details.logistics },
       ],
     };
   });
@@ -98,7 +79,7 @@ export default function AtelierFinancialCharts({ items }) {
   const nextMonth = today + 30 * DAY_MS;
   const upcoming = planned.reduce((sum, row) => sum + row.amount * Math.max(0, projectedShare(row, nextMonth) - projectedShare(row, today)), 0);
   const defaultIndex = data.reduce((best, point, index) => Math.abs(Date.parse(`${point.date}T00:00:00Z`) - today) < Math.abs(Date.parse(`${data[best].date}T00:00:00Z`) - today) ? index : best, 0);
-  const cost = portfolioCosts(items);
+  const garments = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return <>
     <CashFlowAreaChart
@@ -116,18 +97,11 @@ export default function AtelierFinancialCharts({ items }) {
       locale="it-IT"
       currency="EUR"
     />
-    <BudgetOverviewChart
+    <AtelierCostBreakdownChart
       title="Composizione dei costi"
-      account={`${number(items.length)} varianti · ${number(cost.garments)} capi pianificati`}
-      categories={[
-        { id: 'fabric', name: 'Tessuto e filato', icon: <ShoppingBagIcon />, color: 'orange' },
-        { id: 'accessories', name: 'Accessori e componenti', icon: <PackageIcon />, color: 'purple' },
-      ]}
+      account={`${number(items.length)} varianti · ${number(garments)} capi pianificati`}
       periods={periods}
       defaultPeriod="all"
-      spentLabel="Materiali"
-      remainingLabel="Lavorazione"
-      savedLabel="Logistica"
       locale="it-IT"
       currency="EUR"
     />
