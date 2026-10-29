@@ -17,7 +17,7 @@ const hex = value => { try { return '#' + new Color(typeof value === 'string' &&
 const svgExporters = new WeakMap();
 const escapeXmlAttribute = value => String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 
-export default function VectorEditor({ initialScene, sourceSvg, quoteOptions = [], onSave, onDirty }) {
+export default function VectorEditor({ initialScene, sourceSvg, onSave, onDirty }) {
   const element = useRef(null), stage = useRef(null), canvas = useRef(null);
   const history = useRef([]), position = useRef(-1), baseline = useRef(''), suspended = useRef(true);
   const toolRef = useRef('select'), drag = useRef(null), pen = useRef([]), penPreview = useRef(null);
@@ -147,13 +147,7 @@ export default function VectorEditor({ initialScene, sourceSvg, quoteOptions = [
     } else object.set(key, value);
     object.setCoords(); canvas.current.requestRenderAll(); commit();
   }
-  function bindQuote(quoteKey, axis = selection?.measurementBinding?.axis || 'x') {
-    const object = canvas.current.getActiveObject();
-    if (!object) return;
-    if (quoteKey) object.measurementBinding = { quoteKey, axis };
-    else delete object.measurementBinding;
-    commit();
-  }
+
   function removeSelection() { const c = canvas.current; const objects = c.getActiveObjects(); c.discardActiveObject(); c.remove(...objects); commit(); }
   async function duplicate() {
     const c = canvas.current, object = c.getActiveObject();
@@ -314,12 +308,12 @@ export default function VectorEditor({ initialScene, sourceSvg, quoteOptions = [
           <Field label="Nome livello"><input key={`${selection.id}-${selection.name}`} maxLength={100} defaultValue={selection.name} onBlur={e => modify('name', e.target.value)} /></Field>
           <div className="dw-vector-properties">{[['left','X'],['top','Y'],['width','Larghezza'],['height','Altezza'],['angle','Rotazione °']].map(([key, label]) => <Field key={key} label={label}><input key={`${selection.id}-${selection[key]}`} type="number" step=".1" defaultValue={Number(selection[key].toFixed(1))} onBlur={e => modify(key, e.target.value)} /></Field>)}</div>
           {!isGroup && !multiple && <><div className="dw-vector-paint"><Field label="Riempimento"><input type="color" value={selection.fill} onChange={e => modify('fill', e.target.value)} /></Field><Field label="Tratto"><input type="color" value={selection.stroke} onChange={e => modify('stroke', e.target.value)} /></Field><Field label="Spessore · px"><input key={`${selection.id}-${selection.strokeWidth}`} type="number" min="0" max="50" step=".5" defaultValue={selection.strokeWidth} onBlur={e => modify('strokeWidth', e.target.value)} /></Field></div><Button onClick={() => modify('fill', 'transparent')}>Senza riempimento</Button>{selection.text !== undefined && <Field label="Contenuto testo"><textarea key={`${selection.id}-${selection.text}`} maxLength={2000} defaultValue={selection.text} onBlur={e => modify('text', e.target.value)} /></Field>}</>}
-          <details className="dw-vector-binding"><summary>Collegamento alle quote</summary><p>La quota aggiorna questo livello; il disegno libero non modifica i centimetri.</p><Field label="Misura"><select value={selection.measurementBinding?.quoteKey || ''} onChange={e => bindQuote(e.target.value)}><option value="">Nessun collegamento</option>{quoteOptions.map(option => <option key={option.key} value={option.key}>{option.label} · {option.value} cm</option>)}</select></Field><Field label="Asse di ridimensionamento"><select value={selection.measurementBinding?.axis || 'x'} disabled={!selection.measurementBinding} onChange={e => bindQuote(selection.measurementBinding.quoteKey, e.target.value)}><option value="x">Orizzontale · X</option><option value="y">Verticale · Y</option></select></Field></details>
+
           <div className="dw-vector-object-actions"><Button onClick={duplicate}><ToolIcon icon={Copy} />Duplica</Button><Button onClick={removeSelection}><ToolIcon icon={Trash2} />Elimina</Button><Button onClick={() => { canvas.current.bringObjectForward(canvas.current.getActiveObject()); commit(); }}>Porta avanti</Button><Button onClick={() => { canvas.current.sendObjectBackwards(canvas.current.getActiveObject()); commit(); }}>Porta indietro</Button>{multiple && <Button onClick={groupSelection}>Raggruppa</Button>}</div>
         </> : <div className="dw-vector-empty"><ToolIcon icon={MousePointer2} size={20} /><p>Scegli un livello o un elemento sulla tavola per modificarlo.</p></div>}</section>
       </aside>
     </div>
-    <footer className="dw-vector-footer"><div className="dw-actions"><Button aria-label="Riduci zoom" disabled={!ready} onClick={() => { const c=canvas.current; const scale=Math.max(.1,c.getZoom()/1.25); c.zoomToPoint(new Point(c.width/2,c.height/2),scale); setZoom(Math.round(scale*100)); }}>−</Button><span>{zoom}%</span><Button aria-label="Aumenta zoom" disabled={!ready} onClick={() => { const c=canvas.current; const scale=Math.min(8,c.getZoom()*1.25); c.zoomToPoint(new Point(c.width/2,c.height/2),scale); setZoom(Math.round(scale*100)); }}>+</Button><Button disabled={!ready} onClick={() => fit(true)}>Adatta disegno</Button><Button disabled={!ready} onClick={() => fit()}>Adatta tavola</Button></div><span>Le dimensioni grafiche sono in pixel.</span><Button primary disabled={!ready || busy || penCount > 0 || !historyState.dirty} onClick={save}>Salva nuova revisione</Button></footer>
+    <footer className="dw-vector-footer"><div className="dw-actions"><Button aria-label="Riduci zoom" disabled={!ready} onClick={() => { const c=canvas.current; const scale=Math.max(.1,c.getZoom()/1.25); c.zoomToPoint(new Point(c.width/2,c.height/2),scale); setZoom(Math.round(scale*100)); }}>−</Button><span>{zoom}%</span><Button aria-label="Aumenta zoom" disabled={!ready} onClick={() => { const c=canvas.current; const scale=Math.min(8,c.getZoom()*1.25); c.zoomToPoint(new Point(c.width/2,c.height/2),scale); setZoom(Math.round(scale*100)); }}>+</Button><Button disabled={!ready} onClick={() => fit(true)}>Adatta disegno</Button><Button disabled={!ready} onClick={() => fit()}>Adatta tavola</Button></div><span>Coordinate grafiche senza scala fisica.</span><Button primary disabled={!ready || busy || penCount > 0 || !historyState.dirty} onClick={save}>Salva nuova revisione</Button></footer>
     {error && <p className="dw-vector-error" role="alert">{error}</p>}
   </div>;
 }

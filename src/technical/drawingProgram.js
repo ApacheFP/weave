@@ -1,9 +1,9 @@
 // Programs are data, never markup. Limits keep previews and saved documents bounded.
 const styles = {
-  contour: { stroke: '#242424', width: 2.4, dash: '' },
-  seam: { stroke: '#343434', width: 1.5, dash: '' },
-  stitch: { stroke: '#464646', width: 1, dash: '6 5' },
-  detail: { stroke: '#343434', width: 1.1, dash: '' },
+  contour: { stroke: '#242424', width: 1.5, dash: '' },
+  seam: { stroke: '#343434', width: 1, dash: '' },
+  stitch: { stroke: '#464646', width: 0.5, dash: '6 5' },
+  detail: { stroke: '#343434', width: 0.25, dash: '' },
 };
 const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 const finite = value => typeof value === 'number' && Number.isFinite(value) && Math.abs(value) <= 10000;
@@ -65,6 +65,15 @@ function draw(op, state, depth = 0) {
       if (![op.x, op.y, op.width, op.height].every(finite) || op.width <= 0 || op.height <= 0) throw Error('Rettangolo non valido.');
       return `<rect ${styleAttrs(op, true)} x="${op.x}" y="${op.y}" width="${op.width}" height="${op.height}"/>`;
     case 'group': return `<g>${children()}</g>`;
+    case 'align': {
+      if (![op.fromX, op.fromY, op.toX, op.toY].every(finite)) throw Error('Allineamento non valido.');
+      return `<g transform="translate(${number(op.toX - op.fromX)} ${number(op.toY - op.fromY)})">${children()}</g>`;
+    }
+    case 'clipRect': {
+      if (![op.x, op.y, op.width, op.height].every(finite) || op.width <= 0 || op.height <= 0) throw Error('Ritaglio non valido.');
+      const id = `weave-clip-${++state.clips}`, content = children();
+      return `<g data-weave-clip="${op.x} ${op.y} ${op.width} ${op.height}"><clipPath id="${id}"><rect x="${op.x}" y="${op.y}" width="${op.width}" height="${op.height}"/></clipPath><g clip-path="url(#${id})">${content}</g></g>`;
+    }
     case 'mirror':
       if (!finite(op.axis)) throw Error('Asse di simmetria non valido.');
       return `<g transform="translate(${2 * op.axis} 0) scale(-1 1)">${children()}</g>`;
@@ -85,6 +94,20 @@ function draw(op, state, depth = 0) {
       if (state.expanded > 2000) throw Error('Troppe ripetizioni.');
       return Array.from({ length: op.count }, (_, i) => `<g transform="translate(${number(i * op.dx)} ${number(i * op.dy)})">${content}</g>`).join('');
     }
+    case 'repeatPath': {
+      if (!validPoints(op.points) || !Number.isInteger(op.count) || op.count < 1 || op.count > 100) throw Error('Ripetizione lungo percorso non valida.');
+      const lengths = op.points.slice(1).map((point, index) => Math.hypot(point[0] - op.points[index][0], point[1] - op.points[index][1]));
+      const total = lengths.reduce((sum, length) => sum + length, 0);
+      if (!total || lengths.some(length => !length)) throw Error('Il percorso di ripetizione richiede punti distinti.');
+      const content = children();
+      if (content.length * op.count > 1000000 || (state.expanded += op.count) > 2000) throw Error('Ripetizione troppo complessa.');
+      return Array.from({ length: op.count }, (_, i) => {
+        let distance = op.count === 1 ? 0 : total * i / (op.count - 1), index = 0;
+        while (index < lengths.length - 1 && distance > lengths[index]) { distance -= lengths[index]; index++; }
+        const start = op.points[index], end = op.points[index + 1], fraction = distance / lengths[index];
+        return `<g transform="translate(${number(start[0] + (end[0] - start[0]) * fraction)} ${number(start[1] + (end[1] - start[1]) * fraction)})">${content}</g>`;
+      }).join('');
+    }
     case 'offset':
       if (!validPoints(op.points) || !finite(op.distance)) throw Error('Offset non valido.');
       return `<polyline ${styleAttrs(op)} points="${pointsAttr(parallel(op.points, op.distance))}"/>`;
@@ -96,7 +119,7 @@ function draw(op, state, depth = 0) {
 }
 export function renderProgram(program) {
   if (!program || program.version !== 1 || typeof program.garment !== 'string' || !program.garment.trim() || program.garment.length > 100 || !Array.isArray(program.parts) || !program.parts.length || program.parts.length > 100) throw Error('Programma non valido: servono versione, tipo di capo e parti.');
-  const state = { count: 0, expanded: 0 };
+  const state = { count: 0, expanded: 0, clips: 0 };
   const groups = program.parts.map(part => {
     if (!part || typeof part.name !== 'string' || !part.name.trim() || part.name.length > 100 || typeof part.description !== 'string' || part.description.length > 500 || !Array.isArray(part.operations) || !part.operations.length || part.operations.length > 200) throw Error('Parte non valida.');
     return `<g data-label="${escape(part.name)}">${part.operations.map(op => draw(op, state)).join('')}</g>`;

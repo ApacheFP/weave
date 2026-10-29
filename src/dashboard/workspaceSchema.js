@@ -4,6 +4,7 @@ import { categorySpecs, additionalFabrics } from './productData.js';
 import { validTask } from './workspaceData.js';
 import { validArtwork, vectorViews } from './vectorDocument.js';
 import { validProgram } from '../technical/drawingProgram.js';
+import { validProportions } from './proportions.js';
 
 export const workspaceSchemaVersion = 1;
 export class WorkspaceDataError extends Error {
@@ -30,7 +31,7 @@ function technical(value, category) {
   if (!array(value.versions, version => {
     if (!object(version)) return false;
     const snapshot = version.snapshot;
-    return strings(version, ['id', 'note']) && finite(version.number) && strings(snapshot, ['fit', 'requirements', 'constraints']) && snapshot.category === category && measurements(snapshot.measurements) && object(snapshot.parts) && Object.keys(categorySpecs[category].parts).every(key => nonnegative(snapshot.parts[key])) && colors(snapshot.colors) && notes(snapshot.notes) && nonnegative(snapshot.tolerance) && validArtwork(snapshot.artwork) && (snapshot.programs == null || object(snapshot.programs) && Object.entries(snapshot.programs).every(([view, program]) => vectorViews.includes(view) && validProgram(program)));
+    return strings(version, ['id', 'note']) && finite(version.number) && strings(snapshot, ['fit', 'requirements', 'constraints']) && snapshot.category === category && measurements(snapshot.measurements) && object(snapshot.parts) && Object.keys(categorySpecs[category].parts).every(key => nonnegative(snapshot.parts[key])) && colors(snapshot.colors) && notes(snapshot.notes) && nonnegative(snapshot.tolerance) && (snapshot.proportions == null || validProportions(snapshot.proportions)) && validArtwork(snapshot.artwork) && (snapshot.programs == null || object(snapshot.programs) && Object.entries(snapshot.programs).every(([view, program]) => vectorViews.includes(view) && validProgram(program)));
   }) || !uniqueIds(value.versions)) return false;
   return ['approvedId', 'currentId'].every(key => value[key] == null || value.versions.some(version => version.id === value[key]));
 }
