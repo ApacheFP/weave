@@ -106,7 +106,7 @@ const ROWS: [number, number, string][] = [
   [334, 16, "0"],
 ]
 const HOVER_REACH = 18 // the pointer picks the nearest hex within 18px of its centre
-const DIM = 0.52 // keep unselected categories visible when one category is highlighted
+const DIM = 0.3 // keep unselected categories visible while muting fabric and accessories at rest
 const TIP_GAP = 6 // the tooltip ends 6px above the hex (below it near the top)
 const TIP_PADDING_X = 24 // its 12px side padding, twice
 const TIP_PADDING_Y = 16 // and its 8px top and bottom padding
@@ -318,6 +318,7 @@ function CategoryRow({
   dimmed,
   onToggle,
   onPreview,
+  onFocusPreview,
   format,
   percent,
   compact = false,
@@ -329,6 +330,7 @@ function CategoryRow({
   dimmed: boolean
   onToggle: () => void
   onPreview: (on: boolean) => void
+  onFocusPreview: (on: boolean) => void
   format: (value: number) => string
   percent: (value: number) => string
   compact?: boolean
@@ -347,6 +349,8 @@ function CategoryRow({
       onClick={onToggle}
       onPointerEnter={(event) => event.pointerType === "mouse" && onPreview(true)}
       onPointerLeave={(event) => event.pointerType === "mouse" && onPreview(false)}
+      onFocus={() => onFocusPreview(true)}
+      onBlur={() => onFocusPreview(false)}
       className={cn(
         compact && "atelier-cost-category-row",
         // Figma "Header Cell": Background/Disable inside a 1px Border/Soft ring, 16 × 13px from the outer edge
@@ -426,17 +430,6 @@ function BudgetOverviewChart({
   )
   // Content key: parents may pass new arrays on every render, so changes are detected by value.
   const ownersKey = owners.map((owner) => `${owner.part}:${owner.category ?? ""}`).join(",")
-  const tone = (i: number) => {
-    const owner = owners[i]
-    if (!owner) return "fill-surface-soft"
-    const categoryColor = colorByCategory && owner.part === "spent"
-      ? categories.find((category) => category.id === owner.category)?.color
-      : undefined
-    const color = categoryColor ?? PARTS.find((part) => part.key === owner.part)?.color ?? "blue"
-    const shade = categoryColor ? CELLS[i].level : Math.max(2, CELLS[i].level)
-    return palettes[color].shades[shade] ?? palettes[color].shades[0]
-  }
-
   // Keep every currency amount at two decimals so this breakdown matches the Atelier cash flow chart.
   const amountFormat = React.useCallback(
     (_final: number) => (value: number) => formatCurrency(value, { locale, currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }),
@@ -445,15 +438,32 @@ function BudgetOverviewChart({
   const money = (value: number) => amountFormat(value)(value)
   const percent = React.useCallback((value: number) => formatPercent(value, { locale, maximumFractionDigits: 0 }), [locale])
 
-  // What is lit: the hovered hex's category (or part), else a hovered share or row, else the pressed one.
+  // What is lit: the hovered hex, hovered row, focused category, or pressed category, in that order.
   const [hoverCell, setHoverCell] = React.useState<number | null>(null)
   const [preview, setPreview] = React.useState<Highlight | null>(null)
+  const [focusPreview, setFocusPreview] = React.useState<Highlight | null>(null)
   const [pinned, setPinned] = React.useState<Highlight | null>(null)
   const hoverOwner = hoverCell !== null ? owners[hoverCell] : undefined
-  const highlight: Highlight | null = hoverOwner ? { part: hoverOwner.part, category: hoverOwner.category } : (preview ?? pinned)
+  const highlight: Highlight | null = hoverOwner ? { part: hoverOwner.part, category: hoverOwner.category } : (preview ?? focusPreview ?? pinned)
   const toggle = (next: Highlight) => {
     setPreview(null)
     setPinned((now) => (sameHighlight(now, next) ? null : next))
+  }
+  const tone = (i: number) => {
+    const owner = owners[i]
+    if (!owner) return "fill-surface-soft"
+    const categoryColor = colorByCategory && owner.part === "spent"
+      ? categories.find((category) => category.id === owner.category)?.color
+      : undefined
+    const color = categoryColor ?? PARTS.find((part) => part.key === owner.part)?.color ?? "blue"
+    const lit = !!highlight && lights(highlight, owner)
+    const shade = categoryColor && !lit ? CELLS[i].level : Math.max(2, CELLS[i].level)
+    return palettes[color].shades[shade] ?? palettes[color].shades[0]
+  }
+  const cellOpacity = (i: number) => {
+    const owner = owners[i]
+    if (highlight) return lights(highlight, owner) ? undefined : DIM
+    return colorByCategory && owner?.part === "spent" && (owner.category === "fabric" || owner.category === "accessories") ? DIM : undefined
   }
 
   // The tooltip over the hovered hex: its category (or part) and that one's amount. The last one is kept after the
@@ -695,7 +705,7 @@ function BudgetOverviewChart({
             <g
               key={i}
               className="transition-opacity duration-200 motion-reduce:transition-none"
-              style={{ opacity: highlight && !lights(highlight, owners[i]) ? DIM : undefined }}
+              style={{ opacity: cellOpacity(i) }}
             >
               <g data-slot="budget-overview-chart-hex" data-rank={i} className="origin-center [transform-box:fill-box]">
                 <path d={CELLS[i].outline} className="fill-surface-white" />
@@ -768,6 +778,13 @@ function BudgetOverviewChart({
               dimmed={!!highlight && (highlight.part !== "spent" || (!!highlight.category && highlight.category !== category.id))}
               onToggle={() => toggle({ part: "spent", category: category.id })}
               onPreview={(on) => setPreview(on ? { part: "spent", category: category.id } : null)}
+              onFocusPreview={(on) => {
+                setFocusPreview(on ? { part: "spent", category: category.id } : null)
+                if (on) {
+                  setHoverCell(null)
+                  setTipCell(null)
+                }
+              }}
               format={amountFormat(categoryAmounts[k])}
               percent={percent}
               compact={compactCategories}
