@@ -3,7 +3,7 @@
 import { animate, stagger, svg, utils, type JSAnimation } from "animejs"
 import * as React from "react"
 
-import { ChartButton, ChartCard, ArrowCircleDownIcon, ArrowCircleUpIcon, BarLineChartIcon, DotsHorizontalIcon, ChartSwatch, cn } from "./chart-primitives"
+import { ChartButton, ChartCard, ArrowCircleDownIcon, ArrowCircleUpIcon, BarLineChartIcon, DotsHorizontalIcon, ChartMenu, ChartMenuContent, ChartMenuItem, ChartMenuTrigger, ChartSwatch, cn, downloadCsv } from "./chart-primitives"
 import { releaseStyles, useChartEntrance, useCountUp, useIsomorphicLayoutEffect, useReducedMotion } from "./chart-hooks"
 import { useChartSize } from "./chart-size"
 import { useControllableState } from "./chart-state"
@@ -569,9 +569,19 @@ function CashFlowAreaChart({
           </div>
           {description && <p className="typo-label-02-medium -my-0.5 truncate py-0.5 text-fg-soft">{description}</p>}
         </div>
-        <ChartButton size="icon" aria-label="Altre opzioni" onClick={onMoreClick}>
-          <DotsHorizontalIcon />
-        </ChartButton>
+        <ChartMenu>
+          <ChartMenuTrigger asChild>
+            <ChartButton size="icon" aria-label="Altre opzioni" onClick={onMoreClick}>
+              <DotsHorizontalIcon />
+            </ChartButton>
+          </ChartMenuTrigger>
+          <ChartMenuContent align="end">
+            <ChartMenuItem onSelect={() => downloadCsv("andamento-costi.csv", [
+              ["Data", totalLabel, compareLabel ?? "Confronto"],
+              ...data.map((item, i) => [item.date, item.value, compare.length ? compare[Math.round(i * Math.max(0, compare.length - 1) / Math.max(1, data.length - 1))] : ""]),
+            ])}>Esporta dati CSV</ChartMenuItem>
+          </ChartMenuContent>
+        </ChartMenu>
       </div>
 
       <div className="flex items-center gap-3">

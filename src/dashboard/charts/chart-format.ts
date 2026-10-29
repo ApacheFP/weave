@@ -1,5 +1,5 @@
-export function formatCurrency(value: number, { locale = 'it-IT', currency = 'EUR', maximumFractionDigits }: { locale?: string; currency?: string; maximumFractionDigits?: number } = {}) {
-  return new Intl.NumberFormat(locale, { style: 'currency', currency, ...(maximumFractionDigits === undefined ? {} : { maximumFractionDigits }) }).format(value);
+export function formatCurrency(value: number, { locale = 'it-IT', currency = 'EUR', minimumFractionDigits, maximumFractionDigits }: { locale?: string; currency?: string; minimumFractionDigits?: number; maximumFractionDigits?: number } = {}) {
+  return new Intl.NumberFormat(locale, { style: 'currency', currency, ...(minimumFractionDigits === undefined ? {} : { minimumFractionDigits }), ...(maximumFractionDigits === undefined ? {} : { maximumFractionDigits }) }).format(value);
 }
 
 export function formatCompactCurrency(value: number, { locale = 'it-IT', currency = 'EUR' }: { locale?: string; currency?: string } = {}) {

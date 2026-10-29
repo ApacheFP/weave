@@ -62,14 +62,17 @@
 }
 
 :where(.mebius-chart-card) button { margin:0; border:0 solid; padding:0; background-color:transparent; color:inherit; font:inherit; letter-spacing:inherit; line-height:inherit; }
-.mebius-chart-card .dw-card-body { display:flex; flex-direction:column; gap:22px; padding:16px; }
+:where(.mebius-chart-card) p { margin:0; }
+.mebius-chart-card .dw-card-body { display:flex; flex-direction:column; gap:16px; padding:16px; }
 .mebius-chart-button { flex:0 0 auto; cursor:pointer; }
 .mebius-chart-button.is-icon { width:var(--control-height); height:var(--control-height); }
 .mebius-chart-menu { position:relative; display:inline-flex; }
 .mebius-chart-menu-content { position:absolute; z-index:20; top:calc(100% + 5px); min-width:170px; padding:5px; border:1px solid var(--border); border-radius:9px; background:var(--surface); box-shadow:var(--shadow-popover); }
 .mebius-chart-menu-content.align-start { left:0; }
+.mebius-chart-menu-content.align-end { right:0; }
 .mebius-chart-menu-item { display:block; width:100%; padding:7px 9px; border:0; border-radius:6px; background:transparent; color:var(--text); text-align:left; font:inherit; font-size:12px; cursor:pointer; }
 .mebius-chart-menu-item:hover,.mebius-chart-menu-item[aria-checked=true] { background:var(--surface-2); }
+.mebius-chart-menu-item:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
 .mebius-chart-swatch { display:inline-block; height:6px; width:16px; flex:0 0 auto; border-radius:2px; }
 .mebius-tooltip-label { color:var(--text-2); font-size:11px; }
 .mebius-tooltip-value { color:var(--text); font-size:12px; font-weight:600; font-variant-numeric:tabular-nums; }

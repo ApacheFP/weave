@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useId, useRef, useState } from 'react';
 import { Icon } from '../ui.jsx';
 
 export const cn = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(' ');
@@ -27,22 +27,50 @@ export const ArrowCircleDownIcon = () => <Icon name="circle-arrow-down" size={16
 export const ArrowCircleUpIcon = () => <Icon name="circle-arrow-up" size={16} />;
 export const BarLineChartIcon = () => <Icon name="chart-no-axes-combined" size={20} />;
 
-type MenuState = { open: boolean; setOpen: (open: boolean) => void; value?: string; setValue?: (value: string) => void };
+type MenuState = { open: boolean; setOpen: (open: boolean) => void; value?: string; setValue?: (value: string) => void; contentId: string; trigger: React.MutableRefObject<HTMLButtonElement | null>; close: () => void };
 const MenuContext = createContext<MenuState | null>(null);
 function useMenu() { const value = useContext(MenuContext); if (!value) throw new Error('Chart menu item must be inside ChartMenu.'); return value; }
 export function ChartMenu({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string>();
-  return <MenuContext.Provider value={{ open, setOpen, value, setValue }}><div className="mebius-chart-menu" onKeyDown={event => event.key === 'Escape' && setOpen(false)}>{children}</div></MenuContext.Provider>;
+  const root = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement | null>(null);
+  const contentId = useId();
+  const close = () => { setOpen(false); trigger.current?.focus({ preventScroll: true }); };
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (event: PointerEvent) => { if (!root.current?.contains(event.target as Node)) setOpen(false); };
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') close(); };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => { document.removeEventListener('pointerdown', onPointerDown); document.removeEventListener('keydown', onKeyDown); };
+  }, [open]);
+  return <MenuContext.Provider value={{ open, setOpen, value, setValue, contentId, trigger, close }}><div ref={root} className="mebius-chart-menu">{children}</div></MenuContext.Provider>;
 }
 export function ChartMenuTrigger({ children, asChild }: { children: React.ReactElement; asChild?: boolean }) {
-  const { open, setOpen } = useMenu();
-  if (!asChild) return <button type="button" aria-expanded={open} onClick={() => setOpen(!open)}>{children}</button>;
-  return React.cloneElement(children, { 'aria-expanded': open, 'data-state': open ? 'open' : 'closed', onClick: (event: React.MouseEvent) => { children.props.onClick?.(event); setOpen(!open); } } as any);
+  const state = useMenu();
+  const props = {
+    'aria-haspopup': 'menu',
+    'aria-expanded': state.open,
+    'aria-controls': state.open ? state.contentId : undefined,
+    'data-state': state.open ? 'open' : 'closed',
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => {
+      children.props.onClick?.(event);
+      if (event.defaultPrevented) return;
+      state.trigger.current = event.currentTarget;
+      state.setOpen(!state.open);
+    },
+  };
+  if (!asChild) return <button type="button" {...props}>{children}</button>;
+  return React.cloneElement(children, props as any);
 }
 export function ChartMenuContent({ children, align = 'start' }: { children: React.ReactNode; align?: string }) {
-  const { open } = useMenu();
-  return open ? <div role="menu" className={`mebius-chart-menu-content align-${align}`}>{children}</div> : null;
+  const { open, contentId } = useMenu();
+  return open ? <div id={contentId} role="menu" className={`mebius-chart-menu-content align-${align}`}>{children}</div> : null;
+}
+export function ChartMenuItem({ children, onSelect }: { children: React.ReactNode; onSelect: () => void }) {
+  const state = useMenu();
+  return <button type="button" role="menuitem" className="mebius-chart-menu-item" onClick={() => { onSelect(); state.close(); }}>{children}</button>;
 }
 export function ChartMenuRadioGroup({ children, value, onValueChange }: { children: React.ReactNode; value: string; onValueChange: (value: string) => void }) {
   const state = useMenu();
@@ -51,9 +79,21 @@ export function ChartMenuRadioGroup({ children, value, onValueChange }: { childr
   return <div role="group" aria-label="Selezione periodo">{children}</div>;
 }
 export function ChartMenuRadioItem({ children, value }: { children: React.ReactNode; value: string }) {
-  const { open, setOpen } = useMenu();
   const state = useMenu();
-  return <button type="button" role="menuitemradio" aria-checked={state.value === value} className="mebius-chart-menu-item" onClick={() => { state.setValue?.(value); setOpen(false); }}>{children}</button>;
+  return <button type="button" role="menuitemradio" aria-checked={state.value === value} className="mebius-chart-menu-item" onClick={() => { state.setValue?.(value); state.close(); }}>{children}</button>;
+}
+
+export function downloadCsv(filename: string, rows: Array<Array<string | number | null | undefined>>) {
+  const quote = (value: string | number | null | undefined) => `"${String(value ?? '').replaceAll('"', '""')}"`;
+  const csv = rows.map(row => row.map(quote).join(';')).join('\r\n');
+  const url = URL.createObjectURL(new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export function ChartTooltipLines({ label, value, valueRef }: { label: string; value: string; valueRef?: React.Ref<HTMLSpanElement>; dividerWidth?: number }) {

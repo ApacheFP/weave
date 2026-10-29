@@ -3,7 +3,7 @@
 import { animate, stagger, utils } from "animejs"
 import * as React from "react"
 
-import { ChartButton, ChartCard, CarIcon, DotsHorizontalIcon, FoodIcon, HomeIcon, ShoppingBagIcon, ChartMenu, ChartMenuContent, ChartMenuRadioGroup, ChartMenuRadioItem, ChartMenuTrigger, ChartSwatch, ChartTooltipLines, cn } from "./chart-primitives"
+import { ChartButton, ChartCard, CarIcon, DotsHorizontalIcon, FoodIcon, HomeIcon, ShoppingBagIcon, ChartMenu, ChartMenuContent, ChartMenuItem, ChartMenuRadioGroup, ChartMenuRadioItem, ChartMenuTrigger, ChartSwatch, ChartTooltipLines, cn, downloadCsv } from "./chart-primitives"
 import { releaseStyles, useChartEntrance, useCountUp, useIsomorphicLayoutEffect, useReducedMotion } from "./chart-hooks"
 import { useChartSize } from "./chart-size"
 import { useControllableState } from "./chart-state"
@@ -386,6 +386,7 @@ function BudgetOverviewChart({
   const categoryAmounts = categories.map((category) => Math.max(0, current?.spent[category.id] ?? 0))
   const spent = categoryAmounts.reduce((sum, value) => sum + value, 0)
   const amounts = [spent, Math.max(0, current?.remaining ?? 0), Math.max(0, current?.saved ?? 0)]
+  const totalCost = amounts.reduce((sum, value) => sum + value, 0)
   const shares = wholePercents(amounts)
   const labels: Record<Part, string> = { spent: spentLabel, remaining: remainingLabel, saved: savedLabel }
   const owners = assignCells(
@@ -402,10 +403,9 @@ function BudgetOverviewChart({
     return palettes[color].shades[CELLS[i].level] ?? palettes[color].shades[0]
   }
 
-  // An amount without cents when it is whole, as in Figma ("$2,100"); the digits follow the final amount, so a count
-  // up to it doesn't show cents on the way.
+  // Keep every currency amount at two decimals so this breakdown matches the Atelier cash flow chart.
   const amountFormat = React.useCallback(
-    (final: number) => (value: number) => formatCurrency(value, { locale, currency, maximumFractionDigits: Number.isInteger(final) ? 0 : undefined }),
+    (_final: number) => (value: number) => formatCurrency(value, { locale, currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }),
     [locale, currency],
   )
   const money = (value: number) => amountFormat(value)(value)
@@ -612,9 +612,24 @@ function BudgetOverviewChart({
             </ChartMenu>
           </div>
         </div>
-        <ChartButton corner="rounded" size="icon" aria-label="Altre opzioni" onClick={onMoreClick} className={RING}>
-          <DotsHorizontalIcon />
-        </ChartButton>
+        <ChartMenu>
+          <ChartMenuTrigger asChild>
+            <ChartButton corner="rounded" size="icon" aria-label="Altre opzioni" onClick={onMoreClick} className={RING}>
+              <DotsHorizontalIcon />
+            </ChartButton>
+          </ChartMenuTrigger>
+          <ChartMenuContent align="end">
+            <ChartMenuItem onSelect={() => downloadCsv("composizione-costi.csv", [
+              ["Periodo", current?.label ?? ""],
+              [],
+              ["Voce", "Importo", "Incidenza"],
+              ...categories.map((category, i) => [category.name, categoryAmounts[i], totalCost ? percent(categoryAmounts[i] / totalCost) : "0%"]),
+              [remainingLabel, amounts[1], totalCost ? percent(amounts[1] / totalCost) : "0%"],
+              [savedLabel, amounts[2], totalCost ? percent(amounts[2] / totalCost) : "0%"],
+              ["Totale costo industriale", totalCost, "100%"],
+            ])}>Esporta dati CSV</ChartMenuItem>
+          </ChartMenuContent>
+        </ChartMenu>
       </div>
 
       {/* Figma "Plot Area": 440 × 375, smaller in a narrower card */}
